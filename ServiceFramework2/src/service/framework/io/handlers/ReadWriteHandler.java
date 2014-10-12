@@ -54,6 +54,7 @@ public class ReadWriteHandler implements Handler {
 				ProviderBean objProviderBean = (ProviderBean)applicationContext.getBean(objRequestEntity.getServiceName());
 				ResponseEntity objResponseEntity = objProviderBean.prcessRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(objServiceOnMessageReceiveEvent.getSocketChannel());
+				System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
 				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity).getBytes(ShareingProtocolData.FRAMEWORK_IO_ENCODING));
 				WorkingChannel channel = objServiceOnMessageWriteEvent.getSocketChannel();
 				channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);

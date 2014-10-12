@@ -157,7 +157,7 @@ public class DefaultWorker implements Worker {
 		SocketChannel ch = (SocketChannel) key.channel();
 		int readBytes = 0;
 		int ret = 0;
-		boolean failure = true;
+		boolean success = false;
 	    ByteBuffer bb = ByteBuffer.allocate(ShareingProtocolData.BUFFER_SIZE);
         try {
             while ((ret = ch.read(bb)) > 0) {
@@ -166,7 +166,7 @@ public class DefaultWorker implements Worker {
                     break;
                 }
             }
-            failure = false;
+            success = true;
         } catch (ClosedChannelException e) {
         	e.printStackTrace();
             // Can happen, and does not need a user attention.
@@ -183,7 +183,7 @@ public class DefaultWorker implements Worker {
 		event.setMessage(message);
 		System.out.println("reviced ... " + new String(message));
 		fireCommonEvent(event);
-		return failure;
+		return success;
 	}
 
 	/**

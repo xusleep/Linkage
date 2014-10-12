@@ -7,7 +7,7 @@
 <!-- <bean id=""></bean> -->
 <bean id="addService" class="service.framework.io.client.comsume.ConsumerBean">
 	<property name="route">
-		<ref bean="clientRoute"></ref>
+		<ref bean="linkedToService"></ref>
 	</property>
 	<property name="serviceName">
 		<value>addService</value>
@@ -60,6 +60,20 @@
 				</property>
 				<property name="port">
 					<value>5002</value>
+				</property>
+			</bean>
+		</list>
+	</property>
+</bean>
+<bean id="linkedToService" class="service.framework.route.DefaultRoute">
+	<property name="serviceList">
+		<list>
+			<bean class="servicecenter.service.ServiceInformation">
+				<property name="address">
+					<value>localhost</value>
+				</property>
+				<property name="port">
+					<value>5001</value>
 				</property>
 			</bean>
 		</list>

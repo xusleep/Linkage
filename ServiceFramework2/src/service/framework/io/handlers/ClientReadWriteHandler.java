@@ -35,10 +35,7 @@ import service.framework.serialization.SerializeUtils;
 public class ClientReadWriteHandler implements Handler {
 	private AtomicInteger aint = new AtomicInteger(0);
 	
-	private final ApplicationContext applicationContext;
-	
-	public ClientReadWriteHandler(ApplicationContext applicationContext){
-		this.applicationContext = applicationContext;
+	public ClientReadWriteHandler(){
 	}
 	
 	@Override
@@ -50,7 +47,7 @@ public class ClientReadWriteHandler implements Handler {
 				String receiveData = new String(objServiceOnMessageReceiveEvent.getMessage(), ShareingProtocolData.FRAMEWORK_IO_ENCODING);
 				System.out.println(" receive message ... " + receiveData);
 				aint.incrementAndGet();
-				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
+				//ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

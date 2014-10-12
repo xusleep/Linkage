@@ -12,6 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import service.framework.io.client.comsume.ClientManagement;
 import service.framework.io.client.comsume.ConsumerBean;
 import service.framework.io.master.ClientBootStrap;
+import service.framework.io.server.WorkerPool;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
 import zhonglin.test.framework.concurrence.condition.job.JobInterface;
@@ -51,7 +52,7 @@ public class StartClient extends AbstractJob {
 	@Override
 	public void doConcurrentJob() {
 		try {
-			for(long i = 1; i < 2; i++)
+			for(long i = 1; i < 3; i++)
 			{
 				
 		    	List<String> args1 = new LinkedList<String>();
@@ -99,7 +100,8 @@ public class StartClient extends AbstractJob {
 
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		new ClientBootStrap().start();
 	 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("ClientServiceConfig.xml");
     	ClientManagement cmm = new ClientManagement();
 		StartClient job1 = new StartClient((ConsumerBean)applicationContext.getBean("addService"));
