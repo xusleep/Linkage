@@ -1,6 +1,8 @@
 package service.framework.io.client.comsume;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -8,6 +10,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 
 import service.framework.io.client.ClientTask;
+import service.framework.io.server.WorkerPool;
+import service.framework.io.server.WorkingChannel;
 import service.framework.provide.entity.RequestEntity;
 import service.framework.provide.entity.ResponseEntity;
 import service.framework.route.Route;
@@ -48,8 +52,8 @@ public class ConsumerBean {
 		ServiceInformation service = route.chooseRoute(serviceName);
     	ClientTask task = new ClientTask(service.getAddress(), service.getPort(), objRequestEntity);
     	Future result = ClientManagement.objExecutorService.submit(task);
-    	ResponseEntity objResponseEntity = (ResponseEntity)result.get();
-    	resultList.put(id, result);
+    	//ResponseEntity objResponseEntity = (ResponseEntity)result.get();
+    	//resultList.put(id, result);
     	return id;
 	}
 	

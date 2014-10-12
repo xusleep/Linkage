@@ -11,6 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import service.framework.io.client.comsume.ClientManagement;
 import service.framework.io.client.comsume.ConsumerBean;
+import service.framework.io.master.ClientBootStrap;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
 import zhonglin.test.framework.concurrence.condition.job.JobInterface;
@@ -50,7 +51,7 @@ public class StartClient extends AbstractJob {
 	@Override
 	public void doConcurrentJob() {
 		try {
-			for(long i = 1; i < 100000000; i++)
+			for(long i = 1; i < 2; i++)
 			{
 				
 		    	List<String> args1 = new LinkedList<String>();
@@ -102,7 +103,7 @@ public class StartClient extends AbstractJob {
 	 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("ClientServiceConfig.xml");
     	ClientManagement cmm = new ClientManagement();
 		StartClient job1 = new StartClient((ConsumerBean)applicationContext.getBean("addService"));
-		job1.setThreadCount(10);
+		job1.setThreadCount(1);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);
@@ -115,5 +116,12 @@ public class StartClient extends AbstractJob {
 		}
 		cmm.stop();
 		System.out.println("成功的条数为:" + (StartClient.aint.get() - 2320) / 2);
+		
+//		try {
+//			new ClientBootStrap().start("localhost", 5001);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }

@@ -1,6 +1,7 @@
 package service.framework.provide.entity;
 
 public class ResponseEntity {
+	private String requestID;
 	private String result;
 
 	public String getResult() {
@@ -9,6 +10,14 @@ public class ResponseEntity {
 
 	public void setResult(String result) {
 		this.result = result;
+	}
+
+	public String getRequestID() {
+		return requestID;
+	}
+
+	public void setRequestID(String requestID) {
+		this.requestID = requestID;
 	}
 	
 }

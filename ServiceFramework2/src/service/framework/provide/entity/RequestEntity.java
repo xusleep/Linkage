@@ -8,6 +8,7 @@ public class RequestEntity implements Serializable {
 	private String serviceName;
 	private String methodName;
 	private String version;
+	private String requestID;
 	private List args;
 	private String group;
 	
@@ -15,6 +16,14 @@ public class RequestEntity implements Serializable {
 		args = new LinkedList();
 	}
 	
+	public String getRequestID() {
+		return requestID;
+	}
+
+	public void setRequestID(String requestID) {
+		this.requestID = requestID;
+	}
+
 	public String getServiceName() {
 		return serviceName;
 	}

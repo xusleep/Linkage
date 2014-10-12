@@ -32,12 +32,12 @@ import service.framework.serialization.SerializeUtils;
  * @author zhonxu
  *
  */
-public class ReadWriteHandler implements Handler {
+public class ClientReadWriteHandler implements Handler {
 	private AtomicInteger aint = new AtomicInteger(0);
 	
 	private final ApplicationContext applicationContext;
 	
-	public ReadWriteHandler(ApplicationContext applicationContext){
+	public ClientReadWriteHandler(ApplicationContext applicationContext){
 		this.applicationContext = applicationContext;
 	}
 	
@@ -50,14 +50,8 @@ public class ReadWriteHandler implements Handler {
 				String receiveData = new String(objServiceOnMessageReceiveEvent.getMessage(), ShareingProtocolData.FRAMEWORK_IO_ENCODING);
 				System.out.println(" receive message ... " + receiveData);
 				aint.incrementAndGet();
-				RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
-				ProviderBean objProviderBean = (ProviderBean)applicationContext.getBean(objRequestEntity.getServiceName());
-				ResponseEntity objResponseEntity = objProviderBean.prcessRequest(objRequestEntity);
-				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(objServiceOnMessageReceiveEvent.getSocketChannel());
-				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity).getBytes(ShareingProtocolData.FRAMEWORK_IO_ENCODING));
-				WorkingChannel channel = objServiceOnMessageWriteEvent.getSocketChannel();
-				channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-				channel.getWorker().writeFromUser(channel);
+				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

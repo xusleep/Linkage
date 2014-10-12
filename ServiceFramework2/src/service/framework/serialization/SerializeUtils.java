@@ -28,6 +28,9 @@ public class SerializeUtils {
 	public static String serializeRequest(RequestEntity request) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
+		sb.append("<requestid>");
+		sb.append(request.getRequestID());
+		sb.append("</requestid>");
 		sb.append("<serviceName>");
 		sb.append(request.getServiceName());
 		sb.append("</serviceName>");
@@ -66,19 +69,22 @@ public class SerializeUtils {
 			NodeList childs = document.getChildNodes().item(0).getChildNodes(); 
 			for(int i = 0; i < childs.getLength(); i++){
 				Node node = childs.item(i);
-				if(node.getNodeName().equals("serviceName")){
+				if(node.getNodeName().equals("requestid")){
+					request.setRequestID(node.getTextContent());
+				}
+				else if(node.getNodeName().equals("serviceName")){
 					request.setServiceName(node.getTextContent());
 				}
-				if(node.getNodeName().equals("methodName")){
+				else if(node.getNodeName().equals("methodName")){
 					request.setMethodName(node.getTextContent());
 				}
-				if(node.getNodeName().equals("version")){
+				else  if(node.getNodeName().equals("version")){
 					request.setVersion(node.getTextContent());
 				}
-				if(node.getNodeName().equals("group")){
+				else if(node.getNodeName().equals("group")){
 					request.setGroup(node.getTextContent());
 				}
-				if(node.getNodeName().equals("list")){
+				else if(node.getNodeName().equals("list")){
 					NodeList childs1 = node.getChildNodes();
 					for(int j = 0; j < childs1.getLength(); j++){
 						Node listNode = childs1.item(j);
@@ -110,6 +116,9 @@ public class SerializeUtils {
 	public static String serializeResponse(ResponseEntity response) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<response>");
+		sb.append("<requestid>");
+		sb.append(response.getRequestID());
+		sb.append("</requestid>");
 		sb.append("<result>");
 		sb.append(escapeForXML(response.getResult()));
 		sb.append("</result>");
@@ -134,6 +143,9 @@ public class SerializeUtils {
 				Node node = childs.item(i);
 				if(node.getNodeName().equals("result")){
 					response.setResult(unEscapeForXML(node.getTextContent()));
+				}
+				else if(node.getNodeName().equals("requestid")){
+					response.setRequestID(node.getTextContent());
 				}
 			}
 			return response;

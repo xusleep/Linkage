@@ -33,8 +33,8 @@ public class WorkerPool {
 		return workers[nextWorkCount++%WORKERCOUNTER];
 	}
 	
-	public void register(SocketChannel sc){
+	public WorkingChannel register(SocketChannel sc){
 		Worker worker = getNextWorker();
-		worker.submitOpeRegister(sc);
+		return worker.submitOpeRegister(sc);
 	}
 }
