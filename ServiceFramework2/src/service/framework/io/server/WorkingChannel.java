@@ -22,6 +22,7 @@ public class WorkingChannel {
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteRequestQueue();
 	Channel channel;
 	private Worker worker;
+	private String remainMessage;
 	
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
@@ -40,7 +41,15 @@ public class WorkingChannel {
 		this.channel = channel;
 	}
 	
-    private final class WriteRequestQueue implements Queue<ServiceOnMessageWriteEvent> {
+    public String getRemainMessage() {
+		return remainMessage == null ? "" : remainMessage;
+	}
+
+	public void setRemainMessage(String remainMessage) {
+		this.remainMessage = remainMessage;
+	}
+
+	private final class WriteRequestQueue implements Queue<ServiceOnMessageWriteEvent> {
 
         private final Queue<ServiceOnMessageWriteEvent> queue;
 

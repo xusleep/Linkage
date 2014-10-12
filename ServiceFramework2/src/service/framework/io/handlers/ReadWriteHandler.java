@@ -47,16 +47,16 @@ public class ReadWriteHandler implements Handler {
 		if (event instanceof ServiceOnMessageReceiveEvent) {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
+				WorkingChannel channel = objServiceOnMessageReceiveEvent.getSocketChannel();
 				String receiveData = new String(objServiceOnMessageReceiveEvent.getMessage(), ShareingProtocolData.FRAMEWORK_IO_ENCODING);
 				System.out.println(" receive message ... " + receiveData);
 				aint.incrementAndGet();
 				RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
 				ProviderBean objProviderBean = (ProviderBean)applicationContext.getBean(objRequestEntity.getServiceName());
 				ResponseEntity objResponseEntity = objProviderBean.prcessRequest(objRequestEntity);
-				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(objServiceOnMessageReceiveEvent.getSocketChannel());
+				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel);
 				System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
 				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity).getBytes(ShareingProtocolData.FRAMEWORK_IO_ENCODING));
-				WorkingChannel channel = objServiceOnMessageWriteEvent.getSocketChannel();
 				channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 				channel.getWorker().writeFromUser(channel);
 			} catch (IOException e) {
