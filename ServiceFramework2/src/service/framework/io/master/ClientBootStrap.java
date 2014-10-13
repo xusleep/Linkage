@@ -22,8 +22,6 @@ public class ClientBootStrap {
 		MasterHandler objMasterHandler = new MasterHandler(1, eventConsumerList);
 		//启动事件处理分发线程, 即将任务分发到线程池，由线程池完成任务
     	objMasterHandler.start();
-		WorkerPool.getInstance().start();
-		new MonitorThread().start();
 	}
 	
 	 

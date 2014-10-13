@@ -15,7 +15,7 @@ public class WorkingChannel {
     /**
      * Monitor object for synchronizing access to the {@link WriteRequestQueue}.
      */
-    final Object writeReadLock = new Object();
+    final public Object writeReadLock = new Object();
     
     /**
      * Queue of write {@link MessageEvent}s.
@@ -24,6 +24,7 @@ public class WorkingChannel {
 	Channel channel;
 	private Worker worker;
 	private StringBuffer bufferMessage;
+	private boolean isOpen;
 	
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
@@ -43,11 +44,22 @@ public class WorkingChannel {
 		this.channel = channel;
 	}
 	
-    public void appendMessage(String message){
+	
+    public boolean isOpen() {
+		return isOpen;
+	}
+
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
+	}
+
+	public void appendMessage(String message){
     	synchronized(writeReadLock){
     		this.bufferMessage.append(message);
     	}
     }
+    
+    
     
     /**
 	 * 从缓存区解析出消息
@@ -82,7 +94,6 @@ public class WorkingChannel {
 					headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
 			bufferMessage.delete(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
 			ShareingProtocolData.aint.incrementAndGet();
-			System.out.println("extractMessage --> remained messageBuffer = " + bufferMessage + " message count " + ShareingProtocolData.aint.get() );
 			return messageBody;
 		}
 	}

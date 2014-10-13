@@ -61,14 +61,12 @@ public class MasterHandler extends Thread {
 	 * @param event
 	 */
 	public void handleEvent(final ServiceEvent event){
-//		this.objExecutorService.execute(new Runnable(){
-//			@Override
-//			public void run() {
+		this.objExecutorService.execute(new Runnable(){
+			@Override
+			public void run() {
             	try {
-            		System.out.println("this.objExecutorService.execute() ...");
             		for(Handler handler : eventHandlerList)
             		{
-            			System.out.println("handler.handleRequest(null, event); ... ");
             			handler.handleRequest(null, event);
             		}
 				} catch (IOException e) {
@@ -77,7 +75,7 @@ public class MasterHandler extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//			}
-//    	});
+			}
+    	});
 	}
 }

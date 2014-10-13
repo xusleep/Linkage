@@ -41,6 +41,7 @@ public class StartClient extends AbstractJob {
 	
 	public StartClient(ConsumerBean cb) {
 		this.cb = cb;
+		this.cb.build();
 	}
 	
 	@Override
@@ -51,45 +52,20 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		try {
-			for(long i = 0; i < 100; i++)
-			{
-		    	List<String> args1 = new LinkedList<String>();
-		    	String a = "" + aint.incrementAndGet();
-		    	String b = "" + aint.incrementAndGet();
-		    	args1.add(a);
-		    	args1.add(b);
-		    	try
-		    	{
-		    		long id = cb.prcessRequest(args1);
-		    		System.out.println("Thread.currentThread().getId() : " + Thread.currentThread().getId() + "  a = " + a + " b = "  + b + " result : " + cb.getResult(id));
-		    	}
-		    	catch(Exception ex){
-		    		long id = cb.prcessRequest(args1);
-		    		System.out.println("retry Thread.currentThread().getId() : " + Thread.currentThread().getId() + "  a = " + a + " b = "  + b + " result : " + cb.getResult(id));
-		    	
-		    	}
-			}
-		} catch (InterruptedException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-			aint.decrementAndGet();
-			aint.decrementAndGet();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			aint.decrementAndGet();
-			aint.decrementAndGet();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			aint.decrementAndGet();
-			aint.decrementAndGet();
-		}
-		catch(Exception ex){
-			ex.printStackTrace();
-			aint.decrementAndGet();
-			aint.decrementAndGet();
+		for(long i = 0; i < 100; i++)
+		{
+	    	List<String> args1 = new LinkedList<String>();
+	    	String a = "" + aint.incrementAndGet();
+	    	String b = "" + aint.incrementAndGet();
+	    	args1.add(a);
+	    	args1.add(b);
+	    	try
+	    	{
+	    		long id = cb.prcessRequest(args1);
+	    		
+	    	}
+	    	catch(Exception ex){
+	    	}
 		}
 	}
 

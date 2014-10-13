@@ -10,11 +10,9 @@ public class MonitorThread extends Thread {
 		while(true)
 		{
 			// TODO Auto-generated method stub
-			System.out.println("MasterHandler.pool.size()" + MasterHandler.pool.size());
-			System.out.println("DefaultWorker.readBytesCount.get() = " + DefaultWorker.readBytesCount.get());
-			System.out.println("DefaultWorker.writeBytesCount.get() = " + DefaultWorker.writeBytesCount.get());
+			System.out.println("MasterHandler.pool.size()" + MasterHandler.pool.size());;
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

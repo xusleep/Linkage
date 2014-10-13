@@ -33,8 +33,6 @@ public class ServiceBootStrap {
 			WorkerPool.getInstance().start();
 			//启动事件处理分发线程, 即将任务分发到线程池，由线程池完成任务
         	objMasterHandler.start();
-        	MonitorThread mt = new MonitorThread();
-        	mt.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -49,7 +47,7 @@ public class ServiceBootStrap {
 	            ApplicationContext applicationContext = new ClassPathXmlApplicationContext("ServerServiceConfig.xml");
 	            Server objServer = (Server)applicationContext.getBean("defaultServer");
 	            List<Handler> eventConsumerList = new LinkedList<Handler>();
-	            eventConsumerList.add(new ReadWriteHandler(applicationContext));
+	            //eventConsumerList.add(new ReadWriteHandler(applicationContext));
 	    		//eventConsumerList.add(new ServiceRegisterHandler(applicationContext));
 	    		MasterHandler objMasterHandler = new MasterHandler(1, eventConsumerList);
 	            new ServiceBootStrap(objServer, objMasterHandler).start();

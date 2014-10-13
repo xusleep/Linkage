@@ -32,18 +32,26 @@ public class ConsumerBean {
 	private WorkingChannel newWorkingChannel;
 	
 	public ConsumerBean(){
+
 	}
 	
-	public ConsumerBean(Route route){
-		this.route = route;
-	}
-
 	public Route getRoute() {
 		return route;
 	}
 
 	public void setRoute(Route route) {
 		this.route = route;
+	}
+
+	public void build(){
+		try {
+			ServiceInformation service;
+			service = this.route.chooseRoute(serviceName);
+			this.newWorkingChannel = newWorkingChannel(service.getAddress(), service.getPort());
+		} catch (IOException | InterruptedException | ExecutionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	public long prcessRequest(List<String> args) throws IOException, InterruptedException, ExecutionException{
@@ -53,20 +61,18 @@ public class ConsumerBean {
 		objRequestEntity.setGroup(group);
 		objRequestEntity.setServiceName(serviceName);
 		objRequestEntity.setArgs(args);
-		if(this.newWorkingChannel == null){
-			ServiceInformation service = route.chooseRoute(serviceName);
-			this.newWorkingChannel = newWorkingChannel(service.getAddress(), service.getPort());
-		}
+
     	new Thread(new Runnable(){
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel);
-		        String sendData = SerializeUtils.serializeRequest(objRequestEntity);
-				objServiceOnMessageWriteEvent.setMessage(sendData);
-		        newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-		        newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
+					// TODO Auto-generated method stub
+					ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel);
+			        String sendData = SerializeUtils.serializeRequest(objRequestEntity);
+					objServiceOnMessageWriteEvent.setMessage(sendData);
+					
+			        newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+			        newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
 			}
     		
     	}).start();
