@@ -12,6 +12,7 @@ import service.framework.io.handlers.ClientReadWriteHandler;
 import service.framework.io.handlers.Handler;
 import service.framework.io.server.WorkerPool;
 import service.framework.io.server.WorkingChannel;
+import service.framework.monitor.MonitorThread;
 
 public class ClientBootStrap {
 	
@@ -22,6 +23,7 @@ public class ClientBootStrap {
 		//启动事件处理分发线程, 即将任务分发到线程池，由线程池完成任务
     	objMasterHandler.start();
 		WorkerPool.getInstance().start();
+		new MonitorThread().start();
 	}
 	
 	 

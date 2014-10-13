@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import service.framework.io.event.ServiceOnMessageWriteEvent;
+import service.framework.protocol.ShareingProtocolData;
 
 
 public class WorkingChannel {
@@ -14,7 +15,7 @@ public class WorkingChannel {
     /**
      * Monitor object for synchronizing access to the {@link WriteRequestQueue}.
      */
-    final Object writeLock = new Object();
+    final Object writeReadLock = new Object();
     
     /**
      * Queue of write {@link MessageEvent}s.
@@ -22,11 +23,12 @@ public class WorkingChannel {
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteRequestQueue();
 	Channel channel;
 	private Worker worker;
-	private String remainMessage;
+	private StringBuffer bufferMessage;
 	
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
 		this.worker = worker;
+		this.bufferMessage = new StringBuffer(ShareingProtocolData.BUFFER_MESSAGE_SIZE);
 	}
 
 	public Worker getWorker() {
@@ -41,12 +43,66 @@ public class WorkingChannel {
 		this.channel = channel;
 	}
 	
-    public String getRemainMessage() {
-		return remainMessage == null ? "" : remainMessage;
+    public void appendMessage(String message){
+    	synchronized(writeReadLock){
+    		this.bufferMessage.append(message);
+    	}
+    }
+    
+    /**
+	 * 从缓存区解析出消息
+	 * @param sb
+	 * @return
+	 * @throws Exception 
+	 */
+	public  String extractMessage() throws Exception{
+		synchronized(writeReadLock){
+			int headStartIndex = this.bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_START);
+			int headEndIndex = bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_END);
+			if(ShareingProtocolData.MESSAGE_HEADER_START.length() > bufferMessage.length())
+				return "";
+			if(headStartIndex != 0)
+			{
+				throw new Exception("the received message is not comleted, some message not receive correct");
+			}
+			//包头不完整说明没有收到完整包
+			if(headEndIndex <= 0)
+				return "";
+			String head = bufferMessage.substring(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length());
+			String bodyLenthStr =  bufferMessage.substring(headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length(), 
+					headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length() + ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART);
+			int bodyLenth = Integer.parseInt(bodyLenthStr);
+			//包体长度没有到包头中设定的长度
+			if(bufferMessage.length() < ShareingProtocolData.MESSAGE_HEADER_START.length() + 
+					ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth)
+			{
+				return "";
+			}
+			String messageBody = bufferMessage.substring(headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length(), 
+					headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
+			bufferMessage.delete(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
+			ShareingProtocolData.aint.incrementAndGet();
+			System.out.println("extractMessage --> remained messageBuffer = " + bufferMessage + " message count " + ShareingProtocolData.aint.get() );
+			return messageBody;
+		}
 	}
-
-	public void setRemainMessage(String remainMessage) {
-		this.remainMessage = remainMessage;
+	
+	/**
+	 * 对消息进行包装
+	 * @param message
+	 * @return
+	 */
+	public  String wrapMessage(String message){
+		return ShareingProtocolData.MESSAGE_HEADER_START + toLengthString(message.length()) + ShareingProtocolData.MESSAGE_HEADER_END + message; 
+	}
+	
+	private static String toLengthString(int length){
+		String tmp = "" + length;
+		int tmpLength = tmp.length();
+		for(int i = 0; i < ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
+			tmp = "0" + tmp;
+		}
+		return tmp;
 	}
 
 	private final class WriteRequestQueue implements Queue<ServiceOnMessageWriteEvent> {
@@ -132,7 +188,7 @@ public class WorkingChannel {
         }
 
         private int getMessageSize(ServiceOnMessageWriteEvent e) {
-            return e.getMessage() == null ? 0 : e.getMessage().length;
+            return e.getMessage() == null ? 0 : e.getMessage().length();
         }
     }
 

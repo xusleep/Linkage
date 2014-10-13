@@ -44,12 +44,14 @@ public class ClientReadWriteHandler implements Handler {
 		if (event instanceof ServiceOnMessageReceiveEvent) {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
-				String receiveData = new String(objServiceOnMessageReceiveEvent.getMessage(), ShareingProtocolData.FRAMEWORK_IO_ENCODING);
+				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				System.out.println(" receive message ... " + receiveData);
 				aint.incrementAndGet();
+				System.out.println("处理的条数为:" + aint.get());
+				System.out.println("队列长度为:" + MasterHandler.pool.size());
 				//ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
 				
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -65,7 +67,6 @@ public class ClientReadWriteHandler implements Handler {
 			//这里将添加注册到服务中心的代码
             System.out.println("Server Service started.");
 		}
-		System.out.println("处理的条数为:" + aint.get());
-		System.out.println("队列长度为:" + MasterHandler.pool.size());
+		
 	}
 }

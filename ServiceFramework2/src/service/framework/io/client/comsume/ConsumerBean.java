@@ -64,14 +64,7 @@ public class ConsumerBean {
 				// TODO Auto-generated method stub
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel);
 		        String sendData = SerializeUtils.serializeRequest(objRequestEntity);
-		        byte[] data;
-				try {
-					data = sendData.getBytes(ShareingProtocolData.FRAMEWORK_IO_ENCODING);
-					objServiceOnMessageWriteEvent.setMessage(data);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				objServiceOnMessageWriteEvent.setMessage(sendData);
 		        newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 		        newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
 			}

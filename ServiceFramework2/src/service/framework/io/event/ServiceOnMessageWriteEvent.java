@@ -4,7 +4,7 @@ import service.framework.io.server.WorkingChannel;
 
 public class ServiceOnMessageWriteEvent implements ServiceEvent {
 	private WorkingChannel socketChannel;
-	private byte[] message;
+	private String message;
 	
 	public ServiceOnMessageWriteEvent(WorkingChannel socketChannel)
 	{
@@ -22,11 +22,11 @@ public class ServiceOnMessageWriteEvent implements ServiceEvent {
 	}
 
 
-	public byte[] getMessage() {
+	public String getMessage() {
 		return message;
 	}
 
-	public void setMessage(byte[] message) {
+	public void setMessage(String message) {
 		this.message = message;
 	}
 }
