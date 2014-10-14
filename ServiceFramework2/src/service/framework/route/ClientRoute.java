@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import service.framework.io.client.comsume.ConsumerBean;
+import service.framework.io.client.comsume.RequestResultEntity;
 import service.framework.localcache.CacheElement;
 import service.framework.localcache.ICacheElement;
 import service.framework.localcache.IMemoryCache;
@@ -50,8 +51,8 @@ public class ClientRoute implements Route {
 		{
 			List<String> list = new LinkedList<String>();
 			list.add(serviceName);
-			long id = this.getServiceCenterConsumerBean().prcessRequest(list);
-			result = this.getServiceCenterConsumerBean().getResult(id);
+			RequestResultEntity objRequestResultEntity  = this.getServiceCenterConsumerBean().prcessRequest(list);
+			result = objRequestResultEntity.getResponseEntity().getResult();
 			ce = new CacheElement(serviceName, result);
 			cache.update(ce);;
 		}

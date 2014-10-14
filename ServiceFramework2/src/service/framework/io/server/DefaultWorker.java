@@ -17,12 +17,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import service.framework.io.event.ServiceOnClosedEvent;
 import service.framework.io.event.ServiceOnMessageReceiveEvent;
 import service.framework.io.event.ServiceOnMessageWriteEvent;
+import service.framework.io.fire.MasterHandler;
 import service.framework.protocol.ShareingProtocolData;
 
 /**
@@ -162,74 +162,74 @@ public class DefaultWorker implements Worker {
 	private void closeChannel(SocketChannel sc) throws IOException {
 		sc.close();
 	}
-
-
-
+	
+	/**
+	 *  
+	 * @param key
+	 * @return
+	 */
 	private boolean read(SelectionKey key) {
 		SocketChannel ch = (SocketChannel) key.channel();
 		final WorkingChannel objWorkingChannel = (WorkingChannel)key.attachment();
-		synchronized(objWorkingChannel.writeReadLock)
-		{
-			int readBytes = 0;
-			int ret = 0;
-			boolean success = false;
-		    ByteBuffer bb = ByteBuffer.allocate(ShareingProtocolData.BUFFER_SIZE);
-	        try {
-	            while ((ret = ch.read(bb)) > 0) {
-	                readBytes += ret;
-	                if (!bb.hasRemaining()) {
-	                    break;
-	                }
-	            }
-	            success = true;
-	        } catch (ClosedChannelException e) {
-	        	e.printStackTrace();
-	        	objWorkingChannel.setOpen(false);
-	            // Can happen, and does not need a user attention.
-	        } catch (Throwable t) {
-	            t.printStackTrace();
-	        }
-	        if (readBytes > 0) {
-	            bb.flip();
-	        }
-			byte[] message = new byte[readBytes];
-			System.arraycopy(bb.array(), 0, message, 0, readBytes);
-			this.readBytesCount.getAndAdd(readBytes);
-			String receiveString = "";
-			try {
-				receiveString = new String(message, ShareingProtocolData.FRAMEWORK_IO_ENCODING);
-			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			objWorkingChannel.appendMessage(receiveString);
-			String unwrappedMessage = "";
-			try {
-				while((unwrappedMessage = objWorkingChannel.extractMessage()) != "")
-				{
-					final String sendMessage = unwrappedMessage;
-					objExecutorService.execute(new Runnable(){
-	
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
-							event.setMessage(sendMessage);
-							System.out.println("fired message ... " + new String(sendMessage));
-							fireCommonEvent(event);
-						}
-						
-					});
-	
-				}
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("exception : " + e.getMessage());
-			}
-			return success;
+		int readBytes = 0;
+		int ret = 0;
+		boolean success = false;
+	    ByteBuffer bb = ByteBuffer.allocate(ShareingProtocolData.BUFFER_SIZE);
+        try {
+            while ((ret = ch.read(bb)) > 0) {
+                readBytes += ret;
+                if (!bb.hasRemaining()) {
+                    break;
+                }
+            }
+            success = true;
+        } catch (ClosedChannelException e) {
+        	e.printStackTrace();
+        	objWorkingChannel.setOpen(false);
+            // Can happen, and does not need a user attention.
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        if (readBytes > 0) {
+            bb.flip();
+        }
+		byte[] message = new byte[readBytes];
+		System.arraycopy(bb.array(), 0, message, 0, readBytes);
+		this.readBytesCount.getAndAdd(readBytes);
+		String receiveString = "";
+		try {
+			receiveString = new String(message, ShareingProtocolData.FRAMEWORK_IO_ENCODING);
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		objWorkingChannel.appendMessage(receiveString);
+		String unwrappedMessage = "";
+		try {
+			while((unwrappedMessage = objWorkingChannel.extractMessage()) != "")
+			{
+				final String sendMessage = unwrappedMessage;
+				objExecutorService.execute(new Runnable(){
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
+						event.setMessage(sendMessage);
+						System.out.println("fired message ... " + sendMessage);
+						fireCommonEvent(event);
+					}
+					
+				});
+
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("exception : " + e.getMessage());
+		}
+		return success;
 	}
 
 	/**
@@ -291,8 +291,9 @@ public class DefaultWorker implements Worker {
 			// TODO Auto-generated method stub
 			try {
 				schannel.configureBlocking(false);
-				schannel.register(selector, SelectionKey.OP_READ, objWorkingChannel);
+				SelectionKey key = schannel.register(selector, SelectionKey.OP_READ, objWorkingChannel);
 				objWorkingChannel.setOpen(true);
+				objWorkingChannel.setKey(key);
 			} catch (Exception e) {
 				try {
 					schannel.finishConnect();

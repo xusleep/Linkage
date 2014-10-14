@@ -45,38 +45,38 @@
 	</property>
 </bean>
 <!-- 设置连接到注册中心的配置 -->
-<!-- <bean id="linkToServiceCenter" class="service.framework.io.client.comsume.ConsumerBean"> -->
-<!-- 	<constructor-arg> -->
-<!-- 	<ref bean="linkedToServiceCenterInform"></ref> -->
-<!-- 	</constructor-arg> -->
-<!-- 	<property name="serviceName"> -->
-<!-- 		<value>serviceCenter</value> -->
-<!-- 	</property> -->
-<!-- 	<property name="methodName"> -->
-<!-- 		<value>register</value> -->
-<!-- 	</property> -->
-<!-- 	<property name="version"> -->
-<!-- 		<value>1.0.0</value> -->
-<!-- 	</property> -->
-<!-- 	<property name="group"> -->
-<!-- 		<value>test</value> -->
-<!-- 	</property> -->
-<!-- </bean> -->
+<bean id="linkToServiceCenter" class="service.framework.io.client.comsume.ConsumerBean">
+	<property name="route">
+		<ref bean="linkedToServiceCenterInform"></ref>
+	</property>
+	<property name="serviceName">
+		<value>serviceCenter</value>
+	</property>
+	<property name="methodName">
+		<value>register</value>
+	</property>
+	<property name="version">
+		<value>1.0.0</value>
+	</property>
+	<property name="group">
+		<value>test</value>
+	</property>
+</bean>
 <!-- 设置连接到服务器注册中心的路由 -->
-<!-- <bean id="linkedToServiceCenterInform" class="service.framework.route.DefaultRoute"> -->
-<!-- 	<property name="serviceList"> -->
-<!-- 		<list> -->
-<!-- 			<bean class="servicecenter.service.ServiceInformation"> -->
-<!-- 				<property name="address"> -->
-<!-- 					<value>localhost</value> -->
-<!-- 				</property> -->
-<!-- 				<property name="port"> -->
-<!-- 					<value>5002</value> -->
-<!-- 				</property> -->
-<!-- 			</bean> -->
-<!-- 		</list> -->
-<!-- 	</property> -->
-<!-- </bean> -->
+<bean id="linkedToServiceCenterInform" class="service.framework.route.DefaultRoute">
+	<property name="serviceList">
+		<list>
+			<bean class="servicecenter.service.ServiceInformation">
+				<property name="address">
+					<value>localhost</value>
+				</property>
+				<property name="port">
+					<value>5002</value>
+				</property>
+			</bean>
+		</list>
+	</property>
+</bean>
 <!-- 设置本地服务的启动配置 -->
 <bean id="defaultServer" class="service.framework.io.server.DefaultServer">
 	<constructor-arg>

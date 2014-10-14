@@ -21,6 +21,7 @@ public class ServiceBootStrap {
 	private final Server objServer;
 	private final MasterHandler objMasterHandler;
 
+
 	public ServiceBootStrap(Server objServer, MasterHandler objMasterHandler) throws Exception{
 		this.objServer = objServer;
 		this.objMasterHandler = objMasterHandler;
@@ -30,7 +31,6 @@ public class ServiceBootStrap {
         try {
         	//启动数据服务线程
 			new Thread(objServer).start();
-			WorkerPool.getInstance().start();
 			//启动事件处理分发线程, 即将任务分发到线程池，由线程池完成任务
         	objMasterHandler.start();
 		} catch (Exception e) {

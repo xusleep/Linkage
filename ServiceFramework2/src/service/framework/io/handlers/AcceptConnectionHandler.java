@@ -1,8 +1,5 @@
 package service.framework.io.handlers;
 
-import static service.framework.io.fire.Fires.fireRegisterChannel;
-
-import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -42,7 +39,7 @@ public class AcceptConnectionHandler implements Handler {
 			SocketChannel sc = ssc.accept();
 			sc.configureBlocking(false);
 			// 将接收到的channel，放到工作线程池中
-			fireRegisterChannel(sc);
+			objServiceOnAcceptedEvent.getServer().getWorkPool().register(sc);
 			System.out.println("Accepted connection ... count = " + aint.incrementAndGet());
 		}
 	}	

@@ -33,7 +33,8 @@ public class DefaultServer implements Server {
 	private final Selector selector;
 	private final ServerSocketChannel sschannel;
 	private final InetSocketAddress address;
-
+	private final WorkerPool workPool;
+	
 	public DefaultServer(ServiceInformation serviceInformation) throws Exception {
 		fireCommonEvent(new ServiceStartingEvent());
 		// 创建无阻塞网络套接
@@ -45,10 +46,20 @@ public class DefaultServer implements Server {
 		ServerSocket ss = sschannel.socket();
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);
+		this.workPool = new WorkerPool();
 		fireCommonEvent(new ServiceStartedEvent());
 	}
+	
+	
+
+	public WorkerPool getWorkPool() {
+		return workPool;
+	}
+
+
 
 	public void run() {
+		workPool.start();
 		// 监听
 		while (true) {
 			try {

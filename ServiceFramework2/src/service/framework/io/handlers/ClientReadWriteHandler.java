@@ -10,6 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.context.ApplicationContext;
 
+import service.framework.io.client.comsume.ConsumerBean;
+import service.framework.io.client.comsume.RequestResultEntity;
 import service.framework.io.context.DefaultServiceContext;
 import service.framework.io.context.ServiceContext;
 import service.framework.io.event.ServiceEvent;
@@ -49,8 +51,9 @@ public class ClientReadWriteHandler implements Handler {
 				aint.incrementAndGet();
 				System.out.println("处理的条数为:" + aint.get());
 				System.out.println("队列长度为:" + MasterHandler.pool.size());
-				//ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
-				
+				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
+				RequestResultEntity result = ConsumerBean.resultList.remove(objResponseEntity.getRequestID());
+				result.setResponseEntity(objResponseEntity);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

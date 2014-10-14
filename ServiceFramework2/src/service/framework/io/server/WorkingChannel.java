@@ -1,6 +1,7 @@
 package service.framework.io.server;
 
 import java.nio.channels.Channel;
+import java.nio.channels.SelectionKey;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
@@ -25,6 +26,7 @@ public class WorkingChannel {
 	private Worker worker;
 	private StringBuffer bufferMessage;
 	private boolean isOpen;
+	private SelectionKey key;
 	
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
@@ -59,9 +61,15 @@ public class WorkingChannel {
     	}
     }
     
-    
-    
-    /**
+    public SelectionKey getKey() {
+		return key;
+	}
+
+	public void setKey(SelectionKey key) {
+		this.key = key;
+	}
+
+	/**
 	 * 从缓存区解析出消息
 	 * @param sb
 	 * @return

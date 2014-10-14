@@ -20,9 +20,4 @@ public class Fires
 	public static void fireCommonEvent(ServiceEvent event) {
 		MasterHandler.submitEventPool(event);
 	}
-	
-	public static void fireRegisterChannel(SocketChannel sc) throws Exception{
-		System.out.println("register " + sc.getRemoteAddress());
-		WorkerPool.getInstance().register(sc);
-	}
 }

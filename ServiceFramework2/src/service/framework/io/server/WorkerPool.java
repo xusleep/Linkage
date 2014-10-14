@@ -6,13 +6,8 @@ public class WorkerPool {
 	private final int WORKERCOUNTER = Runtime.getRuntime().availableProcessors();
 	private Worker[] workers = new Worker[WORKERCOUNTER];
 	private int nextWorkCount = 0;
-	private static final WorkerPool instance = new WorkerPool();
 	
-	public static WorkerPool getInstance() {
-		return instance;
-	}
-	
-	private WorkerPool(){
+	public WorkerPool(){
 		for(int i = 0; i < workers.length; i++){
 			try {
 				workers[i] = new DefaultWorker();

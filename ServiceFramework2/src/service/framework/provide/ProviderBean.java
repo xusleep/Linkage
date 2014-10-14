@@ -29,6 +29,7 @@ public class ProviderBean {
 				Object result = findMethod.invoke(target, request.getArgs().toArray());
 				ResponseEntity response = new ResponseEntity();
 				response.setResult(result.toString());
+				response.setRequestID(request.getRequestID());
 				return response;
 			}
 		} catch (IllegalAccessException e) {

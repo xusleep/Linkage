@@ -22,7 +22,7 @@ import service.framework.serialization.SerializeUtils;
 import servicecenter.service.ServiceInformation;
 
 public class ConsumerBean {
-	private ConcurrentHashMap resultList = new ConcurrentHashMap(16);
+	public static ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(16);
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private String methodName;
 	private String serviceName;
@@ -54,40 +54,26 @@ public class ConsumerBean {
 		}
 	}
 
-	public long prcessRequest(List<String> args) throws IOException, InterruptedException, ExecutionException{
+	public RequestResultEntity prcessRequest(List<String> args) throws IOException, InterruptedException, ExecutionException{
 		long id = idGenerator.incrementAndGet();
 		final RequestEntity objRequestEntity = new RequestEntity();
 		objRequestEntity.setMethodName(methodName);
 		objRequestEntity.setGroup(group);
 		objRequestEntity.setServiceName(serviceName);
 		objRequestEntity.setArgs(args);
-
-    	new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-					// TODO Auto-generated method stub
-					ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel);
-			        String sendData = SerializeUtils.serializeRequest(objRequestEntity);
-					objServiceOnMessageWriteEvent.setMessage(sendData);
-					
-			        newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-			        newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
-			}
-    		
-    	}).start();
-    	//ResponseEntity objResponseEntity = (ResponseEntity)result.get();
-    	//resultList.put(id, result);
-    	return id;
-	}
-	
-	public String getResult(long id) throws InterruptedException, ExecutionException{
-		
-		return "";
+		objRequestEntity.setRequestID("" + id);
+    	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel);
+        String sendData = SerializeUtils.serializeRequest(objRequestEntity);
+		objServiceOnMessageWriteEvent.setMessage(sendData);
+        newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+        newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
+        RequestResultEntity result = new RequestResultEntity();
+        result.setRequestID(objRequestEntity.getRequestID());
+        resultList.put(objRequestEntity.getRequestID(), result);
+    	return result;
 	}
 	
 	public WorkingChannel newWorkingChannel(String address, int port) throws IOException{
-		WorkerPool.getInstance().start();
 		// 获得一个Socket通道  
         SocketChannel channel = SocketChannel.open();  
         // 设置通道为非阻塞  
@@ -100,8 +86,9 @@ public class ConsumerBean {
         if(channel.isConnectionPending()){  
             channel.finishConnect();  
         } 
-        
-        WorkingChannel objWorkingChannel = WorkerPool.getInstance().register(channel);
+        WorkerPool objWorkerPool = new WorkerPool();
+        objWorkerPool.start();
+        WorkingChannel objWorkingChannel = objWorkerPool.register(channel);
         return objWorkingChannel;
 	}
 

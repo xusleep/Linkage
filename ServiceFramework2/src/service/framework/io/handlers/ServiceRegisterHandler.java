@@ -43,6 +43,7 @@ public class ServiceRegisterHandler implements Handler {
 	public void handleRequest(ServiceContext context, ServiceEvent event) throws IOException {
 		// TODO Auto-generated method stub
 		if (event instanceof ServiceStartedEvent) {
+			
 			// TODO Auto-generated method stub
 			//Ö´ÐÐ
 			ServiceStartedEvent objServiceOnReadEvent = (ServiceStartedEvent) event;
@@ -76,6 +77,7 @@ public class ServiceRegisterHandler implements Handler {
 			}
 			String strServiceInformation = SerializeUtils.serializeServiceInformationList(serviceInformationList);
 			ConsumerBean objConsumerBean = (ConsumerBean)applicationContext.getBean("linkToServiceCenter");
+			objConsumerBean.build();
 			List<String> args = new LinkedList<String>();
 			args.add(strServiceInformation);
 			try {
