@@ -1,7 +1,6 @@
 package service.framework.io.server;
 
 import static service.framework.io.fire.Fires.fireConnectAccept;
-import static service.framework.io.fire.Fires.fireCommonEvent;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -16,6 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import service.framework.io.event.ServiceOnAcceptedEvent;
 import service.framework.io.event.ServiceStartedEvent;
 import service.framework.io.event.ServiceStartingEvent;
+import service.framework.io.fire.MasterHandler;
 import servicecenter.service.ServiceInformation;
 
 /**
@@ -34,9 +34,11 @@ public class DefaultServer implements Server {
 	private final ServerSocketChannel sschannel;
 	private final InetSocketAddress address;
 	private final WorkerPool workPool;
+	private final MasterHandler objMasterHandler;
 	
-	public DefaultServer(ServiceInformation serviceInformation) throws Exception {
-		fireCommonEvent(new ServiceStartingEvent());
+	public DefaultServer(ServiceInformation serviceInformation, MasterHandler objMasterHandler) throws Exception {
+		this.objMasterHandler = objMasterHandler;
+		objMasterHandler.submitEventPool(new ServiceStartingEvent());
 		// ´´½¨ÎÞ×èÈûÍøÂçÌ×½Ó
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
@@ -46,8 +48,8 @@ public class DefaultServer implements Server {
 		ServerSocket ss = sschannel.socket();
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);
-		this.workPool = new WorkerPool();
-		fireCommonEvent(new ServiceStartedEvent());
+		this.workPool = new WorkerPool(objMasterHandler);
+		objMasterHandler.submitEventPool(new ServiceStartedEvent());
 	}
 	
 	
@@ -59,6 +61,7 @@ public class DefaultServer implements Server {
 
 
 	public void run() {
+		objMasterHandler.start();
 		workPool.start();
 		// ¼àÌý
 		while (true) {

@@ -1,16 +1,10 @@
 package service.framework.io.handlers;
 
-import static service.framework.io.fire.Fires.fireCommonEvent;
-
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.context.ApplicationContext;
 
-import service.framework.io.context.DefaultServiceContext;
 import service.framework.io.context.ServiceContext;
 import service.framework.io.event.ServiceEvent;
 import service.framework.io.event.ServiceOnErrorEvent;
@@ -18,9 +12,7 @@ import service.framework.io.event.ServiceOnMessageReceiveEvent;
 import service.framework.io.event.ServiceOnMessageWriteEvent;
 import service.framework.io.event.ServiceStartedEvent;
 import service.framework.io.event.ServiceStartingEvent;
-import service.framework.io.fire.MasterHandler;
 import service.framework.io.server.WorkingChannel;
-import service.framework.protocol.ShareingProtocolData;
 import service.framework.provide.ProviderBean;
 import service.framework.provide.entity.RequestEntity;
 import service.framework.provide.entity.ResponseEntity;
@@ -79,6 +71,5 @@ public class ReadWriteHandler implements Handler {
             System.out.println("Server Service started.");
 		}
 		System.out.println("处理的条数为:" + aint.get());
-		System.out.println("处理 队列的长度为:" + MasterHandler.pool.size());
 	}
 }

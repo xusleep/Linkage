@@ -17,7 +17,7 @@ import service.framework.io.handlers.Handler;
  *
  */
 public class MasterHandler extends Thread {
-	public static BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
+	public  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
 	private final ExecutorService objExecutorService;
 	private final List<Handler> eventHandlerList;
 	
@@ -46,7 +46,7 @@ public class MasterHandler extends Thread {
 	/**
 	 * 处理客户请求,管理用户的联结池,并唤醒队列中的线程进行处理
 	 */
-	public static void submitEventPool(ServiceEvent event) {
+	public void submitEventPool(ServiceEvent event) {
 		try {
 			pool.put(event);
 		} catch (InterruptedException e) {

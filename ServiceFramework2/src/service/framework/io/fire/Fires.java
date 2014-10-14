@@ -14,10 +14,4 @@ public class Fires
 		AcceptConnectionHandler.getInstance().handleRequest(null, event);
 	}	
 	
-	/**
-	 * 处理客户请求,管理用户的联结池,并唤醒队列中的线程进行处理
-	 */
-	public static void fireCommonEvent(ServiceEvent event) {
-		MasterHandler.submitEventPool(event);
-	}
 }

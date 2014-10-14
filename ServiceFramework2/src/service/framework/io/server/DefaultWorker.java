@@ -1,7 +1,5 @@
 package service.framework.io.server;
 
-import static service.framework.io.fire.Fires.fireCommonEvent;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -41,11 +39,13 @@ public class DefaultWorker implements Worker {
 	private final ExecutorService objExecutorService;
 	public static AtomicLong readBytesCount = new AtomicLong(0);
 	public static AtomicLong writeBytesCount = new AtomicLong(0);
+	private final MasterHandler objMasterHandler;
 	
-	public DefaultWorker() throws Exception {
+	public DefaultWorker(MasterHandler objMasterHandler) throws Exception {
 		// 创建无阻塞网络套接
 		selector = Selector.open();
 		this.objExecutorService = Executors.newFixedThreadPool(10);
+		this.objMasterHandler = objMasterHandler;
 	}
 
 	public void run() {
@@ -217,7 +217,7 @@ public class DefaultWorker implements Worker {
 						ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
 						event.setMessage(sendMessage);
 						System.out.println("fired message ... " + sendMessage);
-						fireCommonEvent(event);
+						objMasterHandler.pool.offer(event);
 					}
 					
 				});
@@ -299,7 +299,7 @@ public class DefaultWorker implements Worker {
 					schannel.finishConnect();
 					schannel.close();
 					schannel.socket().close();
-					fireCommonEvent(new ServiceOnClosedEvent());
+					objMasterHandler.pool.offer(new ServiceOnClosedEvent());
 				} catch (Exception e1) {
 				}
 			}
