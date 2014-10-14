@@ -79,6 +79,6 @@ public class ReadWriteHandler implements Handler {
             System.out.println("Server Service started.");
 		}
 		System.out.println("处理的条数为:" + aint.get());
-		System.out.println("队列长度为:" + MasterHandler.pool.size());
+		System.out.println("处理 队列的长度为:" + MasterHandler.pool.size());
 	}
 }

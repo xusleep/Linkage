@@ -26,7 +26,6 @@ public class ProviderBean {
 			}
 			if(findMethod != null)
 			{
-				System.out.println("Provider args : " + request.getArgs().get(0));
 				Object result = findMethod.invoke(target, request.getArgs().toArray());
 				ResponseEntity response = new ResponseEntity();
 				response.setResult(result.toString());

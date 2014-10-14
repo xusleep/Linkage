@@ -33,7 +33,6 @@ public class MasterHandler extends Thread {
             try 
             {
             	final ServiceEvent event = pool.take();
-	            System.out.println("pool.take() ... ");	
             	// 将事件处理任务交由线程池执行，处理逻辑独立处理在consumer里面完成
             	handleEvent(event);
             }

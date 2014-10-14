@@ -47,7 +47,7 @@ public class ServiceBootStrap {
 	            ApplicationContext applicationContext = new ClassPathXmlApplicationContext("ServerServiceConfig.xml");
 	            Server objServer = (Server)applicationContext.getBean("defaultServer");
 	            List<Handler> eventConsumerList = new LinkedList<Handler>();
-	            //eventConsumerList.add(new ReadWriteHandler(applicationContext));
+	            eventConsumerList.add(new ReadWriteHandler(applicationContext));
 	    		//eventConsumerList.add(new ServiceRegisterHandler(applicationContext));
 	    		MasterHandler objMasterHandler = new MasterHandler(1, eventConsumerList);
 	            new ServiceBootStrap(objServer, objMasterHandler).start();
