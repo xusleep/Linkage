@@ -9,6 +9,9 @@
 	<property name="route">
 		<ref bean="linkedToService"></ref>
 	</property>
+	<property name="workerPool">
+		<ref bean="clientworkerPool"></ref>
+	</property>
 	<property name="serviceName">
 		<value>addService</value>
 	</property>
@@ -36,7 +39,10 @@
 <!-- 设置连接到注册中心的配置 -->
 <bean id="linkedToServiceCenterCB" class="service.framework.io.client.comsume.ConsumerBean">
 	<property name="route">
-		<ref bean="linkedToServiceCenter"></ref>
+		<ref bean="linkedToServiceCenterInform"></ref>
+	</property>
+	<property name="workerPool">
+		<ref bean="clientworkerPool"></ref>
 	</property>
 	<property name="serviceName">
 		<value>serviceCenter</value>
@@ -78,5 +84,24 @@
 			</bean>
 		</list>
 	</property>
+</bean>
+<!-- 设置本地服务的客户端部分启动配置 -->
+<bean id="defaultClient" class="service.framework.io.server.DefaultClient">
+	<constructor-arg>
+		<ref bean="clientmasterHandler"/>
+	</constructor-arg>
+	<constructor-arg>
+		<ref bean="clientworkerPool"/>
+	</constructor-arg>
+</bean>
+<bean id="clientmasterHandler" class="service.framework.io.fire.MasterHandler">
+	<constructor-arg>
+		<value>200</value>
+	</constructor-arg>
+</bean>
+<bean id="clientworkerPool" class="service.framework.io.server.DefaultWorkerPool">
+	<constructor-arg>
+		<ref bean="clientmasterHandler"/>
+	</constructor-arg>
 </bean>
 </beans>

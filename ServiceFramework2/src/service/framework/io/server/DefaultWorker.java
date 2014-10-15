@@ -217,7 +217,7 @@ public class DefaultWorker implements Worker {
 						ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
 						event.setMessage(sendMessage);
 						System.out.println("fired message ... " + sendMessage);
-						objMasterHandler.pool.offer(event);
+						objMasterHandler.submitEventPool(event);
 					}
 					
 				});
@@ -299,7 +299,7 @@ public class DefaultWorker implements Worker {
 					schannel.finishConnect();
 					schannel.close();
 					schannel.socket().close();
-					objMasterHandler.pool.offer(new ServiceOnClosedEvent());
+					objMasterHandler.submitEventPool(new ServiceOnClosedEvent());
 				} catch (Exception e1) {
 				}
 			}

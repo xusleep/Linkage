@@ -1,18 +1,16 @@
 package service.framework.io.server;
 
-import static service.framework.io.fire.Fires.fireConnectAccept;
-
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import service.framework.io.event.ServiceOnAcceptedEvent;
 import service.framework.io.event.ServiceStartedEvent;
 import service.framework.io.event.ServiceStartingEvent;
 import service.framework.io.fire.MasterHandler;
@@ -33,10 +31,10 @@ public class DefaultServer implements Server {
 	private final Selector selector;
 	private final ServerSocketChannel sschannel;
 	private final InetSocketAddress address;
-	private final WorkerPool workPool;
+	private final WorkerPool workerPool;
 	private final MasterHandler objMasterHandler;
 	
-	public DefaultServer(ServiceInformation serviceInformation, MasterHandler objMasterHandler) throws Exception {
+	public DefaultServer(ServiceInformation serviceInformation, MasterHandler objMasterHandler, WorkerPool workerPool) throws Exception {
 		this.objMasterHandler = objMasterHandler;
 		objMasterHandler.submitEventPool(new ServiceStartingEvent());
 		// 创建无阻塞网络套接
@@ -48,21 +46,23 @@ public class DefaultServer implements Server {
 		ServerSocket ss = sschannel.socket();
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);
-		this.workPool = new WorkerPool(objMasterHandler);
+		this.workerPool = workerPool;
 		objMasterHandler.submitEventPool(new ServiceStartedEvent());
 	}
-	
-	
 
-	public WorkerPool getWorkPool() {
-		return workPool;
+	public WorkerPool getWorkerPool() {
+		return workerPool;
 	}
+	
+	
 
-
+	public MasterHandler getMasterHandler() {
+		return objMasterHandler;
+	}
 
 	public void run() {
 		objMasterHandler.start();
-		workPool.start();
+		workerPool.start();
 		// 监听
 		while (true) {
 			try {
@@ -77,7 +77,11 @@ public class DefaultServer implements Server {
 						// 处理IO事件
 						if (key.isAcceptable()) {
 							// Accept the new connection
-							fireConnectAccept(new ServiceOnAcceptedEvent(key, this));
+							ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
+							SocketChannel sc = ssc.accept();
+							sc.configureBlocking(false);
+							// 将接收到的channel，放到工作线程池中
+							this.getWorkerPool().register(sc);
 						} 
 					}
 				} 

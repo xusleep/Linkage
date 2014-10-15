@@ -6,31 +6,47 @@ import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import service.framework.io.event.ServiceOnMessageWriteEvent;
 import service.framework.io.fire.MasterHandler;
 import service.framework.io.handlers.ClientReadWriteHandler;
 import service.framework.io.handlers.Handler;
-import service.framework.io.server.WorkerPool;
+import service.framework.io.server.Client;
+import service.framework.io.server.DefaultWorkerPool;
 import service.framework.io.server.WorkingChannel;
 import service.framework.monitor.MonitorThread;
 
 public class ClientBootStrap {
+	private final Client client;
+	private static ClientBootStrap instance = new ClientBootStrap();
+	private final ApplicationContext applicationContext;
 	
-	public void start() throws IOException {
-        List<Handler> eventConsumerList = new LinkedList<Handler>();
-        eventConsumerList.add(new ClientReadWriteHandler());
-		MasterHandler objMasterHandler = new MasterHandler(1, eventConsumerList);
-		//启动事件处理分发线程, 即将任务分发到线程池，由线程池完成任务
-    	objMasterHandler.start();
+	private ClientBootStrap(){
+		this.applicationContext = new ClassPathXmlApplicationContext("ClientServiceConfig.xml");
+		this.client = (Client)applicationContext.getBean("defaultClient");
 	}
 	
-	 
-	public static void main(String[] args) {
-		try {
-			new ClientBootStrap().start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static ClientBootStrap getInstance(){
+		return instance;
+	}
+	
+	public Client getClient() {
+		return client;
+	}
+
+	
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+
+	public void start() throws IOException {
+		client.getMasterHandler().registerHandler(new ClientReadWriteHandler());
+		new Thread(client).start();
+	}
+	
+	public static void main(String[] args) throws IOException {
+		ClientBootStrap.getInstance().start();
 	}
 }

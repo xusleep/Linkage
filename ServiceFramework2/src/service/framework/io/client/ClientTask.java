@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import service.framework.io.context.DefaultServiceContext;
 import service.framework.io.event.ServiceOnMessageWriteEvent;
-import service.framework.io.server.WorkerPool;
+import service.framework.io.server.DefaultWorkerPool;
 import service.framework.io.server.WorkingChannel;
 import service.framework.protocol.ShareingProtocolData;
 import service.framework.provide.entity.RequestEntity;

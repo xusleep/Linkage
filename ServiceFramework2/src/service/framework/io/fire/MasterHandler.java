@@ -1,6 +1,7 @@
 package service.framework.io.fire;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -17,14 +18,21 @@ import service.framework.io.handlers.Handler;
  *
  */
 public class MasterHandler extends Thread {
-	public  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
+	private  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
 	private final ExecutorService objExecutorService;
 	private final List<Handler> eventHandlerList;
 	
-	public MasterHandler(int taskThreadPootSize, List<Handler> eventHandlerList){
+	public MasterHandler(int taskThreadPootSize){
 		this.objExecutorService = Executors.newFixedThreadPool(taskThreadPootSize);
-		this.eventHandlerList = eventHandlerList;
+		this.eventHandlerList = new LinkedList<Handler>();
 	}
+	
+	
+	public void registerHandler(Handler handler) {
+		this.eventHandlerList.add(handler);
+	}
+
+
 
 	@Override
 	public void run() {

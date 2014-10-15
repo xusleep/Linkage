@@ -77,7 +77,14 @@ public class ServiceRegisterHandler implements Handler {
 			}
 			String strServiceInformation = SerializeUtils.serializeServiceInformationList(serviceInformationList);
 			ConsumerBean objConsumerBean = (ConsumerBean)applicationContext.getBean("linkToServiceCenter");
-			objConsumerBean.build();
+			try {
+				objConsumerBean.build();
+			} catch (InterruptedException e1) {
+				return ;
+			} catch (ExecutionException e1) {
+				// TODO Auto-generated catch block
+				return;
+			}
 			List<String> args = new LinkedList<String>();
 			args.add(strServiceInformation);
 			try {

@@ -12,6 +12,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import service.framework.io.client.ClientTask;
 import service.framework.io.event.ServiceOnMessageWriteEvent;
+import service.framework.io.master.ClientBootStrap;
+import service.framework.io.master.ServiceBootStrap;
+import service.framework.io.server.DefaultWorkerPool;
 import service.framework.io.server.WorkerPool;
 import service.framework.io.server.WorkingChannel;
 import service.framework.protocol.ShareingProtocolData;
@@ -30,6 +33,7 @@ public class ConsumerBean {
 	private String group;
 	private Route route;
 	private WorkingChannel newWorkingChannel;
+	private WorkerPool workerPool;
 	
 	public ConsumerBean(){
 
@@ -42,16 +46,21 @@ public class ConsumerBean {
 	public void setRoute(Route route) {
 		this.route = route;
 	}
+	
+	
 
-	public void build(){
-		try {
-			ServiceInformation service;
-			service = this.route.chooseRoute(serviceName);
-			this.newWorkingChannel = newWorkingChannel(service.getAddress(), service.getPort());
-		} catch (IOException | InterruptedException | ExecutionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	public WorkerPool getWorkerPool() {
+		return workerPool;
+	}
+
+	public void setWorkerPool(WorkerPool objWorkerPool) {
+		this.workerPool = objWorkerPool;
+	}
+
+	public void build() throws IOException, InterruptedException, ExecutionException{
+		ServiceInformation service;
+		service = this.route.chooseRoute(serviceName);
+		this.newWorkingChannel = newWorkingChannel(service.getAddress(), service.getPort());
 	}
 
 	public RequestResultEntity prcessRequest(List<String> args) throws IOException, InterruptedException, ExecutionException{
@@ -86,9 +95,7 @@ public class ConsumerBean {
         if(channel.isConnectionPending()){  
             channel.finishConnect();  
         } 
-        WorkerPool objWorkerPool = new WorkerPool();
-        objWorkerPool.start();
-        WorkingChannel objWorkingChannel = objWorkerPool.register(channel);
+        WorkingChannel objWorkingChannel = this.getWorkerPool().register(channel);
         return objWorkingChannel;
 	}
 

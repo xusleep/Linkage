@@ -6,14 +6,10 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import service.framework.io.client.comsume.ClientManagement;
 import service.framework.io.client.comsume.ConsumerBean;
 import service.framework.io.client.comsume.RequestResultEntity;
 import service.framework.io.master.ClientBootStrap;
-import service.framework.io.server.WorkerPool;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
 import zhonglin.test.framework.concurrence.condition.job.JobInterface;
@@ -42,7 +38,18 @@ public class StartClient extends AbstractJob {
 	
 	public StartClient(ConsumerBean cb) {
 		this.cb = cb;
-		this.cb.build();
+		try {
+			this.cb.build();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -78,10 +85,9 @@ public class StartClient extends AbstractJob {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new ClientBootStrap().start();
-	 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("ClientServiceConfig.xml");
+		ClientBootStrap.getInstance().start();
     	ClientManagement cmm = new ClientManagement();
-		StartClient job1 = new StartClient((ConsumerBean)applicationContext.getBean("addService"));
+		StartClient job1 = new StartClient((ConsumerBean)ClientBootStrap.getInstance().getApplicationContext().getBean("addService"));
 		job1.setThreadCount(1000);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
