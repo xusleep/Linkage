@@ -121,7 +121,7 @@
 </bean>
 <bean id="clientmasterHandler" class="service.framework.io.fire.MasterHandler">
 	<constructor-arg>
-		<value>200</value>
+		<value>1</value>
 	</constructor-arg>
 </bean>
 <bean id="clientworkerPool" class="service.framework.io.server.DefaultWorkerPool">

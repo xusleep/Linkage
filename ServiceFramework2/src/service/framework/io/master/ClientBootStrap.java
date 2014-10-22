@@ -42,8 +42,9 @@ public class ClientBootStrap {
 	}
 
 	public void start() throws IOException {
+		new MonitorThread(client.getMasterHandler()).start();
 		client.getMasterHandler().registerHandler(new ClientReadWriteHandler());
-		client.run();
+		new Thread(client).start();
 	}
 	
 	public static void main(String[] args) throws IOException {

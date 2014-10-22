@@ -18,8 +18,8 @@ import service.framework.io.handlers.Handler;
  *
  */
 public class MasterHandler extends Thread {
-	private  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
-	private final ExecutorService objExecutorService;
+	public  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
+	public final ExecutorService objExecutorService;
 	private final List<Handler> eventHandlerList;
 	
 	public MasterHandler(int taskThreadPootSize){

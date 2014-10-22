@@ -57,7 +57,7 @@ public class ConsumerBean {
 		this.workerPool = objWorkerPool;
 	}
 
-	public synchronized void build() throws IOException, InterruptedException, ExecutionException{
+	public synchronized void build() throws Exception{
 		ServiceInformation service;
 		service = this.route.chooseRoute(serviceName);
 		this.newWorkingChannel = newWorkingChannel(service.getAddress(), service.getPort());

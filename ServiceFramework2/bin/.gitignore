@@ -1,3 +1,6 @@
-/service/
-/servicecenter/
-/test/
+/ClientServiceConfig.xml
+/ServerServiceConfig.xml
+/bean.xml
+/service
+/servicecenter
+/test

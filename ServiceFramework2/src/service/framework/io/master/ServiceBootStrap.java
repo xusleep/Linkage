@@ -8,6 +8,7 @@ import service.framework.io.handlers.ReadWriteHandler;
 import service.framework.io.handlers.ServiceRegisterHandler;
 import service.framework.io.server.Client;
 import service.framework.io.server.Server;
+import service.framework.monitor.MonitorThread;
 
 public class ServiceBootStrap {
 	private Client client;
@@ -28,9 +29,10 @@ public class ServiceBootStrap {
 	public void start(){
 		server.getMasterHandler().registerHandler(new ReadWriteHandler(applicationContext));
 		//server.getMasterHandler().registerHandler(new ServiceRegisterHandler(applicationContext));
-		server.run();
+		new Thread(server).start();
+		new MonitorThread(server.getMasterHandler()).start();
 		client.getMasterHandler().registerHandler(new ClientReadWriteHandler());
-		client.run();
+		new Thread(client).start();
 	}
 	
 	public Client getClient() {

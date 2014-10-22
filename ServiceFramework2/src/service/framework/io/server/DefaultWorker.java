@@ -208,31 +208,33 @@ public class DefaultWorker implements Worker {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		objWorkingChannel.appendMessage(receiveString);
-		String unwrappedMessage = "";
-		try {
-			while((unwrappedMessage = objWorkingChannel.extractMessage()) != "")
-			{
-				final String sendMessage = unwrappedMessage;
-				objExecutorService.execute(new Runnable(){
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
-						event.setMessage(sendMessage);
-						System.out.println("fired message ... " + sendMessage);
-						objMasterHandler.submitEventPool(event);
-					}
-					
-				});
-
+		synchronized(objWorkingChannel.writeReadLock){
+			objWorkingChannel.appendMessage(receiveString);
+			String unwrappedMessage = "";
+			try {
+				while((unwrappedMessage = objWorkingChannel.extractMessage()) != "")
+				{
+					final String sendMessage = unwrappedMessage;
+					objExecutorService.execute(new Runnable(){
+	
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
+							event.setMessage(sendMessage);
+							System.out.println("fired message ... " + sendMessage);
+							objMasterHandler.submitEventPool(event);
+						}
+						
+					});
+	
+				}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("exception : " + e.getMessage());
 			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("exception : " + e.getMessage());
 		}
 		return success;
 	}
