@@ -37,6 +37,7 @@ public class ClientReadWriteHandler implements Handler {
 				aint.incrementAndGet();
 				System.out.println("处理的条数为:" + aint.get());
 				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
+				System.out.println("objResponseEntity.getRequestID():" + objResponseEntity.getRequestID());
 				RequestResultEntity result = ConsumerBean.resultList.remove(objResponseEntity.getRequestID());
 				result.setResponseEntity(objResponseEntity);
 			} catch (Exception e) {

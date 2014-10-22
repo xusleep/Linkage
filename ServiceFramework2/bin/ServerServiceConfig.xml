@@ -102,7 +102,7 @@
 </bean>
 <bean id="masterHandler" class="service.framework.io.fire.MasterHandler">
 	<constructor-arg>
-		<value>200</value>
+		<value>5</value>
 	</constructor-arg>
 </bean>
 <bean id="workerPool" class="service.framework.io.server.DefaultWorkerPool">

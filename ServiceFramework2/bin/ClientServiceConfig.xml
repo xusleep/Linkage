@@ -7,7 +7,7 @@
 <!-- <bean id=""></bean> -->
 <bean id="addService" class="service.framework.io.client.comsume.ConsumerBean">
 	<property name="route">
-		<ref bean="linkedToService"></ref>
+		<ref bean="linkedToServiceDirectly"></ref>
 	</property>
 	<property name="workerPool">
 		<ref bean="clientworkerPool"></ref>
@@ -39,7 +39,7 @@
 <!-- 设置连接到注册中心的配置 -->
 <bean id="linkedToServiceCenterCB" class="service.framework.io.client.comsume.ConsumerBean">
 	<property name="route">
-		<ref bean="linkedToServiceCenterInform"></ref>
+		<ref bean="linkedToServiceCenter"></ref>
 	</property>
 	<property name="workerPool">
 		<ref bean="clientworkerPool"></ref>
@@ -71,6 +71,20 @@
 		</list>
 	</property>
 </bean>
+<bean id="linkedToServiceDirectly" class="service.framework.route.DefaultRoute">
+	<property name="serviceList">
+		<list>
+			<bean class="servicecenter.service.ServiceInformation">
+				<property name="address">
+					<value>localhost</value>
+				</property>
+				<property name="port">
+					<value>5001</value>
+				</property>
+			</bean>
+		</list>
+	</property>
+</bean>
 <bean id="linkedToService" class="service.framework.route.DefaultRoute">
 	<property name="serviceList">
 		<list>
@@ -96,7 +110,7 @@
 </bean>
 <bean id="clientmasterHandler" class="service.framework.io.fire.MasterHandler">
 	<constructor-arg>
-		<value>200</value>
+		<value>5</value>
 	</constructor-arg>
 </bean>
 <bean id="clientworkerPool" class="service.framework.io.server.DefaultWorkerPool">

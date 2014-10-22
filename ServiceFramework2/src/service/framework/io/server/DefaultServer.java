@@ -63,6 +63,7 @@ public class DefaultServer implements Server {
 	public void run() {
 		objMasterHandler.start();
 		workerPool.start();
+		workerPool.waitReady();
 		// ¼àÌý
 		while (true) {
 			try {
@@ -89,5 +90,11 @@ public class DefaultServer implements Server {
 				continue;
 			}
 		}
+	}
+
+	@Override
+	public void waitReady() {
+		// TODO Auto-generated method stub
+		workerPool.waitReady();
 	}
 }

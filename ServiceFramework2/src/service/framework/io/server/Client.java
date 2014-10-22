@@ -5,4 +5,6 @@ import service.framework.io.fire.MasterHandler;
 public interface Client extends Runnable{
 	public WorkerPool getWorkerPool();
 	public MasterHandler getMasterHandler();
+	// wait for every thing ready
+	public void waitReady();
 }

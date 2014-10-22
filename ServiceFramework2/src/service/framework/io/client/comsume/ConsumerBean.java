@@ -57,7 +57,7 @@ public class ConsumerBean {
 		this.workerPool = objWorkerPool;
 	}
 
-	public void build() throws IOException, InterruptedException, ExecutionException{
+	public synchronized void build() throws IOException, InterruptedException, ExecutionException{
 		ServiceInformation service;
 		service = this.route.chooseRoute(serviceName);
 		this.newWorkingChannel = newWorkingChannel(service.getAddress(), service.getPort());
@@ -71,14 +71,14 @@ public class ConsumerBean {
 		objRequestEntity.setServiceName(serviceName);
 		objRequestEntity.setArgs(args);
 		objRequestEntity.setRequestID("" + id);
+        RequestResultEntity result = new RequestResultEntity();
+        result.setRequestID(objRequestEntity.getRequestID());
+        resultList.put(objRequestEntity.getRequestID(), result);
     	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel);
         String sendData = SerializeUtils.serializeRequest(objRequestEntity);
 		objServiceOnMessageWriteEvent.setMessage(sendData);
         newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
         newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
-        RequestResultEntity result = new RequestResultEntity();
-        result.setRequestID(objRequestEntity.getRequestID());
-        resultList.put(objRequestEntity.getRequestID(), result);
     	return result;
 	}
 	
@@ -95,6 +95,9 @@ public class ConsumerBean {
         if(channel.isConnectionPending()){  
             channel.finishConnect();  
         } 
+        System.out.println("wait pool ready ...");
+        this.getWorkerPool().waitReady();
+        System.out.println("pool is ready!");
         WorkingChannel objWorkingChannel = this.getWorkerPool().register(channel);
         return objWorkingChannel;
 	}

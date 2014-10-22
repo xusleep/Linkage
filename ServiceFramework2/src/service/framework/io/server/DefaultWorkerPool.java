@@ -1,6 +1,7 @@
 package service.framework.io.server;
 
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.CountDownLatch;
 
 import service.framework.io.fire.MasterHandler;
 
@@ -9,11 +10,12 @@ public class DefaultWorkerPool implements WorkerPool {
 	private Worker[] workers = new Worker[WORKERCOUNTER];
 	private int nextWorkCount = 0;
 	private MasterHandler objMasterHandler;
+	private final CountDownLatch signal = new CountDownLatch(WORKERCOUNTER);
 	
 	public DefaultWorkerPool(MasterHandler objMasterHandler){
 		for(int i = 0; i < workers.length; i++){
 			try {
-				workers[i] = new DefaultWorker(objMasterHandler);
+				workers[i] = new DefaultWorker(objMasterHandler, signal);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -34,5 +36,16 @@ public class DefaultWorkerPool implements WorkerPool {
 	public WorkingChannel register(SocketChannel sc){
 		Worker worker = getNextWorker();
 		return worker.submitOpeRegister(sc);
+	}
+
+	@Override
+	public void waitReady() {
+		// TODO Auto-generated method stub
+		try {
+			signal.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

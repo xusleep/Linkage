@@ -31,8 +31,8 @@ public class RequestResultEntity {
 	}
 
 	public void setResponseEntity(ResponseEntity responseEntity) {
-		signal.countDown();
 		this.responseEntity = responseEntity;
+		signal.countDown();
 	}
 	
 	

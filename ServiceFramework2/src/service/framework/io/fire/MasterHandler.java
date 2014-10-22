@@ -38,11 +38,13 @@ public class MasterHandler extends Thread {
 	public void run() {
 		// TODO Auto-generated method stub
         while (true) {
+        	
             try 
             {
             	final ServiceEvent event = pool.take();
             	// 将事件处理任务交由线程池执行，处理逻辑独立处理在consumer里面完成
             	handleEvent(event);
+            	System.out.println(" pool take  ");
             }
             catch (Exception e) {
             	e.printStackTrace();
@@ -57,6 +59,7 @@ public class MasterHandler extends Thread {
 	public void submitEventPool(ServiceEvent event) {
 		try {
 			pool.put(event);
+			System.out.println("submitEventPool ");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,6 +75,7 @@ public class MasterHandler extends Thread {
 			@Override
 			public void run() {
             	try {
+            		System.out.println("this.objExecutorService.execute ");
             		for(Handler handler : eventHandlerList)
             		{
             			handler.handleRequest(null, event);

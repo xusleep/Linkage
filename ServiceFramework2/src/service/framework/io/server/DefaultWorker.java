@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -40,15 +41,19 @@ public class DefaultWorker implements Worker {
 	public static AtomicLong readBytesCount = new AtomicLong(0);
 	public static AtomicLong writeBytesCount = new AtomicLong(0);
 	private final MasterHandler objMasterHandler;
+	private final CountDownLatch signal;
 	
-	public DefaultWorker(MasterHandler objMasterHandler) throws Exception {
+	public DefaultWorker(MasterHandler objMasterHandler, CountDownLatch signal) throws Exception {
 		// 创建无阻塞网络套接
 		selector = Selector.open();
 		this.objExecutorService = Executors.newFixedThreadPool(10);
 		this.objMasterHandler = objMasterHandler;
+		this.signal = signal;
 	}
 
 	public void run() {
+		signal.countDown();
+		System.out.println("启动 worker id = " + Thread.currentThread().getId());
 		// 监听
 		while (true) {
 			try {

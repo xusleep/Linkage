@@ -43,7 +43,7 @@ public class ClientBootStrap {
 
 	public void start() throws IOException {
 		client.getMasterHandler().registerHandler(new ClientReadWriteHandler());
-		new Thread(client).start();
+		client.run();
 	}
 	
 	public static void main(String[] args) throws IOException {

@@ -27,10 +27,10 @@ public class ServiceBootStrap {
 	
 	public void start(){
 		server.getMasterHandler().registerHandler(new ReadWriteHandler(applicationContext));
-		server.getMasterHandler().registerHandler(new ServiceRegisterHandler(applicationContext));
-		new Thread(server).start();
+		//server.getMasterHandler().registerHandler(new ServiceRegisterHandler(applicationContext));
+		server.run();
 		client.getMasterHandler().registerHandler(new ClientReadWriteHandler());
-		new Thread(client).start();
+		client.run();
 	}
 	
 	public Client getClient() {

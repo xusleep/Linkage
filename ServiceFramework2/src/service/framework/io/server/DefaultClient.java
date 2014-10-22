@@ -26,4 +26,10 @@ public class DefaultClient implements Client {
 		return objMasterHandler;
 	}
 
+	@Override
+	public void waitReady() {
+		// TODO Auto-generated method stub
+		this.getWorkerPool().waitReady();
+	}
+
 }

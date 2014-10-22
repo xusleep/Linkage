@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.io.client.comsume.ClientManagement;
@@ -35,6 +36,9 @@ import zhonglin.test.framework.concurrence.condition.job.JobInterface;
 public class StartClient extends AbstractJob {
 	public static final AtomicInteger aint = new AtomicInteger(2320);
 	private final ConsumerBean cb;
+	private final AtomicBoolean isFailed = new AtomicBoolean(false);
+	public static final AtomicInteger successCount = new AtomicInteger(0);
+	public static final AtomicInteger requestCount = new AtomicInteger(0);
 	
 	public StartClient(ConsumerBean cb) {
 		this.cb = cb;
@@ -60,20 +64,28 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		for(long i = 0; i < 100000; i++)
+		for(long i = 0; i < 100; i++)
 		{
+			System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
-	    	String a = "" + aint.incrementAndGet();
+	    	String a = "" + requestCount.get();
 	    	String b = "" + aint.incrementAndGet();
 	    	args1.add(a);
 	    	args1.add(b);
 	    	try
 	    	{
+				if(isFailed.get())
+				{
+					System.out.println("break ...");
+					break;
+				}
 	    		RequestResultEntity result = cb.prcessRequest(args1);
 	    		System.out.println("a = " + a + " + b = " + b + " = " + result.getResponseEntity().getResult());
-	    		
+	    		successCount.incrementAndGet();
 	    	}
 	    	catch(Exception ex){
+	    		ex.printStackTrace();
+	    		isFailed.set(true);
 	    	}
 		}
 	}
@@ -100,6 +112,6 @@ public class StartClient extends AbstractJob {
 			e.printStackTrace();
 		}
 		cmm.stop();
-		System.out.println("成功的条数为:" + (StartClient.aint.get() - 2320) / 2);
+		System.out.println("成功的条数为:" + successCount.get());
 	}
 }
