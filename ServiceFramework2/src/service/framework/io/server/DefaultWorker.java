@@ -109,7 +109,7 @@ public class DefaultWorker implements Worker {
 	public boolean writeFromUser(WorkingChannel channel) {
 		ServiceOnMessageWriteEvent evt;
 		final Queue<ServiceOnMessageWriteEvent> writeBuffer = channel.writeBufferQueue;
-		synchronized (channel.writeReadLock) {
+		synchronized (channel.writeLock) {
 			for (;;) {
 				if ((evt = writeBuffer.poll()) == null) {
 					break;
@@ -208,7 +208,7 @@ public class DefaultWorker implements Worker {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		synchronized(objWorkingChannel.writeReadLock){
+		synchronized(objWorkingChannel.readLock){
 			objWorkingChannel.appendMessage(receiveString);
 			String unwrappedMessage = "";
 			try {

@@ -84,6 +84,9 @@ public class ServiceRegisterHandler implements Handler {
 			} catch (ExecutionException e1) {
 				// TODO Auto-generated catch block
 				return;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			List<String> args = new LinkedList<String>();
 			args.add(strServiceInformation);

@@ -16,7 +16,8 @@ public class WorkingChannel {
     /**
      * Monitor object for synchronizing access to the {@link WriteRequestQueue}.
      */
-    final public Object writeReadLock = new Object();
+    final public Object writeLock = new Object();
+    final public Object readLock = new Object();
     
     /**
      * Queue of write {@link MessageEvent}s.
@@ -56,9 +57,7 @@ public class WorkingChannel {
 	}
 
 	public void appendMessage(String message){
-    	synchronized(writeReadLock){
-    		this.bufferMessage.append(message);
-    	}
+    	this.bufferMessage.append(message);
     }
     
     public SelectionKey getKey() {
@@ -76,34 +75,32 @@ public class WorkingChannel {
 	 * @throws Exception 
 	 */
 	public  String extractMessage() throws Exception{
-		synchronized(writeReadLock){
-			int headStartIndex = this.bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_START);
-			int headEndIndex = bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_END);
-			if(ShareingProtocolData.MESSAGE_HEADER_START.length() > bufferMessage.length())
-				return "";
-			if(headStartIndex != 0)
-			{
-				throw new Exception("the received message is not comleted, some message not receive correct");
-			}
-			//包头不完整说明没有收到完整包
-			if(headEndIndex <= 0)
-				return "";
-			String head = bufferMessage.substring(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length());
-			String bodyLenthStr =  bufferMessage.substring(headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length(), 
-					headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length() + ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART);
-			int bodyLenth = Integer.parseInt(bodyLenthStr);
-			//包体长度没有到包头中设定的长度
-			if(bufferMessage.length() < ShareingProtocolData.MESSAGE_HEADER_START.length() + 
-					ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth)
-			{
-				return "";
-			}
-			String messageBody = bufferMessage.substring(headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length(), 
-					headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
-			bufferMessage.delete(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
-			ShareingProtocolData.aint.incrementAndGet();
-			return messageBody;
+		int headStartIndex = this.bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_START);
+		int headEndIndex = bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_END);
+		if(ShareingProtocolData.MESSAGE_HEADER_START.length() > bufferMessage.length())
+			return "";
+		if(headStartIndex != 0)
+		{
+			throw new Exception("the received message is not comleted, some message not receive correct");
 		}
+		//包头不完整说明没有收到完整包
+		if(headEndIndex <= 0)
+			return "";
+		String head = bufferMessage.substring(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length());
+		String bodyLenthStr =  bufferMessage.substring(headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length(), 
+				headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length() + ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART);
+		int bodyLenth = Integer.parseInt(bodyLenthStr);
+		//包体长度没有到包头中设定的长度
+		if(bufferMessage.length() < ShareingProtocolData.MESSAGE_HEADER_START.length() + 
+				ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth)
+		{
+			return "";
+		}
+		String messageBody = bufferMessage.substring(headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length(), 
+				headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
+		bufferMessage.delete(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
+		ShareingProtocolData.aint.incrementAndGet();
+		return messageBody;
 	}
 	
 	/**
