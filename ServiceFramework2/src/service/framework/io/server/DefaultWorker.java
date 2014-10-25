@@ -222,7 +222,7 @@ public class DefaultWorker implements Worker {
 							// TODO Auto-generated method stub
 							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
 							event.setMessage(sendMessage);
-							System.out.println("fired message ... " + sendMessage);
+							//System.out.println("fired message ... " + sendMessage);
 							objMasterHandler.submitEventPool(event);
 						}
 						

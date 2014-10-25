@@ -13,7 +13,7 @@
 		<ref bean="clientworkerPool"></ref>
 	</property>
 	<property name="serviceName">
-		<value>addService</value>
+		<value>calculator</value>
 	</property>
 	<property name="methodName">
 		<value>add</value>

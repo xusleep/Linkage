@@ -42,21 +42,6 @@ public class StartClient extends AbstractJob {
 	
 	public StartClient(ConsumerBean cb) {
 		this.cb = cb;
-		try {
-			this.cb.build();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
@@ -67,7 +52,7 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		for(long i = 0; i < 100000; i++)
+		for(long i = 0; i < 10; i++)
 		{
 			System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
@@ -82,7 +67,7 @@ public class StartClient extends AbstractJob {
 					System.out.println("break ...");
 					break;
 				}
-	    		RequestResultEntity result = cb.prcessRequest(args1);
+	    		RequestResultEntity result = cb.prcessRequest("calculator", args1);
 	    		System.out.println("a = " + a + " + b = " + b + " = " + result.getResponseEntity().getResult());
 	    		successCount.incrementAndGet();
 	    	}
@@ -102,8 +87,8 @@ public class StartClient extends AbstractJob {
 	public static void main(String[] args) throws IOException {
 		ClientBootStrap.getInstance().start();
     	ClientManagement cmm = new ClientManagement();
-		StartClient job1 = new StartClient((ConsumerBean)ClientBootStrap.getInstance().getApplicationContext().getBean("addService"));
-		job1.setThreadCount(1);
+		StartClient job1 = new StartClient(ClientBootStrap.getInstance().getConsumerBean());
+		job1.setThreadCount(30000);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

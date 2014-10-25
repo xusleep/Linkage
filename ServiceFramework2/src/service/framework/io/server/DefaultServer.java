@@ -34,15 +34,15 @@ public class DefaultServer implements Server {
 	private final WorkerPool workerPool;
 	private final MasterHandler objMasterHandler;
 	
-	public DefaultServer(ServiceInformation serviceInformation, MasterHandler objMasterHandler, WorkerPool workerPool) throws Exception {
+	public DefaultServer(String strAddress, int port, MasterHandler objMasterHandler, WorkerPool workerPool) throws Exception {
 		this.objMasterHandler = objMasterHandler;
 		objMasterHandler.submitEventPool(new ServiceStartingEvent());
 		// 创建无阻塞网络套接
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
 		sschannel.configureBlocking(false);
-		System.out.println("Listening to " + serviceInformation.getAddress() + " port : " + serviceInformation.getPort());
-		address = new InetSocketAddress(serviceInformation.getAddress(), serviceInformation.getPort());
+		System.out.println("Listening to " + strAddress + " port : " + port);
+		address = new InetSocketAddress(strAddress, port);
 		ServerSocket ss = sschannel.socket();
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);

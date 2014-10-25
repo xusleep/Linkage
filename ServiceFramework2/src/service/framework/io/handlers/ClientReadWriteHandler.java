@@ -22,8 +22,10 @@ import service.framework.serialization.SerializeUtils;
  */
 public class ClientReadWriteHandler implements Handler {
 	private AtomicInteger aint = new AtomicInteger(0);
+	private final ConsumerBean consumerBean;
 	
-	public ClientReadWriteHandler(){
+	public ClientReadWriteHandler(ConsumerBean consumerBean){
+		this.consumerBean = consumerBean;
 	}
 	
 	@Override
@@ -33,12 +35,12 @@ public class ClientReadWriteHandler implements Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-				System.out.println(" receive message ... " + receiveData);
+				//System.out.println(" receive message ... " + receiveData);
 				aint.incrementAndGet();
-				System.out.println("处理的条数为:" + aint.get());
+				//System.out.println("处理的条数为:" + aint.get());
 				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
 				System.out.println("objResponseEntity.getRequestID():" + objResponseEntity.getRequestID());
-				RequestResultEntity result = ConsumerBean.resultList.remove(objResponseEntity.getRequestID());
+				RequestResultEntity result = this.consumerBean.getResultList().remove(objResponseEntity.getRequestID());
 				result.setResponseEntity(objResponseEntity);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
