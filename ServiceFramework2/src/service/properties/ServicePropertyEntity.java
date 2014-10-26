@@ -10,6 +10,8 @@ public class ServicePropertyEntity {
 	
 	private final String serviceAddress;
 	private final int servicePort;
+	private final String serviceCenterAddress;
+	private final int serviceCenterPort;
 	private final List<ServiceEntity> serviceList = new LinkedList<ServiceEntity>();
 	private final List<ServiceClientEntity> serviceClientList = new LinkedList<ServiceClientEntity>();
 	
@@ -30,6 +32,12 @@ public class ServicePropertyEntity {
         	this.servicePort = Integer.parseInt(strServicePort);
         else
         	this.servicePort = 0;
+        this.serviceCenterAddress = properties.getProperty("serviceCenterAddress");
+        String strserviceCenterPort = properties.getProperty("serviceCenterPort");
+        if(strserviceCenterPort != null && strserviceCenterPort != "")
+        	this.serviceCenterPort = Integer.parseInt(strserviceCenterPort);
+        else
+        	this.serviceCenterPort = 0;
         for(int i = 1; i < 1000; i++)
         {
         	String serviceName = properties.getProperty("service.service" + i + ".name");
@@ -42,7 +50,6 @@ public class ServicePropertyEntity {
             	entity.setServiceTarget(properties.getProperty("service.service" + i + ".target"));
             	entity.setServiceVersion(properties.getProperty("service.service" + i + ".version"));
             	serviceList.add(entity);
-        		break;
         	}
         	if(clientName != null && clientName != ""){
         		ServiceClientEntity entity = new ServiceClientEntity();
@@ -84,4 +91,17 @@ public class ServicePropertyEntity {
 		return serviceClientList;
 	}
 
+
+
+	public String getServiceCenterAddress() {
+		return serviceCenterAddress;
+	}
+
+
+
+	public int getServiceCenterPort() {
+		return serviceCenterPort;
+	}
+
+	
 }

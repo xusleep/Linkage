@@ -24,10 +24,7 @@ public class ClientBootStrap {
 		this.workPool = new DefaultWorkerPool(this.masterHandler);
 		this.client = new DefaultClient(this.masterHandler, this.workPool);
 		ServicePropertyEntity servicePropertyEntity = new ServicePropertyEntity("conf/client.properties");
-		DefaultRoute objDefaultRoute = new DefaultRoute();
-		ServiceInformation objServiceInformation = new ServiceInformation("localhost", 5001, "", "", "");
-		objDefaultRoute.getServiceList().add(objServiceInformation);
-		this.consumerBean = new ConsumerBean(objDefaultRoute, servicePropertyEntity.getServiceClientList(), this.workPool);
+		this.consumerBean = new ConsumerBean(servicePropertyEntity, this.workPool);
 	}
 	
 	public ConsumerBean getConsumerBean() {

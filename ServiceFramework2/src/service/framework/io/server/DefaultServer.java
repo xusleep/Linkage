@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import service.framework.io.event.ServiceStartedEvent;
 import service.framework.io.event.ServiceStartingEvent;
 import service.framework.io.fire.MasterHandler;
-import servicecenter.service.ServiceInformation;
 
 /**
  * <p>

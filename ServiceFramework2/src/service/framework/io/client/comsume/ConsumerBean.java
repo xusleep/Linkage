@@ -11,9 +11,11 @@ import service.framework.io.event.ServiceOnMessageWriteEvent;
 import service.framework.io.server.WorkerPool;
 import service.framework.io.server.WorkingChannel;
 import service.framework.provide.entity.RequestEntity;
+import service.framework.route.DefaultRoute;
 import service.framework.route.Route;
 import service.framework.serialization.SerializeUtils;
 import service.properties.ServiceClientEntity;
+import service.properties.ServicePropertyEntity;
 import servicecenter.service.ServiceInformation;
 
 public class ConsumerBean {
@@ -22,11 +24,11 @@ public class ConsumerBean {
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final Route route;
 	private final WorkerPool workerPool;
-	private final List<ServiceClientEntity> serviceClientList;
+	private final ServicePropertyEntity servicePropertyEntity;
 	
-	public ConsumerBean(Route route, List<ServiceClientEntity> serviceClientList, WorkerPool workerPool){
-		this.route = route;
-		this.serviceClientList = serviceClientList;
+	public ConsumerBean(ServicePropertyEntity servicePropertyEntity, WorkerPool workerPool){
+		this.route = new DefaultRoute(servicePropertyEntity, this);
+		this.servicePropertyEntity = servicePropertyEntity;
 		this.workerPool = workerPool;
 	}
 
@@ -34,27 +36,10 @@ public class ConsumerBean {
 		return workerPool;
 	}
 
-	private WorkingChannel createWorkingChannnel(String serviceName) throws Exception{
-		ServiceInformation service = this.route.chooseRoute(serviceName);
-		WorkingChannel objWorkingChannel = workingChannelCacheList.get(service.toString());
-		if(objWorkingChannel == null)
-		{
-			synchronized(this){
-				// get the working channel again 
-				// in case we set after we get from the cache
-				objWorkingChannel = workingChannelCacheList.get(service.toString());
-				if(objWorkingChannel == null)
-				{
-					objWorkingChannel = createWorkingChannel(service.getAddress(), service.getPort());
-					workingChannelCacheList.put(service.toString(), objWorkingChannel);
-				}
-			}
-		}
-		return objWorkingChannel;
-	}
+	
 	
 	private ServiceClientEntity searchServiceClientEntity(String id){
-		for(ServiceClientEntity entity : serviceClientList){
+		for(ServiceClientEntity entity : this.servicePropertyEntity.getServiceClientList()){
 			if(entity.getId().equals(id)){
 				return entity;
 			}
@@ -64,6 +49,7 @@ public class ConsumerBean {
 
 	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args) throws Exception{
 		long id = idGenerator.incrementAndGet();
+		System.out.println("request clientid = " + clientID);
 		final RequestEntity objRequestEntity = new RequestEntity();
 		ServiceClientEntity objServiceClientEntity = searchServiceClientEntity(clientID);
 		objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
@@ -81,6 +67,26 @@ public class ConsumerBean {
         newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
         newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
     	return result;
+	}
+	
+	private WorkingChannel createWorkingChannnel(String serviceName) throws Exception{
+		ServiceInformation service;
+		service = this.route.chooseRoute(serviceName);
+		WorkingChannel objWorkingChannel = workingChannelCacheList.get(service.toString());
+		if(objWorkingChannel == null)
+		{
+			synchronized(this){
+				// get the working channel again 
+				// in case we set after we get from the cache
+				objWorkingChannel = workingChannelCacheList.get(service.toString());
+				if(objWorkingChannel == null)
+				{
+					objWorkingChannel = createWorkingChannel(service.getAddress(), service.getPort());
+					workingChannelCacheList.put(service.toString(), objWorkingChannel);
+				}
+			}
+		}
+		return objWorkingChannel;
 	}
 	
 	public WorkingChannel createWorkingChannel(String address, int port) throws IOException{
@@ -103,6 +109,10 @@ public class ConsumerBean {
 
 	public ConcurrentHashMap<String, RequestResultEntity> getResultList() {
 		return resultList;
+	}
+
+	public ServicePropertyEntity getServicePropertyEntity() {
+		return servicePropertyEntity;
 	}
 	
 	
