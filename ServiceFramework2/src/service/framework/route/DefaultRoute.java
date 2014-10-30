@@ -28,7 +28,6 @@ public class DefaultRoute implements Route {
 	public DefaultRoute(ServicePropertyEntity servicePropertyEntity, ConsumerBean consumerBean){
 		this.servicePropertyEntity = servicePropertyEntity;
 		this.consumerBean = consumerBean;
-		
 	}
 
 	@Override
