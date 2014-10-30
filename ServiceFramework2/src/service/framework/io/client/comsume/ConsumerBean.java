@@ -19,6 +19,7 @@ import service.properties.ServicePropertyEntity;
 import servicecenter.service.ServiceInformation;
 
 public class ConsumerBean {
+	
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	private final ConcurrentHashMap<String, WorkingChannel> workingChannelCacheList = new ConcurrentHashMap<String, WorkingChannel>(16);
 	private AtomicLong idGenerator = new AtomicLong(0);
