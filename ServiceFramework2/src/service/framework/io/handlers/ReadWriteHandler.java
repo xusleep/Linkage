@@ -3,8 +3,6 @@ package service.framework.io.handlers;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.springframework.context.ApplicationContext;
-
 import service.framework.io.context.ServiceContext;
 import service.framework.io.event.ServiceEvent;
 import service.framework.io.event.ServiceOnErrorEvent;
@@ -26,11 +24,10 @@ import service.framework.serialization.SerializeUtils;
  */
 public class ReadWriteHandler implements Handler {
 	private AtomicInteger aint = new AtomicInteger(0);
+	private final ProviderBean  providerBean;
 	
-	private final ApplicationContext applicationContext;
-	
-	public ReadWriteHandler(ApplicationContext applicationContext){
-		this.applicationContext = applicationContext;
+	public ReadWriteHandler(ProviderBean providerBean){
+		this.providerBean = providerBean;
 	}
 	
 	@Override
@@ -43,13 +40,12 @@ public class ReadWriteHandler implements Handler {
 				if(channel.isOpen())
 				{
 					String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-					System.out.println(" receive message ... " + receiveData);
+					//System.out.println(" receive message ... " + receiveData);
 					aint.incrementAndGet();
 					RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
-					ProviderBean objProviderBean = (ProviderBean)applicationContext.getBean(objRequestEntity.getServiceName());
-					ResponseEntity objResponseEntity = objProviderBean.prcessRequest(objRequestEntity);
+					ResponseEntity objResponseEntity = this.providerBean.prcessRequest(objRequestEntity);
 					ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel);
-					System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
+					//System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
 					objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
 					channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 					channel.getWorker().writeFromUser(channel);
@@ -70,6 +66,6 @@ public class ReadWriteHandler implements Handler {
 			//这里将添加注册到服务中心的代码
             System.out.println("Server Service started.");
 		}
-		System.out.println("处理的条数为:" + aint.get());
+		//System.out.println("处理的条数为:" + aint.get());
 	}
 }
