@@ -2,20 +2,38 @@ package service.framework.provide;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 
 import service.framework.provide.entity.RequestEntity;
 import service.framework.provide.entity.ResponseEntity;
+import service.properties.ServiceEntity;
+import service.properties.ServicePropertyEntity;
 
 public class ProviderBean {
-	private String interfaceName;
-	private Object target;
-	private String version;
-	private String group;
+	private final ServicePropertyEntity servicePropertyEntity;
+	
+	public ProviderBean(ServicePropertyEntity servicePropertyEntity){
+		this.servicePropertyEntity = servicePropertyEntity;
+	}
+	
+	private ServiceEntity searchService(String serviceName){
+		for(ServiceEntity entity : servicePropertyEntity.getServiceList()){
+			if(entity.getServiceName().equals(serviceName)){
+				return entity;
+			}
+		}
+		return null;
+	}
 	
 	public ResponseEntity prcessRequest(RequestEntity request){
+		ServiceEntity entity = searchService(request.getServiceName());
+		if(entity == null){
+			ResponseEntity response = new ResponseEntity();
+			response.setResult("Can not find the service name of " + request.getServiceName());
+			response.setRequestID(request.getRequestID());
+			return response;
+		}
 		try {
-			Class clazz = Class.forName(interfaceName);
+			Class clazz = Class.forName(entity.getServiceInterface());
 			Method[] methods = clazz.getMethods();
 			Method findMethod = null;
 			for(Method method : methods){
@@ -26,7 +44,7 @@ public class ProviderBean {
 			}
 			if(findMethod != null)
 			{
-				Object result = findMethod.invoke(target, request.getArgs().toArray());
+				Object result = findMethod.invoke(entity.getServiceTargetObject(), request.getArgs().toArray());
 				ResponseEntity response = new ResponseEntity();
 				response.setResult(result.toString());
 				response.setRequestID(request.getRequestID());
@@ -47,41 +65,10 @@ public class ProviderBean {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return new ResponseEntity();
 	}
-	
-	public String getInterfaceName() {
-		return interfaceName;
-	}
-
-	public void setInterfaceName(String interfaceName) {
-		this.interfaceName = interfaceName;
-	}
-
-	public Object getTarget() {
-		return target;
-	}
-
-	public void setTarget(Object target) {
-		this.target = target;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public String getGroup() {
-		return group;
-	}
-
-	public void setGroup(String group) {
-		this.group = group;
-	}
-
-
 }

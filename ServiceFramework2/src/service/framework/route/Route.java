@@ -7,5 +7,5 @@ import service.framework.provide.entity.RequestEntity;
 import servicecenter.service.ServiceInformation;
 
 public interface Route {
-	public ServiceInformation chooseRoute(String serviceName) throws IOException, InterruptedException, ExecutionException;
+	public ServiceInformation chooseRoute(String serviceName) throws IOException, InterruptedException, ExecutionException, Exception;
 }
