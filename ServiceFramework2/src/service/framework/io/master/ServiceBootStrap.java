@@ -25,7 +25,6 @@ public class ServiceBootStrap {
 	private final ConsumerBean consumerBean;
 	
 	private ServiceBootStrap(){
-		
 		ServicePropertyEntity objServicePropertyEntity = new ServicePropertyEntity("conf/service1.properties");
 		MasterHandler masterHandler = new MasterHandler(5);
 		WorkerPool workPool = new DefaultWorkerPool(masterHandler);

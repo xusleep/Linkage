@@ -20,7 +20,6 @@ public class ClientBootStrap {
 	private final WorkerPool workPool;
 	private final ConsumerBean consumerBean;
 	private ClientBootStrap(){
-		
 		this.masterHandler = new MasterHandler(5);
 		this.workPool = new DefaultWorkerPool(this.masterHandler);
 		this.client = new DefaultClient(this.masterHandler, this.workPool);
