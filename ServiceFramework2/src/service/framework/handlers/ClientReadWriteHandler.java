@@ -1,26 +1,24 @@
 package service.framework.handlers;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.common.SerializeUtils;
-import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.event.ServiceEvent;
+import service.framework.event.ServiceOnChannelClosedEvent;
 import service.framework.event.ServiceOnErrorEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
 
 /**
- * 这里是默认的事件处理handler
+ * the default handler for the client message received event
  * 
  * @author zhonxu
  *
  */
 public class ClientReadWriteHandler implements Handler {
-	private AtomicInteger aint = new AtomicInteger(0);
 	private final ConsumerBean consumerBean;
 	
 	public ClientReadWriteHandler(ConsumerBean consumerBean){
@@ -34,20 +32,20 @@ public class ClientReadWriteHandler implements Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-				//System.out.println(" receive message ... " + receiveData);
-				aint.incrementAndGet();
-				//System.out.println("处理的条数为:" + aint.get());
 				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
-				System.out.println("objResponseEntity.getRequestID():" + objResponseEntity.getRequestID());
-				RequestResultEntity result = this.consumerBean.getResultList().remove(objResponseEntity.getRequestID());
-				result.setResponseEntity(objResponseEntity);
+				this.consumerBean.setRequestResult(objResponseEntity);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		else if(event instanceof ServiceOnErrorEvent){
+		else if(event instanceof ServiceOnChannelClosedEvent){
+			ServiceOnChannelClosedEvent objServiceOnChannelClosedEvent = (ServiceOnChannelClosedEvent)event;
+			this.consumerBean.removeClosedChannel(objServiceOnChannelClosedEvent.getSocketChannel(), objServiceOnChannelClosedEvent.getRequestID());
 			System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());
+		}
+		else if(event instanceof ServiceOnErrorEvent){
+			System.out.println("there is a error comes out" + ((ServiceOnErrorEvent)event).getMsg());
 		}
 		else if(event instanceof ServiceStartingEvent){
             System.out.println("Server Service starting ...");

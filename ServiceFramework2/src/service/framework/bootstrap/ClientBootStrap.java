@@ -8,13 +8,23 @@ import service.framework.io.client.DefaultClient;
 import service.framework.io.common.DefaultWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.properties.WorkingPropertyEntity;
-
+/**
+ * client side boot strap
+ * it will init a worker pool and a distribution master
+ * @author zhonxu
+ *
+ */
 public class ClientBootStrap implements Runnable {
 	private final Client client;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkerPool workPool;
 	private final ConsumerBean consumerBean;
 	
+	/**
+	 * 
+	 * @param propertyPath the property configured for the client
+	 * @param clientTaskThreadPootSize the client 
+	 */
 	public ClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
 		this.eventDistributionHandler = new EventDistributionMaster(clientTaskThreadPootSize);
 		this.workPool = new DefaultWorkerPool(this.eventDistributionHandler);
@@ -24,18 +34,18 @@ public class ClientBootStrap implements Runnable {
 		this.consumerBean = new ConsumerBean(servicePropertyEntity, this.workPool);
 	}
 	
+	/**
+	 * the user can use this cosumer bean to request service
+	 * from the client
+	 * @return
+	 */
 	public ConsumerBean getConsumerBean() {
 		return consumerBean;
-	}
-	
-	public WorkerPool getWorkPool() {
-		return workPool;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		//new MonitorThread(client.getMasterHandler()).start();
 		client.getEventDistributionHandler().registerHandler(new ClientReadWriteHandler(this.getConsumerBean()));
 		new Thread(client).start();
 	}

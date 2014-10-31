@@ -3,7 +3,7 @@ package service.framework.bootstrap;
 import service.framework.comsume.ConsumerBean;
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.handlers.ClientReadWriteHandler;
-import service.framework.handlers.ReadWriteHandler;
+import service.framework.handlers.ServiceReadWriteHandler;
 import service.framework.handlers.ServiceRegisterHandler;
 import service.framework.io.client.Client;
 import service.framework.io.client.DefaultClient;
@@ -34,7 +34,7 @@ public class ServiceBootStrap implements Runnable {
 		this.providerBean = new ProviderBean(objServicePropertyEntity);
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
-		eventDistributionHandler.registerHandler(new ReadWriteHandler(providerBean));
+		eventDistributionHandler.registerHandler(new ServiceReadWriteHandler(providerBean));
 		
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
 		this.server = new DefaultServer(objServicePropertyEntity.getServiceAddress(), objServicePropertyEntity.getServicePort(),

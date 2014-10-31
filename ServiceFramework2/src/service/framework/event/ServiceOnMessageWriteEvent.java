@@ -5,8 +5,9 @@ import service.framework.io.common.WorkingChannel;
 public class ServiceOnMessageWriteEvent implements ServiceEvent {
 	private WorkingChannel socketChannel;
 	private String message;
+	private String requestID;
 	
-	public ServiceOnMessageWriteEvent(WorkingChannel socketChannel)
+	public ServiceOnMessageWriteEvent(WorkingChannel socketChannel, String requestID)
 	{
 		this.socketChannel = socketChannel;
 	}
@@ -28,5 +29,14 @@ public class ServiceOnMessageWriteEvent implements ServiceEvent {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getRequestID() {
+		return requestID;
+	}
+
+
+	public void setRequestID(String requestID) {
+		this.requestID = requestID;
 	}
 }

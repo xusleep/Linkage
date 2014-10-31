@@ -28,6 +28,7 @@ public class WorkingChannel {
 	private StringBuffer bufferMessage;
 	private boolean isOpen;
 	private SelectionKey key;
+	private String cacheID;
 	
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
@@ -103,6 +104,14 @@ public class WorkingChannel {
 		return messageBody;
 	}
 	
+	public String getCacheID() {
+		return cacheID;
+	}
+
+	public void setCacheID(String cacheID) {
+		this.cacheID = cacheID;
+	}
+
 	/**
 	 * 对消息进行包装
 	 * @param message

@@ -65,18 +65,7 @@ public class ServiceRegisterHandler implements Handler {
 			String strServiceInformation = SerializeUtils.serializeServiceInformationList(serviceInformationList);
 			List<String> args = new LinkedList<String>();
 			args.add(strServiceInformation);
-			try {
-				this.consumerBean.prcessRequest("serviceCenter", args);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.consumerBean.prcessRequest("serviceCenter", args);
 		}
 	}
 }

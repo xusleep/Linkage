@@ -47,7 +47,6 @@ public class DefaultServer implements Server {
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);
 		this.workerPool = workerPool;
-		eventDistributionHandler.submitEventPool(new ServiceStartedEvent());
 	}
 
 	public WorkerPool getWorkerPool() {
@@ -62,6 +61,7 @@ public class DefaultServer implements Server {
 		eventDistributionHandler.start();
 		workerPool.start();
 		workerPool.waitReady();
+		eventDistributionHandler.submitEventPool(new ServiceStartedEvent());
 		// ¼àÌý
 		while (true) {
 			try {

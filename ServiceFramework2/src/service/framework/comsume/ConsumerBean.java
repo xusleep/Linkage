@@ -5,11 +5,13 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
+import service.framework.common.entity.ResponseEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.io.common.WorkerPool;
@@ -18,7 +20,12 @@ import service.framework.properties.ClientPropertyEntity;
 import service.framework.properties.WorkingPropertyEntity;
 import service.framework.route.DefaultRoute;
 import service.framework.route.Route;
-
+/**
+ * this class is an access point from the client
+ * the client will use this class to call the service  
+ * @author zhonxu
+ *
+ */
 public class ConsumerBean {
 	
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
@@ -33,13 +40,12 @@ public class ConsumerBean {
 		this.servicePropertyEntity = servicePropertyEntity;
 		this.workerPool = workerPool;
 	}
-
-	public WorkerPool getWorkerPool() {
-		return workerPool;
-	}
-
 	
-	
+	/**
+	 * search the configuration check the configure for the service
+	 * @param id
+	 * @return
+	 */
 	private ClientPropertyEntity searchServiceClientEntity(String id){
 		for(ClientPropertyEntity entity : this.servicePropertyEntity.getServiceClientList()){
 			if(entity.getId().equals(id)){
@@ -48,10 +54,17 @@ public class ConsumerBean {
 		}
 		return null;
 	}
-
-	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args) throws Exception{
+	
+	/**
+	 * send the request from the client to request a service
+	 * @param clientID the id set in property
+	 * @param args  the arguments for the service
+	 * @return
+	 * @throws Exception
+	 */
+	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args) {
+		// this is unique id for a request
 		long id = idGenerator.incrementAndGet();
-		System.out.println("request clientid = " + clientID);
 		final RequestEntity objRequestEntity = new RequestEntity();
 		ClientPropertyEntity objServiceClientEntity = searchServiceClientEntity(clientID);
 		objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
@@ -62,8 +75,16 @@ public class ConsumerBean {
         RequestResultEntity result = new RequestResultEntity();
         result.setRequestID(objRequestEntity.getRequestID());
         resultList.put(objRequestEntity.getRequestID(), result);
-        WorkingChannel newWorkingChannel = createWorkingChannnel(objRequestEntity.getServiceName());
-    	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel);
+        WorkingChannel newWorkingChannel = null;
+        try
+        {
+        	newWorkingChannel = getWorkingChannnel(objRequestEntity.getServiceName());
+        }
+        catch(Exception ex){
+        	System.out.println(ex.getMessage());
+        	return null;
+        }
+    	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
         String sendData = SerializeUtils.serializeRequest(objRequestEntity);
 		objServiceOnMessageWriteEvent.setMessage(sendData);
         newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
@@ -71,10 +92,20 @@ public class ConsumerBean {
     	return result;
 	}
 	
-	private WorkingChannel createWorkingChannnel(String serviceName) throws Exception{
+	/**
+	 * get a working channel
+	 * @param serviceName
+	 * @return
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
+	 * @throws IOException 
+	 * @throws Exception
+	 */
+	private WorkingChannel getWorkingChannnel(String serviceName) throws IOException, InterruptedException, ExecutionException, Exception {
 		ServiceInformationEntity service;
 		service = this.route.chooseRoute(serviceName);
-		WorkingChannel objWorkingChannel = workingChannelCacheList.get(service.toString());
+		String cacheID = service.toString();
+		WorkingChannel objWorkingChannel = workingChannelCacheList.get(cacheID);
 		if(objWorkingChannel == null)
 		{
 			synchronized(this){
@@ -84,38 +115,70 @@ public class ConsumerBean {
 				if(objWorkingChannel == null)
 				{
 					objWorkingChannel = createWorkingChannel(service.getAddress(), service.getPort());
-					workingChannelCacheList.put(service.toString(), objWorkingChannel);
+					objWorkingChannel.setCacheID(cacheID);
+					workingChannelCacheList.put(cacheID, objWorkingChannel);
 				}
 			}
 		}
 		return objWorkingChannel;
 	}
 	
+	/**
+	 *  connect to the service
+	 * @param address
+	 * @param port
+	 * @return
+	 * @throws IOException
+	 */
 	public WorkingChannel createWorkingChannel(String address, int port) throws IOException{
-		// 获得一个Socket通道  
+		// get a Socket channel
         SocketChannel channel = SocketChannel.open();  
-        // 设置通道为非阻塞  
+        // set it unblocking  
         channel.configureBlocking(false);   
           
-        // 客户端连接服务器,其实方法执行并没有实现连接，需要在listen（）方法中调  
-        //用channel.finishConnect();才能完成连接  
+        // connect
         channel.connect(new InetSocketAddress(address, port));
-        // 如果正在连接，则完成连接  
+        // finish the connect
         if(channel.isConnectionPending()){  
             channel.finishConnect();  
         } 
-        this.getWorkerPool().waitReady();
-        WorkingChannel objWorkingChannel = this.getWorkerPool().register(channel);
+        // wait for the worker pool util it is ready
+        this.workerPool.waitReady();
+        WorkingChannel objWorkingChannel = this.workerPool.register(channel);
         return objWorkingChannel;
 	}
-
-	public ConcurrentHashMap<String, RequestResultEntity> getResultList() {
-		return resultList;
-	}
-
+	
+	/**
+	 * get the proterties
+	 * @return
+	 */
 	public WorkingPropertyEntity getServicePropertyEntity() {
 		return servicePropertyEntity;
 	}
 	
+	/**
+	 * when the response comes, use this method to set it. 
+	 * @param objResponseEntity
+	 */
+	public void setRequestResult(ResponseEntity objResponseEntity){
+		RequestResultEntity result = this.resultList.remove(objResponseEntity.getRequestID());
+		result.setResponseEntity(objResponseEntity);
+	}
 	
+	/**
+	 * remove the colsed channel from the cache when there is a error comes out
+	 * @param requestID
+	 */
+	public void removeClosedChannel(WorkingChannel objWorkingChannel, String requestID){
+		System.out.println("clear the working channel request id is " + requestID);
+		if(requestID != null)
+		{
+			RequestResultEntity result = this.resultList.remove(requestID);
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(requestID);
+		    objResponseEntity.setResult("the channel is closed");
+			result.setResponseEntity(objResponseEntity);
+		}
+		this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
+	}
 }

@@ -7,6 +7,7 @@ import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.event.ServiceEvent;
+import service.framework.event.ServiceOnChannelClosedEvent;
 import service.framework.event.ServiceOnErrorEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceOnMessageWriteEvent;
@@ -21,11 +22,11 @@ import service.framework.provide.ProviderBean;
  * @author zhonxu
  *
  */
-public class ReadWriteHandler implements Handler {
+public class ServiceReadWriteHandler implements Handler {
 	private AtomicInteger aint = new AtomicInteger(0);
 	private final ProviderBean  providerBean;
 	
-	public ReadWriteHandler(ProviderBean providerBean){
+	public ServiceReadWriteHandler(ProviderBean providerBean){
 		this.providerBean = providerBean;
 	}
 	
@@ -39,12 +40,12 @@ public class ReadWriteHandler implements Handler {
 				if(channel.isOpen())
 				{
 					String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-					//System.out.println(" receive message ... " + receiveData);
+					System.out.println(" receive message ... " + receiveData);
 					aint.incrementAndGet();
 					RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
 					ResponseEntity objResponseEntity = this.providerBean.prcessRequest(objRequestEntity);
-					ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel);
-					//System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
+					ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
+					System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
 					objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
 					channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 					channel.getWorker().writeFromUser(channel);
@@ -53,6 +54,9 @@ public class ReadWriteHandler implements Handler {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		else if(event instanceof ServiceOnChannelClosedEvent){
+			System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());
 		}
 		else if(event instanceof ServiceOnErrorEvent){
 			System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());

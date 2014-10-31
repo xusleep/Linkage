@@ -2,7 +2,7 @@ package service.framework.bootstrap;
 
 import service.framework.bootstrap.ServiceBootStrap;
 import service.framework.distribution.EventDistributionMaster;
-import service.framework.handlers.ReadWriteHandler;
+import service.framework.handlers.ServiceReadWriteHandler;
 import service.framework.io.common.DefaultWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.server.DefaultServer;
@@ -19,7 +19,7 @@ public class ServiceCenterBootStrap implements Runnable{
 		EventDistributionMaster eventDistributionHandler = new EventDistributionMaster(5);
 		WorkerPool workPool = new DefaultWorkerPool(eventDistributionHandler);
 		this.providerBean = new ProviderBean(objServicePropertyEntity);
-		eventDistributionHandler.registerHandler(new ReadWriteHandler(providerBean));
+		eventDistributionHandler.registerHandler(new ServiceReadWriteHandler(providerBean));
 		
 		try {
 			this.server = new DefaultServer(objServicePropertyEntity.getServiceAddress(), objServicePropertyEntity.getServicePort(),

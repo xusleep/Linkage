@@ -3,13 +3,11 @@ package test.run;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.bootstrap.ClientBootStrap;
 import service.framework.common.entity.RequestResultEntity;
-import service.framework.comsume.ClientManagement;
 import service.framework.comsume.ConsumerBean;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
@@ -52,11 +50,11 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		for(long i = 0; i < 10000000; i++)
+		for(long i = 0; i < 1; i++)
 		{
-			System.out.println("request count ..." + requestCount.incrementAndGet());
+			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
-	    	String a = "" + requestCount.get();
+	    	String a = "" + requestCount.incrementAndGet();
 	    	String b = "" + aint.incrementAndGet();
 	    	args1.add(a);
 	    	args1.add(b);
@@ -87,7 +85,6 @@ public class StartClient extends AbstractJob {
 	public static void main(String[] args) throws IOException {
 		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
 		clientBootStrap.run();;
-    	ClientManagement cmm = new ClientManagement();
 		StartClient job1 = new StartClient(clientBootStrap.getConsumerBean());
 		job1.setThreadCount(10);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
@@ -100,7 +97,6 @@ public class StartClient extends AbstractJob {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cmm.stop();
 		System.out.println("成功的条数为:" + successCount.get());
 	}
 }
