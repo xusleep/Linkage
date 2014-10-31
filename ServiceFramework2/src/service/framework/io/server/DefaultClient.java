@@ -1,20 +1,20 @@
 package service.framework.io.server;
 
-import service.framework.io.fire.MasterHandler;
+import service.framework.io.distribution.EventDistributionMaster;
 
 public class DefaultClient implements Client {
 	private final WorkerPool workerPool;
-	private final MasterHandler objMasterHandler;
+	private final EventDistributionMaster eventDistributionHandler;
 
-	public DefaultClient(MasterHandler objMasterHandler, WorkerPool workerPool){
-		this.objMasterHandler = objMasterHandler;
+	public DefaultClient(EventDistributionMaster objMasterHandler, WorkerPool workerPool){
+		this.eventDistributionHandler = objMasterHandler;
 		this.workerPool = workerPool;
 	}
 	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		objMasterHandler.start();
+		eventDistributionHandler.start();
 		workerPool.start();
 	}
 
@@ -22,8 +22,8 @@ public class DefaultClient implements Client {
 		return workerPool;
 	}
 
-	public MasterHandler getMasterHandler() {
-		return objMasterHandler;
+	public EventDistributionMaster getEventDistributionHandler() {
+		return eventDistributionHandler;
 	}
 
 	@Override

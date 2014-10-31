@@ -85,9 +85,10 @@ public class StartClient extends AbstractJob {
 	}
 
 	public static void main(String[] args) throws IOException {
-		ClientBootStrap.getInstance().start();
+		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
+		clientBootStrap.run();;
     	ClientManagement cmm = new ClientManagement();
-		StartClient job1 = new StartClient(ClientBootStrap.getInstance().getConsumerBean());
+		StartClient job1 = new StartClient(clientBootStrap.getConsumerBean());
 		job1.setThreadCount(10);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);

@@ -18,10 +18,10 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import service.framework.io.distribution.EventDistributionMaster;
 import service.framework.io.event.ServiceOnClosedEvent;
 import service.framework.io.event.ServiceOnMessageReceiveEvent;
 import service.framework.io.event.ServiceOnMessageWriteEvent;
-import service.framework.io.fire.MasterHandler;
 import service.framework.protocol.ShareingProtocolData;
 
 /**
@@ -40,15 +40,15 @@ public class DefaultWorker implements Worker {
 	private final ExecutorService objExecutorService;
 	public static AtomicLong readBytesCount = new AtomicLong(0);
 	public static AtomicLong writeBytesCount = new AtomicLong(0);
-	private final MasterHandler objMasterHandler;
 	private final CountDownLatch signal;
+	private final EventDistributionMaster eventDistributionHandler;
 	
-	public DefaultWorker(MasterHandler objMasterHandler, CountDownLatch signal) throws Exception {
+	public DefaultWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
 		// 创建无阻塞网络套接
 		selector = Selector.open();
 		this.objExecutorService = Executors.newFixedThreadPool(10);
-		this.objMasterHandler = objMasterHandler;
 		this.signal = signal;
+		this.eventDistributionHandler = eventDistributionHandler;
 	}
 
 	public void run() {
@@ -223,7 +223,7 @@ public class DefaultWorker implements Worker {
 							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
 							event.setMessage(sendMessage);
 							//System.out.println("fired message ... " + sendMessage);
-							objMasterHandler.submitEventPool(event);
+							eventDistributionHandler.submitEventPool(event);
 						}
 						
 					});
@@ -306,7 +306,7 @@ public class DefaultWorker implements Worker {
 					schannel.finishConnect();
 					schannel.close();
 					schannel.socket().close();
-					objMasterHandler.submitEventPool(new ServiceOnClosedEvent());
+					eventDistributionHandler.submitEventPool(new ServiceOnClosedEvent());
 				} catch (Exception e1) {
 				}
 			}

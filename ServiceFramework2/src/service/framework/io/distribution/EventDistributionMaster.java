@@ -1,4 +1,4 @@
-package service.framework.io.fire;
+package service.framework.io.distribution;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -17,12 +17,12 @@ import service.framework.io.handlers.Handler;
  * @author zhonxu
  *
  */
-public class MasterHandler extends Thread {
+public class EventDistributionMaster extends Thread {
 	public  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
 	public final ExecutorService objExecutorService;
 	private final List<Handler> eventHandlerList;
 	
-	public MasterHandler(int taskThreadPootSize){
+	public EventDistributionMaster(int taskThreadPootSize){
 		this.objExecutorService = Executors.newFixedThreadPool(taskThreadPootSize);
 		this.eventHandlerList = new LinkedList<Handler>();
 	}

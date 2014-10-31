@@ -11,9 +11,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import service.framework.io.distribution.EventDistributionMaster;
 import service.framework.io.event.ServiceStartedEvent;
 import service.framework.io.event.ServiceStartingEvent;
-import service.framework.io.fire.MasterHandler;
 
 /**
  * <p>
@@ -31,11 +31,11 @@ public class DefaultServer implements Server {
 	private final ServerSocketChannel sschannel;
 	private final InetSocketAddress address;
 	private final WorkerPool workerPool;
-	private final MasterHandler objMasterHandler;
+	private final EventDistributionMaster eventDistributionHandler;
 	
-	public DefaultServer(String strAddress, int port, MasterHandler objMasterHandler, WorkerPool workerPool) throws Exception {
-		this.objMasterHandler = objMasterHandler;
-		objMasterHandler.submitEventPool(new ServiceStartingEvent());
+	public DefaultServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
+		this.eventDistributionHandler = eventDistributionHandler;
+		eventDistributionHandler.submitEventPool(new ServiceStartingEvent());
 		// ´´½¨ÎÞ×èÈûÍøÂçÌ×½Ó
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
@@ -46,21 +46,19 @@ public class DefaultServer implements Server {
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);
 		this.workerPool = workerPool;
-		objMasterHandler.submitEventPool(new ServiceStartedEvent());
+		eventDistributionHandler.submitEventPool(new ServiceStartedEvent());
 	}
 
 	public WorkerPool getWorkerPool() {
 		return workerPool;
 	}
 	
-	
-
-	public MasterHandler getMasterHandler() {
-		return objMasterHandler;
+	public EventDistributionMaster getMasterHandler() {
+		return eventDistributionHandler;
 	}
 
 	public void run() {
-		objMasterHandler.start();
+		eventDistributionHandler.start();
 		workerPool.start();
 		workerPool.waitReady();
 		// ¼àÌý

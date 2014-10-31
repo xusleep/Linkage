@@ -1,14 +1,13 @@
 package service.framework.monitor;
 
-import service.framework.io.fire.MasterHandler;
-import service.framework.io.server.DefaultWorker;
+import service.framework.io.distribution.EventDistributionMaster;
 
 public class MonitorThread extends Thread {
-	private MasterHandler masterHandler;
+	private EventDistributionMaster eventDistributionHandler;
 	
-	public MonitorThread(MasterHandler masterHandler) {
+	public MonitorThread(EventDistributionMaster eventDistributionHandler) {
 		// TODO Auto-generated constructor stub
-		this.masterHandler = masterHandler;
+		this.eventDistributionHandler = eventDistributionHandler;
 	}
 
 	@Override
@@ -18,7 +17,7 @@ public class MonitorThread extends Thread {
 			// TODO Auto-generated method stub
 			try {
 				Thread.sleep(1000);
-				System.out.println("masterHandler.objExecutorService.toString() " + masterHandler.objExecutorService.toString());
+				System.out.println("masterHandler.objExecutorService.toString() " + eventDistributionHandler.objExecutorService.toString());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -3,19 +3,18 @@ package service.framework.io.server;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.CountDownLatch;
 
-import service.framework.io.fire.MasterHandler;
+import service.framework.io.distribution.EventDistributionMaster;
 
 public class DefaultWorkerPool implements WorkerPool {
 	private final int WORKERCOUNTER = Runtime.getRuntime().availableProcessors();
 	private Worker[] workers = new Worker[WORKERCOUNTER];
 	private int nextWorkCount = 0;
-	private MasterHandler objMasterHandler;
 	private final CountDownLatch signal = new CountDownLatch(WORKERCOUNTER);
 	
-	public DefaultWorkerPool(MasterHandler objMasterHandler){
+	public DefaultWorkerPool(EventDistributionMaster eventDistributionHandler){
 		for(int i = 0; i < workers.length; i++){
 			try {
-				workers[i] = new DefaultWorker(objMasterHandler, signal);
+				workers[i] = new DefaultWorker(eventDistributionHandler, signal);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
