@@ -1,4 +1,4 @@
-package service.framework.io.server.statistics;
+package service.framework.statistics;
 
 public class StatisticsInformation {
 	private final static int NOT_AVAILABLE = 3;

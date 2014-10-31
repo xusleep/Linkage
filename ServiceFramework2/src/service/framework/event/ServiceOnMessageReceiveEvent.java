@@ -1,6 +1,6 @@
 package service.framework.event;
 
-import service.framework.io.server.WorkingChannel;
+import service.framework.io.common.WorkingChannel;
 
 public class ServiceOnMessageReceiveEvent implements ServiceEvent {
 	private WorkingChannel socketChannel;

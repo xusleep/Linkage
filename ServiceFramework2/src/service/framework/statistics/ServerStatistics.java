@@ -1,4 +1,4 @@
-package service.framework.io.server.statistics;
+package service.framework.statistics;
 
 public interface ServerStatistics {
 	public StatisticsInformation gatherStatisticsInformation();

@@ -1,4 +1,4 @@
-package service.framework.io.server;
+package service.framework.io.common;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

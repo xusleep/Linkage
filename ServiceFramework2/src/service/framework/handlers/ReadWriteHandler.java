@@ -11,7 +11,7 @@ import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
-import service.framework.io.server.WorkingChannel;
+import service.framework.io.common.WorkingChannel;
 import service.framework.provide.ProviderBean;
 import service.framework.serialization.SerializeUtils;
 
