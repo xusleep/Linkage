@@ -11,8 +11,8 @@ import service.framework.io.common.DefaultWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.server.DefaultServer;
 import service.framework.io.server.Server;
+import service.framework.properties.WorkingPropertyEntity;
 import service.framework.provide.ProviderBean;
-import service.properties.WorkingPropertyEntity;
 
 public class ServiceBootStrap implements Runnable {
 	private final Client client;

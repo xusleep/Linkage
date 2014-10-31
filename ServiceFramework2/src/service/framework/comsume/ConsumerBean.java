@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
+import service.framework.properties.ClientPropertyEntity;
+import service.framework.properties.WorkingPropertyEntity;
 import service.framework.route.DefaultRoute;
 import service.framework.route.Route;
-import service.framework.serialization.SerializeUtils;
-import service.properties.ClientPropertyEntity;
-import service.properties.WorkingPropertyEntity;
 
 public class ConsumerBean {
 	

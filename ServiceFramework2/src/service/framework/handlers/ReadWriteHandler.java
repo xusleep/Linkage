@@ -3,6 +3,7 @@ package service.framework.handlers;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.event.ServiceEvent;
@@ -13,7 +14,6 @@ import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
 import service.framework.io.common.WorkingChannel;
 import service.framework.provide.ProviderBean;
-import service.framework.serialization.SerializeUtils;
 
 /**
  * 这里是默认的事件处理handler

@@ -1,4 +1,4 @@
-package service.properties;
+package service.framework.properties;
 
 public class ClientPropertyEntity {
 	private String serviceName;

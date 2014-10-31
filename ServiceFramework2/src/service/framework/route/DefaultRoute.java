@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import service.framework.common.SerializeUtils;
+import service.framework.common.ShareingData;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
+import service.framework.properties.WorkingPropertyEntity;
 import service.framework.route.filters.RouteFilter;
-import service.framework.serialization.SerializeUtils;
-import service.properties.WorkingPropertyEntity;
 
 public class DefaultRoute implements Route {
 	private final WorkingPropertyEntity servicePropertyEntity;
 	private final ConsumerBean serviceCenterConsumerBean;
-	private final String SERVICE_CENTER = "serviceCenter";
 	private final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
 	
 	public DefaultRoute(WorkingPropertyEntity servicePropertyEntity, ConsumerBean serviceCenterConsumerBean){
@@ -30,7 +30,7 @@ public class DefaultRoute implements Route {
 		String result = null;
 		if(serviceList == null)
 		{
-			if(serviceName.equals(SERVICE_CENTER))
+			if(serviceName.equals(ShareingData.SERVICE_CENTER))
 			{
 				ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
 				serviceCenter.setAddress(this.servicePropertyEntity.getServiceCenterAddress());
@@ -41,7 +41,7 @@ public class DefaultRoute implements Route {
 			{
 				List<String> list = new LinkedList<String>();
 				list.add(serviceName);
-				RequestResultEntity objRequestResultEntity  = this.serviceCenterConsumerBean.prcessRequest(SERVICE_CENTER, list);
+				RequestResultEntity objRequestResultEntity  = this.serviceCenterConsumerBean.prcessRequest(ShareingData.SERVICE_CENTER, list);
 				result = objRequestResultEntity.getResponseEntity().getResult();
 				serviceList = SerializeUtils.deserializeServiceInformationList(result);
 				serviceListCache.put(serviceName, serviceList);

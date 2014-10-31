@@ -1,4 +1,4 @@
-package service.properties;
+package service.framework.properties;
 
 public class ServicePropertyEntity {
 	private String serviceInterface;

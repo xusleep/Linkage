@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
-import service.properties.ServicePropertyEntity;
-import service.properties.WorkingPropertyEntity;
+import service.framework.properties.ServicePropertyEntity;
+import service.framework.properties.WorkingPropertyEntity;
 
 public class ProviderBean {
 	private final WorkingPropertyEntity servicePropertyEntity;

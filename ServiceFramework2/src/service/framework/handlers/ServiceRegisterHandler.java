@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import service.framework.common.SerializeUtils;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.event.ServiceEvent;
 import service.framework.event.ServiceStartedEvent;
-import service.framework.serialization.SerializeUtils;
-import service.properties.ServicePropertyEntity;
+import service.framework.properties.ServicePropertyEntity;
 
 /***
  * 这个handler只针对配置服务中心的时候使用

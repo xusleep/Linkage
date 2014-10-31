@@ -7,7 +7,7 @@ import service.framework.io.client.Client;
 import service.framework.io.client.DefaultClient;
 import service.framework.io.common.DefaultWorkerPool;
 import service.framework.io.common.WorkerPool;
-import service.properties.WorkingPropertyEntity;
+import service.framework.properties.WorkingPropertyEntity;
 
 public class ClientBootStrap implements Runnable {
 	private final Client client;

@@ -1,4 +1,4 @@
-package service.framework.serialization;
+package service.framework.common;
 
 import java.io.IOException;
 import java.io.InputStream;
