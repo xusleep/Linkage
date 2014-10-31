@@ -3,15 +3,14 @@ package service.framework.io.handlers;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import service.framework.common.entity.ResponseEntity;
 import service.framework.io.client.comsume.ConsumerBean;
 import service.framework.io.client.comsume.RequestResultEntity;
-import service.framework.io.context.ServiceContext;
 import service.framework.io.event.ServiceEvent;
 import service.framework.io.event.ServiceOnErrorEvent;
 import service.framework.io.event.ServiceOnMessageReceiveEvent;
 import service.framework.io.event.ServiceStartedEvent;
 import service.framework.io.event.ServiceStartingEvent;
-import service.framework.provide.entity.ResponseEntity;
 import service.framework.serialization.SerializeUtils;
 
 /**
@@ -29,7 +28,7 @@ public class ClientReadWriteHandler implements Handler {
 	}
 	
 	@Override
-	public void handleRequest(ServiceContext context, ServiceEvent event) throws IOException {
+	public void handleRequest(ServiceEvent event) throws IOException {
 		// TODO Auto-generated method stub
 		if (event instanceof ServiceOnMessageReceiveEvent) {
 			try {

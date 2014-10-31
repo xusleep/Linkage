@@ -1,6 +1,5 @@
 package service.framework.route;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -8,12 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import service.framework.io.client.comsume.ConsumerBean;
 import service.framework.io.client.comsume.RequestResultEntity;
-import service.framework.io.server.WorkingChannel;
-import service.framework.localcache.CacheElement;
-import service.framework.localcache.ICacheElement;
-import service.framework.localcache.IMemoryCache;
-import service.framework.localcache.LRUMemoryCache;
-import service.framework.provide.entity.RequestEntity;
 import service.framework.route.filters.RouteFilter;
 import service.framework.serialization.SerializeUtils;
 import service.properties.ServicePropertyEntity;
@@ -21,13 +14,13 @@ import servicecenter.service.ServiceInformation;
 
 public class DefaultRoute implements Route {
 	private final ServicePropertyEntity servicePropertyEntity;
-	private final ConsumerBean consumerBean;
+	private final ConsumerBean serviceCenterConsumerBean;
 	private final String SERVICE_CENTER = "serviceCenter";
 	private final ConcurrentHashMap<String, List<ServiceInformation>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformation>>(16);
 	
-	public DefaultRoute(ServicePropertyEntity servicePropertyEntity, ConsumerBean consumerBean){
+	public DefaultRoute(ServicePropertyEntity servicePropertyEntity, ConsumerBean serviceCenterConsumerBean){
 		this.servicePropertyEntity = servicePropertyEntity;
-		this.consumerBean = consumerBean;
+		this.serviceCenterConsumerBean = serviceCenterConsumerBean;
 	}
 
 	@Override
@@ -48,7 +41,7 @@ public class DefaultRoute implements Route {
 			{
 				List<String> list = new LinkedList<String>();
 				list.add(serviceName);
-				RequestResultEntity objRequestResultEntity  = this.consumerBean.prcessRequest(SERVICE_CENTER, list);
+				RequestResultEntity objRequestResultEntity  = this.serviceCenterConsumerBean.prcessRequest(SERVICE_CENTER, list);
 				result = objRequestResultEntity.getResponseEntity().getResult();
 				serviceList = SerializeUtils.deserializeServiceInformationList(result);
 				serviceListCache.put(serviceName, serviceList);

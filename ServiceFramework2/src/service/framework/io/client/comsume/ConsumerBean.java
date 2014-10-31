@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import service.framework.common.entity.RequestEntity;
 import service.framework.io.event.ServiceOnMessageWriteEvent;
 import service.framework.io.server.WorkerPool;
 import service.framework.io.server.WorkingChannel;
-import service.framework.provide.entity.RequestEntity;
 import service.framework.route.DefaultRoute;
 import service.framework.route.Route;
 import service.framework.serialization.SerializeUtils;

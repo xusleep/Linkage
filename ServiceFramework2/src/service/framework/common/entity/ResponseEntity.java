@@ -1,4 +1,4 @@
-package service.framework.provide.entity;
+package service.framework.common.entity;
 
 public class ResponseEntity {
 	private String requestID;

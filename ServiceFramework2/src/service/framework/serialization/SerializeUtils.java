@@ -15,8 +15,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import service.framework.provide.entity.RequestEntity;
-import service.framework.provide.entity.ResponseEntity;
+import service.framework.common.entity.RequestEntity;
+import service.framework.common.entity.ResponseEntity;
 import servicecenter.service.ServiceInformation;
 
 public class SerializeUtils {

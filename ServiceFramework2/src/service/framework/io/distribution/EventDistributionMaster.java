@@ -75,7 +75,7 @@ public class EventDistributionMaster extends Thread {
             	try {
             		for(Handler handler : eventHandlerList)
             		{
-            			handler.handleRequest(null, event);
+            			handler.handleRequest(event);
             		}
 				} catch (IOException e) {
 					e.printStackTrace();

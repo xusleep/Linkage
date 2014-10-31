@@ -3,8 +3,8 @@ package service.framework.provide;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import service.framework.provide.entity.RequestEntity;
-import service.framework.provide.entity.ResponseEntity;
+import service.framework.common.entity.RequestEntity;
+import service.framework.common.entity.ResponseEntity;
 import service.properties.ServiceEntity;
 import service.properties.ServicePropertyEntity;
 

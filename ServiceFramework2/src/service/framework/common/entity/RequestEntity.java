@@ -1,4 +1,4 @@
-package service.framework.provide.entity;
+package service.framework.common.entity;
 
 import java.io.Serializable;
 import java.util.LinkedList;

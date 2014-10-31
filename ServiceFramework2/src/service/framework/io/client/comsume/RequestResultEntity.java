@@ -2,7 +2,7 @@ package service.framework.io.client.comsume;
 
 import java.util.concurrent.CountDownLatch;
 
-import service.framework.provide.entity.ResponseEntity;
+import service.framework.common.entity.ResponseEntity;
 
 public class RequestResultEntity {
 	private String requestID;
