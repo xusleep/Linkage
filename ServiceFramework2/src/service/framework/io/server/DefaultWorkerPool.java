@@ -3,7 +3,7 @@ package service.framework.io.server;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.CountDownLatch;
 
-import service.framework.io.distribution.EventDistributionMaster;
+import service.framework.distribution.EventDistributionMaster;
 
 public class DefaultWorkerPool implements WorkerPool {
 	private final int WORKERCOUNTER = Runtime.getRuntime().availableProcessors();

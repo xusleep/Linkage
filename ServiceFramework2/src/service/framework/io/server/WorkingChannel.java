@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import service.framework.io.event.ServiceOnMessageWriteEvent;
-import service.framework.protocol.ShareingProtocolData;
+import service.framework.event.ServiceOnMessageWriteEvent;
+import service.framework.io.protocol.ShareingProtocolData;
 
 
 public class WorkingChannel {

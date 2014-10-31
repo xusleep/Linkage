@@ -11,9 +11,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import service.framework.io.distribution.EventDistributionMaster;
-import service.framework.io.event.ServiceStartedEvent;
-import service.framework.io.event.ServiceStartingEvent;
+import service.framework.distribution.EventDistributionMaster;
+import service.framework.event.ServiceStartedEvent;
+import service.framework.event.ServiceStartingEvent;
 
 /**
  * <p>

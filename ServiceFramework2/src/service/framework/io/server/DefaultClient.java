@@ -1,6 +1,6 @@
 package service.framework.io.server;
 
-import service.framework.io.distribution.EventDistributionMaster;
+import service.framework.distribution.EventDistributionMaster;
 
 public class DefaultClient implements Client {
 	private final WorkerPool workerPool;

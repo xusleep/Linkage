@@ -1,6 +1,6 @@
 package service.framework.monitor;
 
-import service.framework.io.distribution.EventDistributionMaster;
+import service.framework.distribution.EventDistributionMaster;
 
 public class MonitorThread extends Thread {
 	private EventDistributionMaster eventDistributionHandler;

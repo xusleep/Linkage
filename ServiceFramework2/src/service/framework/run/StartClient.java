@@ -7,10 +7,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import service.framework.io.client.comsume.ClientManagement;
-import service.framework.io.client.comsume.ConsumerBean;
-import service.framework.io.client.comsume.RequestResultEntity;
-import service.framework.io.master.ClientBootStrap;
+import service.framework.bootstrap.ClientBootStrap;
+import service.framework.common.entity.RequestResultEntity;
+import service.framework.comsume.ClientManagement;
+import service.framework.comsume.ConsumerBean;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
 import zhonglin.test.framework.concurrence.condition.job.JobInterface;

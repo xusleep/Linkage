@@ -5,34 +5,34 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import service.framework.io.client.comsume.ConsumerBean;
-import service.framework.io.client.comsume.RequestResultEntity;
+import service.framework.common.entity.RequestResultEntity;
+import service.framework.common.entity.ServiceInformationEntity;
+import service.framework.comsume.ConsumerBean;
 import service.framework.route.filters.RouteFilter;
 import service.framework.serialization.SerializeUtils;
-import service.properties.ServicePropertyEntity;
-import servicecenter.service.ServiceInformation;
+import service.properties.WorkingPropertyEntity;
 
 public class DefaultRoute implements Route {
-	private final ServicePropertyEntity servicePropertyEntity;
+	private final WorkingPropertyEntity servicePropertyEntity;
 	private final ConsumerBean serviceCenterConsumerBean;
 	private final String SERVICE_CENTER = "serviceCenter";
-	private final ConcurrentHashMap<String, List<ServiceInformation>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformation>>(16);
+	private final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
 	
-	public DefaultRoute(ServicePropertyEntity servicePropertyEntity, ConsumerBean serviceCenterConsumerBean){
+	public DefaultRoute(WorkingPropertyEntity servicePropertyEntity, ConsumerBean serviceCenterConsumerBean){
 		this.servicePropertyEntity = servicePropertyEntity;
 		this.serviceCenterConsumerBean = serviceCenterConsumerBean;
 	}
 
 	@Override
-	public ServiceInformation chooseRoute(String serviceName) throws Exception {
+	public ServiceInformationEntity chooseRoute(String serviceName) throws Exception {
 		//首先从cache中取得服务列表，cache中没有的话，再从服务中心获取
-		List<ServiceInformation> serviceList = serviceListCache.get(serviceName);
+		List<ServiceInformationEntity> serviceList = serviceListCache.get(serviceName);
 		String result = null;
 		if(serviceList == null)
 		{
 			if(serviceName.equals(SERVICE_CENTER))
 			{
-				ServiceInformation serviceCenter = new ServiceInformation();
+				ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
 				serviceCenter.setAddress(this.servicePropertyEntity.getServiceCenterAddress());
 				serviceCenter.setPort(this.servicePropertyEntity.getServiceCenterPort());
 				return serviceCenter;
@@ -56,7 +56,7 @@ public class DefaultRoute implements Route {
 		if(serviceList.size() == 0)
 			return null;
 		Random r = new Random();
-		ServiceInformation service = serviceList.get(r.nextInt(serviceList.size()));
+		ServiceInformationEntity service = serviceList.get(r.nextInt(serviceList.size()));
 		while(service == null)
 		{
 			service = serviceList.get(r.nextInt(serviceList.size()));

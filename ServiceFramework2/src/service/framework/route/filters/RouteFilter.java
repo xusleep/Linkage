@@ -2,8 +2,8 @@ package service.framework.route.filters;
 
 import java.util.List;
 
-import servicecenter.service.ServiceInformation;
+import service.framework.common.entity.ServiceInformationEntity;
 
 public interface RouteFilter {
-	public List<ServiceInformation> filter(List<ServiceInformation> serviceList);
+	public List<ServiceInformationEntity> filter(List<ServiceInformationEntity> serviceList);
 }

@@ -5,18 +5,18 @@ import java.lang.reflect.Method;
 
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
-import service.properties.ServiceEntity;
 import service.properties.ServicePropertyEntity;
+import service.properties.WorkingPropertyEntity;
 
 public class ProviderBean {
-	private final ServicePropertyEntity servicePropertyEntity;
+	private final WorkingPropertyEntity servicePropertyEntity;
 	
-	public ProviderBean(ServicePropertyEntity servicePropertyEntity){
+	public ProviderBean(WorkingPropertyEntity servicePropertyEntity){
 		this.servicePropertyEntity = servicePropertyEntity;
 	}
 	
-	private ServiceEntity searchService(String serviceName){
-		for(ServiceEntity entity : servicePropertyEntity.getServiceList()){
+	private ServicePropertyEntity searchService(String serviceName){
+		for(ServicePropertyEntity entity : servicePropertyEntity.getServiceList()){
 			if(entity.getServiceName().equals(serviceName)){
 				return entity;
 			}
@@ -25,7 +25,7 @@ public class ProviderBean {
 	}
 	
 	public ResponseEntity prcessRequest(RequestEntity request){
-		ServiceEntity entity = searchService(request.getServiceName());
+		ServicePropertyEntity entity = searchService(request.getServiceName());
 		if(entity == null){
 			ResponseEntity response = new ResponseEntity();
 			response.setResult("Can not find the service name of " + request.getServiceName());

@@ -1,6 +1,6 @@
 package service.framework.io.server;
 
-import service.framework.io.distribution.EventDistributionMaster;
+import service.framework.distribution.EventDistributionMaster;
 
 public interface Client extends Runnable{
 	public WorkerPool getWorkerPool();

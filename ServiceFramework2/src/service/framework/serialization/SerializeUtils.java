@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
-import servicecenter.service.ServiceInformation;
+import service.framework.common.entity.ServiceInformationEntity;
 
 public class SerializeUtils {
 	/**
@@ -311,7 +311,7 @@ public class SerializeUtils {
 	 * @param objServiceInformation
 	 * @return
 	 */
-	public static String serializeServiceInformation(ServiceInformation objServiceInformation) {
+	public static String serializeServiceInformation(ServiceInformationEntity objServiceInformation) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<serviceInformation>");
 		sb.append("<address>");
@@ -338,7 +338,7 @@ public class SerializeUtils {
 	 * @param request
 	 * @return
 	 */
-	public static ServiceInformation deserializeServiceInformation(String receiveData) {
+	public static ServiceInformationEntity deserializeServiceInformation(String receiveData) {
 		try {
 			InputStream is = new StringBufferInputStream(receiveData);
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
@@ -368,7 +368,7 @@ public class SerializeUtils {
 					serviceVersion  = node.getTextContent();
 				}
 			}
-			ServiceInformation objServiceInformation = new ServiceInformation(address, Integer.parseInt(port), serviceName, serviceMethod, serviceVersion);
+			ServiceInformationEntity objServiceInformation = new ServiceInformationEntity(address, Integer.parseInt(port), serviceName, serviceMethod, serviceVersion);
 			return objServiceInformation;
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -388,10 +388,10 @@ public class SerializeUtils {
 	 * @param request
 	 * @return
 	 */
-	public static List<ServiceInformation> deserializeServiceInformationList(String receiveData) {
+	public static List<ServiceInformationEntity> deserializeServiceInformationList(String receiveData) {
 		try {
 			System.out.println("deserializeServiceInformationList :" + receiveData);
-			List<ServiceInformation> list = new LinkedList<ServiceInformation>();
+			List<ServiceInformationEntity> list = new LinkedList<ServiceInformationEntity>();
 			InputStream is = new StringBufferInputStream(receiveData);
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -424,7 +424,7 @@ public class SerializeUtils {
 							serviceVersion  = node1.getTextContent();
 						}
 					}
-					ServiceInformation objServiceInformation = new ServiceInformation(address, Integer.parseInt(port), serviceName, serviceMethod, serviceVersion);
+					ServiceInformationEntity objServiceInformation = new ServiceInformationEntity(address, Integer.parseInt(port), serviceName, serviceMethod, serviceVersion);
 					list.add(objServiceInformation);
 				}
 			}
@@ -447,10 +447,10 @@ public class SerializeUtils {
 	 * @param request
 	 * @return
 	 */
-	public static String serializeServiceInformationList(List<ServiceInformation> serviceInformationList) {
+	public static String serializeServiceInformationList(List<ServiceInformationEntity> serviceInformationList) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<serviceInformationList>");
-		for(ServiceInformation objServiceInformation : serviceInformationList){
+		for(ServiceInformationEntity objServiceInformation : serviceInformationList){
 			sb.append("<serviceInformation>");
 			sb.append("<address>");
 			sb.append(objServiceInformation.getAddress());
