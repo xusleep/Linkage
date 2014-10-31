@@ -1,4 +1,4 @@
-package service.framework.run;
+package test.run;
 import service.framework.bootstrap.ServiceBootStrap;
 
 
@@ -12,7 +12,7 @@ public class StartService {
 
     public static void main(String[] args) {
         try {
-        	new ServiceBootStrap("conf/service1.properties", 5, 5).run();
+        	new ServiceBootStrap("conf/service.properties", 5, 5).run();
         }
         catch (Exception e) {
         	e.printStackTrace();
