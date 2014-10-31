@@ -26,7 +26,6 @@ public class WorkingChannel {
 	Channel channel;
 	private Worker worker;
 	private StringBuffer bufferMessage;
-	private boolean isOpen;
 	private SelectionKey key;
 	private String cacheID;
 	
@@ -46,15 +45,6 @@ public class WorkingChannel {
 
 	public void setChannel(Channel channel) {
 		this.channel = channel;
-	}
-	
-	
-    public boolean isOpen() {
-		return isOpen;
-	}
-
-	public void setOpen(boolean isOpen) {
-		this.isOpen = isOpen;
 	}
 
 	public void appendMessage(String message){

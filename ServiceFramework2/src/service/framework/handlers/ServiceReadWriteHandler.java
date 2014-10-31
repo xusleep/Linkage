@@ -37,19 +37,16 @@ public class ServiceReadWriteHandler implements Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				WorkingChannel channel = objServiceOnMessageReceiveEvent.getSocketChannel();
-				if(channel.isOpen())
-				{
-					String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-					System.out.println(" receive message ... " + receiveData);
-					aint.incrementAndGet();
-					RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
-					ResponseEntity objResponseEntity = this.providerBean.prcessRequest(objRequestEntity);
-					ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
-					System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
-					objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
-					channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-					channel.getWorker().writeFromUser(channel);
-				}
+				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
+				//System.out.println(" receive message ... " + receiveData);
+				aint.incrementAndGet();
+				RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
+				ResponseEntity objResponseEntity = this.providerBean.prcessRequest(objRequestEntity);
+				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
+				//System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
+				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
+				channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+				channel.getWorker().writeFromUser(channel);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -136,7 +136,6 @@ public class DefaultWorker implements Worker {
 						this.eventDistributionHandler.submitEventPool(new ServiceOnChannelClosedEvent(channel, evt.getRequestID()));
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						channel.setOpen(false);
 						try {
 							closeChannel(sc);
 						} catch (IOException e1) {
@@ -191,7 +190,6 @@ public class DefaultWorker implements Worker {
             success = true;
         } catch (ClosedChannelException e) {
         	e.printStackTrace();
-        	objWorkingChannel.setOpen(false);
             // Can happen, and does not need a user attention.
         } catch (Throwable t) {
             t.printStackTrace();
@@ -300,7 +298,6 @@ public class DefaultWorker implements Worker {
 			try {
 				schannel.configureBlocking(false);
 				SelectionKey key = schannel.register(selector, SelectionKey.OP_READ, objWorkingChannel);
-				objWorkingChannel.setOpen(true);
 				objWorkingChannel.setKey(key);
 			} catch (Exception e) {
 				try {

@@ -24,7 +24,7 @@ public class DefaultRoute implements Route {
 	}
 
 	@Override
-	public ServiceInformationEntity chooseRoute(String serviceName) throws Exception {
+	public ServiceInformationEntity chooseRoute(String serviceName) {
 		//首先从cache中取得服务列表，cache中没有的话，再从服务中心获取
 		List<ServiceInformationEntity> serviceList = serviceListCache.get(serviceName);
 		String result = null;
@@ -42,9 +42,16 @@ public class DefaultRoute implements Route {
 				List<String> list = new LinkedList<String>();
 				list.add(serviceName);
 				RequestResultEntity objRequestResultEntity = this.serviceCenterConsumerBean.prcessRequest(ShareingData.SERVICE_CENTER, list);
-				result = objRequestResultEntity.getResponseEntity().getResult();
-				serviceList = SerializeUtils.deserializeServiceInformationList(result);
-				serviceListCache.put(serviceName, serviceList);
+				if(objRequestResultEntity == null)
+				{
+					return null;
+				}
+				else
+				{
+					result = objRequestResultEntity.getResponseEntity().getResult();
+					serviceList = SerializeUtils.deserializeServiceInformationList(result);
+					serviceListCache.put(serviceName, serviceList);
+				}
 			}
 		}
 		if(filters != null)

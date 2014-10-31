@@ -3,6 +3,7 @@ package service.framework.comsume;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -29,7 +30,7 @@ import service.framework.route.Route;
 public class ConsumerBean {
 	
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
-	private final ConcurrentHashMap<String, WorkingChannel> workingChannelCacheList = new ConcurrentHashMap<String, WorkingChannel>(16);
+	private final HashMap<String, WorkingChannel> workingChannelCacheList = new HashMap<String, WorkingChannel>(16);
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final Route route;
 	private final WorkerPool workerPool;
@@ -82,7 +83,16 @@ public class ConsumerBean {
         }
         catch(Exception ex){
         	System.out.println(ex.getMessage());
+        	ex.printStackTrace();
         	return null;
+        }
+        if(newWorkingChannel == null)
+        {
+            ResponseEntity objResponseEntity = new ResponseEntity();
+            objResponseEntity.setRequestID(objRequestEntity.getRequestID());
+            objResponseEntity.setResult("can not connect to the service");
+            result.setResponseEntity(objResponseEntity);
+        	return result;
         }
     	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
         String sendData = SerializeUtils.serializeRequest(objRequestEntity);
@@ -104,11 +114,13 @@ public class ConsumerBean {
 	private WorkingChannel getWorkingChannnel(String serviceName) throws IOException, InterruptedException, ExecutionException, Exception {
 		ServiceInformationEntity service;
 		service = this.route.chooseRoute(serviceName);
+		if(service == null)
+			return null;
 		String cacheID = service.toString();
 		WorkingChannel objWorkingChannel = workingChannelCacheList.get(cacheID);
 		if(objWorkingChannel == null)
 		{
-			synchronized(this){
+			synchronized(workingChannelCacheList){
 				// get the working channel again 
 				// in case we set after we get from the cache
 				objWorkingChannel = workingChannelCacheList.get(service.toString());
@@ -130,12 +142,9 @@ public class ConsumerBean {
 	 * @return
 	 * @throws IOException
 	 */
-	public WorkingChannel createWorkingChannel(String address, int port) throws IOException{
+	private WorkingChannel createWorkingChannel(String address, int port) throws IOException{
 		// get a Socket channel
         SocketChannel channel = SocketChannel.open();  
-        // set it unblocking  
-        channel.configureBlocking(false);   
-          
         // connect
         channel.connect(new InetSocketAddress(address, port));
         // finish the connect
@@ -179,6 +188,8 @@ public class ConsumerBean {
 		    objResponseEntity.setResult("the channel is closed");
 			result.setResponseEntity(objResponseEntity);
 		}
-		this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
+		synchronized(workingChannelCacheList){
+			this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
+		}
 	}
 }
