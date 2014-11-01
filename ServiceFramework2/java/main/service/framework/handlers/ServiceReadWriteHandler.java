@@ -53,7 +53,7 @@ public class ServiceReadWriteHandler implements Handler {
 			}
 		}
 		else if(event instanceof ServiceOnChannelClosedEvent){
-			System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());
+			//System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());
 		}
 		else if(event instanceof ServiceOnErrorEvent){
 			System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());

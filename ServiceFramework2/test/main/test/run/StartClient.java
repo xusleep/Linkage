@@ -83,20 +83,17 @@ public class StartClient extends AbstractJob {
 	}
 
 	public static void main(String[] args) throws IOException {
-		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
-		clientBootStrap.run();;
-		StartClient job1 = new StartClient(clientBootStrap.getConsumerBean());
-		job1.setThreadCount(10000);
-		List<JobInterface> jobList = new LinkedList<JobInterface>();
-		jobList.add(job1);
-		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);
-		mct1.start();
-		try {
-			mct1.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for(int i = 0; i < 1000; i++)
+		{
+			ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
+			clientBootStrap.run();;
+			StartClient job1 = new StartClient(clientBootStrap.getConsumerBean());
+			job1.setThreadCount(1);
+			List<JobInterface> jobList = new LinkedList<JobInterface>();
+			jobList.add(job1);
+			MainConcurrentThread mct1 = new MainConcurrentThread(jobList);
+			mct1.start();
+			System.out.println("成功的条数为:" + successCount.get());
 		}
-		System.out.println("成功的条数为:" + successCount.get());
 	}
 }
