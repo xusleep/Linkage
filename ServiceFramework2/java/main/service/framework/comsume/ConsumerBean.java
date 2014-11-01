@@ -15,12 +15,14 @@ import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.event.ServiceOnMessageWriteEvent;
+import service.framework.exception.ServiceException;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
 import service.framework.properties.ClientPropertyEntity;
 import service.framework.properties.WorkingPropertyEntity;
 import service.framework.route.DefaultRoute;
 import service.framework.route.Route;
+
 /**
  * this class is an access point from the client
  * the client will use this class to call the service  
@@ -82,16 +84,13 @@ public class ConsumerBean {
         	newWorkingChannel = getWorkingChannnel(objRequestEntity.getServiceName());
         }
         catch(Exception ex){
-        	System.out.println(ex.getMessage());
         	ex.printStackTrace();
-        	return null;
+        	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(ex, ex.getMessage()));
+        	return result;
         }
         if(newWorkingChannel == null)
         {
-            ResponseEntity objResponseEntity = new ResponseEntity();
-            objResponseEntity.setRequestID(objRequestEntity.getRequestID());
-            objResponseEntity.setResult("can not connect to the service");
-            result.setResponseEntity(objResponseEntity);
+        	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(null, "can not connect to the service"));
         	return result;
         }
     	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
@@ -111,7 +110,7 @@ public class ConsumerBean {
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	private WorkingChannel getWorkingChannnel(String serviceName) throws IOException, InterruptedException, ExecutionException, Exception {
+	private WorkingChannel getWorkingChannnel(String serviceName) throws IOException, InterruptedException, ExecutionException, Exception  {
 		ServiceInformationEntity service;
 		service = this.route.chooseRoute(serviceName);
 		if(service == null)
@@ -166,6 +165,34 @@ public class ConsumerBean {
 	}
 	
 	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public void setRuquestResult(String requestID, String strResult){
+		RequestResultEntity result = this.resultList.get(requestID);
+	    ResponseEntity objResponseEntity = new ResponseEntity();
+	    objResponseEntity.setRequestID(requestID);
+	    objResponseEntity.setResult(strResult);
+	    setRequestResult(objResponseEntity);
+	}
+	
+	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public void setExceptionRuquestResult(String requestID, ServiceException serviceException){
+		RequestResultEntity result = this.resultList.get(requestID);
+	    ResponseEntity objResponseEntity = new ResponseEntity();
+	    objResponseEntity.setRequestID(requestID);
+	    objResponseEntity.setResult(serviceException.getMessage());
+	    result.setException(true);
+	    result.setException(serviceException);
+	    setRequestResult(objResponseEntity);
+	}
+	
+	/**
 	 * when the response comes, use this method to set it. 
 	 * @param objResponseEntity
 	 */
@@ -178,16 +205,7 @@ public class ConsumerBean {
 	 * remove the colsed channel from the cache when there is a error comes out
 	 * @param requestID
 	 */
-	public void removeClosedChannel(WorkingChannel objWorkingChannel, String requestID){
-		System.out.println("clear the working channel request id is " + requestID);
-		if(requestID != null)
-		{
-			RequestResultEntity result = this.resultList.remove(requestID);
-		    ResponseEntity objResponseEntity = new ResponseEntity();
-		    objResponseEntity.setRequestID(requestID);
-		    objResponseEntity.setResult("the channel is closed");
-			result.setResponseEntity(objResponseEntity);
-		}
+	public void removeClosedChannel(WorkingChannel objWorkingChannel){
 		synchronized(workingChannelCacheList){
 			this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
 		}

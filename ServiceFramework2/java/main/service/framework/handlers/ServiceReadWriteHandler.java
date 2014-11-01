@@ -7,7 +7,7 @@ import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.event.ServiceEvent;
-import service.framework.event.ServiceOnChannelClosedEvent;
+import service.framework.event.ServiceOnExeptionEvent;
 import service.framework.event.ServiceOnErrorEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceOnMessageWriteEvent;
@@ -52,8 +52,7 @@ public class ServiceReadWriteHandler implements Handler {
 				e.printStackTrace();
 			}
 		}
-		else if(event instanceof ServiceOnChannelClosedEvent){
-			//System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());
+		else if(event instanceof ServiceOnExeptionEvent){
 		}
 		else if(event instanceof ServiceOnErrorEvent){
 			System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());

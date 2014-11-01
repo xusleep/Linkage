@@ -10,6 +10,7 @@ import service.framework.common.ShareingData;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
+import service.framework.exception.ServiceException;
 import service.framework.properties.WorkingPropertyEntity;
 import service.framework.route.filters.RouteFilter;
 
@@ -24,7 +25,7 @@ public class DefaultRoute implements Route {
 	}
 
 	@Override
-	public ServiceInformationEntity chooseRoute(String serviceName) {
+	public ServiceInformationEntity chooseRoute(String serviceName) throws ServiceException {
 		//首先从cache中取得服务列表，cache中没有的话，再从服务中心获取
 		List<ServiceInformationEntity> serviceList = serviceListCache.get(serviceName);
 		String result = null;
@@ -42,9 +43,9 @@ public class DefaultRoute implements Route {
 				List<String> list = new LinkedList<String>();
 				list.add(serviceName);
 				RequestResultEntity objRequestResultEntity = this.serviceCenterConsumerBean.prcessRequest(ShareingData.SERVICE_CENTER, list);
-				if(objRequestResultEntity == null)
+				if(objRequestResultEntity.isException())
 				{
-					return null;
+					throw objRequestResultEntity.getException();
 				}
 				else
 				{

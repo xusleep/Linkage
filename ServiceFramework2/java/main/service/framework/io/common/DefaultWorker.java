@@ -19,9 +19,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import service.framework.distribution.EventDistributionMaster;
-import service.framework.event.ServiceOnChannelClosedEvent;
+import service.framework.event.ServiceOnExeptionEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceOnMessageWriteEvent;
+import service.framework.exception.ServiceException;
 import service.framework.io.protocol.ShareingProtocolData;
 
 /**
@@ -133,7 +134,7 @@ public class DefaultWorker implements Worker {
 						while(buffer.hasRemaining())
 							sc.write(buffer);
 					} catch (IOException e) {
-						this.eventDistributionHandler.submitEventPool(new ServiceOnChannelClosedEvent(channel, evt.getRequestID()));
+						this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						try {
@@ -304,7 +305,7 @@ public class DefaultWorker implements Worker {
 					schannel.finishConnect();
 					schannel.close();
 					schannel.socket().close();
-					eventDistributionHandler.submitEventPool(new ServiceOnChannelClosedEvent(objWorkingChannel, null));
+					eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
 				} catch (Exception e1) {
 				}
 			}

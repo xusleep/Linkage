@@ -33,13 +33,11 @@ import zhonglin.test.framework.concurrence.condition.job.JobInterface;
 
 public class StartClient extends AbstractJob {
 	public static final AtomicInteger aint = new AtomicInteger(2320);
-	private final ConsumerBean cb;
 	private final AtomicBoolean isFailed = new AtomicBoolean(false);
 	public static final AtomicInteger successCount = new AtomicInteger(0);
 	public static final AtomicInteger requestCount = new AtomicInteger(0);
 	
-	public StartClient(ConsumerBean cb) {
-		this.cb = cb;
+	public StartClient() {
 	}
 	
 	@Override
@@ -50,7 +48,10 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		for(long i = 0; i < 1000; i++)
+		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
+		clientBootStrap.run();;
+		ConsumerBean cb = clientBootStrap.getConsumerBean();
+		for(long i = 0; i < 1; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
@@ -83,17 +84,12 @@ public class StartClient extends AbstractJob {
 	}
 
 	public static void main(String[] args) throws IOException {
-		for(int i = 0; i < 1000; i++)
-		{
-			ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
-			clientBootStrap.run();;
-			StartClient job1 = new StartClient(clientBootStrap.getConsumerBean());
-			job1.setThreadCount(1);
-			List<JobInterface> jobList = new LinkedList<JobInterface>();
-			jobList.add(job1);
-			MainConcurrentThread mct1 = new MainConcurrentThread(jobList);
-			mct1.start();
-			System.out.println("成功的条数为:" + successCount.get());
-		}
+		StartClient job1 = new StartClient();
+		job1.setThreadCount(1);
+		List<JobInterface> jobList = new LinkedList<JobInterface>();
+		jobList.add(job1);
+		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);
+		mct1.start();
+		System.out.println("成功的条数为:" + successCount.get());
 	}
 }

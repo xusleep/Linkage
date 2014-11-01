@@ -2,10 +2,14 @@ package service.framework.common.entity;
 
 import java.util.concurrent.CountDownLatch;
 
+import service.framework.exception.ServiceException;
+
 public class RequestResultEntity {
 	private String requestID;
 	private ResponseEntity responseEntity;
 	private CountDownLatch signal = new CountDownLatch(1);
+	private boolean isException;
+	private ServiceException exception;
 	
 	public RequestResultEntity(){
 	}
@@ -32,6 +36,20 @@ public class RequestResultEntity {
 		this.responseEntity = responseEntity;
 		signal.countDown();
 	}
-	
-	
+
+	public boolean isException() {
+		return isException;
+	}
+
+	public void setException(boolean isException) {
+		this.isException = isException;
+	}
+
+	public ServiceException getException() {
+		return exception;
+	}
+
+	public void setException(ServiceException exception) {
+		this.exception = exception;
+	}
 }

@@ -6,8 +6,8 @@ import service.framework.common.SerializeUtils;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.event.ServiceEvent;
-import service.framework.event.ServiceOnChannelClosedEvent;
 import service.framework.event.ServiceOnErrorEvent;
+import service.framework.event.ServiceOnExeptionEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
@@ -39,10 +39,13 @@ public class ClientReadWriteHandler implements Handler {
 				e.printStackTrace();
 			}
 		}
-		else if(event instanceof ServiceOnChannelClosedEvent){
-			ServiceOnChannelClosedEvent objServiceOnChannelClosedEvent = (ServiceOnChannelClosedEvent)event;
-			this.consumerBean.removeClosedChannel(objServiceOnChannelClosedEvent.getSocketChannel(), objServiceOnChannelClosedEvent.getRequestID());
-			System.out.println("≥ˆœ÷¡À¥ÌŒÛ" + ((ServiceOnErrorEvent)event).getMsg());
+		else if(event instanceof ServiceOnExeptionEvent){
+			ServiceOnExeptionEvent objServiceOnExeptionEvent = (ServiceOnExeptionEvent)event;
+			this.consumerBean.removeClosedChannel(objServiceOnExeptionEvent.getSocketChannel());
+			if(objServiceOnExeptionEvent.getRequestID() != null)
+			{
+				this.consumerBean.setExceptionRuquestResult(objServiceOnExeptionEvent.getRequestID(), objServiceOnExeptionEvent.getExceptionHappen());
+			}
 		}
 		else if(event instanceof ServiceOnErrorEvent){
 			System.out.println("there is a error comes out" + ((ServiceOnErrorEvent)event).getMsg());

@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.common.SerializeUtils;
+import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.event.ServiceEvent;
@@ -30,7 +31,7 @@ public class ServiceRegisterHandler implements Handler {
 	}
 	
 	@Override
-	public void handleRequest(ServiceEvent event) throws IOException {
+	public void handleRequest(ServiceEvent event)  {
 		// TODO Auto-generated method stub
 		if (event instanceof ServiceStartedEvent) {
 			
@@ -65,7 +66,8 @@ public class ServiceRegisterHandler implements Handler {
 			String strServiceInformation = SerializeUtils.serializeServiceInformationList(serviceInformationList);
 			List<String> args = new LinkedList<String>();
 			args.add(strServiceInformation);
-			this.consumerBean.prcessRequest("serviceCenter", args);
+			RequestResultEntity result = this.consumerBean.prcessRequest("serviceCenter", args);
+			System.out.println("register to the service center ..." + result.getResponseEntity().getResult());
 		}
 	}
 }
