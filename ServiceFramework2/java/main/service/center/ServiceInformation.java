@@ -1,4 +1,4 @@
-package test.servicecenter;
+package service.center;
 
 public class ServiceInformation {
 	private String serviceName;

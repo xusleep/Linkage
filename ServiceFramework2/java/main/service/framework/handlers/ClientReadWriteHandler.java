@@ -3,6 +3,7 @@ package service.framework.handlers;
 import java.io.IOException;
 
 import service.framework.common.SerializeUtils;
+import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.event.ServiceEvent;
@@ -33,7 +34,10 @@ public class ClientReadWriteHandler implements Handler {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
-				this.consumerBean.setRequestResult(objResponseEntity);
+				RequestResultEntity result = this.consumerBean.setRequestResult(objResponseEntity);
+				if(result.isCloseingAfterRequest()){
+					this.consumerBean.closeChannel(objServiceOnMessageReceiveEvent.getSocketChannel());
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

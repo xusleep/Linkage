@@ -1,4 +1,4 @@
-package test.servicecenter;
+package service.center;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,4 +10,5 @@ public interface ServiceCenter {
 	
 	public String register(String serviceInfor);
 	public String getServiceList(String servicename);
+	public String removeServiceList(String serviceName);
 }

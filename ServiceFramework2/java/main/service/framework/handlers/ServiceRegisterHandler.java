@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.common.SerializeUtils;
+import service.framework.common.ShareingData;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
@@ -66,8 +67,14 @@ public class ServiceRegisterHandler implements Handler {
 			String strServiceInformation = SerializeUtils.serializeServiceInformationList(serviceInformationList);
 			List<String> args = new LinkedList<String>();
 			args.add(strServiceInformation);
-			RequestResultEntity result = this.consumerBean.prcessRequest("serviceCenter", args);
-			System.out.println("register to the service center ..." + result.getResponseEntity().getResult());
+			RequestResultEntity result = this.consumerBean.prcessRequest(ShareingData.SERVICE_CENTER_REGISTER_ID, args, true);
+			if(result.isException()){
+				result.getException().printStackTrace();
+			}
+			else
+			{
+				System.out.println("register to the service center ..." + result.getResponseEntity().getResult());
+			}
 		}
 	}
 }

@@ -190,11 +190,12 @@ public class DefaultWorker implements Worker {
             }
             success = true;
         } catch (ClosedChannelException e) {
-        	e.printStackTrace();
+        	this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
             // Can happen, and does not need a user attention.
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+        	this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
+		} 
         if (readBytes > 0) {
             bb.flip();
         }

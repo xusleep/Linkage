@@ -1,4 +1,4 @@
-package test.servicecenter;
+package service.center;
 
 import java.io.IOException;
 import java.io.InputStream;

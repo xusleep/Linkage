@@ -42,7 +42,7 @@ public class DefaultRoute implements Route {
 			{
 				List<String> list = new LinkedList<String>();
 				list.add(serviceName);
-				RequestResultEntity objRequestResultEntity = this.serviceCenterConsumerBean.prcessRequest(ShareingData.SERVICE_CENTER, list);
+				RequestResultEntity objRequestResultEntity = this.serviceCenterConsumerBean.prcessRequest(ShareingData.SERVICE_CENTER, list, true);
 				if(objRequestResultEntity.isException())
 				{
 					throw objRequestResultEntity.getException();

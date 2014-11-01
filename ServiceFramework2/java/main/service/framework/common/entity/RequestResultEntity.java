@@ -10,6 +10,7 @@ public class RequestResultEntity {
 	private CountDownLatch signal = new CountDownLatch(1);
 	private boolean isException;
 	private ServiceException exception;
+	private boolean isCloseingAfterRequest;
 	
 	public RequestResultEntity(){
 	}
@@ -38,6 +39,12 @@ public class RequestResultEntity {
 	}
 
 	public boolean isException() {
+		try {
+			signal.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return isException;
 	}
 
@@ -52,4 +59,14 @@ public class RequestResultEntity {
 	public void setException(ServiceException exception) {
 		this.exception = exception;
 	}
+
+	public boolean isCloseingAfterRequest() {
+		return isCloseingAfterRequest;
+	}
+
+	public void setCloseingAfterRequest(boolean isCloseingAfterRequest) {
+		this.isCloseingAfterRequest = isCloseingAfterRequest;
+	}
+	
+	
 }

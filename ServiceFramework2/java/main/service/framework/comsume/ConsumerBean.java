@@ -65,7 +65,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args) {
+	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args, boolean isClosingAfterRequest) {
 		// this is unique id for a request
 		long id = idGenerator.incrementAndGet();
 		final RequestEntity objRequestEntity = new RequestEntity();
@@ -84,7 +84,6 @@ public class ConsumerBean {
         	newWorkingChannel = getWorkingChannnel(objRequestEntity.getServiceName());
         }
         catch(Exception ex){
-        	ex.printStackTrace();
         	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(ex, ex.getMessage()));
         	return result;
         }
@@ -98,8 +97,10 @@ public class ConsumerBean {
 		objServiceOnMessageWriteEvent.setMessage(sendData);
         newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
         newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
+        result.setCloseingAfterRequest(isClosingAfterRequest);
     	return result;
 	}
+	
 	
 	/**
 	 * get a working channel
@@ -170,11 +171,15 @@ public class ConsumerBean {
 	 * @param strResult
 	 */
 	public void setRuquestResult(String requestID, String strResult){
-		RequestResultEntity result = this.resultList.get(requestID);
-	    ResponseEntity objResponseEntity = new ResponseEntity();
-	    objResponseEntity.setRequestID(requestID);
-	    objResponseEntity.setResult(strResult);
-	    setRequestResult(objResponseEntity);
+		RequestResultEntity result = this.resultList.remove(requestID);
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(requestID);
+		    objResponseEntity.setResult(strResult);
+		    result.setException(false);
+			result.setResponseEntity(objResponseEntity);
+		}
 	}
 	
 	/**
@@ -183,22 +188,30 @@ public class ConsumerBean {
 	 * @param strResult
 	 */
 	public void setExceptionRuquestResult(String requestID, ServiceException serviceException){
-		RequestResultEntity result = this.resultList.get(requestID);
-	    ResponseEntity objResponseEntity = new ResponseEntity();
-	    objResponseEntity.setRequestID(requestID);
-	    objResponseEntity.setResult(serviceException.getMessage());
-	    result.setException(true);
-	    result.setException(serviceException);
-	    setRequestResult(objResponseEntity);
+		RequestResultEntity result = this.resultList.remove(requestID);
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(requestID);
+		    objResponseEntity.setResult(serviceException.getMessage());
+		    result.setException(true);
+		    result.setException(serviceException);
+			result.setResponseEntity(objResponseEntity);
+		}
 	}
 	
 	/**
 	 * when the response comes, use this method to set it. 
 	 * @param objResponseEntity
 	 */
-	public void setRequestResult(ResponseEntity objResponseEntity){
+	public RequestResultEntity setRequestResult(ResponseEntity objResponseEntity){
 		RequestResultEntity result = this.resultList.remove(objResponseEntity.getRequestID());
-		result.setResponseEntity(objResponseEntity);
+		if(result != null)
+		{
+			result.setException(false);
+			result.setResponseEntity(objResponseEntity);
+		}
+		return result;
 	}
 	
 	/**
@@ -208,6 +221,17 @@ public class ConsumerBean {
 	public void removeClosedChannel(WorkingChannel objWorkingChannel){
 		synchronized(workingChannelCacheList){
 			this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
+		}
+	}
+	
+	public void closeChannel(WorkingChannel objWorkingChannel){
+		System.out.println("close the channel");
+		removeClosedChannel(objWorkingChannel);
+		try {
+			objWorkingChannel.getChannel().close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

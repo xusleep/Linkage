@@ -1,4 +1,4 @@
-package test.servicecenter;
+package service.center;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +19,7 @@ public class ServiceCenterImpl implements ServiceCenter {
 		// TODO Auto-generated method stub
 		List<ServiceInformationEntity> objServiceInformation = SerializeUtils.deserializeServiceInformationList(serviceInfor);
 		ServiceCenter.ServiceInformationList.addAll(objServiceInformation);
+		System.out.println("service count = " + ServiceCenter.ServiceInformationList.size());
 		return "true";
 	}
 
@@ -33,7 +34,22 @@ public class ServiceCenterImpl implements ServiceCenter {
 				resultList.add(objServiceInformation);
 			}
 		}
+		System.out.println("service count = " + ServiceCenter.ServiceInformationList.size());
 		return SerializeUtils.serializeServiceInformationList(resultList);
+	}
+	
+	public String removeServiceList(String serviceName){
+		System.out.println("remove serviceName " + serviceName);
+		List<ServiceInformationEntity> resultList = new LinkedList<ServiceInformationEntity>();	
+		for(ServiceInformationEntity objServiceInformation : ServiceCenter.ServiceInformationList){
+			if(objServiceInformation.getServiceName().equals(serviceName))
+			{
+				resultList.add(objServiceInformation);
+			}
+		}
+		ServiceCenter.ServiceInformationList.removeAll(resultList);
+		System.out.println("service count = " + ServiceCenter.ServiceInformationList.size());
+		return "true";
 	}
 
 }
