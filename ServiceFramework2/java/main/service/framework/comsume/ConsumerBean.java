@@ -54,8 +54,14 @@ public class ConsumerBean {
 		}
 		return null;
 	}
-	
+	/**
+	 *  search the route in the property route list
+	 * @param entity
+	 * @return
+	 */
 	private AbstractRoute searchRoute(ClientPropertyEntity entity){
+		if(entity.getRouteid() == null || entity.getRouteid() == "")
+			return workingClientPropertyEntity.getDefaultRoute();
 		for(AbstractRoute route : workingClientPropertyEntity.getRouteList()){
 			if(route.getRouteid().equals(entity.getRouteid())){
 				return route;
