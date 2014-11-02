@@ -19,7 +19,8 @@ import service.framework.exception.ServiceException;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
 import service.framework.properties.ClientPropertyEntity;
-import service.framework.properties.WorkingPropertyEntity;
+import service.framework.properties.WorkingClientPropertyEntity;
+import service.framework.properties.WorkingServicePropertyEntity;
 import service.framework.route.DefaultRoute;
 import service.framework.route.Route;
 
@@ -36,9 +37,9 @@ public class ConsumerBean {
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final Route route;
 	private final WorkerPool workerPool;
-	private final WorkingPropertyEntity servicePropertyEntity;
+	private final WorkingClientPropertyEntity servicePropertyEntity;
 	
-	public ConsumerBean(WorkingPropertyEntity servicePropertyEntity, WorkerPool workerPool){
+	public ConsumerBean(WorkingClientPropertyEntity servicePropertyEntity, WorkerPool workerPool){
 		this.route = new DefaultRoute(servicePropertyEntity, this);
 		this.servicePropertyEntity = servicePropertyEntity;
 		this.workerPool = workerPool;
@@ -208,14 +209,6 @@ public class ConsumerBean {
         this.workerPool.waitReady();
         WorkingChannel objWorkingChannel = this.workerPool.register(channel);
         return objWorkingChannel;
-	}
-	
-	/**
-	 * get the proterties
-	 * @return
-	 */
-	public WorkingPropertyEntity getServicePropertyEntity() {
-		return servicePropertyEntity;
 	}
 	
 	/**

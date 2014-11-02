@@ -1,10 +1,8 @@
 package service.framework.handlers;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.common.SerializeUtils;
@@ -15,6 +13,7 @@ import service.framework.comsume.ConsumerBean;
 import service.framework.event.ServiceEvent;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.properties.ServicePropertyEntity;
+import service.framework.properties.WorkingServicePropertyEntity;
 
 /***
  * 这个handler只针对配置服务中心的时候使用
@@ -26,9 +25,11 @@ import service.framework.properties.ServicePropertyEntity;
 public class ServiceRegisterHandler implements Handler {
 	private AtomicInteger aint = new AtomicInteger(0);
 	private final ConsumerBean consumerBean;
+	private final WorkingServicePropertyEntity workingServicePropertyEntity;
 	
-	public ServiceRegisterHandler(ConsumerBean consumerBean){
+	public ServiceRegisterHandler(ConsumerBean consumerBean, WorkingServicePropertyEntity workingServicePropertyEntity){
 		this.consumerBean = consumerBean;
+		this.workingServicePropertyEntity = workingServicePropertyEntity;
 	}
 	
 	@Override
@@ -40,8 +41,9 @@ public class ServiceRegisterHandler implements Handler {
 			//执行
 			ServiceStartedEvent objServiceOnReadEvent = (ServiceStartedEvent) event;
 			List<ServiceInformationEntity> serviceInformationList = new LinkedList<ServiceInformationEntity>();
+			
 			//获取所有服务，将服务注册到注册中心
-			List<ServicePropertyEntity> serviceList = this.consumerBean.getServicePropertyEntity().getServiceList();
+			List<ServicePropertyEntity> serviceList = this.workingServicePropertyEntity.getServiceList();
 			for(ServicePropertyEntity serviceEntity: serviceList)
 			{
 				String interfaceName = serviceEntity.getServiceInterface();
@@ -50,8 +52,8 @@ public class ServiceRegisterHandler implements Handler {
 					Method[] methods = interfaceclass.getMethods();
 					for(int i = 0; i < methods.length; i++){
 						ServiceInformationEntity subServiceInformation = new ServiceInformationEntity();
-						subServiceInformation.setAddress(this.consumerBean.getServicePropertyEntity().getServiceAddress());
-						subServiceInformation.setPort(this.consumerBean.getServicePropertyEntity().getServicePort());
+						subServiceInformation.setAddress(this.workingServicePropertyEntity.getServiceAddress());
+						subServiceInformation.setPort(this.workingServicePropertyEntity.getServicePort());
 						subServiceInformation.setServiceMethod(methods[i].getName());
 						subServiceInformation.setServiceName(serviceEntity.getServiceName());
 						subServiceInformation.setServiceVersion(serviceEntity.getServiceVersion());

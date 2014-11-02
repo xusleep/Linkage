@@ -11,68 +11,57 @@ import service.framework.io.common.DefaultWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.server.DefaultServer;
 import service.framework.io.server.Server;
-import service.framework.properties.WorkingPropertyEntity;
+import service.framework.properties.WorkingServicePropertyEntity;
 import service.framework.provide.ProviderBean;
 
 public class ServiceBootStrap implements Runnable {
-	private final Client client;
 	private final Server server;
 	private final ProviderBean providerBean;
-	private final ConsumerBean consumerBean;
+	private final EventDistributionMaster eventDistributionHandler;
+	private final WorkingServicePropertyEntity servicePropertyEntity;
 	
 	public ServiceBootStrap(String propertyPath, int serviceTaskThreadPootSize, int clientTaskThreadPootSize) throws Exception{
 		// read the configuration from the properties
-		WorkingPropertyEntity objServicePropertyEntity = new WorkingPropertyEntity(propertyPath);
+		this.servicePropertyEntity = new WorkingServicePropertyEntity(propertyPath);
 		// new a task handler, this handler will handle all of the task from the pool queue
 		// into the executor pool(thread pool) which will execute the task.
-		EventDistributionMaster eventDistributionHandler = new EventDistributionMaster(serviceTaskThreadPootSize);
+		this.eventDistributionHandler = new EventDistributionMaster(serviceTaskThreadPootSize);
 		// this worker pool will handle the read write io operation for all of the connection
 		WorkerPool workerPool = new DefaultWorkerPool(eventDistributionHandler);
 		// this is a provider which provides the service point access from the io layer
 		// in this provider, all of the service information will load into the bean
 		// when there is a request, the provider will find the service, init it & execute the service
-		this.providerBean = new ProviderBean(objServicePropertyEntity);
+		this.providerBean = new ProviderBean(servicePropertyEntity);
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
 		eventDistributionHandler.registerHandler(new ServiceReadWriteHandler(providerBean));
 		
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
-		this.server = new DefaultServer(objServicePropertyEntity.getServiceAddress(), objServicePropertyEntity.getServicePort(),
+		this.server = new DefaultServer(servicePropertyEntity.getServiceAddress(), servicePropertyEntity.getServicePort(),
 				eventDistributionHandler, workerPool);
 		
-		// new a task handler, this handler will handle all of the task from the pool queue
-		// into the executor pool(thread pool) which will execute the task.
-		EventDistributionMaster clientEventDistributionHandler = new EventDistributionMaster(clientTaskThreadPootSize);
-		// this is a client worker pool, this pool will handle all of the io operation 
-		// with the server
-		WorkerPool clientWorkerPool = new DefaultWorkerPool(clientEventDistributionHandler);
-		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
-		this.client = new DefaultClient(clientEventDistributionHandler, clientWorkerPool);
-		this.consumerBean = new ConsumerBean(objServicePropertyEntity, clientWorkerPool);
-		eventDistributionHandler.registerHandler(new ServiceRegisterHandler(this.consumerBean));
-	}
-	
-	public Client getClient() {
-		return client;
+
 	}
 
 	public void stop(){
 		
-	}
-	
-    public ConsumerBean getConsumerBean() {
-		return consumerBean;
 	}
 
 	public ProviderBean getProviderBean() {
 		return providerBean;
 	}
 
+	public EventDistributionMaster getEventDistributionHandler() {
+		return eventDistributionHandler;
+	}
+
+	public WorkingServicePropertyEntity getServicePropertyEntity() {
+		return servicePropertyEntity;
+	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		new Thread(server).start();
-		client.getEventDistributionHandler().registerHandler(new ClientReadWriteHandler(this.getConsumerBean()));
-		new Thread(client).start();
 	}
 }

@@ -1,5 +1,7 @@
 package test.run;
+import service.framework.bootstrap.ClientBootStrap;
 import service.framework.bootstrap.ServiceBootStrap;
+import service.framework.handlers.ServiceRegisterHandler;
 
 
 /**
@@ -11,18 +13,12 @@ import service.framework.bootstrap.ServiceBootStrap;
 public class StartService {
 
     public static void main(String[] args) {
-    	Runtime.getRuntime().addShutdownHook(new Thread(){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				System.out.println("run");
-			}
-    		
-    	});
         try {
-        	new ServiceBootStrap("conf/service.properties", 5, 5).run();
-        	
+        	ServiceBootStrap serviceBootStrap = new ServiceBootStrap("conf/service.properties", 5, 5);
+    		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/service.properties", 5);
+    		serviceBootStrap.getEventDistributionHandler().registerHandler(new ServiceRegisterHandler(clientBootStrap.getConsumerBean(), serviceBootStrap.getServicePropertyEntity()));
+    		serviceBootStrap.run();
+    		clientBootStrap.run();;
         }
         catch (Exception e) {
         	e.printStackTrace();

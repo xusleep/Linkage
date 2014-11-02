@@ -6,12 +6,12 @@ import java.lang.reflect.Method;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.properties.ServicePropertyEntity;
-import service.framework.properties.WorkingPropertyEntity;
+import service.framework.properties.WorkingServicePropertyEntity;
 
 public class ProviderBean {
-	private final WorkingPropertyEntity servicePropertyEntity;
+	private final WorkingServicePropertyEntity servicePropertyEntity;
 	
-	public ProviderBean(WorkingPropertyEntity servicePropertyEntity){
+	public ProviderBean(WorkingServicePropertyEntity servicePropertyEntity){
 		this.servicePropertyEntity = servicePropertyEntity;
 	}
 	
