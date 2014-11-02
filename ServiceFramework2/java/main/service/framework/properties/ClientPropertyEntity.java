@@ -6,6 +6,7 @@ public class ClientPropertyEntity {
 	private String serviceVersion;
 	private String serviceGroup;
 	private String id;
+	private String routeid;
 	
 	public String getId() {
 		return id;
@@ -37,6 +38,10 @@ public class ClientPropertyEntity {
 	public void setServiceGroup(String serviceGroup) {
 		this.serviceGroup = serviceGroup;
 	}
-	
-	
+	public String getRouteid() {
+		return routeid;
+	}
+	public void setRouteid(String routeid) {
+		this.routeid = routeid;
+	}
 }

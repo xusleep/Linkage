@@ -10,4 +10,5 @@ public class ShareingData {
 	public static final String CLIENT_START_STRING = "client.service";
 	public static final String SERVICE_CENTER_UNREGISTER_ID = "serviceCenterUnregister"; 
 	public static final String SERVICE_CENTER_REGISTER_ID = "serviceCenterRegister"; 
+	public static final String CLIENT_ROUTE = "route.route";
 }

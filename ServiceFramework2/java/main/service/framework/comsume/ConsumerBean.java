@@ -20,9 +20,7 @@ import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
 import service.framework.properties.ClientPropertyEntity;
 import service.framework.properties.WorkingClientPropertyEntity;
-import service.framework.properties.WorkingServicePropertyEntity;
-import service.framework.route.DefaultRoute;
-import service.framework.route.Route;
+import service.framework.route.AbstractRoute;
 
 /**
  * this class is an access point from the client
@@ -35,13 +33,11 @@ public class ConsumerBean {
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	private final HashMap<String, WorkingChannel> workingChannelCacheList = new HashMap<String, WorkingChannel>(16);
 	private AtomicLong idGenerator = new AtomicLong(0);
-	private final Route route;
 	private final WorkerPool workerPool;
-	private final WorkingClientPropertyEntity servicePropertyEntity;
+	private final WorkingClientPropertyEntity workingClientPropertyEntity;
 	
-	public ConsumerBean(WorkingClientPropertyEntity servicePropertyEntity, WorkerPool workerPool){
-		this.route = new DefaultRoute(servicePropertyEntity, this);
-		this.servicePropertyEntity = servicePropertyEntity;
+	public ConsumerBean(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool){
+		this.workingClientPropertyEntity = workingClientPropertyEntity;
 		this.workerPool = workerPool;
 	}
 	
@@ -51,12 +47,21 @@ public class ConsumerBean {
 	 * @return
 	 */
 	private ClientPropertyEntity searchServiceClientEntity(String id){
-		for(ClientPropertyEntity entity : this.servicePropertyEntity.getServiceClientList()){
+		for(ClientPropertyEntity entity : this.workingClientPropertyEntity.getServiceClientList()){
 			if(entity.getId().equals(id)){
 				return entity;
 			}
 		}
 		return null;
+	}
+	
+	private AbstractRoute searchRoute(ClientPropertyEntity entity){
+		for(AbstractRoute route : workingClientPropertyEntity.getRouteList()){
+			if(route.getRouteid().equals(entity.getRouteid())){
+				return route;
+			}
+		}
+		return workingClientPropertyEntity.getDefaultRoute();
 	}
 	
 	/**
@@ -123,7 +128,7 @@ public class ConsumerBean {
         WorkingChannel newWorkingChannel = null;
         try
         {
-        	newWorkingChannel = getWorkingChannnel(objRequestEntity.getServiceName(), channelFromCached);
+        	newWorkingChannel = getWorkingChannnel(objServiceClientEntity, channelFromCached);
         	result.setWorkingChannel(newWorkingChannel);
         }
         catch(Exception ex){
@@ -155,9 +160,9 @@ public class ConsumerBean {
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	private WorkingChannel getWorkingChannnel(String serviceName, boolean fromCached) throws IOException, InterruptedException, ExecutionException, Exception  {
+	private WorkingChannel getWorkingChannnel(ClientPropertyEntity clientPropertyEntity, boolean fromCached) throws IOException, InterruptedException, ExecutionException, Exception  {
 		ServiceInformationEntity service;
-		service = this.route.chooseRoute(serviceName);
+		service = searchRoute(clientPropertyEntity).chooseRoute(clientPropertyEntity.getServiceName());
 		if(service == null)
 			return null;
 		String cacheID = service.toString();

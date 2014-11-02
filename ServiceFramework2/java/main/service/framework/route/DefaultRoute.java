@@ -12,13 +12,18 @@ import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.exception.ServiceException;
 import service.framework.properties.WorkingClientPropertyEntity;
-import service.framework.properties.WorkingServicePropertyEntity;
 import service.framework.route.filters.RouteFilter;
 
-public class DefaultRoute implements Route {
+public class DefaultRoute extends AbstractRoute {
 	private final WorkingClientPropertyEntity servicePropertyEntity;
 	private final ConsumerBean serviceCenterConsumerBean;
 	private final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
+	
+	public DefaultRoute(){
+		this.servicePropertyEntity = null;
+		this.serviceCenterConsumerBean = null;
+	}
+	
 	
 	public DefaultRoute(WorkingClientPropertyEntity servicePropertyEntity, ConsumerBean serviceCenterConsumerBean){
 		this.servicePropertyEntity = servicePropertyEntity;
@@ -35,8 +40,8 @@ public class DefaultRoute implements Route {
 			if(serviceName.equals(ShareingData.SERVICE_CENTER))
 			{
 				ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
-				serviceCenter.setAddress(this.servicePropertyEntity.getServiceCenterAddress());
-				serviceCenter.setPort(this.servicePropertyEntity.getServiceCenterPort());
+				serviceCenter.setAddress(this.getRouteProperties().get(0));
+				serviceCenter.setPort(Integer.parseInt(this.getRouteProperties().get(1)));
 				return serviceCenter;
 			}
 			else
