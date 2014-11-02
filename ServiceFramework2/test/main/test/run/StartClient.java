@@ -48,7 +48,7 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
+		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client_client.properties", 5);
 		clientBootStrap.run();;
 		ConsumerBean cb = clientBootStrap.getConsumerBean();
 		for(long i = 0; i < 1000; i++)

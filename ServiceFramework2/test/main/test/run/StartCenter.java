@@ -1,6 +1,6 @@
 package test.run;
 
-import service.framework.bootstrap.ServiceBootStrap;
+import service.framework.bootstrap.ServerBootStrap;
 
 
 /**
@@ -13,7 +13,7 @@ public class StartCenter {
 
     public static void main(String[] args) {
     	try {
-			new ServiceBootStrap("conf/servicecenter.properties", 5, 5).run();
+			new ServerBootStrap("conf/servicecenter_server.properties", 5).run();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

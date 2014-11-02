@@ -14,13 +14,13 @@ import service.framework.io.server.Server;
 import service.framework.properties.WorkingServicePropertyEntity;
 import service.framework.provide.ProviderBean;
 
-public class ServiceBootStrap implements Runnable {
+public class ServerBootStrap implements Runnable {
 	private final Server server;
 	private final ProviderBean providerBean;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkingServicePropertyEntity servicePropertyEntity;
 	
-	public ServiceBootStrap(String propertyPath, int serviceTaskThreadPootSize, int clientTaskThreadPootSize) throws Exception{
+	public ServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
 		// read the configuration from the properties
 		this.servicePropertyEntity = new WorkingServicePropertyEntity(propertyPath);
 		// new a task handler, this handler will handle all of the task from the pool queue
