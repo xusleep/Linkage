@@ -265,8 +265,11 @@ public class ConsumerBean {
 	 * @param requestID
 	 */
 	public void removeCachedChannel(WorkingChannel objWorkingChannel){
-		synchronized(workingChannelCacheList){
-			this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
+		if(objWorkingChannel != null)
+		{
+			synchronized(workingChannelCacheList){
+				this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
+			}
 		}
 	}
 	
@@ -280,9 +283,12 @@ public class ConsumerBean {
 	public void closeChannelByRequestResult(RequestResultEntity objRequestResultEntity){
 		System.out.println("closeChannelByRequestResult close the channel");
 		try {
-			System.out.println("objRequestResultEntity.getWorkingChannel().getCacheID() =  " + objRequestResultEntity.getWorkingChannel().getCacheID());
 			removeCachedChannel(objRequestResultEntity.getWorkingChannel());
-			objRequestResultEntity.getWorkingChannel().getWorker().closeWorkingChannel(objRequestResultEntity.getWorkingChannel());
+			if(objRequestResultEntity.getWorkingChannel() != null && 
+					objRequestResultEntity.getWorkingChannel().getWorker() != null)
+			{
+				objRequestResultEntity.getWorkingChannel().getWorker().closeWorkingChannel(objRequestResultEntity.getWorkingChannel());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
