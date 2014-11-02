@@ -162,7 +162,7 @@ public class ConsumerBean {
 	 */
 	private WorkingChannel getWorkingChannnel(ClientPropertyEntity clientPropertyEntity, boolean fromCached) throws IOException, InterruptedException, ExecutionException, Exception  {
 		ServiceInformationEntity service;
-		service = searchRoute(clientPropertyEntity).chooseRoute(clientPropertyEntity.getServiceName());
+		service = searchRoute(clientPropertyEntity).chooseRoute(clientPropertyEntity.getServiceName(), this);
 		if(service == null)
 			return null;
 		String cacheID = service.toString();

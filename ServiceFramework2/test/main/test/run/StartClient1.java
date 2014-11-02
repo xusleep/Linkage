@@ -50,7 +50,7 @@ public class StartClient1 extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		for(long i = 0; i < 1; i++)
+		for(long i = 0; i < 10; i++)
 		{
 	    	List<String> args1 = new LinkedList<String>();
 	    	String a = "" + requestCount.incrementAndGet();
@@ -95,7 +95,7 @@ public class StartClient1 extends AbstractJob {
 		clientBootStrap.run();;
 		ConsumerBean cb = clientBootStrap.getConsumerBean();
 		StartClient1 job1 = new StartClient1(cb);
-		job1.setThreadCount(1);
+		job1.setThreadCount(100);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

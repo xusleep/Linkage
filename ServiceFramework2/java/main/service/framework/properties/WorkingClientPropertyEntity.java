@@ -37,12 +37,15 @@ public class WorkingClientPropertyEntity {
 		String defaultRouteClass = properties.getProperty("route.default.class");
 		List<String> defaultRouteProperties = new LinkedList<String>();
 		for(int j = 1; j < 100; j++){
-			defaultRouteProperties.add(properties.getProperty("route.default.property" + j));
+			String strProperty = properties.getProperty("route.default.property" + j);
+			if(strProperty == null || strProperty == "")
+				break;
+			defaultRouteProperties.add(strProperty);
 		}
 		try {
-			AbstractRoute defaultRoute = (AbstractRoute) Class.forName(defaultRouteClass).newInstance();
-			defaultRoute.setRouteid(defaultRouteID);
-			defaultRoute.setRouteProperties(defaultRouteProperties);
+			this.defaultRoute = (AbstractRoute) Class.forName(defaultRouteClass).newInstance();
+			this.defaultRoute.setRouteid(defaultRouteID);
+			this.defaultRoute.setRouteProperties(defaultRouteProperties);
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
