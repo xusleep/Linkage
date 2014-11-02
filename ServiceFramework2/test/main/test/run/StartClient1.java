@@ -31,13 +31,15 @@ import zhonglin.test.framework.concurrence.condition.job.JobInterface;
  * @version 1.0
  */
 
-public class StartClient extends AbstractJob {
+public class StartClient1 extends AbstractJob {
 	public static final AtomicInteger aint = new AtomicInteger(2320);
 	private final AtomicBoolean isFailed = new AtomicBoolean(false);
 	public static final AtomicInteger successCount = new AtomicInteger(0);
 	public static final AtomicInteger requestCount = new AtomicInteger(0);
+	private final ConsumerBean cb;
 	
-	public StartClient() {
+	public StartClient1(ConsumerBean cb) {
+		this.cb = cb;
 	}
 	
 	@Override
@@ -48,12 +50,8 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
-		clientBootStrap.run();;
-		ConsumerBean cb = clientBootStrap.getConsumerBean();
-		for(long i = 0; i < 1000; i++)
+		for(long i = 0; i < 100; i++)
 		{
-			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
 	    	String a = "" + requestCount.incrementAndGet();
 	    	String b = "" + aint.incrementAndGet();
@@ -66,7 +64,7 @@ public class StartClient extends AbstractJob {
 					System.out.println("break ...");
 					break;
 				}
-	    		RequestResultEntity result = cb.prcessRequest("calculator", args1);
+	    		RequestResultEntity result = cb.prcessRequestPerConnectSync("calculator", args1);
 	    		if(result.isException())
 	    		{
 	    			result.getException().printStackTrace();
@@ -93,8 +91,11 @@ public class StartClient extends AbstractJob {
 	}
 
 	public static void main(String[] args) throws IOException {
-		StartClient job1 = new StartClient();
-		job1.setThreadCount(100);
+		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client.properties", 5);
+		clientBootStrap.run();;
+		ConsumerBean cb = clientBootStrap.getConsumerBean();
+		StartClient1 job1 = new StartClient1(cb);
+		job1.setThreadCount(10);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

@@ -65,7 +65,48 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args, boolean isClosingAfterRequest) {
+	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args) {
+		return prcessRequest(clientID, args, true);
+	}
+	
+	/**
+	 * send the request from the client to request a service
+	 * this request will not reuse the channel
+	 * this method is a synchronized method
+	 * @param clientID the id set in property
+	 * @param args  the arguments for the service
+	 * @return
+	 * @throws Exception
+	 */
+	public synchronized RequestResultEntity prcessRequestPerConnectSync(String clientID, List<String> args) {
+		RequestResultEntity result = prcessRequest(clientID, args, false);
+		result.getResponseEntity();
+		this.closeChannelByRequestResult(result);
+		return result;
+	}
+	
+	/**
+	 * send the request from the client to request a service
+	 * this request will not reuse the channel
+	 * use this method with closeChannelByRequestResult
+	 * @param clientID the id set in property
+	 * @param args  the arguments for the service
+	 * @return
+	 * @throws Exception
+	 */
+	public synchronized RequestResultEntity prcessRequestPerConnect(String clientID, List<String> args) {
+		return prcessRequest(clientID, args, false);
+	}
+	
+	/**
+	 * send the request from the client to request a service
+	 * @param clientID the id set in property
+	 * @param args  the arguments for the service
+	 * @param channelFromCached use the channel from the cached
+	 * @return
+	 * @throws Exception
+	 */
+	 synchronized RequestResultEntity prcessRequest(String clientID, List<String> args, boolean channelFromCached) {
 		// this is unique id for a request
 		long id = idGenerator.incrementAndGet();
 		final RequestEntity objRequestEntity = new RequestEntity();
@@ -81,7 +122,8 @@ public class ConsumerBean {
         WorkingChannel newWorkingChannel = null;
         try
         {
-        	newWorkingChannel = getWorkingChannnel(objRequestEntity.getServiceName());
+        	newWorkingChannel = getWorkingChannnel(objRequestEntity.getServiceName(), channelFromCached);
+        	result.setWorkingChannel(newWorkingChannel);
         }
         catch(Exception ex){
         	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(ex, ex.getMessage()));
@@ -97,29 +139,39 @@ public class ConsumerBean {
 		objServiceOnMessageWriteEvent.setMessage(sendData);
         newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
         newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
-        result.setCloseingAfterRequest(isClosingAfterRequest);
     	return result;
 	}
 	
 	
 	/**
-	 * get a working channel
+	 * get a working channel from cache,
+	 * if not existed, create a new one
 	 * @param serviceName
+	 * @param fromCached get it from the cache or not
 	 * @return
 	 * @throws ExecutionException 
 	 * @throws InterruptedException 
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	private WorkingChannel getWorkingChannnel(String serviceName) throws IOException, InterruptedException, ExecutionException, Exception  {
+	private WorkingChannel getWorkingChannnel(String serviceName, boolean fromCached) throws IOException, InterruptedException, ExecutionException, Exception  {
 		ServiceInformationEntity service;
 		service = this.route.chooseRoute(serviceName);
 		if(service == null)
 			return null;
 		String cacheID = service.toString();
-		WorkingChannel objWorkingChannel = workingChannelCacheList.get(cacheID);
-		if(objWorkingChannel == null)
+		WorkingChannel objWorkingChannel;
+		// if not get it from the cache, create it directly
+		if(!fromCached){
+			objWorkingChannel  = createWorkingChannel(service.getAddress(), service.getPort());
+			objWorkingChannel.setCacheID(cacheID);
+			return objWorkingChannel;
+		}
+		objWorkingChannel = workingChannelCacheList.get(cacheID);
+		if(objWorkingChannel == null || objWorkingChannel.isClosed())
 		{
+			if(objWorkingChannel != null)
+				removeCachedChannel(objWorkingChannel);
 			synchronized(workingChannelCacheList){
 				// get the working channel again 
 				// in case we set after we get from the cache
@@ -151,6 +203,7 @@ public class ConsumerBean {
         if(channel.isConnectionPending()){  
             channel.finishConnect();  
         } 
+        System.out.println("createWorkingChannel socket " + channel.hashCode());
         // wait for the worker pool util it is ready
         this.workerPool.waitReady();
         WorkingChannel objWorkingChannel = this.workerPool.register(channel);
@@ -215,22 +268,29 @@ public class ConsumerBean {
 	}
 	
 	/**
-	 * remove the colsed channel from the cache when there is a error comes out
+	 * remove the channel from the cache 
 	 * @param requestID
 	 */
-	public void removeClosedChannel(WorkingChannel objWorkingChannel){
+	public void removeCachedChannel(WorkingChannel objWorkingChannel){
 		synchronized(workingChannelCacheList){
 			this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
 		}
 	}
 	
-	public void closeChannel(WorkingChannel objWorkingChannel){
-		System.out.println("close the channel");
-		removeClosedChannel(objWorkingChannel);
+	/**
+	 * close the channel by request result
+	 * the client could determine close the channel or not
+	 * this method is used along with method prcessRequestPerConnect
+	 * don't use it along with method prcessRequest
+	 * @param objRequestResultEntity
+	 */
+	public void closeChannelByRequestResult(RequestResultEntity objRequestResultEntity){
+		System.out.println("closeChannelByRequestResult close the channel");
 		try {
-			objWorkingChannel.getChannel().close();
+			System.out.println("objRequestResultEntity.getWorkingChannel().getCacheID() =  " + objRequestResultEntity.getWorkingChannel().getCacheID());
+			removeCachedChannel(objRequestResultEntity.getWorkingChannel());
+			objRequestResultEntity.getWorkingChannel().getWorker().closeWorkingChannel(objRequestResultEntity.getWorkingChannel());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

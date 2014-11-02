@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.event.ServiceOnExeptionEvent;
@@ -39,10 +39,9 @@ public class DefaultWorker implements Worker {
 	protected final AtomicBoolean wakenUp = new AtomicBoolean();
 	private final Selector selector;
 	private final ExecutorService objExecutorService;
-	public static AtomicLong readBytesCount = new AtomicLong(0);
-	public static AtomicLong writeBytesCount = new AtomicLong(0);
 	private final CountDownLatch signal;
 	private final EventDistributionMaster eventDistributionHandler;
+	private static final AtomicInteger closeCount = new AtomicInteger(0);
 	
 	public DefaultWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
 		// 创建无阻塞网络套接
@@ -71,8 +70,7 @@ public class DefaultWorker implements Worker {
 						// 处理IO事件
 						if (key.isReadable()) {
 							if(!read(key)){
-								key.cancel();
-								this.closeChannel((SocketChannel) key.channel());
+								this.closeChannel(key);
 							}
 						} else if (key.isWritable()) {
 							writeFromSelectorLoop(key);
@@ -121,26 +119,22 @@ public class DefaultWorker implements Worker {
 					data = channel.wrapMessage(evt.getMessage())
 							.getBytes(ShareingProtocolData.FRAMEWORK_IO_ENCODING);
 				} catch (UnsupportedEncodingException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
 				ByteBuffer buffer = ByteBuffer
 						.allocate(data.length);
 				buffer.put(data, 0, data.length);
 				buffer.flip();
-				this.writeBytesCount.getAndAdd(data.length);
 				if (buffer.hasRemaining()) {
 					try {
 						while(buffer.hasRemaining())
 							sc.write(buffer);
 					} catch (IOException e) {
 						this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						try {
-							closeChannel(sc);
+							closeChannel(channel.getKey());
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}
@@ -165,8 +159,21 @@ public class DefaultWorker implements Worker {
 	 * @param sc
 	 * @throws IOException
 	 */
-	private void closeChannel(SocketChannel sc) throws IOException {
+	private void closeChannel(SelectionKey key ) throws IOException {
+		key.cancel();
+		SocketChannel sc = (SocketChannel)key.channel();
 		sc.close();
+		closeCount.incrementAndGet();
+		System.out.println("Default worker close the channel. count = " + closeCount.get());
+	}
+	
+	/**
+	 * close the working channel
+	 * @param workingchannel
+	 * @throws IOException
+	 */
+	public void closeWorkingChannel(WorkingChannel workingchannel) throws IOException{
+		closeChannel(workingchannel.getKey());
 	}
 	
 	/**
@@ -188,25 +195,27 @@ public class DefaultWorker implements Worker {
                     break;
                 }
             }
+            if (ret < 0 ) {
+            	return success = false;
+            }
             success = true;
         } catch (ClosedChannelException e) {
         	this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
-            // Can happen, and does not need a user attention.
+            return false;
+        	// Can happen, and does not need a user attention.
         } catch (IOException e) {
-			// TODO Auto-generated catch block
         	this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
-		} 
+        	return false;
+        } 
         if (readBytes > 0) {
             bb.flip();
         }
 		byte[] message = new byte[readBytes];
 		System.arraycopy(bb.array(), 0, message, 0, readBytes);
-		this.readBytesCount.getAndAdd(readBytes);
 		String receiveString = "";
 		try {
 			receiveString = new String(message, ShareingProtocolData.FRAMEWORK_IO_ENCODING);
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		synchronized(objWorkingChannel.readLock){
@@ -220,7 +229,6 @@ public class DefaultWorker implements Worker {
 	
 						@Override
 						public void run() {
-							// TODO Auto-generated method stub
 							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
 							event.setMessage(sendMessage);
 							//System.out.println("fired message ... " + sendMessage);
@@ -228,11 +236,9 @@ public class DefaultWorker implements Worker {
 						}
 						
 					});
-	
 				}
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.out.println("exception : " + e.getMessage());
 			}
@@ -296,7 +302,6 @@ public class DefaultWorker implements Worker {
 		@Override
 		public void run() {
 			SocketChannel schannel = (SocketChannel) objWorkingChannel.getChannel();
-			// TODO Auto-generated method stub
 			try {
 				schannel.configureBlocking(false);
 				SelectionKey key = schannel.register(selector, SelectionKey.OP_READ, objWorkingChannel);

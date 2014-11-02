@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.event.ServiceStartedEvent;
@@ -33,6 +34,7 @@ public class DefaultServer implements Server {
 	private final InetSocketAddress address;
 	private final WorkerPool workerPool;
 	private final EventDistributionMaster eventDistributionHandler;
+	private final AtomicInteger connectCount = new AtomicInteger(0);
 	
 	public DefaultServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
 		this.eventDistributionHandler = eventDistributionHandler;
@@ -81,6 +83,7 @@ public class DefaultServer implements Server {
 							sc.configureBlocking(false);
 							// 将接收到的channel，放到工作线程池中
 							this.getWorkerPool().register(sc);
+							System.out.println("connect count = " + this.connectCount.incrementAndGet());
 						} 
 					}
 				} 

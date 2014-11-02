@@ -28,6 +28,7 @@ public class WorkingChannel {
 	private StringBuffer bufferMessage;
 	private SelectionKey key;
 	private String cacheID;
+	private volatile boolean isClosed;
 	
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
@@ -100,6 +101,14 @@ public class WorkingChannel {
 
 	public void setCacheID(String cacheID) {
 		this.cacheID = cacheID;
+	}
+
+	public boolean isClosed() {
+		return isClosed;
+	}
+
+	public void setClosed(boolean isClosed) {
+		this.isClosed = isClosed;
 	}
 
 	/**

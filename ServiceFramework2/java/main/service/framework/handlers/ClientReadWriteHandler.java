@@ -34,10 +34,7 @@ public class ClientReadWriteHandler implements Handler {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
-				RequestResultEntity result = this.consumerBean.setRequestResult(objResponseEntity);
-				if(result.isCloseingAfterRequest()){
-					this.consumerBean.closeChannel(objServiceOnMessageReceiveEvent.getSocketChannel());
-				}
+				this.consumerBean.setRequestResult(objResponseEntity);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -45,7 +42,7 @@ public class ClientReadWriteHandler implements Handler {
 		}
 		else if(event instanceof ServiceOnExeptionEvent){
 			ServiceOnExeptionEvent objServiceOnExeptionEvent = (ServiceOnExeptionEvent)event;
-			this.consumerBean.removeClosedChannel(objServiceOnExeptionEvent.getSocketChannel());
+			this.consumerBean.removeCachedChannel(objServiceOnExeptionEvent.getSocketChannel());
 			if(objServiceOnExeptionEvent.getRequestID() != null)
 			{
 				this.consumerBean.setExceptionRuquestResult(objServiceOnExeptionEvent.getRequestID(), objServiceOnExeptionEvent.getExceptionHappen());

@@ -3,6 +3,7 @@ package service.framework.common.entity;
 import java.util.concurrent.CountDownLatch;
 
 import service.framework.exception.ServiceException;
+import service.framework.io.common.WorkingChannel;
 
 public class RequestResultEntity {
 	private String requestID;
@@ -10,7 +11,8 @@ public class RequestResultEntity {
 	private CountDownLatch signal = new CountDownLatch(1);
 	private boolean isException;
 	private ServiceException exception;
-	private boolean isCloseingAfterRequest;
+	private WorkingChannel workingChannel;
+
 	
 	public RequestResultEntity(){
 	}
@@ -60,13 +62,11 @@ public class RequestResultEntity {
 		this.exception = exception;
 	}
 
-	public boolean isCloseingAfterRequest() {
-		return isCloseingAfterRequest;
+	public WorkingChannel getWorkingChannel() {
+		return workingChannel;
 	}
 
-	public void setCloseingAfterRequest(boolean isCloseingAfterRequest) {
-		this.isCloseingAfterRequest = isCloseingAfterRequest;
+	public void setWorkingChannel(WorkingChannel workingChannel) {
+		this.workingChannel = workingChannel;
 	}
-	
-	
 }

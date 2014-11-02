@@ -67,13 +67,9 @@ public class ServiceRegisterHandler implements Handler {
 			String strServiceInformation = SerializeUtils.serializeServiceInformationList(serviceInformationList);
 			List<String> args = new LinkedList<String>();
 			args.add(strServiceInformation);
-			RequestResultEntity result = this.consumerBean.prcessRequest(ShareingData.SERVICE_CENTER_REGISTER_ID, args, true);
+			RequestResultEntity result = this.consumerBean.prcessRequestPerConnectSync(ShareingData.SERVICE_CENTER_REGISTER_ID, args);
 			if(result.isException()){
 				result.getException().printStackTrace();
-			}
-			else
-			{
-				System.out.println("register to the service center ..." + result.getResponseEntity().getResult());
 			}
 		}
 	}

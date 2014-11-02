@@ -58,5 +58,12 @@ public class ServiceInformationEntity {
 	public void setServiceVersion(String serviceVersion) {
 		this.serviceVersion = serviceVersion;
 	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.address + "_" +  this.port + "_UNIQUE_STRING";
+	}
+	
 	
 }

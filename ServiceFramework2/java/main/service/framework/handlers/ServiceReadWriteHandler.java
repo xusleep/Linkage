@@ -55,8 +55,6 @@ public class ServiceReadWriteHandler implements Handler {
 		else if(event instanceof ServiceOnExeptionEvent){
 			System.out.println("ServiceReadWriteHandler ServiceOnExeptionEvent happned ...");
 			ServiceOnExeptionEvent objServiceOnExeptionEvent = (ServiceOnExeptionEvent)event;
-			objServiceOnExeptionEvent.getSocketChannel().getKey().cancel();
-			objServiceOnExeptionEvent.getSocketChannel().getChannel().close();
 			objServiceOnExeptionEvent.getExceptionHappen().printStackTrace();
 		}
 		else if(event instanceof ServiceOnErrorEvent){
