@@ -64,7 +64,7 @@ public class ServiceCenterConsistentHashRoute extends AbstractRoute {
 				}
 			}
 		}
-		return consistentHash.get(serviceName);
+		return (ServiceInformationEntity) consistentHash.get(serviceName);
 	}
 	
 	private ConsistentHash<ServiceInformationEntity> createConsistentHash(

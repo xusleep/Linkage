@@ -51,7 +51,7 @@ public class StartClient extends AbstractJob {
 		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client_client.properties", 5);
 		clientBootStrap.run();;
 		ConsumerBean cb = clientBootStrap.getConsumerBean();
-		for(long i = 0; i < 1000; i++)
+		for(long i = 0; i < 100000; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
