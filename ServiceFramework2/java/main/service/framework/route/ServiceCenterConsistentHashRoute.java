@@ -11,6 +11,8 @@ import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.exception.ServiceException;
+import service.framework.route.consistent.hash.ConsistentHash;
+import service.framework.route.consistent.hash.HashFunction;
 import service.framework.route.filters.RouteFilter;
 /**
  * This route is used for the service center
@@ -21,7 +23,7 @@ import service.framework.route.filters.RouteFilter;
  *
  */
 public class ServiceCenterConsistentHashRoute extends AbstractRoute {
-	private final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
+	private final ConcurrentHashMap<String, ConsistentHash> serviceListCache = new ConcurrentHashMap<String, ConsistentHash>(16);
 	
 	public ServiceCenterConsistentHashRoute(){
 	}
@@ -30,9 +32,9 @@ public class ServiceCenterConsistentHashRoute extends AbstractRoute {
 	@Override
 	public ServiceInformationEntity chooseRoute(String serviceName, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
 		// get it from the cache first, if not exist get it from the service center then
-		List<ServiceInformationEntity> serviceList = serviceListCache.get(serviceName);
+		ConsistentHash consistentHash = serviceListCache.get(serviceName);
 		String result = null;
-		if(serviceList == null)
+		if(consistentHash == null)
 		{
 			// step 2, If request the service center's address, then we could return it back directly
 			if(serviceName.equals(ShareingData.SERVICE_CENTER))
@@ -56,30 +58,21 @@ public class ServiceCenterConsistentHashRoute extends AbstractRoute {
 				else
 				{
 					result = objRequestResultEntity.getResponseEntity().getResult();
-					serviceList = SerializeUtils.deserializeServiceInformationList(result);
-					serviceListCache.put(serviceName, serviceList);
+					List<ServiceInformationEntity> serviceList = SerializeUtils.deserializeServiceInformationList(result);
+					consistentHash = createConsistentHash(serviceList);
+					serviceListCache.put(serviceName, consistentHash);
 				}
 			}
 		}
-		// if configure the filter, we would use it the filter the route
-		if(filters != null)
-		{
-			for(RouteFilter filter : filters){
-				serviceList = filter.filter(serviceList);
-			}
-		}
-		if(serviceList.size() == 0)
-			return null;
-		// if there are more than one service exist, choose it random
-		Random r = new Random();
-		ServiceInformationEntity service = serviceList.get(r.nextInt(serviceList.size()));
-		while(service == null)
-		{
-			service = serviceList.get(r.nextInt(serviceList.size()));
-		}
-		return service;
+		return consistentHash.get(serviceName);
 	}
 	
+	private ConsistentHash<ServiceInformationEntity> createConsistentHash(
+			List<ServiceInformationEntity> serviceList) {
+		// TODO Auto-generated method stub
+		return new ConsistentHash<ServiceInformationEntity>(new HashFunction(), ShareingData.CONSISTENT_HASH_CIRCLE_REPLICATE, serviceList);
+	}
+
 	private List<RouteFilter> filters;
 	
 	public List<RouteFilter> getFilters() {

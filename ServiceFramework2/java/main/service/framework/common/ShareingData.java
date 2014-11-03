@@ -11,4 +11,6 @@ public class ShareingData {
 	public static final String SERVICE_CENTER_UNREGISTER_ID = "serviceCenterUnregister"; 
 	public static final String SERVICE_CENTER_REGISTER_ID = "serviceCenterRegister"; 
 	public static final String CLIENT_ROUTE = "route.route";
+	
+	public static final int CONSISTENT_HASH_CIRCLE_REPLICATE = 10;
 }
