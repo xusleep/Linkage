@@ -6,12 +6,15 @@ import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.exception.ServiceException;
 import service.framework.route.filters.RouteFilter;
-
+/**
+ * this route will access the service directly 
+ * @author zhonxu
+ *
+ */
 public class DefaultRoute extends AbstractRoute {
 
 	public DefaultRoute(){
 	}
-	
 
 	@Override
 	public ServiceInformationEntity chooseRoute(String serviceName, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
@@ -30,5 +33,4 @@ public class DefaultRoute extends AbstractRoute {
 	public void setFilters(List<RouteFilter> filters) {
 		this.filters = filters;
 	}
-
 }

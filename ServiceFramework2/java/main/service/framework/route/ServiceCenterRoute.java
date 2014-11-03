@@ -12,7 +12,14 @@ import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.exception.ServiceException;
 import service.framework.route.filters.RouteFilter;
-
+/**
+ * This route is used for the service center
+ * If will first access the service center, get the service list
+ * then choose one service from the list.
+ * If the service list exist in the cache, it will use it directly without access it again
+ * @author zhonxu
+ *
+ */
 public class ServiceCenterRoute extends AbstractRoute {
 	private final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
 	
@@ -22,11 +29,12 @@ public class ServiceCenterRoute extends AbstractRoute {
 
 	@Override
 	public ServiceInformationEntity chooseRoute(String serviceName, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
-		//首先从cache中取得服务列表，cache中没有的话，再从服务中心获取
+		// get it from the cache first, if not exist get it from the service center then
 		List<ServiceInformationEntity> serviceList = serviceListCache.get(serviceName);
 		String result = null;
 		if(serviceList == null)
 		{
+			// step 2, If request the service center's address, then we could return it back directly
 			if(serviceName.equals(ShareingData.SERVICE_CENTER))
 			{
 				ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
@@ -38,6 +46,8 @@ public class ServiceCenterRoute extends AbstractRoute {
 			{
 				List<String> list = new LinkedList<String>();
 				list.add(serviceName);
+				// step 1, request the service center for the service list, 
+				//         then it will go to the step 2 to get the service center's address
 				RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ShareingData.SERVICE_CENTER, list);
 				if(objRequestResultEntity.isException())
 				{
@@ -51,6 +61,7 @@ public class ServiceCenterRoute extends AbstractRoute {
 				}
 			}
 		}
+		// if configure the filter, we would use it the filter the route
 		if(filters != null)
 		{
 			for(RouteFilter filter : filters){
@@ -59,6 +70,7 @@ public class ServiceCenterRoute extends AbstractRoute {
 		}
 		if(serviceList.size() == 0)
 			return null;
+		// if there are more than one service exist, choose it random
 		Random r = new Random();
 		ServiceInformationEntity service = serviceList.get(r.nextInt(serviceList.size()));
 		while(service == null)
@@ -77,5 +89,4 @@ public class ServiceCenterRoute extends AbstractRoute {
 	public void setFilters(List<RouteFilter> filters) {
 		this.filters = filters;
 	}
-
 }
