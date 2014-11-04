@@ -1,1 +1,0 @@
-sample confirguration for the service client service center
