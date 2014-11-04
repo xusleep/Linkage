@@ -35,7 +35,7 @@ public class ClientBootStrap implements Runnable {
 		eventDistributionHandler = new EventDistributionMaster(clientTaskThreadPootSize);
 		// this is a client worker pool, this pool will handle all of the io operation 
 		// with the server
-		this.workPool = new DefaultWorkerPool(eventDistributionHandler);
+		this.workPool = new DefaultWorkerPool(eventDistributionHandler, 1);
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(eventDistributionHandler, this.workPool);
 		this.consumerBean = new ConsumerBean(objServicePropertyEntity, this.workPool);

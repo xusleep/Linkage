@@ -5,18 +5,42 @@ import java.util.concurrent.CountDownLatch;
 
 import service.framework.distribution.EventDistributionMaster;
 
+/**
+ * Worker pool, put the channel into the worker pool
+ * the worker deal with the bussiness of receiving message & send message
+ * @author zhonxu
+ *
+ */
 public class DefaultWorkerPool implements WorkerPool {
-	private final int WORKERCOUNTER = Runtime.getRuntime().availableProcessors();
-	private Worker[] workers = new Worker[WORKERCOUNTER];
+	private Worker[] workers;
 	private int nextWorkCount = 0;
-	private final CountDownLatch signal = new CountDownLatch(WORKERCOUNTER);
+	private final CountDownLatch signal;
 	
-	public DefaultWorkerPool(EventDistributionMaster eventDistributionHandler){
+	/**
+	 * 
+	 * @param eventDistributionHandler
+	 * @param workerCounter assign the point
+	 */
+	public DefaultWorkerPool(EventDistributionMaster eventDistributionHandler, int workerCounter){
+		signal = new CountDownLatch(workerCounter);
+		workers = new Worker[workerCounter];
 		for(int i = 0; i < workers.length; i++){
 			try {
 				workers[i] = new DefaultWorker(eventDistributionHandler, signal);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public DefaultWorkerPool(EventDistributionMaster eventDistributionHandler){
+		int workerCounter = Runtime.getRuntime().availableProcessors();
+		signal = new CountDownLatch(workerCounter);
+		workers = new Worker[workerCounter];
+		for(int i = 0; i < workers.length; i++){
+			try {
+				workers[i] = new DefaultWorker(eventDistributionHandler, signal);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -29,7 +53,7 @@ public class DefaultWorkerPool implements WorkerPool {
 	}
 	
 	public Worker getNextWorker(){
-		return workers[Math.abs(nextWorkCount++)%WORKERCOUNTER];
+		return workers[Math.abs(nextWorkCount++)%workers.length];
 	}
 	
 	public WorkingChannel register(SocketChannel sc){
@@ -39,11 +63,9 @@ public class DefaultWorkerPool implements WorkerPool {
 
 	@Override
 	public void waitReady() {
-		// TODO Auto-generated method stub
 		try {
 			signal.await();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
