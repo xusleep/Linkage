@@ -13,4 +13,8 @@ public class ShareingData {
 	public static final String CLIENT_ROUTE = "route.route";
 	
 	public static final int CONSISTENT_HASH_CIRCLE_REPLICATE = 10;
+	
+	public static final String HEART_BEAT_SEND = "HEART_BEAT_SEND";
+	public static final String HEART_BEAT_REPLY = "HEART_BEAT_REPLY";
+	public static final String HEART_BEAT_CLIENT_ID = "HEART_BEAT_CLIENT_ID";
 }
