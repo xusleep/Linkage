@@ -2,6 +2,7 @@ package service.framework.route;
 
 import java.util.List;
 
+import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.exception.ServiceException;
@@ -17,7 +18,7 @@ public class DefaultRoute extends AbstractRoute {
 	}
 
 	@Override
-	public ServiceInformationEntity chooseRoute(String serviceName, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
+	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
 		ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
 		serviceCenter.setAddress(this.getRouteProperties().get(0));
 		serviceCenter.setPort(Integer.parseInt(this.getRouteProperties().get(1)));

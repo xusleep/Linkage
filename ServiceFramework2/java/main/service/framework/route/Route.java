@@ -3,6 +3,7 @@ package service.framework.route;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 /**
@@ -12,5 +13,5 @@ import service.framework.comsume.ConsumerBean;
  *
  */
 public interface Route {
-	public ServiceInformationEntity chooseRoute(String serviceName, ConsumerBean cb) throws IOException, InterruptedException, ExecutionException, Exception;
+	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity, ConsumerBean cb) throws IOException, InterruptedException, ExecutionException, Exception;
 }

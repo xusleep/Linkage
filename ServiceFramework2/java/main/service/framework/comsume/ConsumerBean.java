@@ -59,7 +59,7 @@ public class ConsumerBean {
 	 * @param entity
 	 * @return
 	 */
-	private AbstractRoute searchRoute(ClientPropertyEntity entity){
+	private AbstractRoute searchRoute(RequestEntity entity){
 		if(entity.getRouteid() == null || entity.getRouteid() == "")
 			return workingClientPropertyEntity.getDefaultRoute();
 		for(AbstractRoute route : workingClientPropertyEntity.getRouteList()){
@@ -128,13 +128,14 @@ public class ConsumerBean {
 		objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
 		objRequestEntity.setArgs(args);
 		objRequestEntity.setRequestID("" + id);
+		objRequestEntity.setRouteid(objServiceClientEntity.getRouteid());
         RequestResultEntity result = new RequestResultEntity();
         result.setRequestID(objRequestEntity.getRequestID());
         resultList.put(objRequestEntity.getRequestID(), result);
         WorkingChannel newWorkingChannel = null;
         try
         {
-        	newWorkingChannel = getWorkingChannnel(objServiceClientEntity, channelFromCached);
+        	newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached);
         	result.setWorkingChannel(newWorkingChannel);
         }
         catch(Exception ex){
@@ -166,9 +167,9 @@ public class ConsumerBean {
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	private WorkingChannel getWorkingChannnel(ClientPropertyEntity clientPropertyEntity, boolean fromCached) throws IOException, InterruptedException, ExecutionException, Exception  {
+	private WorkingChannel getWorkingChannnel(RequestEntity requestEntity, boolean fromCached) throws IOException, InterruptedException, ExecutionException, Exception  {
 		ServiceInformationEntity service;
-		service = searchRoute(clientPropertyEntity).chooseRoute(clientPropertyEntity.getServiceName(), this);
+		service = searchRoute(requestEntity).chooseRoute(requestEntity, this);
 		if(service == null)
 			return null;
 		String cacheID = service.toString();

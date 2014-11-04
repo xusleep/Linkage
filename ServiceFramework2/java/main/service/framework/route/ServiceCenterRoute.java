@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import service.framework.common.SerializeUtils;
 import service.framework.common.ShareingData;
+import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
@@ -28,14 +29,14 @@ public class ServiceCenterRoute extends AbstractRoute {
 	
 
 	@Override
-	public ServiceInformationEntity chooseRoute(String serviceName, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
+	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
 		// get it from the cache first, if not exist get it from the service center then
-		List<ServiceInformationEntity> serviceList = serviceListCache.get(serviceName);
+		List<ServiceInformationEntity> serviceList = serviceListCache.get(requestEntity.getServiceName());
 		String result = null;
 		if(serviceList == null)
 		{
 			// step 2, If request the service center's address, then we could return it back directly
-			if(serviceName.equals(ShareingData.SERVICE_CENTER))
+			if(ShareingData.SERVICE_CENTER.equals(requestEntity.getServiceName()))
 			{
 				ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
 				serviceCenter.setAddress(this.getRouteProperties().get(0));
@@ -45,7 +46,7 @@ public class ServiceCenterRoute extends AbstractRoute {
 			else
 			{
 				List<String> list = new LinkedList<String>();
-				list.add(serviceName);
+				list.add(requestEntity.getServiceName());
 				// step 1, request the service center for the service list, 
 				//         then it will go to the step 2 to get the service center's address
 				RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ShareingData.SERVICE_CENTER, list);
@@ -57,7 +58,7 @@ public class ServiceCenterRoute extends AbstractRoute {
 				{
 					result = objRequestResultEntity.getResponseEntity().getResult();
 					serviceList = SerializeUtils.deserializeServiceInformationList(result);
-					serviceListCache.put(serviceName, serviceList);
+					serviceListCache.put(requestEntity.getServiceName(), serviceList);
 				}
 			}
 		}
