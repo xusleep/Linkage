@@ -13,7 +13,7 @@ public class StartConfigureManagement {
 
     public static void main(String[] args) {
     	try {
-			new ServerBootStrap("conf/servicecenter_server.properties", 5).run();
+			new ServerBootStrap("conf/configure_management_center.properties", 5).run();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

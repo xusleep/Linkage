@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import management.service.center.common.ConsistentHash;
 import management.service.center.common.HashFunction;
+import management.service.center.common.ServiceCenterClientUtils;
 import management.service.center.common.ServiceCenterUtils;
 import service.framework.common.ShareingData;
 import service.framework.common.entity.RequestEntity;
@@ -43,7 +44,7 @@ public class ServiceCenterConsistentHashRoute extends AbstractRoute {
 		if(consistentHash == null)
 		{
 			// step 2, If request the service center's address, then we could return it back directly
-			if(ServiceCenterUtils.SERVICE_CENTER_SERVICE_NAME.equals(requestEntity.getServiceName()))
+			if(ServiceCenterClientUtils.SERVICE_CENTER_SERVICE_NAME.equals(requestEntity.getServiceName()))
 			{
 				ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
 				serviceCenter.setAddress(this.getRouteProperties().get(0));
@@ -56,7 +57,7 @@ public class ServiceCenterConsistentHashRoute extends AbstractRoute {
 				list.add(requestEntity.getServiceName());
 				// step 1, request the service center for the service list, 
 				//         then it will go to the step 2 to get the service center's address
-				RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ServiceCenterUtils.SERVICE_CENTER_GET_SERVICE_ID, list);
+				RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list);
 				if(objRequestResultEntity.isException())
 				{
 					throw objRequestResultEntity.getException();

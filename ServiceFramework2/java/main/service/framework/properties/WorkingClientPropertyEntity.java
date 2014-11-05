@@ -43,9 +43,16 @@ public class WorkingClientPropertyEntity {
 			defaultRouteProperties.add(strProperty);
 		}
 		try {
-			this.defaultRoute = (AbstractRoute) Class.forName(defaultRouteClass).newInstance();
-			this.defaultRoute.setRouteid(defaultRouteID);
-			this.defaultRoute.setRouteProperties(defaultRouteProperties);
+			if(defaultRouteID != null || defaultRouteID != "")
+			{
+				this.defaultRoute = (AbstractRoute) Class.forName(defaultRouteClass).newInstance();
+				this.defaultRoute.setRouteid(defaultRouteID);
+				this.defaultRoute.setRouteProperties(defaultRouteProperties);
+			}
+			else
+			{
+				System.out.println("there is not default route defined.");
+			}
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
