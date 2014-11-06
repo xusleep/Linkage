@@ -7,7 +7,7 @@ import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.event.ServiceEvent;
-import service.framework.event.ServiceOnExeptionEvent;
+import service.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.framework.event.ServiceOnErrorEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceOnMessageWriteEvent;
@@ -36,7 +36,7 @@ public class ServiceReadWriteHandler implements Handler {
 		if (event instanceof ServiceOnMessageReceiveEvent) {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
-				WorkingChannel channel = objServiceOnMessageReceiveEvent.getSocketChannel();
+				WorkingChannel channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				//System.out.println(" receive message ... " + receiveData);
 				aint.incrementAndGet();
@@ -52,9 +52,9 @@ public class ServiceReadWriteHandler implements Handler {
 				e.printStackTrace();
 			}
 		}
-		else if(event instanceof ServiceOnExeptionEvent){
+		else if(event instanceof ServiceOnChannelCloseExeptionEvent){
 			System.out.println("ServiceReadWriteHandler ServiceOnExeptionEvent happned ...");
-			ServiceOnExeptionEvent objServiceOnExeptionEvent = (ServiceOnExeptionEvent)event;
+			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
 			objServiceOnExeptionEvent.getExceptionHappen().printStackTrace();
 		}
 		else if(event instanceof ServiceOnErrorEvent){

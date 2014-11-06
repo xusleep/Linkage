@@ -8,7 +8,7 @@ import service.framework.common.entity.ResponseEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.event.ServiceEvent;
 import service.framework.event.ServiceOnErrorEvent;
-import service.framework.event.ServiceOnExeptionEvent;
+import service.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
@@ -34,19 +34,16 @@ public class ClientReadWriteHandler implements Handler {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
-				this.consumerBean.setRequestResult(objResponseEntity);
+				objServiceOnMessageReceiveEvent.getWorkingChannel().setRequestResult(objResponseEntity);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		else if(event instanceof ServiceOnExeptionEvent){
-			ServiceOnExeptionEvent objServiceOnExeptionEvent = (ServiceOnExeptionEvent)event;
-			this.consumerBean.removeCachedChannel(objServiceOnExeptionEvent.getSocketChannel());
-			if(objServiceOnExeptionEvent.getRequestID() != null)
-			{
-				this.consumerBean.setExceptionRuquestResult(objServiceOnExeptionEvent.getRequestID(), objServiceOnExeptionEvent.getExceptionHappen());
-			}
+		else if(event instanceof ServiceOnChannelCloseExeptionEvent){
+			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
+			this.consumerBean.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
+			objServiceOnExeptionEvent.getWorkingChannel().clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 		}
 		else if(event instanceof ServiceOnErrorEvent){
 			System.out.println("there is a error comes out" + ((ServiceOnErrorEvent)event).getMsg());

@@ -3,23 +3,23 @@ package service.framework.event;
 import service.framework.io.common.WorkingChannel;
 
 public class ServiceOnMessageWriteEvent implements ServiceEvent {
-	private WorkingChannel socketChannel;
+	private WorkingChannel workingChannel;
 	private String message;
 	private String requestID;
 	
-	public ServiceOnMessageWriteEvent(WorkingChannel socketChannel, String requestID)
+	public ServiceOnMessageWriteEvent(WorkingChannel workingChannel, String requestID)
 	{
-		this.socketChannel = socketChannel;
+		this.workingChannel = workingChannel;
 	}
 
 	
-	public WorkingChannel getSocketChannel() {
-		return socketChannel;
+	public WorkingChannel getWrokingChannel() {
+		return workingChannel;
 	}
 
 
-	public void setSocketChannel(WorkingChannel socketChannel) {
-		this.socketChannel = socketChannel;
+	public void setWorkingChannel(WorkingChannel socketChannel) {
+		this.workingChannel = socketChannel;
 	}
 
 

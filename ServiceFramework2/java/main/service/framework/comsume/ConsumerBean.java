@@ -29,8 +29,6 @@ import service.framework.route.AbstractRoute;
  *
  */
 public class ConsumerBean {
-	
-	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	private final HashMap<String, WorkingChannel> workingChannelCacheList = new HashMap<String, WorkingChannel>(16);
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final WorkerPool workerPool;
@@ -131,7 +129,6 @@ public class ConsumerBean {
 		objRequestEntity.setRouteid(objServiceClientEntity.getRouteid());
         RequestResultEntity result = new RequestResultEntity();
         result.setRequestID(objRequestEntity.getRequestID());
-        resultList.put(objRequestEntity.getRequestID(), result);
         WorkingChannel newWorkingChannel = null;
         try
         {
@@ -139,22 +136,24 @@ public class ConsumerBean {
     		ServiceInformationEntity serviceInformationEntity = searchRoute(objRequestEntity).chooseRoute(objRequestEntity, this);
     		if(serviceInformationEntity == null)
     		{
-            	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
-            	return result;
+    			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
+    			return result;
     		}
     		result.setServiceInformationEntity(serviceInformationEntity);
         	newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached, serviceInformationEntity);
         	result.setWorkingChannel(newWorkingChannel);
         }
         catch(Exception ex){
-        	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(ex, ex.getMessage()));
+        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
         	return result;
         }
         if(newWorkingChannel == null)
         {
-        	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(null, "can not connect to the service"));
+        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new ServiceException(null, "can not connect to the service"), "can not connect to the service"));
         	return result;
         }
+        // put the request result into the request result list
+        newWorkingChannel.offerRequestResult(result);
     	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
         String sendData = SerializeUtils.serializeRequest(objRequestEntity);
 		objServiceOnMessageWriteEvent.setMessage(sendData);
@@ -162,6 +161,8 @@ public class ConsumerBean {
         newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
     	return result;
 	}
+	 
+
 	
 	
 	/**
@@ -226,55 +227,6 @@ public class ConsumerBean {
         this.workerPool.waitReady();
         WorkingChannel objWorkingChannel = this.workerPool.register(channel);
         return objWorkingChannel;
-	}
-	
-	/**
-	 * set the request result
-	 * @param requestID
-	 * @param strResult
-	 */
-	public void setRuquestResult(String requestID, String strResult){
-		RequestResultEntity result = this.resultList.remove(requestID);
-		if(result != null)
-		{
-		    ResponseEntity objResponseEntity = new ResponseEntity();
-		    objResponseEntity.setRequestID(requestID);
-		    objResponseEntity.setResult(strResult);
-		    result.setException(false);
-			result.setResponseEntity(objResponseEntity);
-		}
-	}
-	
-	/**
-	 * set the request result
-	 * @param requestID
-	 * @param strResult
-	 */
-	public void setExceptionRuquestResult(String requestID, ServiceException serviceException){
-		RequestResultEntity result = this.resultList.remove(requestID);
-		if(result != null)
-		{
-		    ResponseEntity objResponseEntity = new ResponseEntity();
-		    objResponseEntity.setRequestID(requestID);
-		    objResponseEntity.setResult(serviceException.getMessage());
-		    result.setException(true);
-		    result.setException(serviceException);
-			result.setResponseEntity(objResponseEntity);
-		}
-	}
-	
-	/**
-	 * when the response comes, use this method to set it. 
-	 * @param objResponseEntity
-	 */
-	public RequestResultEntity setRequestResult(ResponseEntity objResponseEntity){
-		RequestResultEntity result = this.resultList.remove(objResponseEntity.getRequestID());
-		if(result != null)
-		{
-			result.setException(false);
-			result.setResponseEntity(objResponseEntity);
-		}
-		return result;
 	}
 	
 	/**

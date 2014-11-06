@@ -95,7 +95,7 @@ public class StartClient1 extends AbstractJob {
 		clientBootStrap.run();;
 		ConsumerBean cb = clientBootStrap.getConsumerBean();
 		StartClient1 job1 = new StartClient1(cb);
-		job1.setThreadCount(10);
+		job1.setThreadCount(1);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

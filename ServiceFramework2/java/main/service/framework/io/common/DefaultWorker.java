@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.distribution.EventDistributionMaster;
-import service.framework.event.ServiceOnExeptionEvent;
+import service.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.exception.ServiceException;
@@ -130,7 +130,7 @@ public class DefaultWorker implements Worker {
 						while(buffer.hasRemaining())
 							sc.write(buffer);
 					} catch (IOException e) {
-						this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
+						this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
 						e.printStackTrace();
 						try {
 							closeChannel(channel.getKey());
@@ -200,11 +200,11 @@ public class DefaultWorker implements Worker {
             }
             success = true;
         } catch (ClosedChannelException e) {
-        	this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
+        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
             return false;
         	// Can happen, and does not need a user attention.
         } catch (IOException e) {
-        	this.eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
+        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
         	return false;
         } 
         if (readBytes > 0) {
@@ -311,7 +311,7 @@ public class DefaultWorker implements Worker {
 					schannel.finishConnect();
 					schannel.close();
 					schannel.socket().close();
-					eventDistributionHandler.submitEventPool(new ServiceOnExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
+					eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
 				} catch (Exception e1) {
 				}
 			}

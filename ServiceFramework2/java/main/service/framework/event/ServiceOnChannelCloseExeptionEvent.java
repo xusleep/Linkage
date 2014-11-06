@@ -3,15 +3,15 @@ package service.framework.event;
 import service.framework.exception.ServiceException;
 import service.framework.io.common.WorkingChannel;
 
-public class ServiceOnExeptionEvent implements ServiceEvent {
+public class ServiceOnChannelCloseExeptionEvent implements ServiceEvent {
 	
-	private WorkingChannel socketChannel;
+	private WorkingChannel workingChannel;
 	private ServiceException exceptionHappen;
 	private String requestID;
 	
-	public ServiceOnExeptionEvent(WorkingChannel socketChannel, String requestID, ServiceException exceptionHappen)
+	public ServiceOnChannelCloseExeptionEvent(WorkingChannel socketChannel, String requestID, ServiceException exceptionHappen)
 	{
-		this.socketChannel = socketChannel;
+		this.workingChannel = socketChannel;
 		this.requestID = requestID;
 		this.exceptionHappen = exceptionHappen;
 	}
@@ -24,13 +24,12 @@ public class ServiceOnExeptionEvent implements ServiceEvent {
 		this.requestID = requestID;
 	}
 	
-	public WorkingChannel getSocketChannel() {
-		return socketChannel;
+	public WorkingChannel getWorkingChannel() {
+		return workingChannel;
 	}
 
-
-	public void setSocketChannel(WorkingChannel socketChannel) {
-		this.socketChannel = socketChannel;
+	public void setWorkingChannel(WorkingChannel socketChannel) {
+		this.workingChannel = socketChannel;
 	}
 
 	public ServiceException getExceptionHappen() {
