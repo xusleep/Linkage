@@ -51,7 +51,7 @@ public class StartClient extends AbstractJob {
 		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client_client.properties", 5);
 		clientBootStrap.run();;
 		ConsumerBean cb = clientBootStrap.getConsumerBean();
-		for(long i = 0; i < 10; i++)
+		for(long i = 0; i < 1000000000; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
@@ -70,7 +70,7 @@ public class StartClient extends AbstractJob {
 	    		if(result.isException())
 	    		{
 	    			result.getException().printStackTrace();
-	    			System.out.println("exception happened" + result.getException().getMessage());
+	    			System.out.println("exception happened " + result.getException().getMessage());
 	    		}
 	    		else
 	    		{

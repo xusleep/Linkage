@@ -11,7 +11,9 @@ public class ShareingData {
 	
 	public static final int CONSISTENT_HASH_CIRCLE_REPLICATE = 10;
 	
+	public static final String HEART_BEAT_SERVICE_NAME = "HEART_BEAT_SERVICE";
 	public static final String HEART_BEAT_SEND = "HEART_BEAT_SEND";
 	public static final String HEART_BEAT_REPLY = "HEART_BEAT_REPLY";
+	public static final String HEART_BEAT_ERROR = "HEART_BEAT_ERROR";
 	public static final String HEART_BEAT_CLIENT_ID = "HEART_BEAT_CLIENT_ID";
 }

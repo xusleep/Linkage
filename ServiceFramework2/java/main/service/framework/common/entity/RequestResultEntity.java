@@ -12,7 +12,7 @@ public class RequestResultEntity {
 	private boolean isException;
 	private ServiceException exception;
 	private WorkingChannel workingChannel;
-
+	private ServiceInformationEntity serviceInformationEntity;
 	
 	public RequestResultEntity(){
 	}
@@ -69,4 +69,15 @@ public class RequestResultEntity {
 	public void setWorkingChannel(WorkingChannel workingChannel) {
 		this.workingChannel = workingChannel;
 	}
+
+	public ServiceInformationEntity getServiceInformationEntity() {
+		return serviceInformationEntity;
+	}
+
+	public void setServiceInformationEntity(
+			ServiceInformationEntity serviceInformationEntity) {
+		this.serviceInformationEntity = serviceInformationEntity;
+	}
+	
+	
 }

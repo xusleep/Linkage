@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.io.protocol.ShareingProtocolData;
 
@@ -35,6 +36,7 @@ public class WorkingChannel {
 		this.worker = worker;
 		this.bufferMessage = new StringBuffer(ShareingProtocolData.BUFFER_MESSAGE_SIZE);
 	}
+
 
 	public Worker getWorker() {
 		return worker;

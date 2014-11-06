@@ -135,7 +135,15 @@ public class ConsumerBean {
         WorkingChannel newWorkingChannel = null;
         try
         {
-        	newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached);
+        	// Find the service information from the route, set the information into the result entity as well
+    		ServiceInformationEntity serviceInformationEntity = searchRoute(objRequestEntity).chooseRoute(objRequestEntity, this);
+    		if(serviceInformationEntity == null)
+    		{
+            	this.setExceptionRuquestResult(result.getRequestID(), new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
+            	return result;
+    		}
+    		result.setServiceInformationEntity(serviceInformationEntity);
+        	newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached, serviceInformationEntity);
         	result.setWorkingChannel(newWorkingChannel);
         }
         catch(Exception ex){
@@ -167,16 +175,14 @@ public class ConsumerBean {
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	private WorkingChannel getWorkingChannnel(RequestEntity requestEntity, boolean fromCached) throws IOException, InterruptedException, ExecutionException, Exception  {
-		ServiceInformationEntity service;
-		service = searchRoute(requestEntity).chooseRoute(requestEntity, this);
+	private WorkingChannel getWorkingChannnel(RequestEntity requestEntity, boolean fromCached, ServiceInformationEntity service) throws IOException, InterruptedException, ExecutionException, Exception  {
 		if(service == null)
 			return null;
 		String cacheID = service.toString();
 		WorkingChannel objWorkingChannel;
 		// if not get it from the cache, create it directly
 		if(!fromCached){
-			objWorkingChannel  = createWorkingChannel(service.getAddress(), service.getPort());
+			objWorkingChannel  = createWorkingChannel(service);
 			objWorkingChannel.setCacheID(cacheID);
 			return objWorkingChannel;
 		}
@@ -191,7 +197,7 @@ public class ConsumerBean {
 				objWorkingChannel = workingChannelCacheList.get(service.toString());
 				if(objWorkingChannel == null)
 				{
-					objWorkingChannel = createWorkingChannel(service.getAddress(), service.getPort());
+					objWorkingChannel = createWorkingChannel(service);
 					objWorkingChannel.setCacheID(cacheID);
 					workingChannelCacheList.put(cacheID, objWorkingChannel);
 				}
@@ -207,16 +213,15 @@ public class ConsumerBean {
 	 * @return
 	 * @throws IOException
 	 */
-	private WorkingChannel createWorkingChannel(String address, int port) throws IOException{
+	private WorkingChannel createWorkingChannel(ServiceInformationEntity service) throws IOException{
 		// get a Socket channel
         SocketChannel channel = SocketChannel.open();  
         // connect
-        channel.connect(new InetSocketAddress(address, port));
+        channel.connect(new InetSocketAddress(service.getAddress(), service.getPort()));
         // finish the connect
         if(channel.isConnectionPending()){  
             channel.finishConnect();  
         } 
-        System.out.println("createWorkingChannel socket " + channel.hashCode());
         // wait for the worker pool util it is ready
         this.workerPool.waitReady();
         WorkingChannel objWorkingChannel = this.workerPool.register(channel);
