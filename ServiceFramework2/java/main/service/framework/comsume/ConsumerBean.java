@@ -5,14 +5,12 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
-import service.framework.common.entity.ResponseEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.exception.ServiceException;
@@ -21,6 +19,7 @@ import service.framework.io.common.WorkingChannel;
 import service.framework.properties.ClientPropertyEntity;
 import service.framework.properties.WorkingClientPropertyEntity;
 import service.framework.route.AbstractRoute;
+import service.framework.route.Route;
 
 /**
  * this class is an access point from the client
@@ -133,36 +132,53 @@ public class ConsumerBean {
         RequestResultEntity result = new RequestResultEntity();
         result.setRequestID(objRequestEntity.getRequestID());
         WorkingChannel newWorkingChannel = null;
-        try
-        {
-        	// Find the service information from the route, set the information into the result entity as well
-    		ServiceInformationEntity serviceInformationEntity = searchRoute(objRequestEntity).chooseRoute(objRequestEntity, this);
-    		if(serviceInformationEntity == null)
-    		{
-    			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
-    			return result;
-    		}
-    		result.setServiceInformationEntity(serviceInformationEntity);
-        	newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached, serviceInformationEntity);
-        	result.setWorkingChannel(newWorkingChannel);
-        }
-        catch(Exception ex){
+
+    	// Find the service information from the route, set the information into the result entity as well
+    	Route route = searchRoute(objRequestEntity);
+    	if(route == null){
+			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the route"), "Can not find the route"));
+			return result;
+    	}
+		ServiceInformationEntity serviceInformationEntity = null;
+		try {
+			serviceInformationEntity = route.chooseRoute(objRequestEntity, this);
+			if(serviceInformationEntity == null)
+			{
+				WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
+			return result;
+			}
+		} 
+		catch(Exception ex)
+		{
         	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
         	return result;
         }
-        if(newWorkingChannel == null)
-        {
-        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new ServiceException(null, "can not connect to the service"), "can not connect to the service"));
-        	return result;
-        }
-        // put the request result into the request result list
-        newWorkingChannel.offerRequestResult(result);
-    	ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
-        String sendData = SerializeUtils.serializeRequest(objRequestEntity);
+		try
+		{
+			result.setServiceInformationEntity(serviceInformationEntity);
+			newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached, serviceInformationEntity);
+			result.setWorkingChannel(newWorkingChannel);
+		}
+		catch(Exception ex){
+			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			if(route != null){
+				route.afterChooseRoute(serviceInformationEntity);
+			}
+			return result;
+		}
+		if(newWorkingChannel == null)
+		{
+			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new ServiceException(null, "can not connect to the service"), "can not connect to the service"));
+			return result;
+		}
+		// put the request result into the request result list
+		newWorkingChannel.offerRequestResult(result);
+		ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
+		String sendData = SerializeUtils.serializeRequest(objRequestEntity);
 		objServiceOnMessageWriteEvent.setMessage(sendData);
-        newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-        newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
-    	return result;
+		newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+		newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
+		return result;
 	}
 	 
 

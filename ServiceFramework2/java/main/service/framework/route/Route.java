@@ -14,4 +14,5 @@ import service.framework.comsume.ConsumerBean;
  */
 public interface Route {
 	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity, ConsumerBean cb) throws IOException, InterruptedException, ExecutionException, Exception;
+	public void afterChooseRoute(ServiceInformationEntity serviceInformationEntity);
 }

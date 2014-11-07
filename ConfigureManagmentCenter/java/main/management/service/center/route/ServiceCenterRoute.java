@@ -91,4 +91,11 @@ public class ServiceCenterRoute extends AbstractRoute {
 	public void setFilters(List<RouteFilter> filters) {
 		this.filters = filters;
 	}
+
+	@Override
+	public void afterChooseRoute(
+			ServiceInformationEntity serviceInformationEntity) {
+		// TODO Auto-generated method stub
+		removeServiceInformationEntity(serviceInformationEntity);
+	}
 }
