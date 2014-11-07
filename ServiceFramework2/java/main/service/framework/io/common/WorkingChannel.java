@@ -131,30 +131,16 @@ public class WorkingChannel {
 		return result;
 	}
 
-	public Worker getWorker() {
-		return worker;
-	}
 
-	public Channel getChannel() {
-		return channel;
-	}
 
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
-
+	/**
+	 * append the string to the buffer
+	 * @param message
+	 */
 	public void appendMessage(String message){
     	this.bufferMessage.append(message);
     }
     
-    public SelectionKey getKey() {
-		return key;
-	}
-
-	public void setKey(SelectionKey key) {
-		this.key = key;
-	}
-
 	/**
 	 * 从缓存区解析出消息
 	 * @param sb
@@ -186,8 +172,53 @@ public class WorkingChannel {
 		String messageBody = bufferMessage.substring(headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length(), 
 				headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
 		bufferMessage.delete(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
-		ShareingProtocolData.aint.incrementAndGet();
 		return messageBody;
+	}
+	
+	/**
+	 * 对消息进行包装
+	 * @param message
+	 * @return
+	 */
+	public static String wrapMessage(String message){
+		return ShareingProtocolData.MESSAGE_HEADER_START + toLengthString(message.length()) + ShareingProtocolData.MESSAGE_HEADER_END + message; 
+	}
+	
+	/**
+	 * Convert the number to a string 
+	 * 2    -- > 0002
+	 * 21   -- > 0021
+	 * 2345 -- > 2345
+	 * @param length
+	 * @return
+	 */
+	private static String toLengthString(int length){
+		String tmp = "" + length;
+		int tmpLength = tmp.length();
+		for(int i = 0; i < ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
+			tmp = "0" + tmp;
+		}
+		return tmp;
+	}
+	
+	public Worker getWorker() {
+		return worker;
+	}
+
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
+	
+    public SelectionKey getKey() {
+		return key;
+	}
+
+	public void setKey(SelectionKey key) {
+		this.key = key;
 	}
 	
 	public String getCacheID() {
@@ -204,24 +235,6 @@ public class WorkingChannel {
 
 	public void setClosed(boolean isClosed) {
 		this.isClosed = isClosed;
-	}
-
-	/**
-	 * 对消息进行包装
-	 * @param message
-	 * @return
-	 */
-	public  String wrapMessage(String message){
-		return ShareingProtocolData.MESSAGE_HEADER_START + toLengthString(message.length()) + ShareingProtocolData.MESSAGE_HEADER_END + message; 
-	}
-	
-	private static String toLengthString(int length){
-		String tmp = "" + length;
-		int tmpLength = tmp.length();
-		for(int i = 0; i < ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
-			tmp = "0" + tmp;
-		}
-		return tmp;
 	}
 
 	private final class WriteRequestQueue implements Queue<ServiceOnMessageWriteEvent> {

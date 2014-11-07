@@ -116,7 +116,7 @@ public class DefaultWorker implements Worker {
 				SocketChannel sc = (SocketChannel) channel.getChannel();
 				byte[] data = null;
 				try {
-					data = channel.wrapMessage(evt.getMessage())
+					data = WorkingChannel.wrapMessage(evt.getMessage())
 							.getBytes(ShareingProtocolData.FRAMEWORK_IO_ENCODING);
 				} catch (UnsupportedEncodingException e2) {
 					e2.printStackTrace();
