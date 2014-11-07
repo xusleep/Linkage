@@ -19,13 +19,16 @@ import service.framework.io.protocol.ShareingProtocolData;
 public class WorkingChannel {
 	
     /**
-     * Monitor object for synchronizing access to the {@link WriteRequestQueue}.
+     * Monitor object for write.
      */
     final public Object writeLock = new Object();
+    /**
+     * Monitor object for read.
+     */
     final public Object readLock = new Object();
     
     /**
-     * Queue of write {@link MessageEvent}s.
+     * Queue of write {@link ServiceOnMessageWriteEvent}s.
      */
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteRequestQueue();
 	Channel channel;
@@ -33,8 +36,9 @@ public class WorkingChannel {
 	private StringBuffer bufferMessage;
 	private SelectionKey key;
 	private String cacheID;
-	private volatile boolean isClosed;
-	// use the concurrent hash map to store the request result list
+	/**
+	 *  use the concurrent hash map to store the request result list {@link RequestResultEntity}
+	 */
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
 	public WorkingChannel(Channel channel, Worker worker){
@@ -131,8 +135,6 @@ public class WorkingChannel {
 		return result;
 	}
 
-
-
 	/**
 	 * append the string to the buffer
 	 * @param message
@@ -228,15 +230,12 @@ public class WorkingChannel {
 	public void setCacheID(String cacheID) {
 		this.cacheID = cacheID;
 	}
-
-	public boolean isClosed() {
-		return isClosed;
-	}
-
-	public void setClosed(boolean isClosed) {
-		this.isClosed = isClosed;
-	}
-
+	
+	/**
+	 *  the writting queue for the request
+	 * @author zhonxu
+	 *
+	 */
 	private final class WriteRequestQueue implements Queue<ServiceOnMessageWriteEvent> {
 
         private final Queue<ServiceOnMessageWriteEvent> queue;
@@ -311,16 +310,12 @@ public class WorkingChannel {
 
         public boolean offer(ServiceOnMessageWriteEvent e) {
             boolean success = queue.offer(e);
-            return true;
+            return success;
         }
 
         public ServiceOnMessageWriteEvent poll() {
         	ServiceOnMessageWriteEvent e = queue.poll();
             return e;
-        }
-
-        private int getMessageSize(ServiceOnMessageWriteEvent e) {
-            return e.getMessage() == null ? 0 : e.getMessage().length();
         }
     }
 

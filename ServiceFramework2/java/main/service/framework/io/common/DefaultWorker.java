@@ -20,9 +20,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.event.ServiceOnChannelCloseExeptionEvent;
+import service.framework.event.ServiceOnChannelIOExeptionEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.exception.ServiceException;
+import service.framework.exception.ServiceOnChanelClosedException;
+import service.framework.exception.ServiceOnChanelIOException;
 import service.framework.io.protocol.ShareingProtocolData;
 
 /**
@@ -200,11 +203,11 @@ public class DefaultWorker implements Worker {
             }
             success = true;
         } catch (ClosedChannelException e) {
-        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
+        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceOnChanelClosedException(e, e.getMessage())));
             return false;
         	// Can happen, and does not need a user attention.
         } catch (IOException e) {
-        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
+        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelIOExeptionEvent(objWorkingChannel, null, new ServiceOnChanelIOException(e, e.getMessage())));
         	return false;
         } 
         if (readBytes > 0) {

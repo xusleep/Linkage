@@ -29,6 +29,9 @@ import service.framework.route.AbstractRoute;
  *
  */
 public class ConsumerBean {
+	/**
+	 * used to cached the {@link WorkingChannel} object
+	 */
 	private final HashMap<String, WorkingChannel> workingChannelCacheList = new HashMap<String, WorkingChannel>(16);
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final WorkerPool workerPool;
@@ -188,10 +191,8 @@ public class ConsumerBean {
 			return objWorkingChannel;
 		}
 		objWorkingChannel = workingChannelCacheList.get(cacheID);
-		if(objWorkingChannel == null || objWorkingChannel.isClosed())
+		if(objWorkingChannel == null)
 		{
-			if(objWorkingChannel != null)
-				removeCachedChannel(objWorkingChannel);
 			synchronized(workingChannelCacheList){
 				// get the working channel again 
 				// in case we set after we get from the cache

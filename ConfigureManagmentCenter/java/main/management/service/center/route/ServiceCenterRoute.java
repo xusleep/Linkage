@@ -23,44 +23,44 @@ import service.framework.route.filters.RouteFilter;
  *
  */
 public class ServiceCenterRoute extends AbstractRoute {
-	private final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
+	private static final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
 	
 	public ServiceCenterRoute(){
 	}
 	
+	public static void removeServiceInformationEntity(ServiceInformationEntity entity){
+		serviceListCache.remove(entity);
+	}
 
 	@Override
 	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
+		// step 2, If request the service center's address, then we could return it back directly
+		if(ServiceCenterClientUtils.SERVICE_CENTER_SERVICE_NAME.equals(requestEntity.getServiceName()))
+		{
+			ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
+			serviceCenter.setAddress(this.getRouteProperties().get(0));
+			serviceCenter.setPort(Integer.parseInt(this.getRouteProperties().get(1)));
+			return serviceCenter;
+		}
 		// get it from the cache first, if not exist get it from the service center then
 		List<ServiceInformationEntity> serviceList = serviceListCache.get(requestEntity.getServiceName());
 		String result = null;
-		if(serviceList == null)
+		if(serviceList == null || serviceList.size() == 0)
 		{
-			// step 2, If request the service center's address, then we could return it back directly
-			if(ServiceCenterClientUtils.SERVICE_CENTER_SERVICE_NAME.equals(requestEntity.getServiceName()))
+			List<String> list = new LinkedList<String>();
+			list.add(requestEntity.getServiceName());
+			// step 1, request the service center for the service list, 
+			//         then it will go to the step 2 to get the service center's address
+			RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list);
+			if(objRequestResultEntity.isException())
 			{
-				ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
-				serviceCenter.setAddress(this.getRouteProperties().get(0));
-				serviceCenter.setPort(Integer.parseInt(this.getRouteProperties().get(1)));
-				return serviceCenter;
+				throw objRequestResultEntity.getException();
 			}
 			else
 			{
-				List<String> list = new LinkedList<String>();
-				list.add(requestEntity.getServiceName());
-				// step 1, request the service center for the service list, 
-				//         then it will go to the step 2 to get the service center's address
-				RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list);
-				if(objRequestResultEntity.isException())
-				{
-					throw objRequestResultEntity.getException();
-				}
-				else
-				{
-					result = objRequestResultEntity.getResponseEntity().getResult();
-					serviceList = ServiceCenterUtils.deserializeServiceInformationList(result);
-					serviceListCache.put(requestEntity.getServiceName(), serviceList);
-				}
+				result = objRequestResultEntity.getResponseEntity().getResult();
+				serviceList = ServiceCenterUtils.deserializeServiceInformationList(result);
+				serviceListCache.put(requestEntity.getServiceName(), serviceList);
 			}
 		}
 		// if configure the filter, we would use it the filter the route
