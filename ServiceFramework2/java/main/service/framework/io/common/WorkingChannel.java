@@ -35,7 +35,7 @@ public class WorkingChannel {
 	private Worker worker;
 	private StringBuffer bufferMessage;
 	private SelectionKey key;
-	private String cacheID;
+	private String workingChannelCacheID;
 	/**
 	 *  use the concurrent hash map to store the request result list {@link RequestResultEntity}
 	 */
@@ -149,7 +149,7 @@ public class WorkingChannel {
 	 * @return
 	 * @throws Exception 
 	 */
-	public  String extractMessage() throws Exception{
+	public String extractMessage() throws Exception{
 		int headStartIndex = this.bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_START);
 		int headEndIndex = bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_END);
 		if(ShareingProtocolData.MESSAGE_HEADER_START.length() > bufferMessage.length())
@@ -223,12 +223,12 @@ public class WorkingChannel {
 		this.key = key;
 	}
 	
-	public String getCacheID() {
-		return cacheID;
+	public String getWoringChannelCacheID() {
+		return workingChannelCacheID;
 	}
 
-	public void setCacheID(String cacheID) {
-		this.cacheID = cacheID;
+	public void setWorkingChannelCacheID(String workingChannelCacheID) {
+		this.workingChannelCacheID = workingChannelCacheID;
 	}
 	
 	/**

@@ -203,7 +203,7 @@ public class ConsumerBean {
 		// if not get it from the cache, create it directly
 		if(!fromCached){
 			objWorkingChannel  = createWorkingChannel(service);
-			objWorkingChannel.setCacheID(cacheID);
+			objWorkingChannel.setWorkingChannelCacheID(cacheID);
 			return objWorkingChannel;
 		}
 		objWorkingChannel = workingChannelCacheList.get(cacheID);
@@ -216,7 +216,7 @@ public class ConsumerBean {
 				if(objWorkingChannel == null)
 				{
 					objWorkingChannel = createWorkingChannel(service);
-					objWorkingChannel.setCacheID(cacheID);
+					objWorkingChannel.setWorkingChannelCacheID(cacheID);
 					workingChannelCacheList.put(cacheID, objWorkingChannel);
 				}
 			}
@@ -254,7 +254,7 @@ public class ConsumerBean {
 		if(objWorkingChannel != null)
 		{
 			synchronized(workingChannelCacheList){
-				this.workingChannelCacheList.remove(objWorkingChannel.getCacheID());
+				this.workingChannelCacheList.remove(objWorkingChannel.getWoringChannelCacheID());
 			}
 		}
 	}
