@@ -45,6 +45,11 @@ public class ClientServiceInformationCache {
 		serviceListCache.clear();
 	}
 	
+	/**
+	 * get the service list from the cache by service name
+	 * @param serviceName
+	 * @return
+	 */
 	public static List<ServiceInformationEntity> getServiceInformationEntityList(String serviceName){
 		List<ServiceInformationEntity> resultList = new LinkedList<ServiceInformationEntity>();
 		if(StringUtils.isEmpty(serviceName))
