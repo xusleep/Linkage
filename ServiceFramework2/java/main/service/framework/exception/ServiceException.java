@@ -30,6 +30,4 @@ public class ServiceException extends Exception {
 			this.getInnerException().printStackTrace();
 		}
 	}
-	
-	
 }
