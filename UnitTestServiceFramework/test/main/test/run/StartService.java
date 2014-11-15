@@ -18,7 +18,8 @@ public class StartService {
     		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/service_client.properties", 5);
     		serviceBootStrap.run();
     		clientBootStrap.run();
-    		ServiceCenterClientUtils.registerService(clientBootStrap.getConsumerBean(), serviceBootStrap.getServicePropertyEntity());
+    		ServiceCenterClientUtils.cacheConsumerBean = clientBootStrap.getConsumerBean();
+    		ServiceCenterClientUtils.registerService(serviceBootStrap.getServicePropertyEntity());
         }
         catch (Exception e) {
         	e.printStackTrace();

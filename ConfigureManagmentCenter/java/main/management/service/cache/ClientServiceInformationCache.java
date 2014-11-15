@@ -1,4 +1,4 @@
-package service.framework.common.cache;
+package management.service.cache;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +19,8 @@ public class ClientServiceInformationCache {
 	 * @param objServiceInformationEntity
 	 */
 	public static void addServiceInformationEntity(ServiceInformationEntity objServiceInformationEntity){
-		serviceListCache.add(objServiceInformationEntity);
+		if(objServiceInformationEntity != null)
+			serviceListCache.add(objServiceInformationEntity);
 	}
 	
 	/**
@@ -27,7 +28,8 @@ public class ClientServiceInformationCache {
 	 * @param objServiceInformationEntity
 	 */
 	public static void addServiceInformationEntityList(List<ServiceInformationEntity> objServiceInformationEntityList){
-		serviceListCache.addAll(objServiceInformationEntityList);
+		if(objServiceInformationEntityList != null)
+			serviceListCache.addAll(objServiceInformationEntityList);
 	}
 	
 	/**
@@ -35,8 +37,19 @@ public class ClientServiceInformationCache {
 	 * @param objServiceInformationEntity
 	 */
 	public static void removeServiceInformationEntity(ServiceInformationEntity objServiceInformationEntity){
-		serviceListCache.remove(objServiceInformationEntity);
+		if(objServiceInformationEntity != null)
+			serviceListCache.remove(objServiceInformationEntity);
 	}
+	
+	/**
+	 * remove the service information entity list from the cache
+	 * @param objServiceInformationEntity
+	 */
+	public static void removeServiceInformationEntityList(List<ServiceInformationEntity> objServiceInformationEntityList){
+		if(objServiceInformationEntityList != null)
+			serviceListCache.removeAll(objServiceInformationEntityList);
+	}
+	
 	
 	/**
 	 * clear the service information entity

@@ -2,6 +2,7 @@ package service.framework.route;
 
 import java.util.List;
 
+import service.framework.clean.Cleaner;
 import service.framework.common.entity.ServiceInformationEntity;
 
 /**
@@ -9,7 +10,7 @@ import service.framework.common.entity.ServiceInformationEntity;
  * @author Smile
  *
  */
-public abstract class AbstractRoute implements Route {
+public abstract class AbstractRoute implements Route, Cleaner {
 
 	private String routeid;
 	private List<String> routeProperties;

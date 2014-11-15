@@ -3,6 +3,7 @@ package service.framework.route;
 import java.util.List;
 
 import service.framework.common.entity.RequestEntity;
+import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import service.framework.exception.ServiceException;
@@ -33,5 +34,11 @@ public class DefaultRoute extends AbstractRoute {
 
 	public void setFilters(List<RouteFilter> filters) {
 		this.filters = filters;
+	}
+
+	@Override
+	public void clean(RequestResultEntity objRequestResultEntity) {
+		// TODO Auto-generated method stub
+		
 	}
 }
