@@ -2,6 +2,8 @@ package service.framework.route;
 
 import java.util.List;
 
+import service.framework.common.entity.ServiceInformationEntity;
+
 /**
  *  All of the route class should extend this class
  * @author Smile

@@ -9,7 +9,7 @@ public class RequestEntity implements Serializable {
 	private String methodName;
 	private String version;
 	private String requestID;
-	private List args;
+	private List   args;
 	private String group;
 	private String routeid;
 	

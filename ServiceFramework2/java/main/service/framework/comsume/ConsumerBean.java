@@ -1,5 +1,7 @@
 package service.framework.comsume;
 
+import static service.framework.common.cache.ClientServiceInformationCache.removeServiceInformationEntity;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
@@ -118,7 +120,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	 synchronized RequestResultEntity prcessRequest(String clientID, List<String> args, boolean channelFromCached) {
+	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args, boolean channelFromCached) {
 		// this is unique id for a request
 		long id = idGenerator.incrementAndGet();
 		final RequestEntity objRequestEntity = new RequestEntity();
@@ -142,33 +144,33 @@ public class ConsumerBean {
 		ServiceInformationEntity serviceInformationEntity = null;
 		try {
 			serviceInformationEntity = route.chooseRoute(objRequestEntity, this);
+			result.setServiceInformationEntity(serviceInformationEntity);
 			if(serviceInformationEntity == null)
 			{
 				WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
-			return result;
+				return result;
 			}
 		} 
 		catch(Exception ex)
 		{
         	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+        	removeServiceInformationEntity(serviceInformationEntity);
         	return result;
         }
 		try
 		{
-			result.setServiceInformationEntity(serviceInformationEntity);
 			newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached, serviceInformationEntity);
 			result.setWorkingChannel(newWorkingChannel);
 		}
 		catch(Exception ex){
 			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
-			if(route != null){
-				route.afterChooseRoute(serviceInformationEntity);
-			}
+        	removeServiceInformationEntity(serviceInformationEntity);
 			return result;
 		}
 		if(newWorkingChannel == null)
 		{
 			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new ServiceException(null, "can not connect to the service"), "can not connect to the service"));
+        	removeServiceInformationEntity(serviceInformationEntity);
 			return result;
 		}
 		// put the request result into the request result list
@@ -180,9 +182,6 @@ public class ConsumerBean {
 		newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
 		return result;
 	}
-	 
-
-	
 	
 	/**
 	 * get a working channel from cache,

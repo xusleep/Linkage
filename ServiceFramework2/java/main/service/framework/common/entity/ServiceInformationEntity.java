@@ -5,7 +5,7 @@ public class ServiceInformationEntity {
 	private String serviceMethod;
 	private String address;
 	private String serviceVersion;
-	private int port;
+	private int    port;
 	
 	public ServiceInformationEntity(){
 	}
