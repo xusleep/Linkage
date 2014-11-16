@@ -1,5 +1,5 @@
 package test.run;
-import management.service.center.common.ServiceCenterClientUtils;
+import management.service.client.ServiceCenterClientUtils;
 import service.framework.bootstrap.ClientBootStrap;
 import service.framework.bootstrap.ServerBootStrap;
 
@@ -19,7 +19,7 @@ public class StartService {
     		serviceBootStrap.run();
     		clientBootStrap.run();
     		ServiceCenterClientUtils.cacheConsumerBean = clientBootStrap.getConsumerBean();
-    		ServiceCenterClientUtils.registerService(serviceBootStrap.getServicePropertyEntity());
+    		ServiceCenterClientUtils.registerServiceList(serviceBootStrap.getServicePropertyEntity());
         }
         catch (Exception e) {
         	e.printStackTrace();

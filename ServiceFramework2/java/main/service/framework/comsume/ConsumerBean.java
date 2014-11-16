@@ -353,7 +353,6 @@ public class ConsumerBean {
 	 * @param objRequestResultEntity
 	 */
 	public void closeChannelByRequestResult(RequestResultEntity objRequestResultEntity){
-		System.out.println("closeChannelByRequestResult close the channel");
 		try {
 			removeCachedChannel(objRequestResultEntity.getWorkingChannel());
 			if(objRequestResultEntity.getWorkingChannel() != null && 
