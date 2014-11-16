@@ -7,8 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import service.framework.common.SerializeUtils;
+import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
@@ -34,6 +41,7 @@ public class ConsumerBean {
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final WorkerPool workerPool;
 	private final WorkingClientPropertyEntity workingClientPropertyEntity;
+	private Log logger = LogFactory.getFactory().getInstance(ConsumerBean.class);
 	
 	public ConsumerBean(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool){
 		this.workingClientPropertyEntity = workingClientPropertyEntity;
@@ -77,7 +85,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args) {
+	public RequestResultEntity prcessRequest(String clientID, List<String> args) {
 		return prcessRequest(clientID, args, true);
 	}
 	
@@ -90,7 +98,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequestPerConnectSync(String clientID, List<String> args) {
+	public RequestResultEntity prcessRequestPerConnectSync(String clientID, List<String> args) {
 		RequestResultEntity result = prcessRequest(clientID, args, false);
 		result.getResponseEntity();
 		this.closeChannelByRequestResult(result);
@@ -106,7 +114,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequestPerConnect(String clientID, List<String> args) {
+	public RequestResultEntity prcessRequestPerConnect(String clientID, List<String> args) {
 		return prcessRequest(clientID, args, false);
 	}
 	
@@ -142,7 +150,11 @@ public class ConsumerBean {
 		} 
 		catch(Exception ex)
 		{
-        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			logger.error(StringUtils.ExceptionStackTraceToString(ex));
+			//logger.log(Level.WARNING, ex.getMessage());
+			//System.out.println("ComsumerBean ... exception happend " + ex.getMessage());
+			//ex.printStackTrace();
+        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
         	route.clean(result);
         	return result;
         }
@@ -158,8 +170,8 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequestPerConnectSyncWithoutRoute(String clientID, List<String> args, ServiceInformationEntity serviceInformationEntity) {
-		RequestResultEntity result = processRequestWithoutRoute(clientID, args, serviceInformationEntity, false);
+	public RequestResultEntity prcessRequestPerConnectSyncByServiceInformation(String clientID, List<String> args, ServiceInformationEntity serviceInformationEntity) {
+		RequestResultEntity result = processRequestByServiceInformation(clientID, args, serviceInformationEntity, false);
 		result.getResponseEntity();
 		this.closeChannelByRequestResult(result);
 		return result;
@@ -174,9 +186,22 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequestPerConnectWithoutRoute(String clientID, List<String> args, 
+	public RequestResultEntity prcessRequestPerConnectByServiceInformation(String clientID, List<String> args, 
 			ServiceInformationEntity serviceInformationEntity) {
-		return processRequestWithoutRoute(clientID, args, serviceInformationEntity, false);
+		return processRequestByServiceInformation(clientID, args, serviceInformationEntity, false);
+	}
+	
+	/**
+	 * request directly using the service information entity
+	 * @param clientID
+	 * @param args
+	 * @param serviceInformationEntity
+	 * @return
+	 */
+	public RequestResultEntity processRequestByServiceInformation(String clientID, List<String> args, 
+			ServiceInformationEntity serviceInformationEntity)
+	{
+		return processRequestByServiceInformation(clientID, args, serviceInformationEntity, false);
 	}
 	
 	/**
@@ -187,7 +212,7 @@ public class ConsumerBean {
 	 * @param channelFromCached
 	 * @return
 	 */
-	public RequestResultEntity processRequestWithoutRoute(String clientID, List<String> args, 
+	public RequestResultEntity processRequestByServiceInformation(String clientID, List<String> args, 
 			ServiceInformationEntity serviceInformationEntity, boolean channelFromCached)
 	{
 		RequestEntity objRequestEntity = createRequestEntity(clientID, args);

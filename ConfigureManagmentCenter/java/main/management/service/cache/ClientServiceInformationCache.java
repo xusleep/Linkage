@@ -18,7 +18,7 @@ public class ClientServiceInformationCache {
 	 * add the service information entity to the cache
 	 * @param objServiceInformationEntity
 	 */
-	public static void addServiceInformationEntity(ServiceInformationEntity objServiceInformationEntity){
+	public static synchronized void addServiceInformationEntity(ServiceInformationEntity objServiceInformationEntity){
 		if(objServiceInformationEntity != null)
 			serviceListCache.add(objServiceInformationEntity);
 	}
@@ -27,7 +27,7 @@ public class ClientServiceInformationCache {
 	 * add the service information entity to the cache
 	 * @param objServiceInformationEntity
 	 */
-	public static void addServiceInformationEntityList(List<ServiceInformationEntity> objServiceInformationEntityList){
+	public static synchronized void addServiceInformationEntityList(List<ServiceInformationEntity> objServiceInformationEntityList){
 		if(objServiceInformationEntityList != null)
 			serviceListCache.addAll(objServiceInformationEntityList);
 	}
@@ -36,7 +36,7 @@ public class ClientServiceInformationCache {
 	 * remove the service information entity from the cache
 	 * @param objServiceInformationEntity
 	 */
-	public static void removeServiceInformationEntity(ServiceInformationEntity objServiceInformationEntity){
+	public static synchronized void removeServiceInformationEntity(ServiceInformationEntity objServiceInformationEntity){
 		if(objServiceInformationEntity != null)
 			serviceListCache.remove(objServiceInformationEntity);
 	}
@@ -45,7 +45,7 @@ public class ClientServiceInformationCache {
 	 * remove the service information entity list from the cache
 	 * @param objServiceInformationEntity
 	 */
-	public static void removeServiceInformationEntityList(List<ServiceInformationEntity> objServiceInformationEntityList){
+	public static synchronized void removeServiceInformationEntityList(List<ServiceInformationEntity> objServiceInformationEntityList){
 		if(objServiceInformationEntityList != null)
 			serviceListCache.removeAll(objServiceInformationEntityList);
 	}
@@ -54,7 +54,7 @@ public class ClientServiceInformationCache {
 	/**
 	 * clear the service information entity
 	 */
-	public static void clearServiceInformationEntity(){
+	public static synchronized void clearServiceInformationEntity(){
 		serviceListCache.clear();
 	}
 	
@@ -63,9 +63,11 @@ public class ClientServiceInformationCache {
 	 * @param serviceName
 	 * @return
 	 */
-	public static List<ServiceInformationEntity> getServiceInformationEntityList(String serviceName){
+	public static synchronized List<ServiceInformationEntity> getServiceInformationEntityList(String serviceName){
 		List<ServiceInformationEntity> resultList = new LinkedList<ServiceInformationEntity>();
 		if(StringUtils.isEmpty(serviceName))
+			return resultList;
+		if(serviceListCache == null || serviceListCache.size() == 0)
 			return resultList;
 		for(ServiceInformationEntity objServiceInformationEntity:serviceListCache)
 		{
