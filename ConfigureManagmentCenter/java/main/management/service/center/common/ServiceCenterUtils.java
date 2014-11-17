@@ -3,7 +3,6 @@ package management.service.center.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,12 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.ConsumerBean;
-import service.framework.exception.ServiceException;
-import service.framework.properties.ServicePropertyEntity;
-import service.framework.properties.WorkingServicePropertyEntity;
 
 public final class ServiceCenterUtils {
 	

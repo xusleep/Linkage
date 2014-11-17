@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import service.framework.common.SerializeUtils;
 import service.framework.common.entity.ResponseEntity;
-import service.framework.comsume.ConsumerBean;
+import service.framework.comsume.Consume;
 import service.framework.event.ServiceEvent;
 import service.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.framework.event.ServiceOnChannelIOExeptionEvent;
@@ -20,9 +20,9 @@ import service.framework.event.ServiceStartingEvent;
  *
  */
 public class ClientReadWriteHandler implements Handler {
-	private final ConsumerBean consumerBean;
+	private final Consume consumerBean;
 	
-	public ClientReadWriteHandler(ConsumerBean consumerBean){
+	public ClientReadWriteHandler(Consume consumerBean){
 		this.consumerBean = consumerBean;
 	}
 	

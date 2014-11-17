@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import management.bootstrap.CenterClientBootStrap;
+import management.service.center.comsume.DefaultRouteConsume;
 import management.service.client.ServiceCenterClientUtils;
-import service.framework.bootstrap.ClientBootStrap;
 import service.framework.bootstrap.ServerBootStrap;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.ConsumerBean;
+import service.framework.comsume.Consume;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
 import zhonglin.test.framework.concurrence.condition.job.JobInterface;
@@ -34,13 +35,13 @@ import zhonglin.test.framework.concurrence.condition.job.JobInterface;
  */
 
 public class StartClient1 extends AbstractJob {
-	public static final AtomicInteger aint = new AtomicInteger(2320);
+	public static final AtomicInteger aint = new AtomicInteger(0);
 	private final AtomicBoolean isFailed = new AtomicBoolean(false);
 	public static final AtomicInteger successCount = new AtomicInteger(0);
 	public static final AtomicInteger requestCount = new AtomicInteger(0);
-	private final ConsumerBean cb;
+	private final DefaultRouteConsume cb;
 	
-	public StartClient1(ConsumerBean cb) {
+	public StartClient1(DefaultRouteConsume cb) {
 		this.cb = cb;
 	}
 	
@@ -66,7 +67,7 @@ public class StartClient1 extends AbstractJob {
 					System.out.println("break ...");
 					break;
 				}
-	    		RequestResultEntity result = cb.prcessRequest("calculator", args1);
+	    		RequestResultEntity result = cb.requestService("calculator", args1);
 	    		if(result.isException())
 	    		{
 	    			result.getException().printStackTrace();
@@ -93,16 +94,18 @@ public class StartClient1 extends AbstractJob {
 	}
 
 	public static void main(String[] args) throws Exception {
-		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client_client.properties", 5);
+    	ServiceInformationEntity centerServiceInformationEntity = new ServiceInformationEntity();
+    	centerServiceInformationEntity.setAddress("localhost");
+    	centerServiceInformationEntity.setPort(5002);
+		CenterClientBootStrap clientBootStrap = new CenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
 		clientBootStrap.run();
     	ServerBootStrap serviceBootStrap = new ServerBootStrap("conf/client_server.properties", 5);
     	serviceBootStrap.run();
-		ConsumerBean cb = clientBootStrap.getConsumerBean();
-		ServiceCenterClientUtils.cacheConsumerBean = cb;
+    	DefaultRouteConsume cb = clientBootStrap.getConsume();
 		ServiceInformationEntity clientServiceInformationEntity = new ServiceInformationEntity();
 		clientServiceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
-		ServiceCenterClientUtils.registerClientInformation(clientServiceInformationEntity);
+		ServiceCenterClientUtils.registerClientInformation(cb, clientServiceInformationEntity, centerServiceInformationEntity);
 		StartClient1 job1 = new StartClient1(cb);
 		job1.setThreadCount(1000);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();

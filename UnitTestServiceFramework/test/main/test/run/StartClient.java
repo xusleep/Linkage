@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import service.framework.bootstrap.ClientBootStrap;
+import management.bootstrap.CenterClientBootStrap;
+import management.service.center.comsume.DefaultRouteConsume;
 import service.framework.common.entity.RequestResultEntity;
-import service.framework.comsume.ConsumerBean;
+import service.framework.common.entity.ServiceInformationEntity;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
 import zhonglin.test.framework.concurrence.condition.job.JobInterface;
@@ -48,9 +49,12 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client_client.properties", 5);
+    	ServiceInformationEntity centerServiceInformationEntity = new ServiceInformationEntity();
+    	centerServiceInformationEntity.setAddress("localhost");
+    	centerServiceInformationEntity.setPort(5002);
+		CenterClientBootStrap clientBootStrap = new CenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
 		clientBootStrap.run();;
-		ConsumerBean cb = clientBootStrap.getConsumerBean();
+		DefaultRouteConsume cb = clientBootStrap.getConsume();
 		for(long i = 0; i < 1000; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
@@ -66,7 +70,7 @@ public class StartClient extends AbstractJob {
 					System.out.println("break ...");
 					break;
 				}
-	    		RequestResultEntity result = cb.prcessRequest("calculator", args1);
+	    		RequestResultEntity result = cb.requestService("calculator", args1);
 	    		if(result.isException())
 	    		{
 	    			result.getException().printStackTrace();

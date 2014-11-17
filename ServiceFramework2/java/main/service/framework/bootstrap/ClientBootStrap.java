@@ -1,6 +1,7 @@
 package service.framework.bootstrap;
 
-import service.framework.comsume.ConsumerBean;
+import service.framework.comsume.Consume;
+import service.framework.comsume.DefaultConsume;
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.handlers.ClientReadWriteHandler;
 import service.framework.io.client.Client;
@@ -8,7 +9,6 @@ import service.framework.io.client.DefaultClient;
 import service.framework.io.common.DefaultWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.properties.WorkingClientPropertyEntity;
-import service.framework.properties.WorkingServicePropertyEntity;
 
 /**
  * client side boot strap
@@ -20,7 +20,7 @@ public class ClientBootStrap implements Runnable {
 	private final Client client;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkerPool workPool;
-	private final ConsumerBean consumerBean;
+	private final Consume consume;
 	
 	/**
 	 * 
@@ -38,8 +38,8 @@ public class ClientBootStrap implements Runnable {
 		this.workPool = new DefaultWorkerPool(eventDistributionHandler, 1);
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(eventDistributionHandler, this.workPool);
-		this.consumerBean = new ConsumerBean(objServicePropertyEntity, this.workPool);
-		eventDistributionHandler.registerHandler(new ClientReadWriteHandler(this.getConsumerBean()));
+		this.consume = new DefaultConsume(objServicePropertyEntity, this.workPool);
+		eventDistributionHandler.registerHandler(new ClientReadWriteHandler(this.getConsume()));
 	}
 	
 	/**
@@ -47,8 +47,8 @@ public class ClientBootStrap implements Runnable {
 	 * from the client
 	 * @return
 	 */
-	public ConsumerBean getConsumerBean() {
-		return consumerBean;
+	public Consume getConsume() {
+		return consume;
 	}
 
 	public WorkerPool getWorkPool() {

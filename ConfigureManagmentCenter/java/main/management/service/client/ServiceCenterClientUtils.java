@@ -5,9 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import management.service.center.common.ServiceCenterUtils;
+import management.service.center.comsume.DefaultRouteConsume;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.ConsumerBean;
+import service.framework.comsume.Consume;
 import service.framework.exception.ServiceException;
 import service.framework.properties.ServicePropertyEntity;
 import service.framework.properties.WorkingServicePropertyEntity;
@@ -21,6 +22,8 @@ import service.framework.properties.WorkingServicePropertyEntity;
  */
 public final class ServiceCenterClientUtils {
 
+	public static DefaultRouteConsume defaultRouteConsume = null;
+	
 	// the service center side
 	public static final String SERVICE_CENTER_SERVICE_NAME   				= "serviceCenter";
 	public static final String SERVICE_CENTER_REGISTER_ID    				= "serviceCenterRegister";
@@ -32,8 +35,6 @@ public final class ServiceCenterClientUtils {
 	public static final String SERVICE_CENTER_CLIENT_SERVICE_NAME			= "serviceCenterClientService";
 	public static final String SERVICE_CENTER_CLIENT_SERVICE_REMOVE 		= "serviceCenterClientServiceRemove";
 	public static final String SERVICE_CENTER_CLIENT_SERVICE_ADD 			= "serviceCenterClientServiceAdd";
-
-	public static volatile ConsumerBean cacheConsumerBean = null;
 	
 	/**
 	 * invoke the client service method
@@ -41,11 +42,11 @@ public final class ServiceCenterClientUtils {
 	 * @param serviceInformationList
 	 * @throws ServiceException 
 	 */
-	public static boolean notifyClientServiceAdd(ServiceInformationEntity clientServiceInformationEntity, List<ServiceInformationEntity> serviceInformationList ) throws ServiceException{
+	public static boolean notifyClientServiceAdd(Consume consume, ServiceInformationEntity clientServiceInformationEntity, List<ServiceInformationEntity> serviceInformationList ) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
 		List<String> args = new LinkedList<String>();
 		args.add(strServiceInformation);
-		RequestResultEntity result = cacheConsumerBean.processRequestByServiceInformation(SERVICE_CENTER_CLIENT_SERVICE_ADD, args, clientServiceInformationEntity);
+		RequestResultEntity result = consume.requestServicePerConnectSync(SERVICE_CENTER_CLIENT_SERVICE_ADD, args, clientServiceInformationEntity);
 		if(result.isException()){
 			result.getException().printStackTrace();
 			throw result.getException();
@@ -62,11 +63,12 @@ public final class ServiceCenterClientUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean registerClientInformation(ServiceInformationEntity clientServiceInformationEntity) throws ServiceException{
+	public static boolean registerClientInformation(Consume consume, ServiceInformationEntity centerServiceInformationEntity, 
+			ServiceInformationEntity clientServiceInformationEntity) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformation(clientServiceInformationEntity);
 		List<String> args = new LinkedList<String>();
 		args.add(strServiceInformation);
-		RequestResultEntity result = cacheConsumerBean.prcessRequestPerConnect(SERVICE_CENTER_REGISTER_CLIENT_ID, args);
+		RequestResultEntity result = consume.requestServicePerConnectSync(SERVICE_CENTER_REGISTER_CLIENT_ID, args, centerServiceInformationEntity);
 		if(result.isException()){
 			result.getException().printStackTrace();
 			throw result.getException();
@@ -81,7 +83,7 @@ public final class ServiceCenterClientUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean registerServiceList(WorkingServicePropertyEntity workingServicePropertyEntity) throws ServiceException{
+	public static boolean registerServiceList(Consume consume, ServiceInformationEntity centerServiceInformationEntity, WorkingServicePropertyEntity workingServicePropertyEntity) throws ServiceException{
 		List<ServiceInformationEntity> serviceInformationList = new LinkedList<ServiceInformationEntity>();
 		
 		//获取所有服务，将服务注册到注册中心
@@ -110,7 +112,7 @@ public final class ServiceCenterClientUtils {
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
 		List<String> args = new LinkedList<String>();
 		args.add(strServiceInformation);
-		RequestResultEntity result = cacheConsumerBean.prcessRequestPerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_REGISTER_ID, args);
+		RequestResultEntity result = consume.requestServicePerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_REGISTER_ID, args, centerServiceInformationEntity);
 		if(result.isException()){
 			result.getException().printStackTrace();
 			throw result.getException();

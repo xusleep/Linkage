@@ -11,7 +11,6 @@ public class RequestEntity implements Serializable {
 	private String requestID;
 	private List   args;
 	private String group;
-	private String routeid;
 	
 	public RequestEntity(){
 		args = new LinkedList();
@@ -63,13 +62,5 @@ public class RequestEntity implements Serializable {
 	
 	public void setGroup(String group) {
 		this.group = group;
-	}
-
-	public String getRouteid() {
-		return routeid;
-	}
-
-	public void setRouteid(String routeid) {
-		this.routeid = routeid;
 	}
 }

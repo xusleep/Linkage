@@ -1,7 +1,8 @@
 package test.run;
+import management.bootstrap.CenterClientBootStrap;
 import management.service.client.ServiceCenterClientUtils;
-import service.framework.bootstrap.ClientBootStrap;
 import service.framework.bootstrap.ServerBootStrap;
+import service.framework.common.entity.ServiceInformationEntity;
 
 
 /**
@@ -15,11 +16,15 @@ public class StartService {
     public static void main(String[] args) {
         try {
         	ServerBootStrap serviceBootStrap = new ServerBootStrap("conf/service_server.properties", 5);
-    		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/service_client.properties", 5);
+        	ServiceInformationEntity centerServiceInformationEntity = new ServiceInformationEntity();
+        	centerServiceInformationEntity.setAddress("localhost");
+        	centerServiceInformationEntity.setPort(5002);
+        	CenterClientBootStrap clientBootStrap = new CenterClientBootStrap("conf/service_client.properties", 
+        			5, centerServiceInformationEntity);
     		serviceBootStrap.run();
     		clientBootStrap.run();
-    		ServiceCenterClientUtils.cacheConsumerBean = clientBootStrap.getConsumerBean();
-    		ServiceCenterClientUtils.registerServiceList(serviceBootStrap.getServicePropertyEntity());
+    		ServiceCenterClientUtils.defaultRouteConsume = clientBootStrap.getConsume();
+    		ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformationEntity, serviceBootStrap.getServicePropertyEntity());
         }
         catch (Exception e) {
         	e.printStackTrace();

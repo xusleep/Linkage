@@ -13,9 +13,8 @@ import management.service.client.ServiceCenterClientUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.ConsumerBean;
+import service.framework.comsume.Consume;
 import service.framework.exception.ServiceException;
-import service.framework.route.AbstractRoute;
 import service.framework.route.filters.RouteFilter;
 /**
  * This route is used for the service center
@@ -25,21 +24,17 @@ import service.framework.route.filters.RouteFilter;
  * @author zhonxu
  *
  */
-public class ServiceCenterRoute extends AbstractRoute {
-	public ServiceCenterRoute(){
-		
+public class ServiceCenterRoute implements Route {
+	private final ServiceInformationEntity centerServiceInformationEntity;
+	private final Consume consume;
+	
+	public ServiceCenterRoute(ServiceInformationEntity centerServiceInformationEntity, Consume consume){
+		this.centerServiceInformationEntity = centerServiceInformationEntity;
+		this.consume = consume;
 	}
 
 	@Override
-	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
-		// step 2, If request the service center's address, then we could return it back directly
-		if(ServiceCenterClientUtils.SERVICE_CENTER_SERVICE_NAME.equals(requestEntity.getServiceName()))
-		{
-			ServiceInformationEntity serviceCenter = new ServiceInformationEntity();
-			serviceCenter.setAddress(this.getRouteProperties().get(0));
-			serviceCenter.setPort(Integer.parseInt(this.getRouteProperties().get(1)));
-			return serviceCenter;
-		}
+	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity) throws ServiceException {
 		// get it from the cache first, if not exist get it from the service center then
 		List<ServiceInformationEntity> serviceList = getServiceInformationEntityList(requestEntity.getServiceName());
 		String result = null;
@@ -53,7 +48,7 @@ public class ServiceCenterRoute extends AbstractRoute {
 					list.add(requestEntity.getServiceName());
 					// step 1, request the service center for the service list, 
 					//         then it will go to the step 2 to get the service center's address
-					RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list);
+					RequestResultEntity objRequestResultEntity = consume.requestServicePerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list, centerServiceInformationEntity);
 					if(objRequestResultEntity.isException())
 					{
 						throw objRequestResultEntity.getException();

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import management.service.center.common.ServiceCenterUtils;
+import management.service.center.comsume.DefaultRouteConsume;
 import management.service.client.ServiceCenterClientUtils;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.exception.ServiceException;
@@ -14,7 +15,6 @@ import service.framework.exception.ServiceException;
  *
  */
 public class ServiceCenterImpl implements ServiceCenter {
-
 	@Override
 	public String register(String serviceInfor) {
 		// TODO Auto-generated method stub
@@ -23,7 +23,7 @@ public class ServiceCenterImpl implements ServiceCenter {
 		for(ServiceInformationEntity clientServiceInformationEntity : ServiceCenter.serviceClientList)
 		{
 			try {
-				ServiceCenterClientUtils.notifyClientServiceAdd(clientServiceInformationEntity, objServiceInformation);
+				ServiceCenterClientUtils.notifyClientServiceAdd(ServiceCenterClientUtils.defaultRouteConsume, clientServiceInformationEntity, objServiceInformation);
 			} catch (ServiceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
