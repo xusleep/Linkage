@@ -7,6 +7,7 @@ import management.service.center.ServiceCenter;
 import service.framework.common.ShareingData;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.comsume.ConsumerBean;
+import service.framework.exception.NoServiceRegisteredException;
 
 public class HeartBeatSender implements Runnable {
 
@@ -20,7 +21,7 @@ public class HeartBeatSender implements Runnable {
 	public void run() {
 		while(true){
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -36,10 +37,20 @@ public class HeartBeatSender implements Runnable {
 			// we have to remove the service from the service list
 			if(result.isException())
 			{
+				if(result.getException().getInnerException() instanceof NoServiceRegisteredException){
+					System.out.println("no service found ...");
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				result.getException().printStackTrace();
 				if(result.getServiceInformationEntity() != null)
 				{
 					System.out.println("failed request information : " + result.getServiceInformationEntity().toString());
+					System.out.println("remove information : " + result.getServiceInformationEntity().toString());
 					ServiceCenter.serviceInformationList.remove(result.getServiceInformationEntity());
 				}
 			}
