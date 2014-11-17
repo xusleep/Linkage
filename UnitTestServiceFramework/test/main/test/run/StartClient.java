@@ -51,7 +51,7 @@ public class StartClient extends AbstractJob {
 		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client_client.properties", 5);
 		clientBootStrap.run();;
 		ConsumerBean cb = clientBootStrap.getConsumerBean();
-		for(long i = 0; i < 1000000000; i++)
+		for(long i = 0; i < 1000; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<String> args1 = new LinkedList<String>();
@@ -94,7 +94,7 @@ public class StartClient extends AbstractJob {
 
 	public static void main(String[] args) throws IOException {
 		StartClient job1 = new StartClient();
-		job1.setThreadCount(1);
+		job1.setThreadCount(1000);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

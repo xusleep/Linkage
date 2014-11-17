@@ -7,8 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import service.framework.common.SerializeUtils;
+import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
@@ -19,7 +26,6 @@ import service.framework.io.common.WorkingChannel;
 import service.framework.properties.ClientPropertyEntity;
 import service.framework.properties.WorkingClientPropertyEntity;
 import service.framework.route.AbstractRoute;
-import service.framework.route.Route;
 
 /**
  * this class is an access point from the client
@@ -35,6 +41,7 @@ public class ConsumerBean {
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final WorkerPool workerPool;
 	private final WorkingClientPropertyEntity workingClientPropertyEntity;
+	private Log logger = LogFactory.getFactory().getInstance(ConsumerBean.class);
 	
 	public ConsumerBean(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool){
 		this.workingClientPropertyEntity = workingClientPropertyEntity;
@@ -59,11 +66,12 @@ public class ConsumerBean {
 	 * @param entity
 	 * @return
 	 */
-	private AbstractRoute searchRoute(RequestEntity entity){
-		if(entity.getRouteid() == null || entity.getRouteid() == "")
+	private AbstractRoute searchRoute(String clientID){
+		ClientPropertyEntity objServiceClientEntity = searchServiceClientEntity(clientID);
+		if(objServiceClientEntity.getRouteid() == null || objServiceClientEntity.getRouteid() == "")
 			return workingClientPropertyEntity.getDefaultRoute();
 		for(AbstractRoute route : workingClientPropertyEntity.getRouteList()){
-			if(route.getRouteid().equals(entity.getRouteid())){
+			if(route.getRouteid().equals(objServiceClientEntity.getRouteid())){
 				return route;
 			}
 		}
@@ -77,7 +85,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequest(String clientID, List<String> args) {
+	public RequestResultEntity prcessRequest(String clientID, List<String> args) {
 		return prcessRequest(clientID, args, true);
 	}
 	
@@ -90,7 +98,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequestPerConnectSync(String clientID, List<String> args) {
+	public RequestResultEntity prcessRequestPerConnectSync(String clientID, List<String> args) {
 		RequestResultEntity result = prcessRequest(clientID, args, false);
 		result.getResponseEntity();
 		this.closeChannelByRequestResult(result);
@@ -106,7 +114,7 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized RequestResultEntity prcessRequestPerConnect(String clientID, List<String> args) {
+	public RequestResultEntity prcessRequestPerConnect(String clientID, List<String> args) {
 		return prcessRequest(clientID, args, false);
 	}
 	
@@ -118,23 +126,14 @@ public class ConsumerBean {
 	 * @return
 	 * @throws Exception
 	 */
-	 synchronized RequestResultEntity prcessRequest(String clientID, List<String> args, boolean channelFromCached) {
+	public RequestResultEntity prcessRequest(String clientID, List<String> args, boolean channelFromCached) {
 		// this is unique id for a request
 		long id = idGenerator.incrementAndGet();
-		final RequestEntity objRequestEntity = new RequestEntity();
-		ClientPropertyEntity objServiceClientEntity = searchServiceClientEntity(clientID);
-		objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
-		objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
-		objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
-		objRequestEntity.setArgs(args);
-		objRequestEntity.setRequestID("" + id);
-		objRequestEntity.setRouteid(objServiceClientEntity.getRouteid());
+		final RequestEntity objRequestEntity = createRequestEntity(clientID, args);
         RequestResultEntity result = new RequestResultEntity();
         result.setRequestID(objRequestEntity.getRequestID());
-        WorkingChannel newWorkingChannel = null;
-
     	// Find the service information from the route, set the information into the result entity as well
-    	Route route = searchRoute(objRequestEntity);
+        AbstractRoute route = searchRoute(clientID);
     	if(route == null){
 			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the route"), "Can not find the route"));
 			return result;
@@ -142,33 +141,104 @@ public class ConsumerBean {
 		ServiceInformationEntity serviceInformationEntity = null;
 		try {
 			serviceInformationEntity = route.chooseRoute(objRequestEntity, this);
+			result.setServiceInformationEntity(serviceInformationEntity);
 			if(serviceInformationEntity == null)
 			{
 				WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
-			return result;
+				return result;
 			}
 		} 
 		catch(Exception ex)
 		{
-        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			logger.error(StringUtils.ExceptionStackTraceToString(ex));
+			//logger.log(Level.WARNING, ex.getMessage());
+			//System.out.println("ComsumerBean ... exception happend " + ex.getMessage());
+			//ex.printStackTrace();
+        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
+        	route.clean(result);
         	return result;
         }
+		return basicProcessRequest(objRequestEntity, result, serviceInformationEntity, channelFromCached);
+	}
+	
+	/**
+	 * send the request from the client to request a service
+	 * this request will not reuse the channel
+	 * this method is a synchronized method
+	 * @param clientID the id set in property
+	 * @param args  the arguments for the service
+	 * @return
+	 * @throws Exception
+	 */
+	public RequestResultEntity prcessRequestPerConnectSyncByServiceInformation(String clientID, List<String> args, ServiceInformationEntity serviceInformationEntity) {
+		RequestResultEntity result = processRequestByServiceInformation(clientID, args, serviceInformationEntity, false);
+		result.getResponseEntity();
+		this.closeChannelByRequestResult(result);
+		return result;
+	}
+	
+	/**
+	 * send the request from the client to request a service
+	 * this request will not reuse the channel
+	 * use this method with closeChannelByRequestResult
+	 * @param clientID the id set in property
+	 * @param args  the arguments for the service
+	 * @return
+	 * @throws Exception
+	 */
+	public RequestResultEntity prcessRequestPerConnectByServiceInformation(String clientID, List<String> args, 
+			ServiceInformationEntity serviceInformationEntity) {
+		return processRequestByServiceInformation(clientID, args, serviceInformationEntity, false);
+	}
+	
+	/**
+	 * request directly using the service information entity
+	 * @param clientID
+	 * @param args
+	 * @param serviceInformationEntity
+	 * @return
+	 */
+	public RequestResultEntity processRequestByServiceInformation(String clientID, List<String> args, 
+			ServiceInformationEntity serviceInformationEntity)
+	{
+		return processRequestByServiceInformation(clientID, args, serviceInformationEntity, false);
+	}
+	
+	/**
+	 * request directly using the service information entity
+	 * @param clientID
+	 * @param args
+	 * @param serviceInformationEntity
+	 * @param channelFromCached
+	 * @return
+	 */
+	public RequestResultEntity processRequestByServiceInformation(String clientID, List<String> args, 
+			ServiceInformationEntity serviceInformationEntity, boolean channelFromCached)
+	{
+		RequestEntity objRequestEntity = createRequestEntity(clientID, args);
+        RequestResultEntity result = new RequestResultEntity();
+        result.setRequestID(objRequestEntity.getRequestID());
+		return basicProcessRequest(objRequestEntity, result, serviceInformationEntity, channelFromCached);
+	}
+	
+	/**
+	 * basic process request
+	 * @param objRequestEntity
+	 * @param result
+	 * @param serviceInformationEntity
+	 * @param channelFromCached
+	 * @return
+	 */
+	private RequestResultEntity basicProcessRequest(RequestEntity objRequestEntity, RequestResultEntity result, 
+			ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
+		WorkingChannel newWorkingChannel = null;
 		try
 		{
-			result.setServiceInformationEntity(serviceInformationEntity);
-			newWorkingChannel = getWorkingChannnel(objRequestEntity, channelFromCached, serviceInformationEntity);
+			newWorkingChannel = getWorkingChannnel(channelFromCached, serviceInformationEntity);
 			result.setWorkingChannel(newWorkingChannel);
-		}
+		}		
 		catch(Exception ex){
 			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
-			if(route != null){
-				route.afterChooseRoute(serviceInformationEntity);
-			}
-			return result;
-		}
-		if(newWorkingChannel == null)
-		{
-			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new ServiceException(null, "can not connect to the service"), "can not connect to the service"));
 			return result;
 		}
 		// put the request result into the request result list
@@ -180,9 +250,6 @@ public class ConsumerBean {
 		newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
 		return result;
 	}
-	 
-
-	
 	
 	/**
 	 * get a working channel from cache,
@@ -195,7 +262,7 @@ public class ConsumerBean {
 	 * @throws IOException 
 	 * @throws Exception
 	 */
-	private WorkingChannel getWorkingChannnel(RequestEntity requestEntity, boolean fromCached, ServiceInformationEntity service) throws IOException, InterruptedException, ExecutionException, Exception  {
+	private WorkingChannel getWorkingChannnel(boolean fromCached, ServiceInformationEntity service) throws IOException, InterruptedException, ExecutionException, Exception  {
 		if(service == null)
 			return null;
 		String cacheID = service.toString();
@@ -222,6 +289,25 @@ public class ConsumerBean {
 			}
 		}
 		return objWorkingChannel;
+	}
+	
+	/**
+	 * create a request entity
+	 * @param clientID
+	 * @param args
+	 * @return
+	 */
+	private RequestEntity createRequestEntity(String clientID, List<String> args){
+		long id = idGenerator.incrementAndGet();
+		final RequestEntity objRequestEntity = new RequestEntity();
+		ClientPropertyEntity objServiceClientEntity = searchServiceClientEntity(clientID);
+		objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
+		objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
+		objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
+		objRequestEntity.setArgs(args);
+		objRequestEntity.setRequestID("" + id);
+		objRequestEntity.setRouteid(objServiceClientEntity.getRouteid());
+		return objRequestEntity;
 	}
 	
 	/**
@@ -267,7 +353,6 @@ public class ConsumerBean {
 	 * @param objRequestResultEntity
 	 */
 	public void closeChannelByRequestResult(RequestResultEntity objRequestResultEntity){
-		System.out.println("closeChannelByRequestResult close the channel");
 		try {
 			removeCachedChannel(objRequestResultEntity.getWorkingChannel());
 			if(objRequestResultEntity.getWorkingChannel() != null && 

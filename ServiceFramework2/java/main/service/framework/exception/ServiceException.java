@@ -1,5 +1,7 @@
 package service.framework.exception;
 
+import java.io.PrintStream;
+
 public class ServiceException extends Exception {
 	private Exception innerException;
 	private String message;
@@ -21,15 +23,19 @@ public class ServiceException extends Exception {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
+	
 	@Override
 	public void printStackTrace() {
 		// TODO Auto-generated method stub
-		super.printStackTrace();
+		printStackTrace(System.err);
+	}
+
+	@Override
+	public void printStackTrace(PrintStream s) {
+		// TODO Auto-generated method stub
+		super.printStackTrace(s);
 		if(this.getInnerException() != null){
 			this.getInnerException().printStackTrace();
 		}
 	}
-	
-	
 }

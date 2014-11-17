@@ -1,13 +1,15 @@
 package test.run;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import management.service.client.ServiceCenterClientUtils;
 import service.framework.bootstrap.ClientBootStrap;
+import service.framework.bootstrap.ServerBootStrap;
 import service.framework.common.entity.RequestResultEntity;
+import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
 import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
 import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
@@ -64,7 +66,7 @@ public class StartClient1 extends AbstractJob {
 					System.out.println("break ...");
 					break;
 				}
-	    		RequestResultEntity result = cb.prcessRequestPerConnectSync("calculator", args1);
+	    		RequestResultEntity result = cb.prcessRequest("calculator", args1);
 	    		if(result.isException())
 	    		{
 	    			result.getException().printStackTrace();
@@ -90,12 +92,19 @@ public class StartClient1 extends AbstractJob {
 
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		ClientBootStrap clientBootStrap = new ClientBootStrap("conf/client_client.properties", 5);
-		clientBootStrap.run();;
+		clientBootStrap.run();
+    	ServerBootStrap serviceBootStrap = new ServerBootStrap("conf/client_server.properties", 5);
+    	serviceBootStrap.run();
 		ConsumerBean cb = clientBootStrap.getConsumerBean();
+		ServiceCenterClientUtils.cacheConsumerBean = cb;
+		ServiceInformationEntity clientServiceInformationEntity = new ServiceInformationEntity();
+		clientServiceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
+		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
+		ServiceCenterClientUtils.registerClientInformation(clientServiceInformationEntity);
 		StartClient1 job1 = new StartClient1(cb);
-		job1.setThreadCount(1);
+		job1.setThreadCount(1000);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

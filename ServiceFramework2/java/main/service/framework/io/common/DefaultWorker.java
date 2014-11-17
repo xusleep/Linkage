@@ -44,7 +44,6 @@ public class DefaultWorker implements Worker {
 	private final ExecutorService objExecutorService;
 	private final CountDownLatch signal;
 	private final EventDistributionMaster eventDistributionHandler;
-	private static final AtomicInteger closeCount = new AtomicInteger(0);
 	
 	public DefaultWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
 		// 创建无阻塞网络套接
@@ -166,8 +165,6 @@ public class DefaultWorker implements Worker {
 		key.cancel();
 		SocketChannel sc = (SocketChannel)key.channel();
 		sc.close();
-		closeCount.incrementAndGet();
-		System.out.println("Default worker close the channel. count = " + closeCount.get());
 	}
 	
 	/**
