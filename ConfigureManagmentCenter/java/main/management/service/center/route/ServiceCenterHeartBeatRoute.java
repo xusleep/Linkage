@@ -6,8 +6,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import management.service.center.ServiceCenter;
 import service.framework.common.entity.RequestEntity;
+import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.ConsumerBean;
+import service.framework.exception.NoServiceRegisteredException;
 import service.framework.exception.ServiceException;
 import service.framework.route.AbstractRoute;
 import service.framework.route.filters.RouteFilter;
@@ -22,7 +24,9 @@ import service.framework.route.filters.RouteFilter;
 public class ServiceCenterHeartBeatRoute extends AbstractRoute {
 	private final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
 	private final AtomicInteger nextCounter = new AtomicInteger(0);
+	
 	public ServiceCenterHeartBeatRoute(){
+		
 	}
 	
 
@@ -30,6 +34,7 @@ public class ServiceCenterHeartBeatRoute extends AbstractRoute {
 	public ServiceInformationEntity chooseRoute(RequestEntity requestEntity, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
 		return getNextServiceFromServiceList();
 	}
+	
 	/**
 	 * 
 	 * @return
@@ -37,7 +42,7 @@ public class ServiceCenterHeartBeatRoute extends AbstractRoute {
 	 */
 	private ServiceInformationEntity getNextServiceFromServiceList() throws ServiceException{
 		if(ServiceCenter.serviceInformationList.size() == 0){
-			throw new ServiceException(new Exception("no service register to the service center"), "no service register to the service center");
+			throw new NoServiceRegisteredException(new Exception("no service register to the service center"), "no service register to the service center");
 		}
 		return ServiceCenter.serviceInformationList.get(nextCounter.incrementAndGet() % ServiceCenter.serviceInformationList.size());
 	}
@@ -54,10 +59,8 @@ public class ServiceCenterHeartBeatRoute extends AbstractRoute {
 
 
 	@Override
-	public void afterChooseRoute(
-			ServiceInformationEntity serviceInformationEntity) {
+	public void clean(RequestResultEntity objRequestResultEntity) {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
