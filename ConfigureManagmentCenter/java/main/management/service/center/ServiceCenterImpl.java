@@ -35,8 +35,9 @@ public class ServiceCenterImpl implements ServiceCenter {
 	
 	@Override
 	public String registerClientList(String serviceInfor) { 
-		List<ServiceInformationEntity> objServiceInformation = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
-		ServiceCenter.serviceClientList.addAll(objServiceInformation);
+		ServiceInformationEntity objServiceInformation = ServiceCenterUtils.deserializeServiceInformation(serviceInfor);
+		ServiceCenter.serviceClientList.add(objServiceInformation);
+		System.out.println("serviceInfor = " + serviceInfor);
 		System.out.println("service client count = " + ServiceCenter.serviceInformationList.size());
 		return "true";
 	}
