@@ -1,12 +1,15 @@
 package management.service.center.route;
 
+import static management.service.cache.ClientServiceInformationCache.addServiceInformationEntityList;
+import static management.service.cache.ClientServiceInformationCache.getServiceInformationEntityList;
+import static management.service.cache.ClientServiceInformationCache.removeServiceInformationEntity;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
-import management.service.center.common.ServiceCenterClientUtils;
 import management.service.center.common.ServiceCenterUtils;
+import management.service.client.ServiceCenterClientUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
@@ -23,13 +26,8 @@ import service.framework.route.filters.RouteFilter;
  *
  */
 public class ServiceCenterRoute extends AbstractRoute {
-	private static final ConcurrentHashMap<String, List<ServiceInformationEntity>> serviceListCache = new ConcurrentHashMap<String, List<ServiceInformationEntity>>(16);
-	
 	public ServiceCenterRoute(){
-	}
-	
-	public static void removeServiceInformationEntity(ServiceInformationEntity entity){
-		serviceListCache.remove(entity);
+		
 	}
 
 	@Override
@@ -43,24 +41,30 @@ public class ServiceCenterRoute extends AbstractRoute {
 			return serviceCenter;
 		}
 		// get it from the cache first, if not exist get it from the service center then
-		List<ServiceInformationEntity> serviceList = serviceListCache.get(requestEntity.getServiceName());
+		List<ServiceInformationEntity> serviceList = getServiceInformationEntityList(requestEntity.getServiceName());
 		String result = null;
 		if(serviceList == null || serviceList.size() == 0)
 		{
-			List<String> list = new LinkedList<String>();
-			list.add(requestEntity.getServiceName());
-			// step 1, request the service center for the service list, 
-			//         then it will go to the step 2 to get the service center's address
-			RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list);
-			if(objRequestResultEntity.isException())
-			{
-				throw objRequestResultEntity.getException();
-			}
-			else
-			{
-				result = objRequestResultEntity.getResponseEntity().getResult();
-				serviceList = ServiceCenterUtils.deserializeServiceInformationList(result);
-				serviceListCache.put(requestEntity.getServiceName(), serviceList);
+			synchronized(this){
+				serviceList = getServiceInformationEntityList(requestEntity.getServiceName());
+				if(serviceList == null || serviceList.size() == 0)
+				{
+					List<String> list = new LinkedList<String>();
+					list.add(requestEntity.getServiceName());
+					// step 1, request the service center for the service list, 
+					//         then it will go to the step 2 to get the service center's address
+					RequestResultEntity objRequestResultEntity = serviceCenterConsumerBean.prcessRequestPerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list);
+					if(objRequestResultEntity.isException())
+					{
+						throw objRequestResultEntity.getException();
+					}
+					else
+					{
+						result = objRequestResultEntity.getResponseEntity().getResult();
+						serviceList = ServiceCenterUtils.deserializeServiceInformationList(result);
+						addServiceInformationEntityList(serviceList);
+					}
+				}
 			}
 		}
 		// if configure the filter, we would use it the filter the route
@@ -93,9 +97,8 @@ public class ServiceCenterRoute extends AbstractRoute {
 	}
 
 	@Override
-	public void afterChooseRoute(
-			ServiceInformationEntity serviceInformationEntity) {
+	public void clean(RequestResultEntity objRequestResultEntity) {
 		// TODO Auto-generated method stub
-		removeServiceInformationEntity(serviceInformationEntity);
+		removeServiceInformationEntity(objRequestResultEntity.getServiceInformationEntity());
 	}
 }
