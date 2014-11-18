@@ -1,4 +1,5 @@
-package service.framework.statistics;
+package management.service.statistics;
+
 
 public class DefaultServerStatistics implements ServerStatistics{
 	/**
