@@ -44,10 +44,12 @@ public class SerializeUtils {
 		sb.append(request.getGroup());
 		sb.append("</group>");
 		sb.append("<list>");
-		for (int i = 0; i < request.getArgs().size(); i++) {
-			sb.append("<arg>");
-			sb.append(escapeForXML(request.getArgs().get(i)));
-			sb.append("</arg>");
+		if(request.getArgs() != null){
+			for (int i = 0; i < request.getArgs().size(); i++) {
+				sb.append("<arg>");
+				sb.append(escapeForXML(request.getArgs().get(i)));
+				sb.append("</arg>");
+			}
 		}
 		sb.append("</list>");
 		sb.append("</request>");
