@@ -29,7 +29,6 @@ public class StartService {
         catch (Exception e) {
         	e.printStackTrace();
             System.out.println("Server error: " + e.getMessage());
-            System.exit(-1);
         }
  
     }

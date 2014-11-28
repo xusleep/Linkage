@@ -20,7 +20,7 @@ import service.framework.properties.ClientPropertyEntity;
 import service.framework.properties.WorkingClientPropertyEntity;
 
 /**
- * this an abstract class of consume
+ * this an engine class of consume
  * @author zhonxu
  *
  */
