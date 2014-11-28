@@ -32,16 +32,16 @@ public class SerializeUtils {
 		sb.append(request.getRequestID());
 		sb.append("</requestid>");
 		sb.append("<serviceName>");
-		sb.append(request.getServiceName());
+		sb.append(escapeForXML(request.getServiceName()));
 		sb.append("</serviceName>");
 		sb.append("<methodName>");
-		sb.append(request.getMethodName());
+		sb.append(escapeForXML(request.getMethodName()));
 		sb.append("</methodName>");
 		sb.append("<version>");
-		sb.append(request.getVersion());
+		sb.append(escapeForXML(request.getVersion()));
 		sb.append("</version>");
 		sb.append("<group>");
-		sb.append(request.getGroup());
+		sb.append(escapeForXML(request.getGroup()));
 		sb.append("</group>");
 		sb.append("<list>");
 		if(request.getArgs() != null){
@@ -91,7 +91,7 @@ public class SerializeUtils {
 					for(int j = 0; j < childs1.getLength(); j++){
 						Node listNode = childs1.item(j);
 						if(listNode.getNodeName().equals("arg")){
-							request.getArgs().add(unEscapeForXML(listNode.getTextContent()));
+							request.getArgs().add(listNode.getTextContent());
 						}
 					}
 				}
@@ -144,7 +144,7 @@ public class SerializeUtils {
 			for(int i = 0; i < childs.getLength(); i++){
 				Node node = childs.item(i);
 				if(node.getNodeName().equals("result")){
-					response.setResult(unEscapeForXML(node.getTextContent()));
+					response.setResult(node.getTextContent());
 				}
 				else if(node.getNodeName().equals("requestid")){
 					response.setRequestID(node.getTextContent());
@@ -237,88 +237,4 @@ public class SerializeUtils {
 
         return buf.toString();
     }
-    
-    /**
-     * Escapes all necessary characters in the String so that it can be used
-     * in an XML doc.
-     *
-     * @param string the string to escape.
-     * @return the string with appropriate characters escaped.
-     */
-    public static final String unEscapeForXML ( String string )
-    {
-
-        // Check if the string is null or zero length -- if so, return
-        // what was sent in.
-        if ( ( string == null ) || ( string.length() == 0 ) )
-        {
-            return string;
-        }
-
-        char[]       sArray = string.toCharArray();
-        StringBuffer buf    = new StringBuffer( sArray.length );
-        char         ch;
-
-        // according to http://www.w3.org/TR/REC-xml/#charsets
-        // a valid xml character is defined as:
-        // #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
-        for ( int i = 0; i < sArray.length; i++ )
-        {
-            ch = sArray [ i ];
-            if(ch == '&')
-            {
-            	String nextString = string.substring(i, sArray.length > i + 6 ? i + 6 : sArray.length);
-            	if(nextString.contains("&lt;"))
-            	{
-            		buf.append('<');
-            		i = i + 3;
-            	}
-            	else if(nextString.contains("&amp;"))
-            	{
-            		buf.append('&');
-            		i = i + 4;
-            	}
-            	else if(nextString.contains("&gt;"))
-            	{
-            		buf.append('>');
-            		i = i + 3;
-            	}
-            	else if(nextString.contains("&quot;"))
-            	{
-            		buf.append('"');
-            		i = i + 4;
-            	}
-            	else if(nextString.contains("&apos;"))
-            	{
-            		buf.append('\'');
-            		i = i + 5;
-            	}
-            	else if(nextString.contains("&quot;"))
-            	{
-            		buf.append('"');
-            		i = i + 5;
-            	}
-            }
-            else
-            {
-            	buf.append(ch);
-            }
-        }
-
-        return buf.toString();
-    }
-	
-	
-	public static void main(String[] args) {
-//		RequestEntity request = new RequestEntity();
-//		request.setGroup("dsfsdf");
-//		request.getArgs().add("sdfsdfdsfds121");
-//        String str = SerializeUtils.serializeRequest(request);
-//        System.out.println(str);
-//        RequestEntity request1 = SerializeUtils.deserializeRequest(str);
-//        System.out.println(request1.getArgs().get(0));
-		String s = escapeForXML("<t>sd</t>");
-		System.out.println(s);
-		System.out.println(unEscapeForXML(s));
-	}
 }
