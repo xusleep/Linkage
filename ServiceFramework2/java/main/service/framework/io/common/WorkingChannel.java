@@ -44,7 +44,7 @@ public class WorkingChannel {
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
 		this.worker = worker;
-		this.bufferMessage = new StringBuffer(ShareingProtocolData.BUFFER_MESSAGE_SIZE);
+		this.bufferMessage = new StringBuffer(ShareingProtocolData.RECEIVE_BUFFER_MESSAGE_SIZE);
 	}
 	
 	/**

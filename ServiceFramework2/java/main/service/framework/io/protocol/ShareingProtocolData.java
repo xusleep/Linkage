@@ -1,25 +1,29 @@
 package service.framework.io.protocol;
 
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ShareingProtocolData {
 	/**
-	 * 数据传输缓存，设置
+	 * data transform buffer Setting, in the data level
 	 */
 	public static final int BUFFER_SIZE = 1024;
-	public static final String FRAMEWORK_IO_ENCODING = "UTF-8";
-	public static final int BUFFER_MESSAGE_SIZE = 2048;
 	/**
-	 * 包头开始部分
+	 * data transform coding Setting
+	 */
+	public static final String FRAMEWORK_IO_ENCODING = "UTF-8";
+	/**
+	 * data transform buffer seting, in the message level
+	 */
+	public static final int RECEIVE_BUFFER_MESSAGE_SIZE = 2048;
+	/**
+	 * message package header start
 	 */
 	public static final String MESSAGE_HEADER_START = "$#####$";
 	/**
-	 * 包头结束部分
+	 * message package header end
 	 */
 	public static final String MESSAGE_HEADER_END = "*#####*";
 	/**
-	 * 表示包头中，用于标书包体长度的字符长度
+	 * message package header length
 	 */
 	public static final int MESSAGE_HEADER_LENGTH_PART = 4;
-	public static AtomicInteger aint = new AtomicInteger(0);
 }

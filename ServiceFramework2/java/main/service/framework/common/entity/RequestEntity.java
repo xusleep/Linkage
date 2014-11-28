@@ -1,10 +1,9 @@
 package service.framework.common.entity;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RequestEntity implements Serializable {
+public class RequestEntity {
 	private String serviceName;
 	private String methodName;
 	private String version;
