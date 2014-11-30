@@ -3,6 +3,8 @@ package service.framework.io.common;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.CountDownLatch;
 
+import org.apache.log4j.Logger;
+
 import service.framework.distribution.EventDistributionMaster;
 
 /**
@@ -15,6 +17,7 @@ public class DefaultWorkerPool implements WorkerPool {
 	private Worker[] workers;
 	private int nextWorkCount = 0;
 	private final CountDownLatch signal;
+	private static Logger  logger = Logger.getLogger(DefaultWorkerPool.class); 
 	
 	/**
 	 * 
@@ -68,5 +71,17 @@ public class DefaultWorkerPool implements WorkerPool {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void shutdown() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void shutdownImediate() {
+		// TODO Auto-generated method stub
+		
 	}
 }

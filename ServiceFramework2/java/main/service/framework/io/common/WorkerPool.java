@@ -8,4 +8,12 @@ public interface WorkerPool {
 	public WorkingChannel register(SocketChannel sc);
 	// wait for every thing ready
 	public void waitReady();
+	/**
+	 * shutdown 
+	 */
+	public void shutdown();
+	/**
+	 * shutdown imediate
+	 */
+	public void shutdownImediate();
 }

@@ -10,7 +10,11 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
+import org.apache.log4j.Logger;
+
+import service.framework.common.StringUtils;
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
@@ -33,6 +37,9 @@ public class DefaultServer implements Server {
 	private final InetSocketAddress address;
 	private final WorkerPool workerPool;
 	private final EventDistributionMaster eventDistributionHandler;
+	private volatile boolean isShutdown = false;
+	private final CountDownLatch shutdownSignal;
+	private static Logger  logger = Logger.getLogger(DefaultServer.class);  
 	
 	public DefaultServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
 		this.eventDistributionHandler = eventDistributionHandler;
@@ -47,6 +54,7 @@ public class DefaultServer implements Server {
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);
 		this.workerPool = workerPool;
+		shutdownSignal = new CountDownLatch(1);
 	}
 
 	public WorkerPool getWorkerPool() {
@@ -58,6 +66,7 @@ public class DefaultServer implements Server {
 	}
 
 	public void run() {
+		logger.debug("service is starting ...");
 		eventDistributionHandler.start();
 		workerPool.start();
 		workerPool.waitReady();
@@ -88,6 +97,30 @@ public class DefaultServer implements Server {
 				continue;
 			}
 		}
+	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdown(){
+		Thread.currentThread().interrupt();
+		isShutdown = true;
+		eventDistributionHandler.shutdown();
+	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdownImediate(){
+		Thread.currentThread().interrupt();
+		isShutdown = true;
+		try {
+			shutdownSignal.await();
+		} catch (InterruptedException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+		}
+		eventDistributionHandler.shutdownImediate();
 	}
 
 	@Override

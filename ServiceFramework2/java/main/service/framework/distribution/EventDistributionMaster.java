@@ -1,19 +1,21 @@
 package service.framework.distribution;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.log4j.Logger;
+
+import service.framework.common.StringUtils;
 import service.framework.event.ServiceEvent;
 import service.framework.handlers.Handler;
 
 /**
- * 在listener中，会接收服务的事件，并调用这里的processRequest方法，将事件加入到队列中
- * 事件队列，并且调用注册的handler，进行事件的处理
+ * this master will handle all of the event to thread pool for running
  * @author zhonxu
  *
  */
@@ -21,13 +23,20 @@ public class EventDistributionMaster extends Thread {
 	public  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
 	public final ExecutorService objExecutorService;
 	private final List<Handler> eventHandlerList;
-	
+	private volatile boolean isShutdown = false;
+	private final CountDownLatch shutdownSignal;
+	private static Logger  logger = Logger.getLogger(EventDistributionMaster.class);  
+
 	public EventDistributionMaster(int taskThreadPootSize){
 		this.objExecutorService = Executors.newFixedThreadPool(taskThreadPootSize);
 		this.eventHandlerList = new LinkedList<Handler>();
+		shutdownSignal = new CountDownLatch(1);
 	}
 	
-	
+	/**
+	 * register a handler to the master
+	 * @param handler
+	 */
 	public void registerHandler(Handler handler) {
 		this.eventHandlerList.add(handler);
 	}
@@ -36,39 +45,92 @@ public class EventDistributionMaster extends Thread {
 
 	@Override
 	public void run() {
+		logger.debug("EventDistributionMaster start running ...");
 		// TODO Auto-generated method stub
         while (true) {
-        	
             try 
             {
             	final ServiceEvent event = pool.take();
-            	// 将事件处理任务交由线程池执行，处理逻辑独立处理在consumer里面完成
+            	// handle the event to thread poo
             	handleEvent(event);
             }
-            catch (Exception e) {
-            	e.printStackTrace();
-                continue;
+            catch (InterruptedException e) {
+            	if(pool.size() == 0 && isShutdown)
+            	{
+            		logger.debug("shut down.");
+            		shutdownSignal.countDown();
+            		break;
+            	}
+            	else if(pool.size() > 0 && isShutdown){
+            		while(pool.size() > 0){
+            			ServiceEvent event;
+						try {
+							event = pool.take();
+	                    	// handle the event to thread pool
+	                    	handleEvent(event);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							logger.error("not expected interruptedException happened. exception detail : " 
+											+ StringUtils.ExceptionStackTraceToString(e1));
+						}
+            		}
+            		shutdownSignal.countDown();
+            		break;
+            	}
+            	else
+            	{
+            		continue;
+            	}
             }
         }
 	}
 
 	/**
-	 * 处理客户请求,管理用户的联结池,并唤醒队列中的线程进行处理
+	 * submit a event to the pool
 	 */
 	public void submitEventPool(ServiceEvent event) {
 		try {
-			pool.put(event);
+			if(!isShutdown)
+			{
+				pool.put(event);
+			}
+			else
+			{
+				logger.error("drop event, because the master is being shutdown. event: " + event.toString());
+			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
 		}
 	}
 	
 	/**
-	 * 注意此方法消费的队列，开始
+	 * shutdown 
+	 */
+	public void shutdown(){
+		Thread.currentThread().interrupt();
+		isShutdown = true;
+	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdownImediate(){
+		Thread.currentThread().interrupt();
+		isShutdown = true;
+		try {
+			shutdownSignal.await();
+		} catch (InterruptedException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+		}
+	}
+	
+	/**
+	 * this method used to handle the event to the working pool
 	 * @param event
 	 */
-	public void handleEvent(final ServiceEvent event){
+	private void handleEvent(final ServiceEvent event){
 		this.objExecutorService.execute(new Runnable(){
 			@Override
 			public void run() {
@@ -77,11 +139,10 @@ public class EventDistributionMaster extends Thread {
             		{
             			handler.handleRequest(event);
             		}
-				} catch (IOException e) {
-					e.printStackTrace();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("not expected exception happened. exception detail : " 
+							+ StringUtils.ExceptionStackTraceToString(e));
 				}
 			}
     	});

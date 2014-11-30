@@ -18,6 +18,9 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.log4j.Logger;
+
+import service.framework.common.StringUtils;
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.framework.event.ServiceOnChannelIOExeptionEvent;
@@ -27,6 +30,7 @@ import service.framework.exception.ServiceException;
 import service.framework.exception.ServiceOnChanelClosedException;
 import service.framework.exception.ServiceOnChanelIOException;
 import service.framework.io.protocol.ShareingProtocolData;
+import service.framework.io.server.DefaultServer;
 
 /**
  * <p>
@@ -44,6 +48,9 @@ public class DefaultWorker implements Worker {
 	private final ExecutorService objExecutorService;
 	private final CountDownLatch signal;
 	private final EventDistributionMaster eventDistributionHandler;
+	private volatile boolean isShutdown = false;
+	private final CountDownLatch shutdownSignal;
+	private static Logger  logger = Logger.getLogger(DefaultWorker.class);  
 	
 	public DefaultWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
 		// 创建无阻塞网络套接
@@ -51,11 +58,12 @@ public class DefaultWorker implements Worker {
 		this.objExecutorService = Executors.newFixedThreadPool(10);
 		this.signal = signal;
 		this.eventDistributionHandler = eventDistributionHandler;
+		shutdownSignal = new CountDownLatch(1);
 	}
 
 	public void run() {
 		signal.countDown();
-		System.out.println("启动 worker id = " + Thread.currentThread().getId());
+		logger.debug("start worker hashCode = " + this.hashCode());
 		// 监听
 		while (true) {
 			try {
@@ -84,6 +92,31 @@ public class DefaultWorker implements Worker {
 			}
 		}
 	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdown(){
+		Thread.currentThread().interrupt();
+		isShutdown = true;
+		eventDistributionHandler.shutdown();
+	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdownImediate(){
+		Thread.currentThread().interrupt();
+		isShutdown = true;
+		try {
+			shutdownSignal.await();
+		} catch (InterruptedException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+		}
+		eventDistributionHandler.shutdownImediate();
+	}
+	
 	/**
 	 * 处理内部任务队列
 	 */
