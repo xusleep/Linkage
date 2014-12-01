@@ -12,7 +12,6 @@ import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.Consume;
-import service.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.framework.exception.NoServiceRegisteredException;
 
 public class HeartBeatSender implements Runnable {
