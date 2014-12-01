@@ -3,7 +3,10 @@ package service.framework.handlers;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.log4j.Logger;
+
 import service.framework.common.SerializeUtils;
+import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.event.ServiceEvent;
@@ -23,7 +26,7 @@ import service.framework.provide.ProviderBean;
  *
  */
 public class ServiceReadWriteHandler implements Handler {
-	private AtomicInteger aint = new AtomicInteger(0);
+	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class); 
 	private final ProviderBean  providerBean;
 	
 	public ServiceReadWriteHandler(ProviderBean providerBean){
@@ -38,12 +41,9 @@ public class ServiceReadWriteHandler implements Handler {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				WorkingChannel channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-				//System.out.println(" receive message ... " + receiveData);
-				aint.incrementAndGet();
 				RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
 				ResponseEntity objResponseEntity = this.providerBean.prcessRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
-				//System.out.println(" send message ... " + SerializeUtils.serializeResponse(objResponseEntity));
 				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
 				channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 				channel.getWorker().writeFromUser(channel);
@@ -53,21 +53,18 @@ public class ServiceReadWriteHandler implements Handler {
 			}
 		}
 		else if(event instanceof ServiceOnChannelCloseExeptionEvent){
-			System.out.println("ServiceReadWriteHandler ServiceOnExeptionEvent happned ...");
+			logger.error("ServiceReadWriteHandler ServiceOnExeptionEvent happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
 			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
 			objServiceOnExeptionEvent.getExceptionHappen().printStackTrace();
 		}
 		else if(event instanceof ServiceOnErrorEvent){
-			System.out.println("出现了错误" + ((ServiceOnErrorEvent)event).getMsg());
+			logger.error("ServiceReadWriteHandler ServiceOnExeptionEvent happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
 		}
 		else if(event instanceof ServiceStartingEvent){
-            System.out.println("Server Service starting ...");
+			logger.debug("Server Service starting ...");
 		}
-		//服务启动，将服务注册到服务中心去
 		else if(event instanceof ServiceStartedEvent){
-			//这里将添加注册到服务中心的代码
-            System.out.println("Server Service started.");
+			logger.debug("Server Service starting ...");
 		}
-		//System.out.println("处理的条数为:" + aint.get());
 	}
 }

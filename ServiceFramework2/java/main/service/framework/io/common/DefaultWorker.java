@@ -64,12 +64,18 @@ public class DefaultWorker implements Worker {
 	public void run() {
 		signal.countDown();
 		logger.debug("start worker hashCode = " + this.hashCode());
-		// 监听
+		// Listening
 		while (true) {
 			try {
 				wakenUp.set(false);
 				int num = 0;
 				num = selector.select();
+				// If we shutdown the loop, then beak from the loop
+				if(isShutdown){
+					logger.debug("shutdown, break loop after select.");
+					shutdownSignal.countDown();
+					break;
+				}
 				processTaskQueue();
 				if (num > 0) {
 					Set selectedKeys = selector.selectedKeys();
@@ -87,7 +93,15 @@ public class DefaultWorker implements Worker {
 						} 
 					}
 				} 
-			} catch (Exception e) {
+			} catch (IOException e) {
+				if(isShutdown){
+					logger.debug("shutdown, break loop after ioexception. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
+					shutdownSignal.countDown();
+					break;
+				}
+				logger.error("not expected interruptedException happened. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
 				continue;
 			}
 		}
@@ -97,8 +111,13 @@ public class DefaultWorker implements Worker {
 	 * shutdown 
 	 */
 	public void shutdown(){
-		Thread.currentThread().interrupt();
+		logger.debug("shutdown.");
 		isShutdown = true;
+		if (selector != null) {
+            if (wakenUp.compareAndSet(false, true)) {
+                selector.wakeup();
+            }
+        }
 		eventDistributionHandler.shutdown();
 	}
 	
@@ -106,8 +125,13 @@ public class DefaultWorker implements Worker {
 	 * shutdown 
 	 */
 	public void shutdownImediate(){
-		Thread.currentThread().interrupt();
+		logger.debug("shutdown imediately.");
 		isShutdown = true;
+		if (selector != null) {
+            if (wakenUp.compareAndSet(false, true)) {
+                selector.wakeup();
+            }
+        }
 		try {
 			shutdownSignal.await();
 		} catch (InterruptedException e) {
@@ -118,7 +142,7 @@ public class DefaultWorker implements Worker {
 	}
 	
 	/**
-	 * 处理内部任务队列
+	 * deal with the task queue
 	 */
     private void processTaskQueue() {
         for (;;) {
@@ -136,7 +160,7 @@ public class DefaultWorker implements Worker {
     }
 	
 	/**
-	 * 写入数据
+	 * write data by user
 	 * @param key
 	 * @return
 	 */
@@ -166,11 +190,13 @@ public class DefaultWorker implements Worker {
 							sc.write(buffer);
 					} catch (IOException e) {
 						this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
-						e.printStackTrace();
+						logger.error("not expected interruptedException happened. exception detail : " 
+								+ StringUtils.ExceptionStackTraceToString(e));
 						try {
 							closeChannel(channel.getKey());
 						} catch (IOException e1) {
-							e1.printStackTrace();
+							logger.error("not expected interruptedException happened. exception detail : " 
+									+ StringUtils.ExceptionStackTraceToString(e1));
 						}
 					}
 				}
@@ -180,21 +206,12 @@ public class DefaultWorker implements Worker {
 	}
 
 	/**
-	 * 设置key的读状态
-	 * 
-	 * @param key
-	 */
-	protected void setOpWrite(SelectionKey key) {
-		key.interestOps(SelectionKey.OP_READ);
-	}
-
-	/**
-	 * 关闭通道
+	 * close the channel
 	 * 
 	 * @param sc
 	 * @throws IOException
 	 */
-	private void closeChannel(SelectionKey key ) throws IOException {
+	private void closeChannel(SelectionKey key) throws IOException {
 		key.cancel();
 		SocketChannel sc = (SocketChannel)key.channel();
 		sc.close();
@@ -235,8 +252,10 @@ public class DefaultWorker implements Worker {
         } catch (ClosedChannelException e) {
         	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceOnChanelClosedException(e, e.getMessage())));
             return false;
-        	// Can happen, and does not need a user attention.
-        } catch (IOException e) {
+        	
+        } 
+        // Can happen, and does not need a user attention.
+        catch (IOException e) {
         	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelIOExeptionEvent(objWorkingChannel, null, new ServiceOnChanelIOException(e, e.getMessage())));
         	return false;
         } 
@@ -264,7 +283,6 @@ public class DefaultWorker implements Worker {
 						public void run() {
 							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
 							event.setMessage(sendMessage);
-							//System.out.println("fired message ... " + sendMessage);
 							eventDistributionHandler.submitEventPool(event);
 						}
 						
@@ -272,30 +290,15 @@ public class DefaultWorker implements Worker {
 				}
 				
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("exception : " + e.getMessage());
+				logger.error("not expected interruptedException happened. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
 			}
 		}
 		return success;
 	}
 
 	/**
-	 * 数组扩容
-	 * 
-	 * @param src
-	 *            byte[] 源数组数据
-	 * @param size
-	 *            int 扩容的增加量
-	 * @return byte[] 扩容后的数组
-	 */
-	public static byte[] grow(byte[] src, int size) {
-		byte[] tmp = new byte[src.length + size];
-		System.arraycopy(src, 0, tmp, 0, src.length);
-		return tmp;
-	}
-
-	/**
-	 * 提交新的客户端写请求于主服务线程的回应池中
+	 * register a channel to the worker
 	 */
 	public WorkingChannel submitOpeRegister(SocketChannel schannel) {
 		WorkingChannel objWorkingChannel = new WorkingChannel(schannel, this);
@@ -304,14 +307,12 @@ public class DefaultWorker implements Worker {
 	}
 	
 	/**
-	 * 注册任务，主要是将通道注册到selector上
+	 * submit a register task to the task queue
 	 * @param task
 	 */
     protected final void registerTask(Runnable task) {
         taskQueue.add(task);
-
         Selector selector = this.selector;
-
         if (selector != null) {
             if (wakenUp.compareAndSet(false, true)) {
                 selector.wakeup();
@@ -323,7 +324,12 @@ public class DefaultWorker implements Worker {
             }
         }
     }
-	
+    
+	/**
+	 * this class is used to register the task to the worker
+	 * @author zhonxu
+	 *
+	 */
 	private final class RegisterTask implements Runnable {
 		
 		private WorkingChannel objWorkingChannel;

@@ -2,6 +2,8 @@ package service.framework.handlers;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import service.framework.common.SerializeUtils;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.comsume.Consume;
@@ -20,6 +22,7 @@ import service.framework.event.ServiceStartingEvent;
  *
  */
 public class ClientReadWriteHandler implements Handler {
+	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class);  
 	private final Consume consumerBean;
 	
 	public ClientReadWriteHandler(Consume consumerBean){
@@ -52,15 +55,13 @@ public class ClientReadWriteHandler implements Handler {
 		
 		}
 		else if(event instanceof ServiceOnErrorEvent){
-			System.out.println("there is a error comes out" + ((ServiceOnErrorEvent)event).getMsg());
+			logger.error("there is a error comes out" + ((ServiceOnErrorEvent)event).getMsg());
 		}
 		else if(event instanceof ServiceStartingEvent){
-            System.out.println("Server Service starting ...");
+			logger.debug("Server Service starting ...");
 		}
-		//服务启动，将服务注册到服务中心去
 		else if(event instanceof ServiceStartedEvent){
-			//这里将添加注册到服务中心的代码
-            System.out.println("Server Service started.");
+			logger.debug("Server Service starting ...");
 		}
 		
 	}

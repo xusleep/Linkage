@@ -21,7 +21,8 @@ public class StringUtils {
 	 */
 	public static String ExceptionStackTraceToString(Exception ex){
 		StringWriter sw = new StringWriter();  
-		PrintWriter pw = new PrintWriter(sw);  
+		PrintWriter pw = new PrintWriter(sw); 
+		pw.append("stack message: \r\n");
 		ex.printStackTrace(pw);
 		return sw.toString();
 	}

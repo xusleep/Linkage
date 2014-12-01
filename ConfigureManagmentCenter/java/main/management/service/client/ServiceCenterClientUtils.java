@@ -4,12 +4,15 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import management.service.center.common.ServiceCenterUtils;
 import management.service.center.comsume.DefaultRouteConsume;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.Consume;
 import service.framework.exception.ServiceException;
+import service.framework.io.common.DefaultWorker;
 import service.framework.properties.ServicePropertyEntity;
 import service.framework.properties.WorkingServicePropertyEntity;
 
@@ -21,6 +24,7 @@ import service.framework.properties.WorkingServicePropertyEntity;
  *
  */
 public final class ServiceCenterClientUtils {
+	private static Logger  logger = Logger.getLogger(ServiceCenterClientUtils.class);  
 
 	public static DefaultRouteConsume defaultRouteConsume = null;
 	
@@ -102,7 +106,7 @@ public final class ServiceCenterClientUtils {
 					subServiceInformation.setServiceName(serviceEntity.getServiceName());
 					subServiceInformation.setServiceVersion(serviceEntity.getServiceVersion());
 					serviceInformationList.add(subServiceInformation);
-					System.out.println("service name : " + serviceEntity.getServiceName() + " method name : " + methods[i].getName());
+					logger.debug("service name : " + serviceEntity.getServiceName() + " method name : " + methods[i].getName());
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();

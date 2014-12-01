@@ -18,7 +18,7 @@ public class ServiceException extends Exception {
 		this.innerException = innerException;
 	}
 	public String getMessage() {
-		return message;
+		return message + (this.getInnerException() != null ? "\r\ninner message: " + this.getInnerException().getMessage() : "");
 	}
 	public void setMessage(String message) {
 		this.message = message;
