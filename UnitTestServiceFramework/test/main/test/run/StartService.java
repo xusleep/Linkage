@@ -24,7 +24,14 @@ public class StartService {
     		serviceBootStrap.run();
     		clientBootStrap.run();
     		ServiceCenterClientUtils.defaultRouteConsume = clientBootStrap.getConsume();
-    		ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformationEntity, serviceBootStrap.getServicePropertyEntity());
+    		try {
+    			ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformationEntity, serviceBootStrap.getServicePropertyEntity());
+    		}
+    		catch (Exception e) {}
+    		
+    		Thread.sleep(1000);
+    		serviceBootStrap.shutdown();
+    		clientBootStrap.shutdown();
         }
         catch (Exception e) {
         	e.printStackTrace();

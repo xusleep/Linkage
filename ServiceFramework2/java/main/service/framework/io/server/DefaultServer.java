@@ -1,5 +1,6 @@
 package service.framework.io.server;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.SelectionKey;
@@ -11,6 +12,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 
@@ -39,6 +41,7 @@ public class DefaultServer implements Server {
 	private final EventDistributionMaster eventDistributionHandler;
 	private volatile boolean isShutdown = false;
 	private final CountDownLatch shutdownSignal;
+	protected final AtomicBoolean wakenUp = new AtomicBoolean();
 	private static Logger  logger = Logger.getLogger(DefaultServer.class);  
 	
 	public DefaultServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
@@ -66,7 +69,7 @@ public class DefaultServer implements Server {
 	}
 
 	public void run() {
-		logger.debug("service is starting ...");
+		logger.debug("start the server.");
 		eventDistributionHandler.start();
 		workerPool.start();
 		workerPool.waitReady();
@@ -74,8 +77,16 @@ public class DefaultServer implements Server {
 		// ¼àÌý
 		while (true) {
 			try {
+				wakenUp.set(false);
 				int num = 0;
 				num = selector.select();
+				// If we shutdown the loop, then beak from the loop
+				if(isShutdown){
+					logger.debug("shutdown, break loop after select.");
+					shutdownSignal.countDown();
+					doJobAfterShutdown();
+					break;
+				}
 				if (num > 0) {
 					Set selectedKeys = selector.selectedKeys();
 					Iterator it = selectedKeys.iterator();
@@ -93,9 +104,28 @@ public class DefaultServer implements Server {
 						} 
 					}
 				} 
-			} catch (Exception e) {
+			} catch (IOException e) {
+				if(isShutdown){
+					logger.debug("shutdown, break loop after ioexception. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
+					shutdownSignal.countDown();
+					doJobAfterShutdown();
+					break;
+				}
+				logger.error("not expected interruptedException happened. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
 				continue;
 			}
+		}
+	}
+	
+	private void doJobAfterShutdown(){
+		try {
+			sschannel.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
 		}
 	}
 	
@@ -103,17 +133,28 @@ public class DefaultServer implements Server {
 	 * shutdown 
 	 */
 	public void shutdown(){
-		Thread.currentThread().interrupt();
+		logger.debug("shutdown.");
 		isShutdown = true;
+		if (selector != null) {
+            if (wakenUp.compareAndSet(false, true)) {
+                selector.wakeup();
+            }
+        }
 		eventDistributionHandler.shutdown();
+		workerPool.shutdown();
 	}
 	
 	/**
 	 * shutdown 
 	 */
 	public void shutdownImediate(){
-		Thread.currentThread().interrupt();
+		logger.debug("shutdown imediately.");
 		isShutdown = true;
+		if (selector != null) {
+            if (wakenUp.compareAndSet(false, true)) {
+                selector.wakeup();
+            }
+        }
 		try {
 			shutdownSignal.await();
 		} catch (InterruptedException e) {
@@ -121,6 +162,7 @@ public class DefaultServer implements Server {
 					+ StringUtils.ExceptionStackTraceToString(e));
 		}
 		eventDistributionHandler.shutdownImediate();
+		workerPool.shutdownImediate();
 	}
 
 	@Override

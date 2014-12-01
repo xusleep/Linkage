@@ -51,13 +51,18 @@ public class EventDistributionMaster extends Thread {
             try 
             {
             	final ServiceEvent event = pool.take();
+            	if(Thread.currentThread().isInterrupted() && isShutdown)
+            	{
+            		break;
+            	}
             	// handle the event to thread poo
             	handleEvent(event);
             }
             catch (InterruptedException e) {
+            	logger.debug("shut down invoke InterruptedException.");
             	if(pool.size() == 0 && isShutdown)
             	{
-            		logger.debug("shut down.");
+            		logger.debug("shut down by InterruptedException.");
             		shutdownSignal.countDown();
             		break;
             	}
@@ -83,6 +88,8 @@ public class EventDistributionMaster extends Thread {
             	}
             }
         }
+        
+        logger.debug("EventDistributionMaster stop running ... hashCode = " + this.hashCode());
 	}
 
 	/**
@@ -108,22 +115,26 @@ public class EventDistributionMaster extends Thread {
 	 * shutdown 
 	 */
 	public void shutdown(){
-		Thread.currentThread().interrupt();
+		logger.debug("shutdown master.");
 		isShutdown = true;
+		this.interrupt();
+		objExecutorService.shutdownNow();
 	}
 	
 	/**
 	 * shutdown 
 	 */
 	public void shutdownImediate(){
-		Thread.currentThread().interrupt();
+		logger.debug("shutdown imediate master.");
 		isShutdown = true;
+		Thread.currentThread().interrupt();
 		try {
 			shutdownSignal.await();
 		} catch (InterruptedException e) {
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e));
 		}
+		objExecutorService.shutdown();
 	}
 	
 	/**

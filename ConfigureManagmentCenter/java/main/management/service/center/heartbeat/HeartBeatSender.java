@@ -17,9 +17,19 @@ import service.framework.exception.NoServiceRegisteredException;
 public class HeartBeatSender implements Runnable {
 	private static Logger  logger = Logger.getLogger(HeartBeatSender.class); 
 	private final Consume consume;
+	private volatile boolean isShutdown = false;
 	
 	public HeartBeatSender(Consume consume){
 		this.consume = consume;
+	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdown()
+	{
+		logger.debug("shutdown heat beat sender.");
+		isShutdown = true;
 	}
 	
 	@Override
@@ -27,6 +37,8 @@ public class HeartBeatSender implements Runnable {
 		while(true){
 			try {
 				Thread.sleep(2000);
+				if(isShutdown)
+					break;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

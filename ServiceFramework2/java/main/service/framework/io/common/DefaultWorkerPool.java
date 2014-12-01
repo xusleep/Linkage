@@ -5,6 +5,7 @@ import java.util.concurrent.CountDownLatch;
 
 import org.apache.log4j.Logger;
 
+import service.framework.common.StringUtils;
 import service.framework.distribution.EventDistributionMaster;
 
 /**
@@ -31,7 +32,8 @@ public class DefaultWorkerPool implements WorkerPool {
 			try {
 				workers[i] = new DefaultWorker(eventDistributionHandler, signal);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("not expected interruptedException happened. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
 			}
 		}
 	}
@@ -44,12 +46,14 @@ public class DefaultWorkerPool implements WorkerPool {
 			try {
 				workers[i] = new DefaultWorker(eventDistributionHandler, signal);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("not expected interruptedException happened. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
 			}
 		}
 	}
 	
 	public void start(){
+		logger.debug("starting all of  the worker.");
 		for(int i = 0; i < workers.length; i++){
 			new Thread(workers[i]).start();
 		}
@@ -69,19 +73,26 @@ public class DefaultWorkerPool implements WorkerPool {
 		try {
 			signal.await();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
 		}
 	}
 
 	@Override
 	public void shutdown() {
+		logger.debug("shutdown all of the workers.");
 		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < workers.length; i++){
+			workers[i].shutdown();
+		}
 	}
 
 	@Override
 	public void shutdownImediate() {
+		logger.debug("shutdown imediate all of the workers.");
 		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < workers.length; i++){
+			workers[i].shutdownImediate();
+		}
 	}
 }

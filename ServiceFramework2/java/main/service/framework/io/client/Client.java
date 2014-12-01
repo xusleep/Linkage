@@ -8,4 +8,12 @@ public interface Client extends Runnable{
 	public EventDistributionMaster getEventDistributionHandler();
 	// wait for every thing ready
 	public void waitReady();
+	/**
+	 * shutdown 
+	 */
+	public void shutdown();
+	/**
+	 * shutdown imediate
+	 */
+	public void shutdownImediate();
 }

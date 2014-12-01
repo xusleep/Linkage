@@ -38,10 +38,6 @@ public class ServerBootStrap implements Runnable {
 
 	}
 
-	public void stop(){
-		
-	}
-
 	public ProviderBean getProviderBean() {
 		return providerBean;
 	}
@@ -58,5 +54,21 @@ public class ServerBootStrap implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		new Thread(server).start();
+	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdown()
+	{
+		server.shutdown();
+	}
+	
+	/**
+	 * shutdown imediate
+	 */
+	public void shutdownImediate()
+	{
+		server.shutdownImediate();
 	}
 }

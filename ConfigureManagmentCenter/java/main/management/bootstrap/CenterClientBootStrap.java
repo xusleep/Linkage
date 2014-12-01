@@ -67,4 +67,19 @@ public class CenterClientBootStrap implements Runnable {
 	public EventDistributionMaster getEventDistributionHandler() {
 		return eventDistributionHandler;
 	}
+	
+	/**
+	 * shutdown 
+	 */
+	public void shutdown()
+	{
+		client.shutdown();
+	}
+	/**
+	 * shutdown imediate
+	 */
+	public void shutdownImediate()
+	{
+		client.shutdownImediate();
+	}
 }

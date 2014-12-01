@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
@@ -30,7 +29,6 @@ import service.framework.exception.ServiceException;
 import service.framework.exception.ServiceOnChanelClosedException;
 import service.framework.exception.ServiceOnChanelIOException;
 import service.framework.io.protocol.ShareingProtocolData;
-import service.framework.io.server.DefaultServer;
 
 /**
  * <p>
@@ -111,21 +109,20 @@ public class DefaultWorker implements Worker {
 	 * shutdown 
 	 */
 	public void shutdown(){
-		logger.debug("shutdown.");
+		logger.debug("shutdown worker.");
 		isShutdown = true;
 		if (selector != null) {
             if (wakenUp.compareAndSet(false, true)) {
                 selector.wakeup();
             }
         }
-		eventDistributionHandler.shutdown();
 	}
 	
 	/**
 	 * shutdown 
 	 */
 	public void shutdownImediate(){
-		logger.debug("shutdown imediately.");
+		logger.debug("shutdown worker imediately.");
 		isShutdown = true;
 		if (selector != null) {
             if (wakenUp.compareAndSet(false, true)) {
@@ -138,7 +135,6 @@ public class DefaultWorker implements Worker {
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e));
 		}
-		eventDistributionHandler.shutdownImediate();
 	}
 	
 	/**

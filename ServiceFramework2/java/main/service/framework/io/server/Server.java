@@ -8,4 +8,12 @@ public interface Server extends Runnable{
 	public EventDistributionMaster getMasterHandler();
 	// wait for every thing ready
 	public void waitReady();
+	/**
+	 * shutdown 
+	 */
+	public void shutdown();
+	/**
+	 * shutdown imediate
+	 */
+	public void shutdownImediate();
 }
