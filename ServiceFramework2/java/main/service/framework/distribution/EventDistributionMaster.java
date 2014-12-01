@@ -45,7 +45,7 @@ public class EventDistributionMaster extends Thread {
 
 	@Override
 	public void run() {
-		logger.debug("EventDistributionMaster start running ...");
+		logger.debug("EventDistributionMaster start running ... hashCode = " + this.hashCode());
 		// TODO Auto-generated method stub
         while (true) {
             try 
