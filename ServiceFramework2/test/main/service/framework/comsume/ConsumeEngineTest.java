@@ -16,7 +16,6 @@ import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.provide.ProviderBean;
 
 public class ConsumeEngineTest {
 	private ServerBootStrap serviceBootStrap;
@@ -59,13 +58,6 @@ public class ConsumeEngineTest {
 		}
 	 }
 	 
-	 @Test
-	 /**
-	  * this method will concurrent request the Method basicProcessRequest
-	  */
-	 public void testConcurrentBasicProcessRequest(){
-		 
-	 }
 	 
 	 @After
 	 @SuppressWarnings("unchecked")
