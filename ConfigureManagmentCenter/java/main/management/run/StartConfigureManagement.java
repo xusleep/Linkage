@@ -21,10 +21,10 @@ public class StartConfigureManagement {
 			clientBootStrap.run();
 			HeartBeatSender objHeartBeatSender = new HeartBeatSender(clientBootStrap.getConsume());
 			new Thread(objHeartBeatSender).start();
-			Thread.sleep(1000);
-			objServerBootStrap.shutdown();
-			objHeartBeatSender.shutdown();
-			clientBootStrap.shutdown();
+			//Thread.sleep(1000);
+			//objServerBootStrap.shutdown();
+			//objHeartBeatSender.shutdown();
+			//clientBootStrap.shutdown();
     	} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

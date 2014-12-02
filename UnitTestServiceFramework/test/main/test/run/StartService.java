@@ -31,9 +31,9 @@ public class StartService {
     			
     		}
     		
-    		Thread.sleep(1000);
-    		serviceBootStrap.shutdownImediate();
-    		clientBootStrap.shutdownImediate();
+    		//Thread.sleep(1000);
+    		//serviceBootStrap.shutdownImediate();
+    		//clientBootStrap.shutdownImediate();
         }
         catch (Exception e) {
         	e.printStackTrace();
