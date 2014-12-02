@@ -185,7 +185,7 @@ public class DefaultWorker implements Worker {
 						while(buffer.hasRemaining())
 							sc.write(buffer);
 					} catch (IOException e) {
-						this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
+						this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
 						logger.error("not expected interruptedException happened. exception detail : " 
 								+ StringUtils.ExceptionStackTraceToString(e));
 						try {
@@ -246,13 +246,13 @@ public class DefaultWorker implements Worker {
             }
             success = true;
         } catch (ClosedChannelException e) {
-        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceOnChanelClosedException(e, e.getMessage())));
+        	this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceOnChanelClosedException(e, e.getMessage())));
             return false;
         	
         } 
         // Can happen, and does not need a user attention.
         catch (IOException e) {
-        	this.eventDistributionHandler.submitEventPool(new ServiceOnChannelIOExeptionEvent(objWorkingChannel, null, new ServiceOnChanelIOException(e, e.getMessage())));
+        	this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelIOExeptionEvent(objWorkingChannel, null, new ServiceOnChanelIOException(e, e.getMessage())));
         	return false;
         } 
         if (readBytes > 0) {
@@ -279,7 +279,7 @@ public class DefaultWorker implements Worker {
 						public void run() {
 							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
 							event.setMessage(sendMessage);
-							eventDistributionHandler.submitEventPool(event);
+							eventDistributionHandler.submitServiceEvent(event);
 						}
 						
 					});
@@ -346,7 +346,7 @@ public class DefaultWorker implements Worker {
 					schannel.finishConnect();
 					schannel.close();
 					schannel.socket().close();
-					eventDistributionHandler.submitEventPool(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
+					eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
 				} catch (Exception e1) {
 				}
 			}

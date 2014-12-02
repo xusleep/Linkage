@@ -46,7 +46,7 @@ public class DefaultServer implements Server {
 	
 	public DefaultServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
 		this.eventDistributionHandler = eventDistributionHandler;
-		eventDistributionHandler.submitEventPool(new ServiceStartingEvent());
+		eventDistributionHandler.submitServiceEvent(new ServiceStartingEvent());
 		// 创建无阻塞网络套接
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
@@ -73,7 +73,7 @@ public class DefaultServer implements Server {
 		eventDistributionHandler.start();
 		workerPool.start();
 		workerPool.waitReady();
-		eventDistributionHandler.submitEventPool(new ServiceStartedEvent());
+		eventDistributionHandler.submitServiceEvent(new ServiceStartedEvent());
 		// 监听
 		while (true) {
 			try {

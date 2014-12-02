@@ -88,7 +88,7 @@ public class EventDistributionMaster extends Thread {
 	/**
 	 * submit a event to the pool
 	 */
-	public void submitEventPool(ServiceEvent event) {
+	public void submitServiceEvent(ServiceEvent event) {
 		try {
 			if(!isShutdown)
 			{
