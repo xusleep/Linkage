@@ -11,10 +11,9 @@ import management.service.client.ServiceCenterClientUtils;
 import service.framework.bootstrap.ServerBootStrap;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.Consume;
-import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
-import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
-import zhonglin.test.framework.concurrence.condition.job.JobInterface;
+import test.framework.concurrence.condition.MainConcurrentThread;
+import test.framework.concurrence.condition.job.AbstractJob;
+import test.framework.concurrence.condition.job.JobInterface;
 
 /**
  * <p>

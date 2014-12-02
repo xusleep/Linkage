@@ -10,9 +10,9 @@ import management.bootstrap.CenterClientBootStrap;
 import management.service.center.comsume.DefaultRouteConsume;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
-import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
-import zhonglin.test.framework.concurrence.condition.job.JobInterface;
+import test.framework.concurrence.condition.MainConcurrentThread;
+import test.framework.concurrence.condition.job.AbstractJob;
+import test.framework.concurrence.condition.job.JobInterface;
 
 /**
  * <p>
