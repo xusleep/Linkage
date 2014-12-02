@@ -27,11 +27,13 @@ public class StartService {
     		try {
     			ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformationEntity, serviceBootStrap.getServicePropertyEntity());
     		}
-    		catch (Exception e) {}
+    		catch (Exception e) {
+    			
+    		}
     		
     		Thread.sleep(1000);
-    		serviceBootStrap.shutdown();
-    		clientBootStrap.shutdown();
+    		serviceBootStrap.shutdownImediate();
+    		clientBootStrap.shutdownImediate();
         }
         catch (Exception e) {
         	e.printStackTrace();

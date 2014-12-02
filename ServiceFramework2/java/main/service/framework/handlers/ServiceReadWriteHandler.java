@@ -1,7 +1,6 @@
 package service.framework.handlers;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
@@ -20,7 +19,7 @@ import service.framework.io.common.WorkingChannel;
 import service.framework.provide.ProviderBean;
 
 /**
- * 这里是默认的事件处理handler
+ * Service handler from the server side
  * 
  * @author zhonxu
  *
@@ -48,8 +47,7 @@ public class ServiceReadWriteHandler implements Handler {
 				channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 				channel.getWorker().writeFromUser(channel);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("ServiceReadWriteHandler exception happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
 			}
 		}
 		else if(event instanceof ServiceOnChannelCloseExeptionEvent){

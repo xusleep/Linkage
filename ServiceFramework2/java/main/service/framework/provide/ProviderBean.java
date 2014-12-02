@@ -1,20 +1,34 @@
 package service.framework.provide;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.log4j.Logger;
+
+import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.properties.ServicePropertyEntity;
 import service.framework.properties.WorkingServicePropertyEntity;
 
+/**
+ * This class provide a service access point 
+ * for all of the service
+ * @author zhonxu
+ *
+ */
 public class ProviderBean {
 	private final WorkingServicePropertyEntity servicePropertyEntity;
+	private static Logger  logger = Logger.getLogger(ProviderBean.class); 
 	
 	public ProviderBean(WorkingServicePropertyEntity servicePropertyEntity){
 		this.servicePropertyEntity = servicePropertyEntity;
 	}
 	
+	/**
+	 * search the service from the service list
+	 * @param serviceName
+	 * @return
+	 */
 	private ServicePropertyEntity searchService(String serviceName){
 		for(ServicePropertyEntity entity : servicePropertyEntity.getServiceList()){
 			if(entity.getServiceName().equals(serviceName)){
@@ -24,6 +38,11 @@ public class ProviderBean {
 		return null;
 	}
 	
+	/**
+	 * process the request from the client
+	 * @param request
+	 * @return
+	 */
 	public ResponseEntity prcessRequest(RequestEntity request){
 		ServicePropertyEntity entity = searchService(request.getServiceName());
 		if(entity == null){
@@ -50,25 +69,14 @@ public class ProviderBean {
 				response.setRequestID(request.getRequestID());
 				return response;
 			}
-		} catch (IllegalAccessException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			logger.error("unexpected exception happened. exception detail:" + StringUtils.ExceptionStackTraceToString(e));
+			ResponseEntity response = new ResponseEntity();
+			response.setResult("no service found in the server.");
+			response.setRequestID(request.getRequestID());
+			return response;
+		} 
 		return new ResponseEntity();
 	}
 }

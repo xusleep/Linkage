@@ -40,7 +40,7 @@ public class ClientReadWriteHandler implements Handler {
 				objServiceOnMessageReceiveEvent.getWorkingChannel().setRequestResult(objResponseEntity);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("there is a error comes out: " + ((ServiceOnErrorEvent)event).getMsg());
 			}
 		}
 		else if(event instanceof ServiceOnChannelCloseExeptionEvent ){

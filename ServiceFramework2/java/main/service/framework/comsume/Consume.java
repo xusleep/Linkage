@@ -63,4 +63,6 @@ public interface Consume {
 	 * @param requestID
 	 */
 	public void removeCachedChannel(WorkingChannel objWorkingChannel);
+	
+	public ConsumeEngine getConsumeEngine(); 
 }

@@ -3,7 +3,6 @@ package service.framework.distribution;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,13 +23,11 @@ public class EventDistributionMaster extends Thread {
 	public final ExecutorService objExecutorService;
 	private final List<Handler> eventHandlerList;
 	private volatile boolean isShutdown = false;
-	private final CountDownLatch shutdownSignal;
 	private static Logger  logger = Logger.getLogger(EventDistributionMaster.class);  
 
 	public EventDistributionMaster(int taskThreadPootSize){
 		this.objExecutorService = Executors.newFixedThreadPool(taskThreadPootSize);
 		this.eventHandlerList = new LinkedList<Handler>();
-		shutdownSignal = new CountDownLatch(1);
 	}
 	
 	/**
@@ -46,7 +43,6 @@ public class EventDistributionMaster extends Thread {
 	@Override
 	public void run() {
 		logger.debug("EventDistributionMaster start running ... hashCode = " + this.hashCode());
-		// TODO Auto-generated method stub
         while (true) {
             try 
             {
@@ -63,7 +59,6 @@ public class EventDistributionMaster extends Thread {
             	if(pool.size() == 0 && isShutdown)
             	{
             		logger.debug("shut down by InterruptedException.");
-            		shutdownSignal.countDown();
             		break;
             	}
             	else if(pool.size() > 0 && isShutdown){
@@ -74,12 +69,10 @@ public class EventDistributionMaster extends Thread {
 	                    	// handle the event to thread pool
 	                    	handleEvent(event);
 						} catch (InterruptedException e1) {
-							// TODO Auto-generated catch block
 							logger.error("not expected interruptedException happened. exception detail : " 
 											+ StringUtils.ExceptionStackTraceToString(e1));
 						}
             		}
-            		shutdownSignal.countDown();
             		break;
             	}
             	else
@@ -127,13 +120,7 @@ public class EventDistributionMaster extends Thread {
 	public void shutdownImediate(){
 		logger.debug("shutdown imediate master.");
 		isShutdown = true;
-		Thread.currentThread().interrupt();
-		try {
-			shutdownSignal.await();
-		} catch (InterruptedException e) {
-			logger.error("not expected interruptedException happened. exception detail : " 
-					+ StringUtils.ExceptionStackTraceToString(e));
-		}
+		this.interrupt();
 		objExecutorService.shutdown();
 	}
 	
@@ -151,7 +138,6 @@ public class EventDistributionMaster extends Thread {
             			handler.handleRequest(event);
             		}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					logger.error("not expected exception happened. exception detail : " 
 							+ StringUtils.ExceptionStackTraceToString(e));
 				}

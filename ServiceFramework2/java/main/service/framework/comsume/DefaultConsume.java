@@ -60,5 +60,10 @@ public class DefaultConsume implements Consume {
 		// TODO Auto-generated method stub
 		consumeEngine.removeCachedChannel(objWorkingChannel);
 	}
-	
+
+	@Override
+	public ConsumeEngine getConsumeEngine() {
+		// TODO Auto-generated method stub
+		return consumeEngine;
+	}
 }
