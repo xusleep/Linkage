@@ -71,6 +71,7 @@ public class ClientBootStrap implements Runnable {
 	{
 		client.shutdown();
 	}
+	
 	/**
 	 * shutdown imediate
 	 */

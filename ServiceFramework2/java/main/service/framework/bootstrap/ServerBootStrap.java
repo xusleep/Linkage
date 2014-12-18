@@ -39,8 +39,6 @@ public class ServerBootStrap implements Runnable {
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
 		this.server = new DefaultServer(servicePropertyEntity.getServiceAddress(), servicePropertyEntity.getServicePort(),
 				eventDistributionHandler, workerPool);
-		
-
 	}
 
 	public ProviderBean getProviderBean() {

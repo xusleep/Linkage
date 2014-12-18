@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class StringUtils {
+	
 	/**
 	 * check the string is empty or null
 	 * @param str
