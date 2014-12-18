@@ -12,7 +12,6 @@ import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.comsume.Consume;
-import service.framework.exception.NoServiceRegisteredException;
 
 public class HeartBeatSender implements Runnable {
 	private static Logger  logger = Logger.getLogger(HeartBeatSender.class); 
@@ -59,15 +58,13 @@ public class HeartBeatSender implements Runnable {
 				// we have to remove the service from the service list
 				if(result.isException())
 				{
-					if(result.getException().getInnerException() instanceof NoServiceRegisteredException){
-						logger.debug("service :" + objServiceInformationEntity.toString() + " no service found ...");
-						try {
-							logger.debug("sleep 1000ms.");
-							Thread.sleep(10000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							logger.error("HeartBeatSender unexpected exception happned ..." + StringUtils.ExceptionStackTraceToString(e));
-						}
+					logger.debug("service :" + objServiceInformationEntity.toString() + " no service found ...");
+					try {
+						logger.debug("sleep 1000ms.");
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						logger.error("HeartBeatSender unexpected exception happned ..." + StringUtils.ExceptionStackTraceToString(e));
 					}
 					logger.error("HeartBeatSender unexpected exception happned ..." + StringUtils.ExceptionStackTraceToString(result.getException()));
 					if(result.getServiceInformationEntity() != null)
