@@ -1,5 +1,11 @@
 package service.framework.exception;
 
+/**
+ * this is a service  channel close exception defined for this frame work
+ * the exception will be wrapped by it.
+ * @author zhonxu
+ *
+ */
 public class ServiceOnChanelClosedException extends ServiceException {
 
 	public ServiceOnChanelClosedException(Exception innerException,

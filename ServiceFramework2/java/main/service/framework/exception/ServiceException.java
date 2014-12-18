@@ -2,7 +2,16 @@ package service.framework.exception;
 
 import java.io.PrintStream;
 
+/**
+ * this is a service exception defined for this frame work
+ * the exception will be wrapped by it.
+ * @author zhonxu
+ *
+ */
 public class ServiceException extends Exception {
+	/**
+	 * this exception will be set when there is excetion happen
+	 */
 	private Exception innerException;
 	private String message;
 	
