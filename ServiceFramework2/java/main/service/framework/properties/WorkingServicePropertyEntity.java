@@ -10,6 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * this class used to read the properties from the service
+ * @author zhonxu
+ *
+ */
 public class WorkingServicePropertyEntity {
 	
 	private final String serviceAddress;

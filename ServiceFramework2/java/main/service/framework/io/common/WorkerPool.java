@@ -2,6 +2,11 @@ package service.framework.io.common;
 
 import java.nio.channels.SocketChannel;
 
+/**
+ * worker pool interface
+ * @author zhonxu
+ *
+ */
 public interface WorkerPool {
 	public void start();
 	public Worker getNextWorker();

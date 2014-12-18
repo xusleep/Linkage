@@ -24,8 +24,8 @@ import service.framework.io.common.WorkerPool;
 
 /**
  * <p>
- * Title: 主控服务线程
- * 主要用于，建立与客户端的连接
+ * this class is used the start a server
+ * the server will accept the connection and put it into the work pool
  * </p>
  * 
  * @author starboy

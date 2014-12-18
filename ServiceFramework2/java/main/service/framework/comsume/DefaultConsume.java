@@ -9,6 +9,11 @@ import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
 import service.framework.properties.WorkingClientPropertyEntity;
 
+/**
+ * the default consume which wrapped the method request
+ * @author zhonxu
+ *
+ */
 public class DefaultConsume implements Consume {
 	
 	protected ConsumeEngine consumeEngine;

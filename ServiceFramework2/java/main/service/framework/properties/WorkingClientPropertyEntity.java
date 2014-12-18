@@ -8,6 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * this class used to read the properties from the client
+ * @author zhonxu
+ *
+ */
 public class WorkingClientPropertyEntity {
 	private final List<ClientPropertyEntity> serviceClientList = new LinkedList<ClientPropertyEntity>();
 	

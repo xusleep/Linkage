@@ -5,6 +5,12 @@ import org.apache.log4j.Logger;
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.io.common.WorkerPool;
 
+/**
+ * this class will be used in the client
+ * a facade pattern used to capsulate all of the behavior 
+ * @author zhonxu
+ *
+ */
 public class DefaultClient implements Client {
 	private final WorkerPool workerPool;
 	private final EventDistributionMaster eventDistributionHandler;

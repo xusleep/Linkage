@@ -1,5 +1,10 @@
 package service.framework.properties;
 
+/**
+ * store the service information from properties
+ * @author zhonxu
+ *
+ */
 public class ServicePropertyEntity {
 	private String serviceInterface;
 	private String serviceName;

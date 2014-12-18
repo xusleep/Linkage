@@ -15,7 +15,12 @@ import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.exception.ServiceException;
 import service.framework.io.protocol.ShareingProtocolData;
 
-
+/**
+ * hold the object when request a connect,
+ * the system will be wrapped by.
+ * @author zhonxu
+ *
+ */
 public class WorkingChannel {
 	
     /**

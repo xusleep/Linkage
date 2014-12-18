@@ -1,5 +1,10 @@
 package service.framework.properties;
 
+/**
+ * store the client information from properties
+ * @author zhonxu
+ *
+ */
 public class ClientPropertyEntity {
 	private String serviceName;
 	private String serviceMethod;

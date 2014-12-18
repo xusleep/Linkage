@@ -31,14 +31,11 @@ import service.framework.exception.ServiceOnChanelIOException;
 import service.framework.io.protocol.ShareingProtocolData;
 
 /**
- * <p>
- * Title: 主控服务线程 主要用于，建立与客户端的连接
- * </p>
- * 
- * @author starboy
- * @version 1.0
+ * this is default worker, will be used when there is connection established 
+ * it will deal with the message send&receive between the client and service
+ * @author zhonxu
+ *
  */
-
 public class DefaultWorker implements Worker {
 	private final Queue<Runnable> taskQueue = new ConcurrentLinkedQueue<Runnable>();
 	protected final AtomicBoolean wakenUp = new AtomicBoolean();
@@ -51,7 +48,6 @@ public class DefaultWorker implements Worker {
 	private static Logger  logger = Logger.getLogger(DefaultWorker.class);  
 	
 	public DefaultWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
-		// 创建无阻塞网络套接
 		selector = Selector.open();
 		this.objExecutorService = Executors.newFixedThreadPool(10);
 		this.signal = signal;
