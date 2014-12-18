@@ -9,6 +9,11 @@ import service.framework.io.server.Server;
 import service.framework.properties.WorkingServicePropertyEntity;
 import service.framework.provide.ProviderBean;
 
+/**
+ * this is boot strap used from the server side
+ * @author zhonxu
+ *
+ */
 public class ServerBootStrap implements Runnable {
 	private final Server server;
 	private final ProviderBean providerBean;
