@@ -1,5 +1,7 @@
 package service.framework.bootstrap;
 
+import java.io.IOException;
+
 import service.framework.comsume.Consume;
 import service.framework.comsume.DefaultConsume;
 import service.framework.distribution.EventDistributionMaster;
@@ -29,7 +31,12 @@ public class ClientBootStrap implements Runnable {
 	 */
 	public ClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
 		// read the configuration from the properties
-		WorkingClientPropertyEntity objServicePropertyEntity = new WorkingClientPropertyEntity(propertyPath);
+		WorkingClientPropertyEntity objServicePropertyEntity = null;
+		try {
+			objServicePropertyEntity = new WorkingClientPropertyEntity(propertyPath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// new a task handler, this handler will handle all of the task from the pool queue
 		// into the executor pool(thread pool) which will execute the task.
 		eventDistributionHandler = new EventDistributionMaster(clientTaskThreadPootSize);

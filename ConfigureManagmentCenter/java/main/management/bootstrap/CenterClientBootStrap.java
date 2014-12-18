@@ -1,5 +1,7 @@
 package management.bootstrap;
 
+import java.io.IOException;
+
 import management.service.center.ServiceCenter;
 import management.service.center.comsume.DefaultRouteConsume;
 import management.service.center.route.Route;
@@ -33,7 +35,13 @@ public class CenterClientBootStrap implements Runnable {
 	 */
 	public CenterClientBootStrap(String propertyPath, int clientTaskThreadPootSize, ServiceInformationEntity centerServiceInformationEntity){
 		// read the configuration from the properties
-		WorkingClientPropertyEntity objServicePropertyEntity = new WorkingClientPropertyEntity(propertyPath);
+		WorkingClientPropertyEntity objServicePropertyEntity = null;
+		try {
+			objServicePropertyEntity = new WorkingClientPropertyEntity(propertyPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// new a task handler, this handler will handle all of the task from the pool queue
 		// into the executor pool(thread pool) which will execute the task.
 		eventDistributionHandler = new EventDistributionMaster(clientTaskThreadPootSize);

@@ -16,20 +16,22 @@ import java.util.Properties;
 public class WorkingClientPropertyEntity {
 	private final List<ClientPropertyEntity> serviceClientList = new LinkedList<ClientPropertyEntity>();
 	
-	public WorkingClientPropertyEntity(String propertyFileName){
+	public WorkingClientPropertyEntity(String propertyFileName) throws IOException {
 		InputStream inputStream = WorkingClientPropertyEntity.class.getClassLoader().getResourceAsStream(propertyFileName);
-		//创建一个Properties容器 
+		//create a new Properties
         Properties properties = new Properties(); 
-        //从流中加载properties文件信息 
-        try {
-			properties.load(inputStream);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-        readClientList(properties);
+        // load properties 
+        properties.load(inputStream);
+        if(properties != null)
+        {
+        	readClientList(properties);
+        }
 	}
 	
+	/**
+	 * read the information from the properties 
+	 * @param properties
+	 */
 	private void readClientList(Properties properties){
 		for (int i = 1; i < 1000; i++) {
 			String clientName = properties.getProperty(CLIENT_START_STRING + i
