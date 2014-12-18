@@ -3,6 +3,11 @@ package service.framework.event;
 import service.framework.exception.ServiceException;
 import service.framework.io.common.WorkingChannel;
 
+/**
+ * this event will be triggered when there is a channel close exception happen
+ * @author zhonxu
+ *
+ */
 public class ServiceOnChannelCloseExeptionEvent implements ServiceEvent {
 	
 	private WorkingChannel workingChannel;

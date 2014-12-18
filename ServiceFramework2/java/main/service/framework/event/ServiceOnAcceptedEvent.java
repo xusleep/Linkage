@@ -1,11 +1,15 @@
 package service.framework.event;
 
 import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
 
 import service.framework.io.server.Server;
 
+/**
+ * this event will be triggered when there is one connection 
+ * accepted.
+ * @author zhonxu
+ *
+ */
 public class ServiceOnAcceptedEvent implements ServiceEvent {
 	private SelectionKey selectionKey;
 	private Server server;

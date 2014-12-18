@@ -2,6 +2,11 @@ package service.framework.event;
 
 import service.framework.io.common.WorkingChannel;
 
+/**
+ * this event will be triggered when there is a message need to be write in the channel
+ * @author zhonxu
+ *
+ */
 public class ServiceOnMessageWriteEvent implements ServiceEvent {
 	private WorkingChannel workingChannel;
 	private String message;

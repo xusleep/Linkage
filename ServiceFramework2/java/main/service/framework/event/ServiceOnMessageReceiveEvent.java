@@ -2,6 +2,11 @@ package service.framework.event;
 
 import service.framework.io.common.WorkingChannel;
 
+/**
+ * this event will be triggered when there is a message arrived
+ * @author zhonxu
+ *
+ */
 public class ServiceOnMessageReceiveEvent implements ServiceEvent {
 	private WorkingChannel workingChannel;
 	private String message;
