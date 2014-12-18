@@ -21,7 +21,7 @@ import service.framework.common.entity.ServiceInformationEntity;
 
 public class SerializeUtils {
 	/**
-	 * 将request实体序列化为字符串
+	 * serialize request entity
 	 * @param request
 	 * @return
 	 */
@@ -57,7 +57,7 @@ public class SerializeUtils {
 	}
 	
 	/**
-	 * 将request实体序列化为字符串
+	 * deserialize request entity
 	 * @param request
 	 * @return
 	 */
@@ -111,7 +111,7 @@ public class SerializeUtils {
 	}
 	
 	/**
-	 * 将request实体序列化为字符串
+	 * serialize Response entity
 	 * @param request
 	 * @return
 	 */
@@ -129,7 +129,7 @@ public class SerializeUtils {
 	}
 	
 	/**
-	 * 将request实体序列化为字符串
+	 * deserialize Response entity
 	 * @param request
 	 * @return
 	 */
