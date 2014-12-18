@@ -1,5 +1,10 @@
 package service.framework.common.entity;
 
+/**
+ * this class use to hold the information of a service
+ * @author zhonxu
+ *
+ */
 public class ServiceInformationEntity {
 	private String serviceName;
 	private String serviceMethod;

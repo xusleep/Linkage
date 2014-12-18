@@ -5,6 +5,11 @@ import java.util.concurrent.CountDownLatch;
 import service.framework.exception.ServiceException;
 import service.framework.io.common.WorkingChannel;
 
+/**
+ * this class stored the request result
+ * @author zhonxu
+ *
+ */
 public class RequestResultEntity {
 	private String requestID;
 	private ResponseEntity responseEntity;

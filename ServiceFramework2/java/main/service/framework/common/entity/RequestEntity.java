@@ -3,6 +3,11 @@ package service.framework.common.entity;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * this entity class stores the request information when request
+ * @author zhonxu
+ *
+ */
 public class RequestEntity {
 	private String serviceName;
 	private String methodName;

@@ -1,5 +1,10 @@
 package service.framework.common.entity;
 
+/**
+ * this class stores the information which response from the server
+ * @author zhonxu
+ *
+ */
 public class ResponseEntity {
 	private String requestID;
 	private String result;
