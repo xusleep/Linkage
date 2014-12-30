@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import service.middleware.linkage.framework.common.SerializeUtils;
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
+import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 public class SerializeUtilsTest {
 	
@@ -31,9 +31,9 @@ public class SerializeUtilsTest {
 		args.add("arg2&*^%");
 		args.add("arg3");
 		request.setArgs(args);
-		String serializeStr = SerializeUtils.serializeRequest(request);
+		String serializeStr = SerializationUtils.serializeRequest(request);
 		System.out.println("serializeStr : " + serializeStr);
-		RequestEntity result = SerializeUtils.deserializeRequest(serializeStr);
+		RequestEntity result = SerializationUtils.deserializeRequest(serializeStr);
 		assertTrue("result.getServiceName() not equals to <testServiceNmae> realvalue is " + result.getServiceName(),  result.getServiceName().equals("<testServiceNmae>"));
 		assertTrue("result.getMethodName()  not equals to test23%^Method& realvalue is " + result.getMethodName(),  result.getMethodName().equals("test23%^Method&"));
 		assertTrue("result.getGroup()       not equals to testGroup realvalue is " + result.getGroup(),  result.getGroup().equals("testGroup"));
@@ -52,9 +52,9 @@ public class SerializeUtilsTest {
 		ResponseEntity response = new ResponseEntity();
 		response.setRequestID("100001212");
 		response.setResult("sdsjdlfkj$@^!*#!4457@$$");
-		String serializeStr = SerializeUtils.serializeResponse(response);
+		String serializeStr = SerializationUtils.serializeResponse(response);
 		System.out.println("serializeStr : " + serializeStr);
-		ResponseEntity result = SerializeUtils.deserializeResponse(serializeStr);
+		ResponseEntity result = SerializationUtils.deserializeResponse(serializeStr);
 		assertTrue("result.getResult() not equals to sdsjdlfkj$@^!*#!4457@$$ realvalue is " + result.getResult(),  result.getResult().equals("sdsjdlfkj$@^!*#!4457@$$"));
 		assertTrue("result.setRequestID()   not equals to 100001212 realvalue is " + result.getRequestID(),  result.getRequestID().equals("100001212"));
 	}

@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.common;
+package service.middleware.linkage.framework.serialization;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,8 @@ import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 
-public class SerializeUtils {
+public class SerializationUtils {
+	
 	/**
 	 * serialize request entity
 	 * @param request

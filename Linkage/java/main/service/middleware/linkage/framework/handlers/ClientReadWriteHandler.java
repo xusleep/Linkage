@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.SerializeUtils;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.event.ServiceEvent;
 import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionEvent;
@@ -13,6 +12,7 @@ import service.middleware.linkage.framework.event.ServiceOnErrorEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
+import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
 
 /**
@@ -36,7 +36,7 @@ public class ClientReadWriteHandler implements Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-				ResponseEntity objResponseEntity = SerializeUtils.deserializeResponse(receiveData);
+				ResponseEntity objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
 				objServiceOnMessageReceiveEvent.getWorkingChannel().setRequestResult(objResponseEntity);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.SerializeUtils;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
@@ -17,6 +16,7 @@ import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
 import service.middleware.linkage.framework.io.common.WorkingChannel;
 import service.middleware.linkage.framework.provider.ServiceProvider;
+import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 /**
  * Service handler from the server side
@@ -39,10 +39,10 @@ public class ServiceReadWriteHandler implements Handler {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				WorkingChannel channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
-				RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
+				RequestEntity objRequestEntity = SerializationUtils.deserializeRequest(receiveData);
 				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
-				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
+				objServiceOnMessageWriteEvent.setMessage(SerializationUtils.serializeResponse(objResponseEntity));
 				channel.offerWriterQueue(objServiceOnMessageWriteEvent);
 				channel.getWorker().writeFromUser(channel);
 			} catch (Exception e) {

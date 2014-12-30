@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import service.middleware.linkage.framework.common.SerializeUtils;
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
@@ -18,6 +17,7 @@ import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannel;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
@@ -77,7 +77,7 @@ public class NIOServiceAccessEngine{
 		// put the request result into the request result list
 		newWorkingChannel.offerRequestResult(result);
 		ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
-		String sendData = SerializeUtils.serializeRequest(objRequestEntity);
+		String sendData = SerializationUtils.serializeRequest(objRequestEntity);
 		objServiceOnMessageWriteEvent.setMessage(sendData);
 		newWorkingChannel.offerWriterQueue(objServiceOnMessageWriteEvent);
 		newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
