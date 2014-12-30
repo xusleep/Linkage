@@ -1,8 +1,8 @@
 package test.run;
-import management.bootstrap.NIOCenterClientBootStrap;
-import management.service.client.ServiceCenterClientUtils;
-import service.framework.bootstrap.NIOServerBootStrap;
-import service.framework.common.entity.ServiceInformationEntity;
+import service.middleware.framework.bootstrap.NIOServerBootStrap;
+import service.middleware.framework.common.entity.ServiceInformationEntity;
+import service.middleware.management.bootstrap.NIOCenterClientBootStrap;
+import service.middleware.management.client.ServiceCenterClientUtils;
 
 
 /**

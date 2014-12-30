@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import management.bootstrap.NIOCenterClientBootStrap;
-import management.service.center.comsume.DefaultRouteConsume;
-import management.service.client.ServiceCenterClientUtils;
-import service.framework.bootstrap.NIOServerBootStrap;
-import service.framework.common.entity.RequestResultEntity;
-import service.framework.common.entity.ServiceInformationEntity;
+import service.middleware.framework.bootstrap.NIOServerBootStrap;
+import service.middleware.framework.common.entity.RequestResultEntity;
+import service.middleware.framework.common.entity.ServiceInformationEntity;
+import service.middleware.management.bootstrap.NIOCenterClientBootStrap;
+import service.middleware.management.center.comsume.DefaultRouteConsume;
+import service.middleware.management.client.ServiceCenterClientUtils;
 import test.framework.concurrence.condition.MainConcurrentThread;
 import test.framework.concurrence.condition.job.AbstractJob;
 import test.framework.concurrence.condition.job.JobInterface;

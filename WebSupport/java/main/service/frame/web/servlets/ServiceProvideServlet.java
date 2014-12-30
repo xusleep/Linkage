@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import management.bootstrap.NIOCenterClientBootStrap;
-import management.service.client.ServiceCenterClientUtils;
-import service.framework.bootstrap.NIOServerBootStrap;
-import service.framework.common.entity.ServiceInformationEntity;
+import service.middleware.framework.bootstrap.NIOServerBootStrap;
+import service.middleware.framework.common.entity.ServiceInformationEntity;
+import service.middleware.management.bootstrap.NIOCenterClientBootStrap;
+import service.middleware.management.client.ServiceCenterClientUtils;
 
 /**
  * This servlet is used to start the service from the web
