@@ -35,12 +35,13 @@ public class WorkingChannel {
     /**
      * Queue of write {@link ServiceOnMessageWriteEvent}s.
      */
-    public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteRequestQueue();
+    public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteMessageQueue();
 	Channel channel;
 	private Worker worker;
 	private StringBuffer bufferMessage;
 	private SelectionKey key;
 	private String workingChannelCacheID;
+	
 	/**
 	 *  use the concurrent hash map to store the request result list {@link RequestResultEntity}
 	 */
@@ -139,75 +140,15 @@ public class WorkingChannel {
 		}
 		return result;
 	}
+	
+	/**
+	 * get the meesage buffer
+	 * @return
+	 */
+	public StringBuffer getBufferMessage() {
+		return bufferMessage;
+	}
 
-	/**
-	 * append the string to the buffer
-	 * @param message
-	 */
-	public void appendMessage(String message){
-    	this.bufferMessage.append(message);
-    }
-    
-	/**
-	 * 从缓存区解析出消息
-	 * @param sb
-	 * @return
-	 * @throws Exception 
-	 */
-	public String extractMessage() throws Exception{
-		int headStartIndex = this.bufferMessage.indexOf(CommunicationProtocol.MESSAGE_HEADER_START);
-		int headEndIndex = bufferMessage.indexOf(CommunicationProtocol.MESSAGE_HEADER_END);
-		if(CommunicationProtocol.MESSAGE_HEADER_START.length() > bufferMessage.length())
-			return "";
-		if(headStartIndex != 0)
-		{
-			throw new Exception("the received message is not comleted, some message not receive correct");
-		}
-		//包头不完整说明没有收到完整包
-		if(headEndIndex <= 0)
-			return "";
-		String head = bufferMessage.substring(headStartIndex, headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length());
-		String bodyLenthStr =  bufferMessage.substring(headStartIndex + CommunicationProtocol.MESSAGE_HEADER_START.length(), 
-				headStartIndex + CommunicationProtocol.MESSAGE_HEADER_START.length() + CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART);
-		int bodyLenth = Integer.parseInt(bodyLenthStr);
-		//包体长度没有到包头中设定的长度
-		if(bufferMessage.length() < CommunicationProtocol.MESSAGE_HEADER_START.length() + 
-				CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth)
-		{
-			return "";
-		}
-		String messageBody = bufferMessage.substring(headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length(), 
-				headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
-		bufferMessage.delete(headStartIndex, headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
-		return messageBody;
-	}
-	
-	/**
-	 * 对消息进行包装
-	 * @param message
-	 * @return
-	 */
-	public static String wrapMessage(String message){
-		return CommunicationProtocol.MESSAGE_HEADER_START + toLengthString(message.length()) + CommunicationProtocol.MESSAGE_HEADER_END + message; 
-	}
-	
-	/**
-	 * Convert the number to a string 
-	 * 2    -- > 0002
-	 * 21   -- > 0021
-	 * 2345 -- > 2345
-	 * @param length
-	 * @return
-	 */
-	private static String toLengthString(int length){
-		String tmp = "" + length;
-		int tmpLength = tmp.length();
-		for(int i = 0; i < CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
-			tmp = "0" + tmp;
-		}
-		return tmp;
-	}
-	
 	public Worker getWorker() {
 		return worker;
 	}
@@ -241,11 +182,11 @@ public class WorkingChannel {
 	 * @author zhonxu
 	 *
 	 */
-	private final class WriteRequestQueue implements Queue<ServiceOnMessageWriteEvent> {
+	private final class WriteMessageQueue implements Queue<ServiceOnMessageWriteEvent> {
 
         private final Queue<ServiceOnMessageWriteEvent> queue;
 
-        public WriteRequestQueue() {
+        public WriteMessageQueue() {
             queue = new ConcurrentLinkedQueue<ServiceOnMessageWriteEvent>();
         }
 

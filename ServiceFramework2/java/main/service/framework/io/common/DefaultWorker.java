@@ -167,7 +167,7 @@ public class DefaultWorker implements Worker {
 				SocketChannel sc = (SocketChannel) channel.getChannel();
 				byte[] data = null;
 				try {
-					data = WorkingChannel.wrapMessage(evt.getMessage())
+					data = CommunicationProtocol.wrapMessage(evt.getMessage())
 							.getBytes(CommunicationProtocol.FRAMEWORK_IO_ENCODING);
 				} catch (UnsupportedEncodingException e2) {
 					e2.printStackTrace();
@@ -263,10 +263,10 @@ public class DefaultWorker implements Worker {
 			e1.printStackTrace();
 		}
 		synchronized(objWorkingChannel.readLock){
-			objWorkingChannel.appendMessage(receiveString);
+			objWorkingChannel.getBufferMessage().append(receiveString);
 			String unwrappedMessage = "";
 			try {
-				while((unwrappedMessage = objWorkingChannel.extractMessage()) != "")
+				while((unwrappedMessage = CommunicationProtocol.extractMessage(objWorkingChannel.getBufferMessage())) != "")
 				{
 					final String sendMessage = unwrappedMessage;
 					objExecutorService.execute(new Runnable(){
