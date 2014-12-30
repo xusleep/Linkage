@@ -9,7 +9,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ConfigureManagementCenter"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ServiceMiddleware"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Linkage"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LinkageCenter"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
