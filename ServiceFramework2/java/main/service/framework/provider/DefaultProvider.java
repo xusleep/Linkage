@@ -1,4 +1,4 @@
-package service.framework.provide;
+package service.framework.provider;
 
 import java.lang.reflect.Method;
 
@@ -10,17 +10,11 @@ import service.framework.common.entity.ResponseEntity;
 import service.framework.properties.ServicePropertyEntity;
 import service.framework.properties.WorkingServicePropertyEntity;
 
-/**
- * This class provide a service access point 
- * for all of the service
- * @author zhonxu
- *
- */
-public class ProviderBean {
+public class DefaultProvider implements Provider{
 	private final WorkingServicePropertyEntity servicePropertyEntity;
-	private static Logger  logger = Logger.getLogger(ProviderBean.class); 
+	private static Logger  logger = Logger.getLogger(Provider.class); 
 	
-	public ProviderBean(WorkingServicePropertyEntity servicePropertyEntity){
+	public DefaultProvider(WorkingServicePropertyEntity servicePropertyEntity){
 		this.servicePropertyEntity = servicePropertyEntity;
 	}
 	

@@ -7,7 +7,8 @@ import service.framework.io.common.WorkerPool;
 import service.framework.io.server.DefaultServer;
 import service.framework.io.server.Server;
 import service.framework.properties.WorkingServicePropertyEntity;
-import service.framework.provide.ProviderBean;
+import service.framework.provider.DefaultProvider;
+import service.framework.provider.Provider;
 
 /**
  * this is boot strap used from the server side
@@ -16,7 +17,7 @@ import service.framework.provide.ProviderBean;
  */
 public class NIOServerBootStrap implements Runnable {
 	private final Server server;
-	private final ProviderBean providerBean;
+	private final Provider providerBean;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkingServicePropertyEntity servicePropertyEntity;
 	
@@ -31,7 +32,7 @@ public class NIOServerBootStrap implements Runnable {
 		// this is a provider which provides the service point access from the io layer
 		// in this provider, all of the service information will load into the bean
 		// when there is a request, the provider will find the service, init it & execute the service
-		this.providerBean = new ProviderBean(servicePropertyEntity);
+		this.providerBean = new DefaultProvider(servicePropertyEntity);
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
 		eventDistributionHandler.registerHandler(new ServiceReadWriteHandler(providerBean));
@@ -41,7 +42,7 @@ public class NIOServerBootStrap implements Runnable {
 				eventDistributionHandler, workerPool);
 	}
 
-	public ProviderBean getProviderBean() {
+	public Provider getProviderBean() {
 		return providerBean;
 	}
 

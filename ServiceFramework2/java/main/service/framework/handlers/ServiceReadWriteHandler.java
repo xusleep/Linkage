@@ -16,7 +16,7 @@ import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
 import service.framework.io.common.WorkingChannel;
-import service.framework.provide.ProviderBean;
+import service.framework.provider.Provider;
 
 /**
  * Service handler from the server side
@@ -26,9 +26,9 @@ import service.framework.provide.ProviderBean;
  */
 public class ServiceReadWriteHandler implements Handler {
 	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class); 
-	private final ProviderBean  providerBean;
+	private final Provider  providerBean;
 	
-	public ServiceReadWriteHandler(ProviderBean providerBean){
+	public ServiceReadWriteHandler(Provider providerBean){
 		this.providerBean = providerBean;
 	}
 	
