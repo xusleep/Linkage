@@ -16,7 +16,7 @@ import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
 import service.middleware.linkage.framework.io.common.WorkingChannel;
-import service.middleware.linkage.framework.provider.Provider;
+import service.middleware.linkage.framework.provider.ServiceProvider;
 
 /**
  * Service handler from the server side
@@ -26,10 +26,10 @@ import service.middleware.linkage.framework.provider.Provider;
  */
 public class ServiceReadWriteHandler implements Handler {
 	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class); 
-	private final Provider  providerBean;
+	private final ServiceProvider  provider;
 	
-	public ServiceReadWriteHandler(Provider providerBean){
-		this.providerBean = providerBean;
+	public ServiceReadWriteHandler(ServiceProvider provider){
+		this.provider = provider;
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class ServiceReadWriteHandler implements Handler {
 				WorkingChannel channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
-				ResponseEntity objResponseEntity = this.providerBean.acceptServiceRequest(objRequestEntity);
+				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
 				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
 				channel.offerWriterQueue(objServiceOnMessageWriteEvent);

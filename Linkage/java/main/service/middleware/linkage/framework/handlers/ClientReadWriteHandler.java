@@ -23,10 +23,10 @@ import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
  */
 public class ClientReadWriteHandler implements Handler {
 	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class);  
-	private final ServiceAccess consumerBean;
+	private final ServiceAccess serviceAccess;
 	
-	public ClientReadWriteHandler(ServiceAccess consumerBean){
-		this.consumerBean = consumerBean;
+	public ClientReadWriteHandler(ServiceAccess serviceAccess){
+		this.serviceAccess = serviceAccess;
 	}
 	
 	@Override
@@ -45,12 +45,12 @@ public class ClientReadWriteHandler implements Handler {
 		}
 		else if(event instanceof ServiceOnChannelCloseExeptionEvent ){
 			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
-			this.consumerBean.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
+			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
 			objServiceOnExeptionEvent.getWorkingChannel().clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 		}
 		else if(event instanceof ServiceOnChannelIOExeptionEvent){
 			ServiceOnChannelIOExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelIOExeptionEvent)event;
-			this.consumerBean.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
+			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
 			objServiceOnExeptionEvent.getWorkingChannel().clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 		
 		}

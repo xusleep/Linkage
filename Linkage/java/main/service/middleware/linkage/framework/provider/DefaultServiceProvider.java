@@ -10,11 +10,11 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 
-public class DefaultProvider implements Provider{
+public class DefaultServiceProvider implements ServiceProvider{
 	private final ServiceSettingReader servicePropertyEntity;
-	private static Logger  logger = Logger.getLogger(Provider.class); 
+	private static Logger  logger = Logger.getLogger(ServiceProvider.class); 
 	
-	public DefaultProvider(ServiceSettingReader servicePropertyEntity){
+	public DefaultServiceProvider(ServiceSettingReader servicePropertyEntity){
 		this.servicePropertyEntity = servicePropertyEntity;
 	}
 	

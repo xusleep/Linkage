@@ -9,7 +9,7 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
  * @author zhonxu
  *
  */
-public interface Provider {
+public interface ServiceProvider {
 	/**
 	 * process the request from the client
 	 * @param request

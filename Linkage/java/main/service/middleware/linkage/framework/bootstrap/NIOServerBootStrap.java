@@ -6,8 +6,8 @@ import service.middleware.linkage.framework.io.common.NIOWorkerPool;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.server.DefaultServer;
 import service.middleware.linkage.framework.io.server.Server;
-import service.middleware.linkage.framework.provider.DefaultProvider;
-import service.middleware.linkage.framework.provider.Provider;
+import service.middleware.linkage.framework.provider.DefaultServiceProvider;
+import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingProtertyReader;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 
@@ -18,7 +18,7 @@ import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
  */
 public class NIOServerBootStrap implements Runnable {
 	private final Server server;
-	private final Provider providerBean;
+	private final ServiceProvider providerBean;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final ServiceSettingReader servicePropertyEntity;
 	
@@ -33,7 +33,7 @@ public class NIOServerBootStrap implements Runnable {
 		// this is a provider which provides the service point access from the io layer
 		// in this provider, all of the service information will load into the bean
 		// when there is a request, the provider will find the service, init it & execute the service
-		this.providerBean = new DefaultProvider(servicePropertyEntity);
+		this.providerBean = new DefaultServiceProvider(servicePropertyEntity);
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
 		eventDistributionHandler.registerHandler(new ServiceReadWriteHandler(providerBean));
@@ -43,7 +43,7 @@ public class NIOServerBootStrap implements Runnable {
 				eventDistributionHandler, workerPool);
 	}
 
-	public Provider getProviderBean() {
+	public ServiceProvider getProviderBean() {
 		return providerBean;
 	}
 
