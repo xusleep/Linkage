@@ -1,4 +1,4 @@
-package service.framework.comsume;
+package service.framework.serviceaccess;
 
 import static org.junit.Assert.assertTrue;
 
@@ -29,9 +29,9 @@ public class ConsumeEngineTest {
 	@BeforeClass
 	public static  void setUp(){
 		try {
-			serviceBootStrap = new NIOServerBootStrap("service/framework/comsume/conf/service_server.properties", 5);
+			serviceBootStrap = new NIOServerBootStrap("service/framework/serviceaccess/conf/service_server.properties", 5);
 			serviceBootStrap.run();
-			clientBootStrap = new NIOClientBootStrap("service/framework/comsume/conf/client_client.properties", 1);
+			clientBootStrap = new NIOClientBootStrap("service/framework/serviceaccess/conf/client_client.properties", 1);
 			clientBootStrap.run();
 		} catch (Exception e) {
 			assertTrue("There is exception when setup the test, exception detail: " + StringUtils.ExceptionStackTraceToString(e), false);
