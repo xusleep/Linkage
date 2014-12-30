@@ -15,5 +15,5 @@ public interface Provider {
 	 * @param request
 	 * @return
 	 */
-	public ResponseEntity prcessRequest(RequestEntity request);
+	public ResponseEntity acceptServiceRequest(RequestEntity request);
 }

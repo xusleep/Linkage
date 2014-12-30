@@ -37,7 +37,7 @@ public class DefaultProvider implements Provider{
 	 * @param request
 	 * @return
 	 */
-	public ResponseEntity prcessRequest(RequestEntity request){
+	public ResponseEntity acceptServiceRequest(RequestEntity request){
 		ServicePropertyEntity entity = searchService(request.getServiceName());
 		if(entity == null){
 			ResponseEntity response = new ResponseEntity();

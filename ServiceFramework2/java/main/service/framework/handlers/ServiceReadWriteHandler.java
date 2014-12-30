@@ -40,7 +40,7 @@ public class ServiceReadWriteHandler implements Handler {
 				WorkingChannel channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				RequestEntity objRequestEntity = SerializeUtils.deserializeRequest(receiveData);
-				ResponseEntity objResponseEntity = this.providerBean.prcessRequest(objRequestEntity);
+				ResponseEntity objResponseEntity = this.providerBean.acceptServiceRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
 				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
 				channel.offerWriterQueue(objServiceOnMessageWriteEvent);
