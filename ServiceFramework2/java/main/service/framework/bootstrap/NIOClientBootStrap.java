@@ -2,15 +2,15 @@ package service.framework.bootstrap;
 
 import java.io.IOException;
 
-import service.framework.comsume.Consume;
-import service.framework.comsume.DefaultConsume;
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.handlers.ClientReadWriteHandler;
 import service.framework.io.client.Client;
 import service.framework.io.client.DefaultClient;
-import service.framework.io.common.DefaultWorkerPool;
+import service.framework.io.common.NIOWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.properties.WorkingClientPropertyEntity;
+import service.framework.serviceaccess.NIOServiceAccess;
+import service.framework.serviceaccess.ServiceAccess;
 
 /**
  * client side boot strap
@@ -18,18 +18,18 @@ import service.framework.properties.WorkingClientPropertyEntity;
  * @author zhonxu
  *
  */
-public class ClientBootStrap implements Runnable {
+public class NIOClientBootStrap implements Runnable {
 	private final Client client;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkerPool workPool;
-	private final Consume consume;
+	private final ServiceAccess consume;
 	
 	/**
 	 * 
 	 * @param propertyPath the property configured for the client
 	 * @param clientTaskThreadPootSize the client 
 	 */
-	public ClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
+	public NIOClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
 		// read the configuration from the properties
 		WorkingClientPropertyEntity objServicePropertyEntity = null;
 		try {
@@ -42,10 +42,10 @@ public class ClientBootStrap implements Runnable {
 		eventDistributionHandler = new EventDistributionMaster(clientTaskThreadPootSize);
 		// this is a client worker pool, this pool will handle all of the io operation 
 		// with the server
-		this.workPool = new DefaultWorkerPool(eventDistributionHandler, 1);
+		this.workPool = new NIOWorkerPool(eventDistributionHandler, 1);
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(eventDistributionHandler, this.workPool);
-		this.consume = new DefaultConsume(objServicePropertyEntity, this.workPool);
+		this.consume = new NIOServiceAccess(objServicePropertyEntity, this.workPool);
 		eventDistributionHandler.registerHandler(new ClientReadWriteHandler(this.getConsume()));
 	}
 	
@@ -54,7 +54,7 @@ public class ClientBootStrap implements Runnable {
 	 * from the client
 	 * @return
 	 */
-	public Consume getConsume() {
+	public ServiceAccess getConsume() {
 		return consume;
 	}
 

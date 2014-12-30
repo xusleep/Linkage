@@ -1,4 +1,4 @@
-package service.framework.comsume;
+package service.framework.serviceaccess;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import service.framework.properties.WorkingClientPropertyEntity;
  * @author zhonxu
  *
  */
-public class DefaultConsume implements Consume {
+public class NIOServiceAccess implements ServiceAccess {
 	
-	protected ConsumeEngine consumeEngine;
+	protected NIOServiceAccessEngine consumeEngine;
 
-	public DefaultConsume(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool) {
-		consumeEngine = new ConsumeEngine(workingClientPropertyEntity, workerPool);
+	public NIOServiceAccess(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool) {
+		consumeEngine = new NIOServiceAccessEngine(workingClientPropertyEntity, workerPool);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class DefaultConsume implements Consume {
 	}
 
 	@Override
-	public ConsumeEngine getConsumeEngine() {
+	public NIOServiceAccessEngine getConsumeEngine() {
 		// TODO Auto-generated method stub
 		return consumeEngine;
 	}

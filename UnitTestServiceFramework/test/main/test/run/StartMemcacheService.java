@@ -1,6 +1,6 @@
 package test.run;
 
-import service.framework.bootstrap.ClientBootStrap;
+import service.framework.bootstrap.NIOClientBootStrap;
 
 public class StartMemcacheService {
 	 public static void main(String[] args) {

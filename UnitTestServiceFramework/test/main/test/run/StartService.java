@@ -1,7 +1,7 @@
 package test.run;
-import management.bootstrap.CenterClientBootStrap;
+import management.bootstrap.NIOCenterClientBootStrap;
 import management.service.client.ServiceCenterClientUtils;
-import service.framework.bootstrap.ServerBootStrap;
+import service.framework.bootstrap.NIOServerBootStrap;
 import service.framework.common.entity.ServiceInformationEntity;
 
 
@@ -15,11 +15,11 @@ public class StartService {
 
     public static void main(String[] args) {
         try {
-        	ServerBootStrap serviceBootStrap = new ServerBootStrap("conf/service_server.properties", 5);
+        	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/service_server.properties", 5);
         	ServiceInformationEntity centerServiceInformationEntity = new ServiceInformationEntity();
         	centerServiceInformationEntity.setAddress("localhost");
         	centerServiceInformationEntity.setPort(5002);
-        	CenterClientBootStrap clientBootStrap = new CenterClientBootStrap("conf/service_client.properties", 
+        	NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/service_client.properties", 
         			5, centerServiceInformationEntity);
     		serviceBootStrap.run();
     		clientBootStrap.run();

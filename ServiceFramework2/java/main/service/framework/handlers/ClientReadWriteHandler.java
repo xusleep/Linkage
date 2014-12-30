@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import service.framework.common.SerializeUtils;
 import service.framework.common.entity.ResponseEntity;
-import service.framework.comsume.Consume;
 import service.framework.event.ServiceEvent;
 import service.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.framework.event.ServiceOnChannelIOExeptionEvent;
@@ -14,6 +13,7 @@ import service.framework.event.ServiceOnErrorEvent;
 import service.framework.event.ServiceOnMessageReceiveEvent;
 import service.framework.event.ServiceStartedEvent;
 import service.framework.event.ServiceStartingEvent;
+import service.framework.serviceaccess.ServiceAccess;
 
 /**
  * the default handler for the client message received event
@@ -23,9 +23,9 @@ import service.framework.event.ServiceStartingEvent;
  */
 public class ClientReadWriteHandler implements Handler {
 	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class);  
-	private final Consume consumerBean;
+	private final ServiceAccess consumerBean;
 	
-	public ClientReadWriteHandler(Consume consumerBean){
+	public ClientReadWriteHandler(ServiceAccess consumerBean){
 		this.consumerBean = consumerBean;
 	}
 	

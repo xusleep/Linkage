@@ -1,4 +1,4 @@
-package service.framework.comsume;
+package service.framework.serviceaccess;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,9 +11,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import service.framework.common.SerializeUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
+import service.framework.common.entity.ResponseEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.exception.ServiceException;
+import service.framework.io.common.NIOWorkingChannel;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
 import service.framework.properties.ClientPropertyEntity;
@@ -24,7 +26,7 @@ import service.framework.properties.WorkingClientPropertyEntity;
  * @author zhonxu
  *
  */
-public class ConsumeEngine{
+public class NIOServiceAccessEngine{
 	/**
 	 * used to cached the {@link WorkingChannel} object
 	 */
@@ -33,7 +35,7 @@ public class ConsumeEngine{
 	private final WorkerPool workerPool;
 	private final WorkingClientPropertyEntity workingClientPropertyEntity;
 	
-	public ConsumeEngine(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool){
+	public NIOServiceAccessEngine(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool){
 		this.workingClientPropertyEntity = workingClientPropertyEntity;
 		this.workerPool = workerPool;
 	}
@@ -62,14 +64,14 @@ public class ConsumeEngine{
 	 */
 	public RequestResultEntity basicProcessRequest(RequestEntity objRequestEntity, RequestResultEntity result, 
 			ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
-		WorkingChannel newWorkingChannel = null;
+		NIOWorkingChannel newWorkingChannel = null;
 		try
 		{
-			newWorkingChannel = getWorkingChannnel(channelFromCached, serviceInformationEntity);
+			newWorkingChannel = (NIOWorkingChannel) getWorkingChannnel(channelFromCached, serviceInformationEntity);
 			result.setWorkingChannel(newWorkingChannel);
 		}		
 		catch(Exception ex){
-			WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			NIOWorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
 			return result;
 		}
 		// put the request result into the request result list
@@ -77,7 +79,7 @@ public class ConsumeEngine{
 		ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, objRequestEntity.getRequestID());
 		String sendData = SerializeUtils.serializeRequest(objRequestEntity);
 		objServiceOnMessageWriteEvent.setMessage(sendData);
-		newWorkingChannel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+		newWorkingChannel.offerWriterQueue(objServiceOnMessageWriteEvent);
 		newWorkingChannel.getWorker().writeFromUser(newWorkingChannel);
 		return result;
 	}
@@ -97,20 +99,20 @@ public class ConsumeEngine{
 		if(service == null)
 			return null;
 		String cacheID = service.toString();
-		WorkingChannel objWorkingChannel;
+		NIOWorkingChannel objWorkingChannel;
 		// if not get it from the cache, create it directly
 		if(!fromCached){
 			objWorkingChannel  = createWorkingChannel(service);
 			objWorkingChannel.setWorkingChannelCacheID(cacheID);
 			return objWorkingChannel;
 		}
-		objWorkingChannel = workingChannelCacheList.get(cacheID);
+		objWorkingChannel = (NIOWorkingChannel) workingChannelCacheList.get(cacheID);
 		if(objWorkingChannel == null)
 		{
 			synchronized(workingChannelCacheList){
 				// get the working channel again 
 				// in case we set after we get from the cache
-				objWorkingChannel = workingChannelCacheList.get(service.toString());
+				objWorkingChannel = (NIOWorkingChannel) workingChannelCacheList.get(service.toString());
 				if(objWorkingChannel == null)
 				{
 					objWorkingChannel = createWorkingChannel(service);
@@ -120,6 +122,23 @@ public class ConsumeEngine{
 			}
 		}
 		return objWorkingChannel;
+	}
+	
+	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public static void setExceptionToRuquestResult(RequestResultEntity result, ServiceException serviceException){
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(result.getRequestID());
+		    objResponseEntity.setResult(serviceException.getMessage());
+		    result.setException(true);
+		    result.setException(serviceException);
+			result.setResponseEntity(objResponseEntity);
+		}
 	}
 	
 	/**
@@ -147,7 +166,7 @@ public class ConsumeEngine{
 	 * @return
 	 * @throws IOException
 	 */
-	private WorkingChannel createWorkingChannel(ServiceInformationEntity service) throws IOException{
+	private NIOWorkingChannel createWorkingChannel(ServiceInformationEntity service) throws IOException{
 		// get a Socket channel
         SocketChannel channel = SocketChannel.open();  
         // connect
@@ -158,7 +177,7 @@ public class ConsumeEngine{
         } 
         // wait for the worker pool util it is ready
         this.workerPool.waitReady();
-        WorkingChannel objWorkingChannel = this.workerPool.register(channel);
+        NIOWorkingChannel objWorkingChannel = (NIOWorkingChannel) this.workerPool.register(channel);
         return objWorkingChannel;
 	}
 	
@@ -170,7 +189,7 @@ public class ConsumeEngine{
 		if(objWorkingChannel != null)
 		{
 			synchronized(workingChannelCacheList){
-				this.workingChannelCacheList.remove(objWorkingChannel.getWoringChannelCacheID());
+				this.workingChannelCacheList.remove(((NIOWorkingChannel)objWorkingChannel).getWoringChannelCacheID());
 			}
 		}
 	}

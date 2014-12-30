@@ -12,14 +12,13 @@ import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.DefaultConsume;
-import service.framework.comsume.ConsumeEngine;
 import service.framework.exception.ServiceException;
+import service.framework.io.common.NIOWorkingChannel;
 import service.framework.io.common.WorkerPool;
-import service.framework.io.common.WorkingChannel;
 import service.framework.properties.WorkingClientPropertyEntity;
+import service.framework.serviceaccess.NIOServiceAccess;
 
-public class DefaultRouteConsume extends DefaultConsume implements RouteConsume {
+public class DefaultRouteConsume extends NIOServiceAccess implements RouteConsume {
 	private final Route route;
 	private Log logger = LogFactory.getFactory().getInstance(DefaultRouteConsume.class);
 	public DefaultRouteConsume(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool, ServiceInformationEntity centerServiceInformationEntity) {
@@ -29,7 +28,6 @@ public class DefaultRouteConsume extends DefaultConsume implements RouteConsume 
 	
 	@Override
 	public RequestResultEntity requestService(String clientID, List<String> args) {
-		// TODO Auto-generated method stub
 		return requestService(clientID, args, true);
 	}
 
@@ -46,7 +44,7 @@ public class DefaultRouteConsume extends DefaultConsume implements RouteConsume 
 			result.setServiceInformationEntity(serviceInformationEntity);
 			if(serviceInformationEntity == null)
 			{
-				WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
+				NIOWorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
 				return result;
 			}
 		} 
@@ -56,7 +54,7 @@ public class DefaultRouteConsume extends DefaultConsume implements RouteConsume 
 			//logger.log(Level.WARNING, ex.getMessage());
 			//System.out.println("ComsumerBean ... exception happend " + ex.getMessage());
 			//ex.printStackTrace();
-        	WorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
+			NIOWorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
         	route.clean(result);
         	return result;
         }

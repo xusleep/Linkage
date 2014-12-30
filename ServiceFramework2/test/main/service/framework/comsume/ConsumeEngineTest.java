@@ -11,8 +11,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import service.framework.bootstrap.ClientBootStrap;
-import service.framework.bootstrap.ServerBootStrap;
+import service.framework.bootstrap.NIOClientBootStrap;
+import service.framework.bootstrap.NIOServerBootStrap;
 import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
@@ -22,16 +22,16 @@ import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
 import zhonglin.test.framework.concurrence.condition.job.JobInterface;
 
 public class ConsumeEngineTest {
-	private static ServerBootStrap serviceBootStrap;
-	private static ClientBootStrap clientBootStrap;
+	private static NIOServerBootStrap serviceBootStrap;
+	private static NIOClientBootStrap clientBootStrap;
 	private static Logger  logger = Logger.getLogger(ConsumeEngineTest.class); 
 	
 	@BeforeClass
 	public static  void setUp(){
 		try {
-			serviceBootStrap = new ServerBootStrap("service/framework/comsume/conf/service_server.properties", 5);
+			serviceBootStrap = new NIOServerBootStrap("service/framework/comsume/conf/service_server.properties", 5);
 			serviceBootStrap.run();
-			clientBootStrap = new ClientBootStrap("service/framework/comsume/conf/client_client.properties", 1);
+			clientBootStrap = new NIOClientBootStrap("service/framework/comsume/conf/client_client.properties", 1);
 			clientBootStrap.run();
 		} catch (Exception e) {
 			assertTrue("There is exception when setup the test, exception detail: " + StringUtils.ExceptionStackTraceToString(e), false);

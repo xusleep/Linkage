@@ -11,14 +11,14 @@ import service.framework.common.ShareingData;
 import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.Consume;
+import service.framework.serviceaccess.ServiceAccess;
 
 public class HeartBeatSender implements Runnable {
 	private static Logger  logger = Logger.getLogger(HeartBeatSender.class); 
-	private final Consume consume;
+	private final ServiceAccess consume;
 	private volatile boolean isShutdown = false;
 	
-	public HeartBeatSender(Consume consume){
+	public HeartBeatSender(ServiceAccess consume){
 		this.consume = consume;
 	}
 	

@@ -1,4 +1,4 @@
-package service.framework.comsume;
+package service.framework.serviceaccess;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.io.common.WorkingChannel;
 
-public interface Consume {
+public interface ServiceAccess {
 	
 	/**
 	 * request directly using the service information entity
@@ -64,5 +64,5 @@ public interface Consume {
 	 */
 	public void removeCachedChannel(WorkingChannel objWorkingChannel);
 	
-	public ConsumeEngine getConsumeEngine(); 
+	public NIOServiceAccessEngine getConsumeEngine(); 
 }

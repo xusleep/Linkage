@@ -2,7 +2,7 @@ package service.framework.bootstrap;
 
 import service.framework.distribution.EventDistributionMaster;
 import service.framework.handlers.ServiceReadWriteHandler;
-import service.framework.io.common.DefaultWorkerPool;
+import service.framework.io.common.NIOWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.server.DefaultServer;
 import service.framework.io.server.Server;
@@ -14,20 +14,20 @@ import service.framework.provide.ProviderBean;
  * @author zhonxu
  *
  */
-public class ServerBootStrap implements Runnable {
+public class NIOServerBootStrap implements Runnable {
 	private final Server server;
 	private final ProviderBean providerBean;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkingServicePropertyEntity servicePropertyEntity;
 	
-	public ServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
+	public NIOServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
 		// read the configuration from the properties
 		this.servicePropertyEntity = new WorkingServicePropertyEntity(propertyPath);
 		// new a task handler, this handler will handle all of the task from the pool queue
 		// into the executor pool(thread pool) which will execute the task.
 		this.eventDistributionHandler = new EventDistributionMaster(serviceTaskThreadPootSize);
 		// this worker pool will handle the read write io operation for all of the connection
-		WorkerPool workerPool = new DefaultWorkerPool(eventDistributionHandler);
+		WorkerPool workerPool = new NIOWorkerPool(eventDistributionHandler);
 		// this is a provider which provides the service point access from the io layer
 		// in this provider, all of the service information will load into the bean
 		// when there is a request, the provider will find the service, init it & execute the service

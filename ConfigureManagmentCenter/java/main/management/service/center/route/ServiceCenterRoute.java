@@ -14,8 +14,8 @@ import management.service.client.ServiceCenterClientUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.Consume;
 import service.framework.exception.ServiceException;
+import service.framework.serviceaccess.ServiceAccess;
 /**
  * This route is used for the service center
  * If will first access the service center, get the service list
@@ -26,9 +26,9 @@ import service.framework.exception.ServiceException;
  */
 public class ServiceCenterRoute implements Route {
 	private final ServiceInformationEntity centerServiceInformationEntity;
-	private final Consume consume;
+	private final ServiceAccess consume;
 	
-	public ServiceCenterRoute(ServiceInformationEntity centerServiceInformationEntity, Consume consume){
+	public ServiceCenterRoute(ServiceInformationEntity centerServiceInformationEntity, ServiceAccess consume){
 		this.centerServiceInformationEntity = centerServiceInformationEntity;
 		this.consume = consume;
 	}

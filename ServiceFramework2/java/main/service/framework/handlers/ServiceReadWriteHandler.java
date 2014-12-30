@@ -34,7 +34,6 @@ public class ServiceReadWriteHandler implements Handler {
 	
 	@Override
 	public void handleRequest(ServiceEvent event) throws IOException {
-		// TODO Auto-generated method stub
 		if (event instanceof ServiceOnMessageReceiveEvent) {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
@@ -44,7 +43,7 @@ public class ServiceReadWriteHandler implements Handler {
 				ResponseEntity objResponseEntity = this.providerBean.prcessRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
 				objServiceOnMessageWriteEvent.setMessage(SerializeUtils.serializeResponse(objResponseEntity));
-				channel.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+				channel.offerWriterQueue(objServiceOnMessageWriteEvent);
 				channel.getWorker().writeFromUser(channel);
 			} catch (Exception e) {
 				logger.error("ServiceReadWriteHandler exception happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));

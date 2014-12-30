@@ -36,7 +36,7 @@ import service.framework.io.protocol.CommunicationProtocol;
  * @author zhonxu
  *
  */
-public class DefaultWorker implements Worker {
+public class NIOWorker implements Worker {
 	private final Queue<Runnable> taskQueue = new ConcurrentLinkedQueue<Runnable>();
 	protected final AtomicBoolean wakenUp = new AtomicBoolean();
 	private final Selector selector;
@@ -45,9 +45,9 @@ public class DefaultWorker implements Worker {
 	private final EventDistributionMaster eventDistributionHandler;
 	private volatile boolean isShutdown = false;
 	private final CountDownLatch shutdownSignal;
-	private static Logger  logger = Logger.getLogger(DefaultWorker.class);  
+	private static Logger  logger = Logger.getLogger(NIOWorker.class);  
 	
-	public DefaultWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
+	public NIOWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
 		selector = Selector.open();
 		this.objExecutorService = Executors.newFixedThreadPool(10);
 		this.signal = signal;
@@ -156,7 +156,8 @@ public class DefaultWorker implements Worker {
 	 * @param key
 	 * @return
 	 */
-	public boolean writeFromUser(WorkingChannel channel) {
+	public boolean writeFromUser(WorkingChannel workingChannel) {
+		NIOWorkingChannel channel = (NIOWorkingChannel)workingChannel;
 		ServiceOnMessageWriteEvent evt;
 		final Queue<ServiceOnMessageWriteEvent> writeBuffer = channel.writeBufferQueue;
 		synchronized (channel.writeLock) {
@@ -215,7 +216,7 @@ public class DefaultWorker implements Worker {
 	 * @throws IOException
 	 */
 	public void closeWorkingChannel(WorkingChannel workingchannel) throws IOException{
-		closeChannel(workingchannel.getKey());
+		closeChannel(((NIOWorkingChannel)workingchannel).getKey());
 	}
 	
 	/**
@@ -225,7 +226,7 @@ public class DefaultWorker implements Worker {
 	 */
 	private boolean read(SelectionKey key) {
 		SocketChannel ch = (SocketChannel) key.channel();
-		final WorkingChannel objWorkingChannel = (WorkingChannel)key.attachment();
+		final NIOWorkingChannel objWorkingChannel = (NIOWorkingChannel)key.attachment();
 		int readBytes = 0;
 		int ret = 0;
 		boolean success = false;
@@ -293,7 +294,7 @@ public class DefaultWorker implements Worker {
 	 * register a channel to the worker
 	 */
 	public WorkingChannel submitOpeRegister(SocketChannel schannel) {
-		WorkingChannel objWorkingChannel = new WorkingChannel(schannel, this);
+		WorkingChannel objWorkingChannel = new NIOWorkingChannel(schannel, this);
 		registerTask(new RegisterTask(objWorkingChannel));
 		return objWorkingChannel;
 	}
@@ -324,10 +325,10 @@ public class DefaultWorker implements Worker {
 	 */
 	private final class RegisterTask implements Runnable {
 		
-		private WorkingChannel objWorkingChannel;
+		private NIOWorkingChannel objWorkingChannel;
 		
 		public RegisterTask(WorkingChannel workingChannel){
-			this.objWorkingChannel = workingChannel;
+			this.objWorkingChannel = (NIOWorkingChannel)workingChannel;
 		}
 
 		@Override

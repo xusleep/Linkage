@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import management.bootstrap.CenterClientBootStrap;
+import management.bootstrap.NIOCenterClientBootStrap;
 import management.service.center.comsume.DefaultRouteConsume;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
@@ -52,7 +52,7 @@ public class StartClient extends AbstractJob {
     	ServiceInformationEntity centerServiceInformationEntity = new ServiceInformationEntity();
     	centerServiceInformationEntity.setAddress("localhost");
     	centerServiceInformationEntity.setPort(5002);
-		CenterClientBootStrap clientBootStrap = new CenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
+		NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
 		clientBootStrap.run();;
 		DefaultRouteConsume cb = clientBootStrap.getConsume();
 		for(long i = 0; i < 1000; i++)

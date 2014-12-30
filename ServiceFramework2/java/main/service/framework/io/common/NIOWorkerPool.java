@@ -14,23 +14,23 @@ import service.framework.distribution.EventDistributionMaster;
  * @author zhonxu
  *
  */
-public class DefaultWorkerPool implements WorkerPool {
+public class NIOWorkerPool implements WorkerPool {
 	private Worker[] workers;
 	private int nextWorkCount = 0;
 	private final CountDownLatch signal;
-	private static Logger  logger = Logger.getLogger(DefaultWorkerPool.class); 
+	private static Logger  logger = Logger.getLogger(NIOWorkerPool.class); 
 	
 	/**
 	 * 
 	 * @param eventDistributionHandler
 	 * @param workerCounter assign the point
 	 */
-	public DefaultWorkerPool(EventDistributionMaster eventDistributionHandler, int workerCounter){
+	public NIOWorkerPool(EventDistributionMaster eventDistributionHandler, int workerCounter){
 		signal = new CountDownLatch(workerCounter);
 		workers = new Worker[workerCounter];
 		for(int i = 0; i < workers.length; i++){
 			try {
-				workers[i] = new DefaultWorker(eventDistributionHandler, signal);
+				workers[i] = new NIOWorker(eventDistributionHandler, signal);
 			} catch (Exception e) {
 				logger.error("not expected interruptedException happened. exception detail : " 
 						+ StringUtils.ExceptionStackTraceToString(e));
@@ -38,13 +38,13 @@ public class DefaultWorkerPool implements WorkerPool {
 		}
 	}
 	
-	public DefaultWorkerPool(EventDistributionMaster eventDistributionHandler){
+	public NIOWorkerPool(EventDistributionMaster eventDistributionHandler){
 		int workerCounter = Runtime.getRuntime().availableProcessors();
 		signal = new CountDownLatch(workerCounter);
 		workers = new Worker[workerCounter];
 		for(int i = 0; i < workers.length; i++){
 			try {
-				workers[i] = new DefaultWorker(eventDistributionHandler, signal);
+				workers[i] = new NIOWorker(eventDistributionHandler, signal);
 			} catch (Exception e) {
 				logger.error("not expected interruptedException happened. exception detail : " 
 						+ StringUtils.ExceptionStackTraceToString(e));

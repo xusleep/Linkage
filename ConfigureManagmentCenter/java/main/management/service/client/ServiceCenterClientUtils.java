@@ -10,11 +10,11 @@ import management.service.center.common.ServiceCenterUtils;
 import management.service.center.comsume.DefaultRouteConsume;
 import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
-import service.framework.comsume.Consume;
 import service.framework.exception.ServiceException;
-import service.framework.io.common.DefaultWorker;
+import service.framework.io.common.NIOWorker;
 import service.framework.properties.ServicePropertyEntity;
 import service.framework.properties.WorkingServicePropertyEntity;
+import service.framework.serviceaccess.ServiceAccess;
 
 /**
  * this class is used for call from the client side
@@ -46,7 +46,7 @@ public final class ServiceCenterClientUtils {
 	 * @param serviceInformationList
 	 * @throws ServiceException 
 	 */
-	public static boolean notifyClientServiceAdd(Consume consume, ServiceInformationEntity clientServiceInformationEntity, List<ServiceInformationEntity> serviceInformationList ) throws ServiceException{
+	public static boolean notifyClientServiceAdd(ServiceAccess consume, ServiceInformationEntity clientServiceInformationEntity, List<ServiceInformationEntity> serviceInformationList ) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
 		List<String> args = new LinkedList<String>();
 		args.add(strServiceInformation);
@@ -67,7 +67,7 @@ public final class ServiceCenterClientUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean registerClientInformation(Consume consume, ServiceInformationEntity centerServiceInformationEntity, 
+	public static boolean registerClientInformation(ServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, 
 			ServiceInformationEntity clientServiceInformationEntity) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformation(clientServiceInformationEntity);
 		List<String> args = new LinkedList<String>();
@@ -87,7 +87,7 @@ public final class ServiceCenterClientUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean registerServiceList(Consume consume, ServiceInformationEntity centerServiceInformationEntity, WorkingServicePropertyEntity workingServicePropertyEntity) throws ServiceException{
+	public static boolean registerServiceList(ServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, WorkingServicePropertyEntity workingServicePropertyEntity) throws ServiceException{
 		List<ServiceInformationEntity> serviceInformationList = new LinkedList<ServiceInformationEntity>();
 		
 		//获取所有服务，将服务注册到注册中心
