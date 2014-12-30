@@ -7,14 +7,14 @@ import org.apache.log4j.Logger;
 import service.framework.common.StringUtils;
 import service.framework.common.entity.RequestEntity;
 import service.framework.common.entity.ResponseEntity;
-import service.framework.properties.ServicePropertyEntity;
-import service.framework.properties.WorkingServicePropertyEntity;
+import service.framework.setting.ServiceSettingEntity;
+import service.framework.setting.reader.ServiceSettingReader;
 
 public class DefaultProvider implements Provider{
-	private final WorkingServicePropertyEntity servicePropertyEntity;
+	private final ServiceSettingReader servicePropertyEntity;
 	private static Logger  logger = Logger.getLogger(Provider.class); 
 	
-	public DefaultProvider(WorkingServicePropertyEntity servicePropertyEntity){
+	public DefaultProvider(ServiceSettingReader servicePropertyEntity){
 		this.servicePropertyEntity = servicePropertyEntity;
 	}
 	
@@ -23,8 +23,8 @@ public class DefaultProvider implements Provider{
 	 * @param serviceName
 	 * @return
 	 */
-	private ServicePropertyEntity searchService(String serviceName){
-		for(ServicePropertyEntity entity : servicePropertyEntity.getServiceList()){
+	private ServiceSettingEntity searchService(String serviceName){
+		for(ServiceSettingEntity entity : servicePropertyEntity.getServiceList()){
 			if(entity.getServiceName().equals(serviceName)){
 				return entity;
 			}
@@ -38,7 +38,7 @@ public class DefaultProvider implements Provider{
 	 * @return
 	 */
 	public ResponseEntity acceptServiceRequest(RequestEntity request){
-		ServicePropertyEntity entity = searchService(request.getServiceName());
+		ServiceSettingEntity entity = searchService(request.getServiceName());
 		if(entity == null){
 			ResponseEntity response = new ResponseEntity();
 			response.setResult("Can not find the service name of " + request.getServiceName());

@@ -7,7 +7,7 @@ import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
-import service.framework.properties.WorkingClientPropertyEntity;
+import service.framework.setting.reader.ClientSettingReader;
 
 /**
  * the default consume which wrapped the method request
@@ -18,7 +18,7 @@ public class NIOServiceAccess implements ServiceAccess {
 	
 	protected NIOServiceAccessEngine consumeEngine;
 
-	public NIOServiceAccess(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool) {
+	public NIOServiceAccess(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool) {
 		consumeEngine = new NIOServiceAccessEngine(workingClientPropertyEntity, workerPool);
 	}
 

@@ -1,11 +1,11 @@
-package service.framework.properties;
+package service.framework.setting;
 
 /**
  * store the client information from properties
  * @author zhonxu
  *
  */
-public class ClientPropertyEntity {
+public class ClientSettingEntity {
 	private String serviceName;
 	private String serviceMethod;
 	private String serviceVersion;

@@ -1,4 +1,4 @@
-package service.framework.properties;
+package service.framework.setting.reader;
 
 import static service.framework.common.ShareingData.CLIENT_START_STRING;
 
@@ -8,16 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * this class used to read the properties from the client
- * @author zhonxu
- *
- */
-public class WorkingClientPropertyEntity {
-	private final List<ClientPropertyEntity> serviceClientList = new LinkedList<ClientPropertyEntity>();
+import service.framework.setting.ClientSettingEntity;
+
+public class ClientSettingPropertyReader implements ClientSettingReader {
+	private final List<ClientSettingEntity> serviceClientList = new LinkedList<ClientSettingEntity>();
 	
-	public WorkingClientPropertyEntity(String propertyFileName) throws IOException {
-		InputStream inputStream = WorkingClientPropertyEntity.class.getClassLoader().getResourceAsStream(propertyFileName);
+	public ClientSettingPropertyReader(String propertyFileName) throws IOException {
+		InputStream inputStream = ClientSettingReader.class.getClassLoader().getResourceAsStream(propertyFileName);
 		//create a new Properties
         Properties properties = new Properties(); 
         // load properties 
@@ -37,7 +34,7 @@ public class WorkingClientPropertyEntity {
 			String clientName = properties.getProperty(CLIENT_START_STRING + i
 					+ ".name");
 			if (clientName != null && clientName != "") {
-				ClientPropertyEntity entity = new ClientPropertyEntity();
+				ClientSettingEntity entity = new ClientSettingEntity();
 				entity.setServiceName(clientName);
 				entity.setServiceGroup(properties
 						.getProperty(CLIENT_START_STRING + i + ".group"));
@@ -54,8 +51,8 @@ public class WorkingClientPropertyEntity {
 			}
 		}
 	}
-
-	public List<ClientPropertyEntity> getServiceClientList() {
+	
+	public List<ClientSettingEntity> getServiceClientList() {
 		return serviceClientList;
 	}
 }

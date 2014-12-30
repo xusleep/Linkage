@@ -18,8 +18,8 @@ import service.framework.exception.ServiceException;
 import service.framework.io.common.NIOWorkingChannel;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.common.WorkingChannel;
-import service.framework.properties.ClientPropertyEntity;
-import service.framework.properties.WorkingClientPropertyEntity;
+import service.framework.setting.ClientSettingEntity;
+import service.framework.setting.reader.ClientSettingReader;
 
 /**
  * this an engine class of consume
@@ -33,9 +33,9 @@ public class NIOServiceAccessEngine{
 	private final HashMap<String, WorkingChannel> workingChannelCacheList = new HashMap<String, WorkingChannel>(16);
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final WorkerPool workerPool;
-	private final WorkingClientPropertyEntity workingClientPropertyEntity;
+	private final ClientSettingReader workingClientPropertyEntity;
 	
-	public NIOServiceAccessEngine(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool){
+	public NIOServiceAccessEngine(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool){
 		this.workingClientPropertyEntity = workingClientPropertyEntity;
 		this.workerPool = workerPool;
 	}
@@ -45,8 +45,8 @@ public class NIOServiceAccessEngine{
 	 * @param id
 	 * @return
 	 */
-	protected ClientPropertyEntity searchServiceClientEntity(String id){
-		for(ClientPropertyEntity entity : this.workingClientPropertyEntity.getServiceClientList()){
+	protected ClientSettingEntity searchServiceClientEntity(String id){
+		for(ClientSettingEntity entity : this.workingClientPropertyEntity.getServiceClientList()){
 			if(entity.getId().equals(id)){
 				return entity;
 			}
@@ -150,7 +150,7 @@ public class NIOServiceAccessEngine{
 	public RequestEntity createRequestEntity(String clientID, List<String> args){
 		long id = idGenerator.incrementAndGet();
 		final RequestEntity objRequestEntity = new RequestEntity();
-		ClientPropertyEntity objServiceClientEntity = searchServiceClientEntity(clientID);
+		ClientSettingEntity objServiceClientEntity = searchServiceClientEntity(clientID);
 		objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
 		objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
 		objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());

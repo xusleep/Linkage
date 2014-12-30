@@ -8,9 +8,10 @@ import service.framework.io.client.Client;
 import service.framework.io.client.DefaultClient;
 import service.framework.io.common.NIOWorkerPool;
 import service.framework.io.common.WorkerPool;
-import service.framework.properties.WorkingClientPropertyEntity;
 import service.framework.serviceaccess.NIOServiceAccess;
 import service.framework.serviceaccess.ServiceAccess;
+import service.framework.setting.reader.ClientSettingPropertyReader;
+import service.framework.setting.reader.ClientSettingReader;
 
 /**
  * client side boot strap
@@ -31,9 +32,9 @@ public class NIOClientBootStrap implements Runnable {
 	 */
 	public NIOClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
 		// read the configuration from the properties
-		WorkingClientPropertyEntity objServicePropertyEntity = null;
+		ClientSettingReader objServicePropertyEntity = null;
 		try {
-			objServicePropertyEntity = new WorkingClientPropertyEntity(propertyPath);
+			objServicePropertyEntity = new ClientSettingPropertyReader(propertyPath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -1,4 +1,4 @@
-package service.framework.properties;
+package service.framework.setting.reader;
 
 import static service.framework.common.ShareingData.SERVICE_ADDRESS;
 import static service.framework.common.ShareingData.SERVICE_PORT;
@@ -10,26 +10,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * this class used to read the properties from the service
- * @author zhonxu
- *
- */
-public class WorkingServicePropertyEntity {
-	
+import service.framework.setting.ServiceSettingEntity;
+
+public class ServiceSettingProtertyReader implements ServiceSettingReader {
 	private final String serviceAddress;
 	private final int servicePort;
-	private final List<ServicePropertyEntity> serviceList = new LinkedList<ServicePropertyEntity>();
+	private final List<ServiceSettingEntity> serviceList = new LinkedList<ServiceSettingEntity>();
 
-	public WorkingServicePropertyEntity(String propertyFileName){
-		InputStream inputStream = WorkingServicePropertyEntity.class.getClassLoader().getResourceAsStream(propertyFileName);
+	public ServiceSettingProtertyReader(String propertyFileName){
+		InputStream inputStream = ServiceSettingReader.class.getClassLoader().getResourceAsStream(propertyFileName);
 		//创建一个Properties容器 
         Properties properties = new Properties(); 
         //从流中加载properties文件信息 
         try {
 			properties.load(inputStream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
         this.serviceAddress = properties.getProperty(SERVICE_ADDRESS);
@@ -42,7 +37,7 @@ public class WorkingServicePropertyEntity {
         {
         	String serviceName = properties.getProperty(SERVICE_START_STRING + i + ".name");
         	if(serviceName != null && serviceName != ""){
-        		ServicePropertyEntity entity = new ServicePropertyEntity();
+        		ServiceSettingEntity entity = new ServiceSettingEntity();
             	entity.setServiceName(serviceName);
             	entity.setServiceGroup(properties.getProperty(SERVICE_START_STRING + i + ".group"));
             	entity.setServiceInterface(properties.getProperty(SERVICE_START_STRING + i + ".interface"));
@@ -64,7 +59,7 @@ public class WorkingServicePropertyEntity {
 		return servicePort;
 	}
 
-	public List<ServicePropertyEntity> getServiceList() {
+	public List<ServiceSettingEntity> getServiceList() {
 		return serviceList;
 	}
 }

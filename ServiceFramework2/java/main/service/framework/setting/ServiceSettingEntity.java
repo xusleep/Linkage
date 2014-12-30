@@ -1,11 +1,11 @@
-package service.framework.properties;
+package service.framework.setting;
 
 /**
  * store the service information from properties
  * @author zhonxu
  *
  */
-public class ServicePropertyEntity {
+public class ServiceSettingEntity {
 	private String serviceInterface;
 	private String serviceName;
 	private String serviceVersion;

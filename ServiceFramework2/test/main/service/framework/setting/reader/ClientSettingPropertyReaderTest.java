@@ -1,4 +1,4 @@
-package service.framework.properties;
+package service.framework.setting.reader;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,16 +7,17 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WorkingClientPropertyEntityTest {
+import service.framework.setting.reader.ClientSettingReader;
+
+public class ClientSettingPropertyReaderTest {
 	
-	WorkingClientPropertyEntity workingClientPropertyEntity;
+	ClientSettingReader workingClientPropertyEntity;
 	
 	@Before
 	public void setUp(){
 		try {
-			workingClientPropertyEntity = new WorkingClientPropertyEntity("service/framework/comsume/conf/client_client.properties");
+			workingClientPropertyEntity = new ClientSettingPropertyReader("service/framework/comsume/conf/client_client.properties");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -25,10 +26,8 @@ public class WorkingClientPropertyEntityTest {
 	public void normalTest(){
 		assertTrue("the count is not right.", workingClientPropertyEntity.getServiceClientList().size() == 5);
 		try {
-			workingClientPropertyEntity = new WorkingClientPropertyEntity("service/framework/comsume/conf/client_client.properties1");
+			workingClientPropertyEntity = new ClientSettingPropertyReader("service/framework/comsume/conf/client_client.properties1");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 		}
 		assertTrue("the count is not right.", workingClientPropertyEntity.getServiceClientList().size() == 0);
 	}

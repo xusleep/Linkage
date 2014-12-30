@@ -6,9 +6,10 @@ import service.framework.io.common.NIOWorkerPool;
 import service.framework.io.common.WorkerPool;
 import service.framework.io.server.DefaultServer;
 import service.framework.io.server.Server;
-import service.framework.properties.WorkingServicePropertyEntity;
 import service.framework.provider.DefaultProvider;
 import service.framework.provider.Provider;
+import service.framework.setting.reader.ServiceSettingProtertyReader;
+import service.framework.setting.reader.ServiceSettingReader;
 
 /**
  * this is boot strap used from the server side
@@ -19,11 +20,11 @@ public class NIOServerBootStrap implements Runnable {
 	private final Server server;
 	private final Provider providerBean;
 	private final EventDistributionMaster eventDistributionHandler;
-	private final WorkingServicePropertyEntity servicePropertyEntity;
+	private final ServiceSettingReader servicePropertyEntity;
 	
 	public NIOServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
 		// read the configuration from the properties
-		this.servicePropertyEntity = new WorkingServicePropertyEntity(propertyPath);
+		this.servicePropertyEntity = new ServiceSettingProtertyReader(propertyPath);
 		// new a task handler, this handler will handle all of the task from the pool queue
 		// into the executor pool(thread pool) which will execute the task.
 		this.eventDistributionHandler = new EventDistributionMaster(serviceTaskThreadPootSize);
@@ -50,13 +51,12 @@ public class NIOServerBootStrap implements Runnable {
 		return eventDistributionHandler;
 	}
 
-	public WorkingServicePropertyEntity getServicePropertyEntity() {
+	public ServiceSettingReader getServicePropertyEntity() {
 		return servicePropertyEntity;
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		new Thread(server).start();
 	}
 	

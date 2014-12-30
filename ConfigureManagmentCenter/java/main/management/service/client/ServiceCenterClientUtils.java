@@ -12,9 +12,9 @@ import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.exception.ServiceException;
 import service.framework.io.common.NIOWorker;
-import service.framework.properties.ServicePropertyEntity;
-import service.framework.properties.WorkingServicePropertyEntity;
 import service.framework.serviceaccess.ServiceAccess;
+import service.framework.setting.ServiceSettingEntity;
+import service.framework.setting.reader.ServiceSettingReader;
 
 /**
  * this class is used for call from the client side
@@ -87,12 +87,12 @@ public final class ServiceCenterClientUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean registerServiceList(ServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, WorkingServicePropertyEntity workingServicePropertyEntity) throws ServiceException{
+	public static boolean registerServiceList(ServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, ServiceSettingReader workingServicePropertyEntity) throws ServiceException{
 		List<ServiceInformationEntity> serviceInformationList = new LinkedList<ServiceInformationEntity>();
 		
 		//获取所有服务，将服务注册到注册中心
-		List<ServicePropertyEntity> serviceList = workingServicePropertyEntity.getServiceList();
-		for(ServicePropertyEntity serviceEntity: serviceList)
+		List<ServiceSettingEntity> serviceList = workingServicePropertyEntity.getServiceList();
+		for(ServiceSettingEntity serviceEntity: serviceList)
 		{
 			String interfaceName = serviceEntity.getServiceInterface();
 			try {

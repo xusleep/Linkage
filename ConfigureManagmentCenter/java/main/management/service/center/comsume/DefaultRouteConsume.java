@@ -15,13 +15,13 @@ import service.framework.common.entity.ServiceInformationEntity;
 import service.framework.exception.ServiceException;
 import service.framework.io.common.NIOWorkingChannel;
 import service.framework.io.common.WorkerPool;
-import service.framework.properties.WorkingClientPropertyEntity;
 import service.framework.serviceaccess.NIOServiceAccess;
+import service.framework.setting.reader.ClientSettingReader;
 
 public class DefaultRouteConsume extends NIOServiceAccess implements RouteConsume {
 	private final Route route;
 	private Log logger = LogFactory.getFactory().getInstance(DefaultRouteConsume.class);
-	public DefaultRouteConsume(WorkingClientPropertyEntity workingClientPropertyEntity, WorkerPool workerPool, ServiceInformationEntity centerServiceInformationEntity) {
+	public DefaultRouteConsume(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool, ServiceInformationEntity centerServiceInformationEntity) {
 		super(workingClientPropertyEntity, workerPool);
 		this.route = new ServiceCenterRoute(centerServiceInformationEntity, this);
 	}
