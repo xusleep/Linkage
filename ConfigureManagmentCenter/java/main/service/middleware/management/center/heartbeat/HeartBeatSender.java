@@ -10,7 +10,7 @@ import service.middleware.framework.common.StringUtils;
 import service.middleware.framework.common.entity.RequestResultEntity;
 import service.middleware.framework.common.entity.ServiceInformationEntity;
 import service.middleware.framework.serviceaccess.ServiceAccess;
-import service.middleware.management.service.center.ServiceCenter;
+import service.middleware.management.center.ServiceCenter;
 
 public class HeartBeatSender implements Runnable {
 	private static Logger  logger = Logger.getLogger(HeartBeatSender.class); 

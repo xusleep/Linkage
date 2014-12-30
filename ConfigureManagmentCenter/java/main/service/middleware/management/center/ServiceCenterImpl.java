@@ -1,4 +1,4 @@
-package service.middleware.management.service.center;
+package service.middleware.management.center;
 
 import java.util.LinkedList;
 import java.util.List;
