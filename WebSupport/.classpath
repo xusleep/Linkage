@@ -10,6 +10,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ConfigureManagementCenter"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ServiceFramework2"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ServiceMiddleware"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
