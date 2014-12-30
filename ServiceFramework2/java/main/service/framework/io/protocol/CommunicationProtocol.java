@@ -1,7 +1,7 @@
 package service.framework.io.protocol;
 
 
-public class ShareingProtocolData {
+public class CommunicationProtocol {
 	/**
 	 * data transform buffer Setting, in the data level
 	 */

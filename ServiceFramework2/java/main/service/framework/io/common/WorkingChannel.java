@@ -13,7 +13,7 @@ import service.framework.common.entity.RequestResultEntity;
 import service.framework.common.entity.ResponseEntity;
 import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.exception.ServiceException;
-import service.framework.io.protocol.ShareingProtocolData;
+import service.framework.io.protocol.CommunicationProtocol;
 
 /**
  * hold the object when request a connect,
@@ -49,7 +49,7 @@ public class WorkingChannel {
 	public WorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
 		this.worker = worker;
-		this.bufferMessage = new StringBuffer(ShareingProtocolData.RECEIVE_BUFFER_MESSAGE_SIZE);
+		this.bufferMessage = new StringBuffer(CommunicationProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
 	}
 	
 	/**
@@ -155,9 +155,9 @@ public class WorkingChannel {
 	 * @throws Exception 
 	 */
 	public String extractMessage() throws Exception{
-		int headStartIndex = this.bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_START);
-		int headEndIndex = bufferMessage.indexOf(ShareingProtocolData.MESSAGE_HEADER_END);
-		if(ShareingProtocolData.MESSAGE_HEADER_START.length() > bufferMessage.length())
+		int headStartIndex = this.bufferMessage.indexOf(CommunicationProtocol.MESSAGE_HEADER_START);
+		int headEndIndex = bufferMessage.indexOf(CommunicationProtocol.MESSAGE_HEADER_END);
+		if(CommunicationProtocol.MESSAGE_HEADER_START.length() > bufferMessage.length())
 			return "";
 		if(headStartIndex != 0)
 		{
@@ -166,19 +166,19 @@ public class WorkingChannel {
 		//包头不完整说明没有收到完整包
 		if(headEndIndex <= 0)
 			return "";
-		String head = bufferMessage.substring(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length());
-		String bodyLenthStr =  bufferMessage.substring(headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length(), 
-				headStartIndex + ShareingProtocolData.MESSAGE_HEADER_START.length() + ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART);
+		String head = bufferMessage.substring(headStartIndex, headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length());
+		String bodyLenthStr =  bufferMessage.substring(headStartIndex + CommunicationProtocol.MESSAGE_HEADER_START.length(), 
+				headStartIndex + CommunicationProtocol.MESSAGE_HEADER_START.length() + CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART);
 		int bodyLenth = Integer.parseInt(bodyLenthStr);
 		//包体长度没有到包头中设定的长度
-		if(bufferMessage.length() < ShareingProtocolData.MESSAGE_HEADER_START.length() + 
-				ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth)
+		if(bufferMessage.length() < CommunicationProtocol.MESSAGE_HEADER_START.length() + 
+				CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth)
 		{
 			return "";
 		}
-		String messageBody = bufferMessage.substring(headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length(), 
-				headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
-		bufferMessage.delete(headStartIndex, headEndIndex + ShareingProtocolData.MESSAGE_HEADER_END.length() + bodyLenth);
+		String messageBody = bufferMessage.substring(headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length(), 
+				headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
+		bufferMessage.delete(headStartIndex, headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
 		return messageBody;
 	}
 	
@@ -188,7 +188,7 @@ public class WorkingChannel {
 	 * @return
 	 */
 	public static String wrapMessage(String message){
-		return ShareingProtocolData.MESSAGE_HEADER_START + toLengthString(message.length()) + ShareingProtocolData.MESSAGE_HEADER_END + message; 
+		return CommunicationProtocol.MESSAGE_HEADER_START + toLengthString(message.length()) + CommunicationProtocol.MESSAGE_HEADER_END + message; 
 	}
 	
 	/**
@@ -202,7 +202,7 @@ public class WorkingChannel {
 	private static String toLengthString(int length){
 		String tmp = "" + length;
 		int tmpLength = tmp.length();
-		for(int i = 0; i < ShareingProtocolData.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
+		for(int i = 0; i < CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
 			tmp = "0" + tmp;
 		}
 		return tmp;

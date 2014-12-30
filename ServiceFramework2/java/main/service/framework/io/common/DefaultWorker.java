@@ -28,7 +28,7 @@ import service.framework.event.ServiceOnMessageWriteEvent;
 import service.framework.exception.ServiceException;
 import service.framework.exception.ServiceOnChanelClosedException;
 import service.framework.exception.ServiceOnChanelIOException;
-import service.framework.io.protocol.ShareingProtocolData;
+import service.framework.io.protocol.CommunicationProtocol;
 
 /**
  * this is default worker, will be used when there is connection established 
@@ -168,7 +168,7 @@ public class DefaultWorker implements Worker {
 				byte[] data = null;
 				try {
 					data = WorkingChannel.wrapMessage(evt.getMessage())
-							.getBytes(ShareingProtocolData.FRAMEWORK_IO_ENCODING);
+							.getBytes(CommunicationProtocol.FRAMEWORK_IO_ENCODING);
 				} catch (UnsupportedEncodingException e2) {
 					e2.printStackTrace();
 				}
@@ -229,7 +229,7 @@ public class DefaultWorker implements Worker {
 		int readBytes = 0;
 		int ret = 0;
 		boolean success = false;
-	    ByteBuffer bb = ByteBuffer.allocate(ShareingProtocolData.BUFFER_SIZE);
+	    ByteBuffer bb = ByteBuffer.allocate(CommunicationProtocol.BUFFER_SIZE);
         try {
             while ((ret = ch.read(bb)) > 0) {
                 readBytes += ret;
@@ -258,7 +258,7 @@ public class DefaultWorker implements Worker {
 		System.arraycopy(bb.array(), 0, message, 0, readBytes);
 		String receiveString = "";
 		try {
-			receiveString = new String(message, ShareingProtocolData.FRAMEWORK_IO_ENCODING);
+			receiveString = new String(message, CommunicationProtocol.FRAMEWORK_IO_ENCODING);
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
