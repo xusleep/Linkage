@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="test/main"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ConcurrentTestFrameWork"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Linkage"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LinkageCenter"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
