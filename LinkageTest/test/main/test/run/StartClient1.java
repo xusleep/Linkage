@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
-import service.middleware.linkage.center.comsume.DefaultRouteConsume;
+import service.middleware.linkage.center.comsume.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
@@ -25,9 +25,9 @@ public class StartClient1 extends AbstractJob {
 	private final AtomicBoolean isFailed = new AtomicBoolean(false);
 	public static final AtomicInteger successCount = new AtomicInteger(0);
 	public static final AtomicInteger requestCount = new AtomicInteger(0);
-	private final DefaultRouteConsume cb;
+	private final NIORouteServiceAccess cb;
 	
-	public StartClient1(DefaultRouteConsume cb) {
+	public StartClient1(NIORouteServiceAccess cb) {
 		this.cb = cb;
 	}
 	
@@ -87,7 +87,7 @@ public class StartClient1 extends AbstractJob {
 		clientBootStrap.run();
     	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/client_server.properties", 5);
     	serviceBootStrap.run();
-    	DefaultRouteConsume cb = clientBootStrap.getConsume();
+    	NIORouteServiceAccess cb = clientBootStrap.getConsume();
 		ServiceInformationEntity clientServiceInformationEntity = new ServiceInformationEntity();
 		clientServiceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());

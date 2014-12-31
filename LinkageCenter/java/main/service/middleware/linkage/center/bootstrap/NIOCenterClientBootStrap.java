@@ -2,7 +2,7 @@ package service.middleware.linkage.center.bootstrap;
 
 import java.io.IOException;
 
-import service.middleware.linkage.center.comsume.DefaultRouteConsume;
+import service.middleware.linkage.center.comsume.NIORouteServiceAccess;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.distribution.EventDistributionMaster;
 import service.middleware.linkage.framework.handlers.ClientReadWriteHandler;
@@ -23,7 +23,7 @@ public class NIOCenterClientBootStrap implements Runnable {
 	private final Client client;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkerPool workPool;
-	private final DefaultRouteConsume consume;
+	private final NIORouteServiceAccess consume;
 	
 	/**
 	 * 
@@ -46,7 +46,7 @@ public class NIOCenterClientBootStrap implements Runnable {
 		this.workPool = new NIOWorkerPool(eventDistributionHandler, 1);
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(eventDistributionHandler, this.workPool);
-		this.consume = new DefaultRouteConsume(objServicePropertyEntity, this.workPool, centerServiceInformationEntity);
+		this.consume = new NIORouteServiceAccess(objServicePropertyEntity, this.workPool, centerServiceInformationEntity);
 		eventDistributionHandler.registerHandler(new ClientReadWriteHandler(this.getConsume()));
 	}
 	
@@ -55,7 +55,7 @@ public class NIOCenterClientBootStrap implements Runnable {
 	 * from the client
 	 * @return
 	 */
-	public DefaultRouteConsume getConsume() {
+	public NIORouteServiceAccess getConsume() {
 		return consume;
 	}
 

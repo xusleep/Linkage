@@ -1,0 +1,1103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.yattasolutions.uml.diagrams.classifier:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.yattasolutions.diagrams="http://ns.yatta-solutions.com/umllab/diagrams/1.1.0" xmlns:com.yattasolutions.uml.diagrams.classifier="http://ns.yatta-solutions.com/umllab/diagrams/classifier/1.1.0" xmi:id="_WCwbwJC6EeSpPN3AM7W89g">
+  <modelElement href="Linkage2.uml#_WgXk0JC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-hgcZC6EeSpPN3AM7W89g" targetItem="_W-o1MJC6EeSpPN3AM7W89g" sourceItem="_W-hgcJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W-oOIJC6EeSpPN3AM7W89g" sourceAnchor="0.0,24.0" targetAnchor="390.0,152.0" target="_W_B2wJC6EeSpPN3AM7W89g" source="_W-o1MJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0_J8JC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W-oOIZC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W1AYEJC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W-oOIpC6EeSpPN3AM7W89g" text="">
+      <visualProperties xmi:id="_XJzjYJC6EeSpPN3AM7W89g" position="-31.0,-21.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_W-oOI5C6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W0_J8ZC6EeSpPN3AM7W89g"/>
+      <visualProperties xmi:id="_XJy8UJC6EeSpPN3AM7W89g" position="-27.625,-51.0"/>
+      <visibility xmi:id="_W-oOJJC6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W-oOJZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W-oOJpC6EeSpPN3AM7W89g" aggregationKind="NONE" name="consumeEngine" navigable="true">
+      <modelElement href="Linkage2.uml#_Wzf8MJC6EeSpPN3AM7W89g"/>
+      <visualProperties xmi:id="_XJ0KcJC6EeSpPN3AM7W89g" position="1.6666666666667425,2.0"/>
+      <visibility xmi:id="_W-oOJ5C6EeSpPN3AM7W89g" label="#"/>
+      <cardinality xmi:id="_W-oOKJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-zNQZC6EeSpPN3AM7W89g" targetItem="_W_B2wJC6EeSpPN3AM7W89g" sourceItem="_W-zNQJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W-z0UJC6EeSpPN3AM7W89g" source="_W_B2wJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W064gZC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W-7JEpC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W08tsJC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W-6iAJC6EeSpPN3AM7W89g" text=""/>
+    <sourceRole xmi:id="_W-7JEJC6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W064gpC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W-9lUJC6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W-8-QJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W-7JEZC6EeSpPN3AM7W89g" aggregationKind="NONE" name="workerPool" navigable="true">
+      <modelElement href="Linkage2.uml#_WzXZUJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W-9lUpC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W-9lUZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W-z0UZC6EeSpPN3AM7W89g" source="_W_B2wJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W09UwJC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W-7wIZC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W0-i4JC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W-7JE5C6EeSpPN3AM7W89g" text=""/>
+    <sourceRole xmi:id="_W-7JFJC6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W09UwZC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W--MYpC6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W--MYZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W-7wIJC6EeSpPN3AM7W89g" aggregationKind="NONE" name="workingClientPropertyEntity" navigable="true">
+      <modelElement href="Linkage2.uml#_WzZOgJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W--MZJC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W--MY5C6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-0bYZC6EeSpPN3AM7W89g" targetItem="_W_B225C6EeSpPN3AM7W89g" sourceItem="_W-0bYJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-1pgZC6EeSpPN3AM7W89g" targetItem="_W_Cd0ZC6EeSpPN3AM7W89g" sourceItem="_W-1pgJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-2QkZC6EeSpPN3AM7W89g" targetItem="_W_Cd3ZC6EeSpPN3AM7W89g" sourceItem="_W-2QkJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-23oZC6EeSpPN3AM7W89g" targetItem="_W_Cd5ZC6EeSpPN3AM7W89g" sourceItem="_W-23oJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-3esZC6EeSpPN3AM7W89g" targetItem="_W_Cd65C6EeSpPN3AM7W89g" sourceItem="_W-3esJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-4FwZC6EeSpPN3AM7W89g" targetItem="_W_Cd85C6EeSpPN3AM7W89g" sourceItem="_W-4FwJC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-4s0ZC6EeSpPN3AM7W89g" targetItem="_W_Cd-ZC6EeSpPN3AM7W89g" sourceItem="_W-4s0JC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_W-5T4ZC6EeSpPN3AM7W89g" targetItem="_W_Cd_ZC6EeSpPN3AM7W89g" sourceItem="_W-5T4JC6EeSpPN3AM7W89g"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W_ABkJC6EeSpPN3AM7W89g" source="_W_B2wJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W03OIZC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W_AooJC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W05DUJC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W_AooZC6EeSpPN3AM7W89g" text=""/>
+    <sourceRole xmi:id="_W_AoopC6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W03OIpC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Aoo5C6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W_AopJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W_AopZC6EeSpPN3AM7W89g" aggregationKind="NONE" name="workingChannelCacheList" navigable="true">
+      <modelElement href="Linkage2.uml#_WzRSsJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_AoppC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_Aop5C6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W_BPsJC6EeSpPN3AM7W89g" source="_W_B2wJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W05DUZC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W_BPsZC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W064gJC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W_BPspC6EeSpPN3AM7W89g" text=""/>
+    <sourceRole xmi:id="_W_BPs5C6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W05DUpC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_BPtJC6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W_BPtZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W_BPtpC6EeSpPN3AM7W89g" aggregationKind="NONE" name="idGenerator" navigable="true">
+      <modelElement href="Linkage2.uml#_WzVkIJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_BPt5C6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_BPuJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W_V_0JC6EeSpPN3AM7W89g" sourceAnchor="0.0,90.0" targetAnchor="390.0,15.0" target="_W_B2wJC6EeSpPN3AM7W89g" source="_W_eisJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0xHgJC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W_XN8JC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W0y8sJC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W_Wm4ZC6EeSpPN3AM7W89g" text="">
+      <visualProperties xmi:id="_XJ1YkJC6EeSpPN3AM7W89g" position="-31.0,2.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_W_Wm4pC6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W0xHgZC6EeSpPN3AM7W89g"/>
+      <visualProperties xmi:id="_XJ0xgJC6EeSpPN3AM7W89g" position="-28.0,2.0"/>
+      <visibility xmi:id="_W_d7oZC6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W_d7oJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W_Wm45C6EeSpPN3AM7W89g" aggregationKind="NONE" name="consumeEngine" navigable="true">
+      <modelElement href="Linkage2.uml#_WoUm8JC6EeSpPN3AM7W89g"/>
+      <visualProperties xmi:id="_XJ1_oJC6EeSpPN3AM7W89g" position="2.6666666666667425,-51.0"/>
+      <visibility xmi:id="_W_d7o5C6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W_d7opC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_W_Wm4JC6EeSpPN3AM7W89g" sourceAnchor="105.0,0.0" targetAnchor="102.0,176.0" dashed="true" superClass="_W_eisJC6EeSpPN3AM7W89g" subClass="_W-o1MJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_Wu1eoJC6EeSpPN3AM7W89g"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_W_l3cJC6EeSpPN3AM7W89g" sourceAnchor="0.0,90.0" targetAnchor="211.0,99.0" superClass="_W-o1MJC6EeSpPN3AM7W89g" subClass="_W_uaUJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_WtbJYJC6EeSpPN3AM7W89g"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W_tMMJC6EeSpPN3AM7W89g" source="_W_uaUJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0zjwJC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W_tMMZC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W01Y8JC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W_tMMpC6EeSpPN3AM7W89g" text=""/>
+    <sourceRole xmi:id="_W_tMM5C6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W0zjwZC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_tMNJC6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W_tMNZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W_tMNpC6EeSpPN3AM7W89g" aggregationKind="NONE" name="route" navigable="true">
+      <modelElement href="Linkage2.uml#_WzHhsJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_tMN5C6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_tMOJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_W_tzQJC6EeSpPN3AM7W89g" source="_W_uaUJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W01Y8ZC6EeSpPN3AM7W89g"/>
+    <stereotypes xmi:id="_W_tzQZC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_W03OIJC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <nameVisual xmi:id="_W_tzQpC6EeSpPN3AM7W89g" text=""/>
+    <sourceRole xmi:id="_W_tzQ5C6EeSpPN3AM7W89g" aggregationKind="NONE" name="">
+      <modelElement href="Linkage2.uml#_W01Y8pC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_tzRJC6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W_tzRZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_W_tzRpC6EeSpPN3AM7W89g" aggregationKind="NONE" name="logger" navigable="true">
+      <modelElement href="Linkage2.uml#_WzJW4JC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_tzR5C6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_tzSJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_W_4yYJC6EeSpPN3AM7W89g" sourceAnchor="114.0,0.0" targetAnchor="117.0,136.0" dashed="true" superClass="_W_8cwJC6EeSpPN3AM7W89g" subClass="_W_uaUJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_WtUbsZC6EeSpPN3AM7W89g"/>
+  </edges>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-hgcJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-hgcZC6EeSpPN3AM7W89g" text="the default consume which wrapped the method request&#xD;&#xA;@author zhonxu&#xD;&#xA; *" item="_W-o1MJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0gBwJC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-zNQJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-zNQZC6EeSpPN3AM7W89g" text="this an engine class of consume&#xD;&#xA;@author zhonxu&#xD;&#xA; *" item="_W_B2wJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0cXYJC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-0bYJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-0bYZC6EeSpPN3AM7W89g" text="search the configuration check the configure for the service&#xD;&#xA;&#x9; * @param id&#xD;&#xA;&#x9; * @return" item="_W_B225C6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0c-cJC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-1pgJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-1pgZC6EeSpPN3AM7W89g" text="basic process request&#xD;&#xA;&#x9; * @param objRequestEntity&#xD;&#xA;&#x9; * @param result&#xD;&#xA;&#x9; * @param serviceInformationEntity&#xD;&#xA;&#x9; * @param channelFromCached&#xD;&#xA;&#x9; * @return" item="_W_Cd0ZC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0dlgJC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-2QkJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-2QkZC6EeSpPN3AM7W89g" text="get a working channel from cache,&#xD;&#xA;&#x9; * if not existed, create a new one&#xD;&#xA;&#x9; * @param serviceName&#xD;&#xA;&#x9; * @param fromCached get it from the cache or not&#xD;&#xA;&#x9; * @return&#xD;&#xA;&#x9; * @throws ExecutionException &#xD;&#xA;&#x9; * @throws InterruptedException &#xD;&#xA;&#x9; * @throws IOException &#xD;&#xA;&#x9; * @throws Exception" item="_W_Cd3ZC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0dlgZC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-23oJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-23oZC6EeSpPN3AM7W89g" text="set the request result&#xD;&#xA;&#x9; * @param requestID&#xD;&#xA;&#x9; * @param strResult" item="_W_Cd5ZC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0eMkJC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-3esJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-3esZC6EeSpPN3AM7W89g" text="create a request entity&#xD;&#xA;&#x9; * @param clientID&#xD;&#xA;&#x9; * @param args&#xD;&#xA;&#x9; * @return" item="_W_Cd65C6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0eMkZC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-4FwJC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-4FwZC6EeSpPN3AM7W89g" text=" connect to the service&#xD;&#xA;&#x9; * @param address&#xD;&#xA;&#x9; * @param port&#xD;&#xA;&#x9; * @return&#xD;&#xA;&#x9; * @throws IOException" item="_W_Cd85C6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0eMkpC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-4s0JC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-4s0ZC6EeSpPN3AM7W89g" text="remove the channel from the cache &#xD;&#xA;&#x9; * @param requestID" item="_W_Cd-ZC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0ezoJC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_W-5T4JC6EeSpPN3AM7W89g" sourceConnectionVisual="_W-5T4ZC6EeSpPN3AM7W89g" text="close the channel by request result&#xD;&#xA;&#x9; * the client could determine close the channel or not&#xD;&#xA;&#x9; * this method is used along with method prcessRequestPerConnect&#xD;&#xA;&#x9; * don't use it along with method prcessRequest&#xD;&#xA;&#x9; * @param objRequestResultEntity" item="_W_Cd_ZC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_W0ezoZC6EeSpPN3AM7W89g"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_W_M14JC6EeSpPN3AM7W89g" name="IOException">
+    <modelElement href="Linkage2.uml#_WttdQJC6EeSpPN3AM7W89g"/>
+    <visualProperties xmi:id="_W_M14ZC6EeSpPN3AM7W89g" position="-193.0,-652.0" size="8.0,48.0"/>
+    <stereotypes xmi:id="_W_M14pC6EeSpPN3AM7W89g" name="Reference">
+      <modelElement href="Linkage2.uml#_WturYJC6EeSpPN3AM7W89g"/>
+    </stereotypes>
+    <visibility xmi:id="_W_M145C6EeSpPN3AM7W89g" label="+"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:InterfaceVisual" xmi:id="_W_eisJC6EeSpPN3AM7W89g" name="ServiceAccess" associationsOut="_W_V_0JC6EeSpPN3AM7W89g" subclassedBy="_W_Wm4JC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_WoKO4JC6EeSpPN3AM7W89g"/>
+    <visualProperties xmi:id="_W_fJwJC6EeSpPN3AM7W89g" position="-1037.0,-636.0" size="203.0,176.0"/>
+    <visibility xmi:id="_W_fJwZC6EeSpPN3AM7W89g" label="+"/>
+    <attributes xmi:id="_W_fJwpC6EeSpPN3AM7W89g" name="consumeEngine">
+      <modelElement href="Linkage2.uml#_WoUm8JC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_fJw5C6EeSpPN3AM7W89g" label="+"/>
+      <cardinality xmi:id="_W_fJxJC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W_fJxZC6EeSpPN3AM7W89g" name="NIOServiceAccessEngine">
+        <modelElement href="Linkage2.uml#_WnOawJC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_W_fJxpC6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_WxctwJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_fJx5C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_fJyJC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wxd74JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJyZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_fJypC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WxdU0JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJy5C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJzJC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WxdU0ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJzZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJzpC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_WxdU0pC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJz5C6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_fJ0JC6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_WxhmQJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_fJ0ZC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_fJ0pC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wxi0YJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ05C6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_fJ1JC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WxiNUJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ1ZC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJ1pC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WxiNUZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ15C6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJ2JC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_WxiNUpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ2ZC6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJ2pC6EeSpPN3AM7W89g" name="channelFromCached">
+        <modelElement href="Linkage2.uml#_WxiNU5C6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ25C6EeSpPN3AM7W89g" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_fJ3JC6EeSpPN3AM7W89g" name="requestServicePerConnect">
+      <modelElement href="Linkage2.uml#_WxnF0JC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_fJ3ZC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_fJ3pC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wxns4ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ35C6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_fJ4JC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WxnF0ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ4ZC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJ4pC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WxnF0pC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ45C6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJ5JC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_Wxns4JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ5ZC6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_fJ5pC6EeSpPN3AM7W89g" name="requestServicePerConnectSync">
+      <modelElement href="Linkage2.uml#_WxrXQJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_fJ55C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_fJ6JC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WxslYJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ6ZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_fJ6pC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_Wxr-UJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ65C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJ7JC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_Wxr-UZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ7ZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_fJ7pC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_Wxr-UpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ75C6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_fJ8JC6EeSpPN3AM7W89g" name="closeChannelByRequestResult">
+      <modelElement href="Linkage2.uml#_WxvosJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_fJ8ZC6EeSpPN3AM7W89g" label="+"/>
+      <parameters xmi:id="_W_fJ8pC6EeSpPN3AM7W89g" name="objRequestResultEntity">
+        <modelElement href="Linkage2.uml#_WxvosZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ85C6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_fJ9JC6EeSpPN3AM7W89g" name="removeCachedChannel">
+      <modelElement href="Linkage2.uml#_Wxxd4JC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_fJ9ZC6EeSpPN3AM7W89g" label="+"/>
+      <parameters xmi:id="_W_fJ9pC6EeSpPN3AM7W89g" name="objWorkingChannel">
+        <modelElement href="Linkage2.uml#_Wxxd4ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_fJ95C6EeSpPN3AM7W89g" name="WorkingChannel">
+          <modelElement href="Linkage2.uml#_Wt6RkJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_W-o1MJC6EeSpPN3AM7W89g" comments="_W-hgcJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-hgcZC6EeSpPN3AM7W89g" name="NIOServiceAccess" associationsOut="_W-oOIJC6EeSpPN3AM7W89g" generalizations="_W_Wm4JC6EeSpPN3AM7W89g" subclassedBy="_W_l3cJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_WooI8JC6EeSpPN3AM7W89g"/>
+    <visualProperties xmi:id="_W-o1MZC6EeSpPN3AM7W89g" position="-1040.0,-433.0" size="211.0,197.0"/>
+    <visibility xmi:id="_W-o1MpC6EeSpPN3AM7W89g" label="+"/>
+    <attributes xmi:id="_W-o1M5C6EeSpPN3AM7W89g" name="consumeEngine">
+      <modelElement href="Linkage2.uml#_Wzf8MJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1NJC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzhKUJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1NZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzhKUJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1NpC6EeSpPN3AM7W89g" label="#"/>
+      <cardinality xmi:id="_W-o1N5C6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W-o1OJC6EeSpPN3AM7W89g" name="NIOServiceAccessEngine">
+        <modelElement href="Linkage2.uml#_WnOawJC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_W-o1OZC6EeSpPN3AM7W89g" name="getConsumeEngine">
+      <modelElement href="Linkage2.uml#_Wo6c0JC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1OpC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_Wo7q8JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1O5C6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_Wo9gIJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1PJC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W-o1PZC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wu_PoJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1PpC6EeSpPN3AM7W89g" name="NIOServiceAccessEngine">
+          <modelElement href="Linkage2.uml#_WnOawJC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+    </operations>
+    <operations xmi:id="_W-o1P5C6EeSpPN3AM7W89g" name="NIOServiceAccess">
+      <modelElement href="Linkage2.uml#_Wx29cJC6EeSpPN3AM7W89g"/>
+      <keywords xmi:id="_W-o1QJC6EeSpPN3AM7W89g" keyword="create"/>
+      <visibility xmi:id="_W-o1QZC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W-o1QpC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wx3kgpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1Q5C6EeSpPN3AM7W89g" name="NIOServiceAccess">
+          <modelElement href="Linkage2.uml#_WooI8JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W-o1RJC6EeSpPN3AM7W89g" name="workingClientPropertyEntity">
+        <modelElement href="Linkage2.uml#_Wx29cZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1RZC6EeSpPN3AM7W89g" name="ClientSettingReader">
+          <modelElement href="Linkage2.uml#_WtTNkJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1RpC6EeSpPN3AM7W89g" name="workerPool">
+        <modelElement href="Linkage2.uml#_Wx29cpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1R5C6EeSpPN3AM7W89g" name="WorkerPool">
+          <modelElement href="Linkage2.uml#_WtRYYZC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W-o1SJC6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_Wx6n0JC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1SZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_Wx8dAJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1SpC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_WyAucJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1S5C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W-o1TJC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wx718JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1TZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W-o1TpC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_Wx7O4JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1T5C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1UJC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_Wx7O4ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1UZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1UpC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_Wx7O4pC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1U5C6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W-o1VJC6EeSpPN3AM7W89g" name="requestServicePerConnect">
+      <modelElement href="Linkage2.uml#_WyEY0JC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1VZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WyGOAJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1VpC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_WyJ4YJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1V5C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W-o1WJC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WyFm8JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1WZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W-o1WpC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WyEY0ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1W5C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1XJC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WyEY0pC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1XZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1XpC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_WyE_4JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1X5C6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W-o1YJC6EeSpPN3AM7W89g" name="requestServicePerConnectSync">
+      <modelElement href="Linkage2.uml#_WyM7sJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1YZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WyOw4JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1YpC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_WySbQJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1Y5C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W-o1ZJC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WyOJ0JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1ZZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W-o1ZpC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WyNiwJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1Z5C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1aJC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WyNiwZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1aZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1apC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_WyNiwpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1a5C6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W-o1bJC6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_WyWFoJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1bZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WyX60ZC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1bpC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_WyczUJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1b5C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W-o1cJC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WyX60JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1cZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W-o1cpC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WyWssJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1c5C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1dJC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WyWssZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1dZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1dpC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_WyWsspC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1d5C6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W-o1eJC6EeSpPN3AM7W89g" name="channelFromCached">
+        <modelElement href="Linkage2.uml#_WyWss5C6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1eZC6EeSpPN3AM7W89g" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W-o1epC6EeSpPN3AM7W89g" name="closeChannelByRequestResult">
+      <modelElement href="Linkage2.uml#_WyfPkJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1e5C6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WygdsJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1fJC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_Wyhr0JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1fZC6EeSpPN3AM7W89g" label="+"/>
+      <parameters xmi:id="_W-o1fpC6EeSpPN3AM7W89g" name="objRequestResultEntity">
+        <modelElement href="Linkage2.uml#_Wyf2oJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1f5C6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W-o1gJC6EeSpPN3AM7W89g" name="removeCachedChannel">
+      <modelElement href="Linkage2.uml#_WyjhAJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W-o1gZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WykvIJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W-o1gpC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_Wyl9QJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W-o1g5C6EeSpPN3AM7W89g" label="+"/>
+      <parameters xmi:id="_W-o1hJC6EeSpPN3AM7W89g" name="objWorkingChannel">
+        <modelElement href="Linkage2.uml#_WyjhAZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W-o1hZC6EeSpPN3AM7W89g" name="WorkingChannel">
+          <modelElement href="Linkage2.uml#_Wt6RkJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:InterfaceVisual" xmi:id="_W_8cwJC6EeSpPN3AM7W89g" name="RouteServiceAccess" subclassedBy="_W_4yYJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_WpgSsJC6EeSpPN3AM7W89g"/>
+    <visualProperties xmi:id="_W_8cwZC6EeSpPN3AM7W89g" position="-799.0,-636.0" size="234.0,136.0"/>
+    <visibility xmi:id="_W_8cwpC6EeSpPN3AM7W89g" label="+"/>
+    <operations xmi:id="_W_8cw5C6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_Wyt5EJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_8cxJC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_8cxZC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WyugIJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8cxpC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_8cx5C6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_Wyt5EZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8cyJC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_8cyZC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_Wyt5EpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8cypC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_8cy5C6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_WyxjcJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_8czJC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_8czZC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WyyKgZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8czpC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_8cz5C6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WyxjcZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c0JC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_8c0ZC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WyxjcpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c0pC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_8c05C6EeSpPN3AM7W89g" name="channelFromCached">
+        <modelElement href="Linkage2.uml#_WyyKgJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c1JC6EeSpPN3AM7W89g" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_8c1ZC6EeSpPN3AM7W89g" name="requestServicePerConnect">
+      <modelElement href="Linkage2.uml#_Wy104JC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_8c1pC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_8c15C6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wy2b8JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c2JC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_8c2ZC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_Wy104ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c2pC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_8c25C6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_Wy104pC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c3JC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_8c3ZC6EeSpPN3AM7W89g" name="requestServicePerConnectSync">
+      <modelElement href="Linkage2.uml#_Wy5fQJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_8c3pC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_8c35C6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Wy6GUZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c4JC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_8c4ZC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_Wy5fQZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c4pC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_8c45C6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_Wy6GUJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_8c5JC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_W_uaUJC6EeSpPN3AM7W89g" name="NIORouteServiceAccess" associationsOut="_W_tMMJC6EeSpPN3AM7W89g _W_tzQJC6EeSpPN3AM7W89g" generalizations="_W_l3cJC6EeSpPN3AM7W89g _W_4yYJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_WmpL8JC6EeSpPN3AM7W89g"/>
+    <visualProperties xmi:id="_W_uaUZC6EeSpPN3AM7W89g" position="-796.0,-424.0" size="256.0,184.0"/>
+    <visibility xmi:id="_W_uaUpC6EeSpPN3AM7W89g" label="+"/>
+    <attributes xmi:id="_W_uaU5C6EeSpPN3AM7W89g" name="route">
+      <modelElement href="Linkage2.uml#_WzHhsJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_uaVJC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzIv0JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_uaVZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzIv0JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_uaVpC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_uaV5C6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W_uaWJC6EeSpPN3AM7W89g" name="Route">
+        <modelElement href="Linkage2.uml#_WtGZQJC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_W_uaWZC6EeSpPN3AM7W89g" defaultValue="LogFactory.getFactory().getInstance(NIORouteServiceAccess.class)" name="logger">
+      <modelElement href="Linkage2.uml#_WzJW4JC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_uaWpC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzKlAJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_uaW5C6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzKlAJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_uaXJC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_uaXZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W_uaXpC6EeSpPN3AM7W89g" name="Log">
+        <modelElement href="Linkage2.uml#_WtDV8ZC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_W_uaX5C6EeSpPN3AM7W89g" name="NIORouteServiceAccess">
+      <modelElement href="Linkage2.uml#_WwH4EJC6EeSpPN3AM7W89g"/>
+      <keywords xmi:id="_W_uaYJC6EeSpPN3AM7W89g" keyword="create"/>
+      <visibility xmi:id="_W_uaYZC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_uaYpC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WwJGMpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaY5C6EeSpPN3AM7W89g" name="NIORouteServiceAccess">
+          <modelElement href="Linkage2.uml#_WmpL8JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_uaZJC6EeSpPN3AM7W89g" name="workingClientPropertyEntity">
+        <modelElement href="Linkage2.uml#_WwH4EZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaZZC6EeSpPN3AM7W89g" name="ClientSettingReader">
+          <modelElement href="Linkage2.uml#_WtTNkJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_uaZpC6EeSpPN3AM7W89g" name="workerPool">
+        <modelElement href="Linkage2.uml#_WwIfIJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaZ5C6EeSpPN3AM7W89g" name="WorkerPool">
+          <modelElement href="Linkage2.uml#_WtRYYZC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_uaaJC6EeSpPN3AM7W89g" name="centerServiceInformationEntity">
+        <modelElement href="Linkage2.uml#_WwIfIZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaaZC6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_uaapC6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_WwLicJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_uaa5C6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WwNXoJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_uabJC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_WwQa8JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_uabZC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_uabpC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WwMwkJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uab5C6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_uacJC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WwMJgJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uacZC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_uacpC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WwMJgZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uac5C6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_uadJC6EeSpPN3AM7W89g" name="requestService">
+      <modelElement href="Linkage2.uml#_WwTeQJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_uadZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WwVTcJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_uadpC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_WwY90JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_uad5C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_uaeJC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WwUsYJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaeZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_uaepC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WwUFUJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uae5C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_uafJC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WwUFUZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uafZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_uafpC6EeSpPN3AM7W89g" name="channelFromCached">
+        <modelElement href="Linkage2.uml#_WwUFUpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaf5C6EeSpPN3AM7W89g" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_uagJC6EeSpPN3AM7W89g" name="requestServicePerConnect">
+      <modelElement href="Linkage2.uml#_WwcBIJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_uagZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_Wwd2UJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_uagpC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_Wwg5oJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_uag5C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_uahJC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WwdPQJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uahZC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_uahpC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WwcBIZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uah5C6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_uaiJC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WwcoMJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaiZC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_uaipC6EeSpPN3AM7W89g" name="requestServicePerConnectSync">
+      <modelElement href="Linkage2.uml#_Wwj88JC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_uai5C6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WwlyIJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_uajJC6EeSpPN3AM7W89g" name="Annotations">
+        <modelElement href="Linkage2.uml#_WwpcgJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_uajZC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_uajpC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WwlLEJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uaj5C6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_uakJC6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WwkkAJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uakZC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_uakpC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WwkkAZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_uak5C6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_W_B2wJC6EeSpPN3AM7W89g" comments="_W-zNQJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-zNQZC6EeSpPN3AM7W89g" name="NIOServiceAccessEngine" associationsIn="_W-oOIJC6EeSpPN3AM7W89g _W_V_0JC6EeSpPN3AM7W89g" associationsOut="_W-z0UJC6EeSpPN3AM7W89g _W-z0UZC6EeSpPN3AM7W89g _W_ABkJC6EeSpPN3AM7W89g _W_BPsJC6EeSpPN3AM7W89g">
+    <modelElement href="Linkage2.uml#_WnOawJC6EeSpPN3AM7W89g"/>
+    <visualProperties xmi:id="_W_B2wZC6EeSpPN3AM7W89g" position="-1540.0,-561.0" size="390.0,304.0"/>
+    <visibility xmi:id="_W_B2wpC6EeSpPN3AM7W89g" label="+"/>
+    <attributes xmi:id="_W_B2w5C6EeSpPN3AM7W89g" defaultValue="new HashMap&lt;String, WorkingChannel>(16)" name="workingChannelCacheList">
+      <modelElement href="Linkage2.uml#_WzRSsJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_B2xJC6EeSpPN3AM7W89g" name="Generics">
+        <modelElement href="Linkage2.uml#_WzTu8JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_B2xZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzU9EJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_B2xpC6EeSpPN3AM7W89g" name="Generics">
+        <modelElement href="Linkage2.uml#_WzTu8JC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_B2x5C6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzU9EJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_B2yJC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_B2yZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W_B2ypC6EeSpPN3AM7W89g" name="HashMap">
+        <modelElement href="Linkage2.uml#_WtxusZC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_W_B2y5C6EeSpPN3AM7W89g" defaultValue="new AtomicLong(0)" name="idGenerator">
+      <modelElement href="Linkage2.uml#_WzVkIJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_B2zJC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzWyQJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W_B2zZC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzWyQJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_B2zpC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_B2z5C6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W_B20JC6EeSpPN3AM7W89g" name="AtomicLong">
+        <modelElement href="Linkage2.uml#_Wt0yAZC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_W_B20ZC6EeSpPN3AM7W89g" name="workerPool">
+      <modelElement href="Linkage2.uml#_WzXZUJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_B20pC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzYncJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W--MYJC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzYncJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_B205C6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_B21JC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W_B21ZC6EeSpPN3AM7W89g" name="WorkerPool">
+        <modelElement href="Linkage2.uml#_WtRYYZC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_W_B21pC6EeSpPN3AM7W89g" name="workingClientPropertyEntity">
+      <modelElement href="Linkage2.uml#_WzZOgJC6EeSpPN3AM7W89g"/>
+      <stereotypes xmi:id="_W_B215C6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzacoJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <stereotypes xmi:id="_W--zcJC6EeSpPN3AM7W89g" name="LegacyStyledElement">
+        <modelElement href="Linkage2.uml#_WzacoJC6EeSpPN3AM7W89g"/>
+      </stereotypes>
+      <visibility xmi:id="_W_B22JC6EeSpPN3AM7W89g" label="-"/>
+      <cardinality xmi:id="_W_B22ZC6EeSpPN3AM7W89g" label="1" max="1" min="1"/>
+      <type xmi:id="_W_B22pC6EeSpPN3AM7W89g" name="ClientSettingReader">
+        <modelElement href="Linkage2.uml#_WtTNkJC6EeSpPN3AM7W89g"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_W_B225C6EeSpPN3AM7W89g" comments="_W-0bYJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-0bYZC6EeSpPN3AM7W89g" name="searchServiceClientEntity">
+      <modelElement href="Linkage2.uml#_WnWWkJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_B23JC6EeSpPN3AM7W89g" label="#"/>
+      <outParameters xmi:id="_W_B23ZC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Ww234JC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_B23pC6EeSpPN3AM7W89g" name="ClientSettingEntity">
+          <modelElement href="Linkage2.uml#_Wt9U4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_B235C6EeSpPN3AM7W89g" name="id">
+        <modelElement href="Linkage2.uml#_WnWWkZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_B24JC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_B24ZC6EeSpPN3AM7W89g" name="NIOServiceAccessEngine">
+      <modelElement href="Linkage2.uml#_Ww0boJC6EeSpPN3AM7W89g"/>
+      <keywords xmi:id="_W_B24pC6EeSpPN3AM7W89g" keyword="create"/>
+      <visibility xmi:id="_W_B245C6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_B25JC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Ww1pwpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_B25ZC6EeSpPN3AM7W89g" name="NIOServiceAccessEngine">
+          <modelElement href="Linkage2.uml#_WnOawJC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_B25pC6EeSpPN3AM7W89g" name="workingClientPropertyEntity">
+        <modelElement href="Linkage2.uml#_Ww1CsJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_B255C6EeSpPN3AM7W89g" name="ClientSettingReader">
+          <modelElement href="Linkage2.uml#_WtTNkJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_B26JC6EeSpPN3AM7W89g" name="workerPool">
+        <modelElement href="Linkage2.uml#_Ww1CsZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd0JC6EeSpPN3AM7W89g" name="WorkerPool">
+          <modelElement href="Linkage2.uml#_WtRYYZC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_Cd0ZC6EeSpPN3AM7W89g" comments="_W-1pgJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-1pgZC6EeSpPN3AM7W89g" name="basicProcessRequest">
+      <modelElement href="Linkage2.uml#_Ww8-gJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Cd0pC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_Cd05C6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_Ww9lkZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd1JC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_Cd1ZC6EeSpPN3AM7W89g" name="objRequestEntity">
+        <modelElement href="Linkage2.uml#_Ww8-gZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd1pC6EeSpPN3AM7W89g" name="RequestEntity">
+          <modelElement href="Linkage2.uml#_WtKqsZC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_Cd15C6EeSpPN3AM7W89g" name="result">
+        <modelElement href="Linkage2.uml#_Ww8-gpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd2JC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_Cd2ZC6EeSpPN3AM7W89g" name="serviceInformationEntity">
+        <modelElement href="Linkage2.uml#_Ww8-g5C6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd2pC6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_Cd25C6EeSpPN3AM7W89g" name="channelFromCached">
+        <modelElement href="Linkage2.uml#_Ww9lkJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd3JC6EeSpPN3AM7W89g" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_Cd3ZC6EeSpPN3AM7W89g" comments="_W-2QkJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-2QkZC6EeSpPN3AM7W89g" name="getWorkingChannnel">
+      <modelElement href="Linkage2.uml#_WxE6UJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Cd3pC6EeSpPN3AM7W89g" label="-"/>
+      <outParameters xmi:id="_W_Cd35C6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WxFhYJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd4JC6EeSpPN3AM7W89g" name="WorkingChannel">
+          <modelElement href="Linkage2.uml#_Wt6RkJC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_Cd4ZC6EeSpPN3AM7W89g" name="fromCached">
+        <modelElement href="Linkage2.uml#_WxE6UZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd4pC6EeSpPN3AM7W89g" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_Cd45C6EeSpPN3AM7W89g" name="service">
+        <modelElement href="Linkage2.uml#_WxE6UpC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd5JC6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_Cd5ZC6EeSpPN3AM7W89g" comments="_W-23oJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-23oZC6EeSpPN3AM7W89g" name="setExceptionToRuquestResult" staticOperation="true">
+      <modelElement href="Linkage2.uml#_WxIksJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Cd5pC6EeSpPN3AM7W89g" label="+"/>
+      <parameters xmi:id="_W_Cd55C6EeSpPN3AM7W89g" name="result">
+        <modelElement href="Linkage2.uml#_WxIksZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd6JC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_Cd6ZC6EeSpPN3AM7W89g" name="serviceException">
+        <modelElement href="Linkage2.uml#_WxIkspC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd6pC6EeSpPN3AM7W89g" name="ServiceException">
+          <modelElement href="Linkage2.uml#_WtO8IZC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_Cd65C6EeSpPN3AM7W89g" comments="_W-3esJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-3esZC6EeSpPN3AM7W89g" name="createRequestEntity">
+      <modelElement href="Linkage2.uml#_WxLA8JC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Cd7JC6EeSpPN3AM7W89g" label="+"/>
+      <outParameters xmi:id="_W_Cd7ZC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WxLoAJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd7pC6EeSpPN3AM7W89g" name="RequestEntity">
+          <modelElement href="Linkage2.uml#_WtKqsZC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_Cd75C6EeSpPN3AM7W89g" name="clientID">
+        <modelElement href="Linkage2.uml#_WxLA8ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd8JC6EeSpPN3AM7W89g" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_W_Cd8ZC6EeSpPN3AM7W89g" name="args">
+        <modelElement href="Linkage2.uml#_WxLA8pC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd8pC6EeSpPN3AM7W89g" name="List">
+          <modelElement href="Linkage2.uml#_WtBgwJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_Cd85C6EeSpPN3AM7W89g" comments="_W-4FwJC6EeSpPN3AM7W89g" targetConnectionVisual="_W-4FwZC6EeSpPN3AM7W89g" name="createWorkingChannel">
+      <modelElement href="Linkage2.uml#_WxOrUJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Cd9JC6EeSpPN3AM7W89g" label="-"/>
+      <outParameters xmi:id="_W_Cd9ZC6EeSpPN3AM7W89g">
+        <modelElement href="Linkage2.uml#_WxPSYZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd9pC6EeSpPN3AM7W89g" name="NIOWorkingChannel">
+          <modelElement href="Linkage2.uml#_WtQKQZC6EeSpPN3AM7W89g"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_W_Cd95C6EeSpPN3AM7W89g" name="service">
+        <modelElement href="Linkage2.uml#_WxPSYJC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd-JC6EeSpPN3AM7W89g" name="ServiceInformationEntity">
+          <modelElement href="Linkage2.uml#_WtNuAJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_Cd-ZC6EeSpPN3AM7W89g" comments="_W-4s0JC6EeSpPN3AM7W89g" targetConnectionVisual="_W-4s0ZC6EeSpPN3AM7W89g" name="removeCachedChannel">
+      <modelElement href="Linkage2.uml#_WxSVsJC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Cd-pC6EeSpPN3AM7W89g" label="+"/>
+      <parameters xmi:id="_W_Cd-5C6EeSpPN3AM7W89g" name="objWorkingChannel">
+        <modelElement href="Linkage2.uml#_WxSVsZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_Cd_JC6EeSpPN3AM7W89g" name="WorkingChannel">
+          <modelElement href="Linkage2.uml#_Wt6RkJC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_W_Cd_ZC6EeSpPN3AM7W89g" comments="_W-5T4JC6EeSpPN3AM7W89g" targetConnectionVisual="_W-5T4ZC6EeSpPN3AM7W89g" name="closeChannelByRequestResult">
+      <modelElement href="Linkage2.uml#_WxUK4JC6EeSpPN3AM7W89g"/>
+      <visibility xmi:id="_W_Cd_pC6EeSpPN3AM7W89g" label="+"/>
+      <parameters xmi:id="_W_Cd_5C6EeSpPN3AM7W89g" name="objRequestResultEntity">
+        <modelElement href="Linkage2.uml#_WxUK4ZC6EeSpPN3AM7W89g"/>
+        <type xmi:id="_W_CeAJC6EeSpPN3AM7W89g" name="RequestResultEntity">
+          <modelElement href="Linkage2.uml#_WtMf4JC6EeSpPN3AM7W89g"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+</com.yattasolutions.uml.diagrams.classifier:ClassDiagram>

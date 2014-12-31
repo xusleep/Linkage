@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.center.common.ServiceCenterUtils;
-import service.middleware.linkage.center.comsume.DefaultRouteConsume;
+import service.middleware.linkage.center.comsume.NIORouteServiceAccess;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
@@ -25,7 +25,7 @@ import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 public final class ServiceCenterClientUtils {
 	private static Logger  logger = Logger.getLogger(ServiceCenterClientUtils.class);  
 
-	public static DefaultRouteConsume defaultRouteConsume = null;
+	public static NIORouteServiceAccess defaultRouteConsume = null;
 	
 	// the service center side
 	public static final String SERVICE_CENTER_SERVICE_NAME   				= "serviceCenter";

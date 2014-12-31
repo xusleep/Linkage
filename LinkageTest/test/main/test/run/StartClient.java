@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
-import service.middleware.linkage.center.comsume.DefaultRouteConsume;
+import service.middleware.linkage.center.comsume.NIORouteServiceAccess;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import test.framework.concurrence.condition.MainConcurrentThread;
@@ -54,7 +54,7 @@ public class StartClient extends AbstractJob {
     	centerServiceInformationEntity.setPort(5002);
 		NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
 		clientBootStrap.run();;
-		DefaultRouteConsume cb = clientBootStrap.getConsume();
+		NIORouteServiceAccess cb = clientBootStrap.getConsume();
 		for(long i = 0; i < 1000; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());

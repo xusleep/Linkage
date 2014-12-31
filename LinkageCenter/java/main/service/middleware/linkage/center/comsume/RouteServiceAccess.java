@@ -4,7 +4,7 @@ import java.util.List;
 
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 
-public interface RouteConsume {
+public interface RouteServiceAccess {
 	/**
 	 * request directly using the service information entity
 	 * @param clientID

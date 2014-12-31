@@ -17,10 +17,10 @@ import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.serviceaccess.NIOServiceAccess;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
-public class DefaultRouteConsume extends NIOServiceAccess implements RouteConsume {
+public class NIORouteServiceAccess extends NIOServiceAccess implements RouteServiceAccess {
 	private final Route route;
-	private Log logger = LogFactory.getFactory().getInstance(DefaultRouteConsume.class);
-	public DefaultRouteConsume(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool, ServiceInformationEntity centerServiceInformationEntity) {
+	private Log logger = LogFactory.getFactory().getInstance(NIORouteServiceAccess.class);
+	public NIORouteServiceAccess(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool, ServiceInformationEntity centerServiceInformationEntity) {
 		super(workingClientPropertyEntity, workerPool);
 		this.route = new ServiceCenterRoute(centerServiceInformationEntity, this);
 	}

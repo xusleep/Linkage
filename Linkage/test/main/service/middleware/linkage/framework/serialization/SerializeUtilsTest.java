@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.common;
+package service.middleware.linkage.framework.serialization;
 
 import static org.junit.Assert.assertTrue;
 
