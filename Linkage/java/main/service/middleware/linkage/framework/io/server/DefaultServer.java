@@ -21,19 +21,16 @@ import service.middleware.linkage.framework.distribution.EventDistributionMaster
 import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
 import service.middleware.linkage.framework.io.common.WorkerPool;
-
 /**
- * <p>
+ * 
  * this class is used the start a server
  * the server will accept the connection and put it into the work pool
- * </p>
  * 
- * @author starboy
- * @version 1.0
+ * @author zhonxu
+ *
  */
-
 public class DefaultServer implements Server {
-	private static Queue<SelectionKey> wpool = new ConcurrentLinkedQueue<SelectionKey>(); // 回应池
+	private static Queue<SelectionKey> wpool = new ConcurrentLinkedQueue<SelectionKey>(); 
 	private final Selector selector;
 	private final ServerSocketChannel sschannel;
 	private final InetSocketAddress address;
@@ -47,23 +44,29 @@ public class DefaultServer implements Server {
 	public DefaultServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
 		this.eventDistributionHandler = eventDistributionHandler;
 		eventDistributionHandler.submitServiceEvent(new ServiceStartingEvent());
-		// 创建无阻塞网络套接
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
+		// set it by no blocking
 		sschannel.configureBlocking(false);
 		logger.debug("Listening to " + strAddress + " port : " + port);
 		address = new InetSocketAddress(strAddress, port);
 		ServerSocket ss = sschannel.socket();
+		// bind the address and listen to the port
 		ss.bind(address);
 		sschannel.register(selector, SelectionKey.OP_ACCEPT);
 		this.workerPool = workerPool;
 		shutdownSignal = new CountDownLatch(1);
 	}
-
+	/**
+	 * get the current worker pool
+	 */
 	public WorkerPool getWorkerPool() {
 		return workerPool;
 	}
 	
+	/**
+	 * get the event handler
+	 */
 	public EventDistributionMaster getMasterHandler() {
 		return eventDistributionHandler;
 	}
@@ -74,7 +77,7 @@ public class DefaultServer implements Server {
 		workerPool.start();
 		workerPool.waitReady();
 		eventDistributionHandler.submitServiceEvent(new ServiceStartedEvent());
-		// 监听
+		// loop
 		while (true) {
 			try {
 				wakenUp.set(false);
@@ -93,13 +96,13 @@ public class DefaultServer implements Server {
 					while (it.hasNext()) {
 						SelectionKey key = (SelectionKey) it.next();
 						it.remove();
-						// 处理IO事件
+						// accept 
 						if (key.isAcceptable()) {
 							// Accept the new connection
 							ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
 							SocketChannel sc = ssc.accept();
 							sc.configureBlocking(false);
-							// 将接收到的channel，放到工作线程池中
+							// put the accepted channel into the worker pool
 							this.getWorkerPool().register(sc);
 						} 
 					}
@@ -118,12 +121,13 @@ public class DefaultServer implements Server {
 			}
 		}
 	}
-	
+	/**
+	 * doing something after the server is shutdown
+	 */
 	private void doJobAfterShutdown(){
 		try {
 			sschannel.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e));
 		}
@@ -167,7 +171,6 @@ public class DefaultServer implements Server {
 
 	@Override
 	public void waitReady() {
-		// TODO Auto-generated method stub
 		workerPool.waitReady();
 	}
 }

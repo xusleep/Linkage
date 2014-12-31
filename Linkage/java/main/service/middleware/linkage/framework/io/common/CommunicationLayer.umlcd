@@ -24,6 +24,12 @@
     </sourceRole>
     <targetRole xmi:id="_QbjYlpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="taskQueue" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QVxgsJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-XAIJCfEeSGr5JQJqgUjA" name="Generics">
+        <modelElement href="CommunicationLayer.uml#_QVzV4JA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6-ZcYJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QVz88JA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QbjYl5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QbjYmJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -41,6 +47,9 @@
     </sourceRole>
     <targetRole xmi:id="_QbkmtpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="wakenUp" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QV0kAJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-bRkJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QV1LEJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qbkmt5A_EeSEiKM1Xq3Vkg" label="#"/>
       <cardinality xmi:id="_QbkmuJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -58,6 +67,9 @@
     </sourceRole>
     <targetRole xmi:id="_Qbl01pA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="selector" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QV1yIJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-b4oJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QV2ZMJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qbl015A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qbl02JA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -75,6 +87,9 @@
     </sourceRole>
     <targetRole xmi:id="_QbnC9pA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="objExecutorService" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QV3AQJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-dGwJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QV3nUJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QbnC95A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QbnC-JA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -92,6 +107,9 @@
     </sourceRole>
     <targetRole xmi:id="_QboRFpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="signal" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QV4OYJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-eU4JCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QV5cgJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QboRF5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QboRGJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -109,6 +127,9 @@
     </sourceRole>
     <targetRole xmi:id="_QbpfNpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="eventDistributionHandler" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QV5cgZA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-fjAJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QV6qoJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QbpfN5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QbpfOJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -126,6 +147,9 @@
     </sourceRole>
     <targetRole xmi:id="_QbqtVpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="shutdownSignal" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QV8f0JA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-gKEJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QV9t8JA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QbqtV5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QbqtWJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -143,6 +167,9 @@
     </sourceRole>
     <targetRole xmi:id="_Qbr7dpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="logger" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QV9t8ZA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-hYMJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QV-8EJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qbr7d5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qbr7eJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -164,6 +191,9 @@
     </sourceRole>
     <targetRole xmi:id="_QcSYZpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="objWorkingChannel" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWAKMJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-jNYJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWAxQJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QcSYZ5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QcSYaJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -182,6 +212,9 @@
     </sourceRole>
     <targetRole xmi:id="_QcdXgZA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="signal" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QVpk4JA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-kbgJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QVqzAJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QcfzwpA_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QcfzwZA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -199,6 +232,9 @@
     </sourceRole>
     <targetRole xmi:id="_Qcd-k5A_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="logger" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QVraEJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-lpoJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QVsoMJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qcga05A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qcga0pA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -221,6 +257,12 @@
     <targetRole xmi:id="_Qci3FpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="workers" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QVksYJA_EeSEiKM1Xq3Vkg"/>
       <visualProperties xmi:id="_SVHiQZA_EeSEiKM1Xq3Vkg" position="2.0,4.0"/>
+      <stereotypes xmi:id="_6-oF4JCfEeSGr5JQJqgUjA" name="Array">
+        <modelElement href="CommunicationLayer.uml#_QVl6gJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6-oF4ZCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QVnIoJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qci3F5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qci3GJA_EeSEiKM1Xq3Vkg" label="1..*" max="-1" min="1"/>
     </targetRole>
@@ -279,6 +321,9 @@
     <targetRole xmi:id="_QdWvYJA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="workerPool" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWM-gJA_EeSEiKM1Xq3Vkg"/>
       <visualProperties xmi:id="_SVNB0ZA_EeSEiKM1Xq3Vkg" position="2.0,35.666666666666686"/>
+      <stereotypes xmi:id="_6-pUAJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWNlkJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QdhugJA_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QdhHdJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -297,6 +342,12 @@
     </sourceRole>
     <targetRole xmi:id="_QdggYJA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="wpool" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWG34JA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-p7EJCfEeSGr5JQJqgUjA" name="Generics">
+        <modelElement href="CommunicationLayer.uml#_QWIGAJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6-p7EZCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWItEJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qdkx05A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qdkx0pA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -314,6 +365,9 @@
     </sourceRole>
     <targetRole xmi:id="_QdhHcJA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="selector" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWJUIJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-qiIJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWJ7MJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qdl_8JA_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QdlY45A_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -331,6 +385,9 @@
     </sourceRole>
     <targetRole xmi:id="_QdhuhJA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="eventDistributionHandler" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWOMoJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-rJMJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWOzsJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QdnOEZA_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QdnOEJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -348,6 +405,9 @@
     </sourceRole>
     <targetRole xmi:id="_QdiVk5A_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="shutdownSignal" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWQo4JA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-rwQJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWRP8JA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QdocMJA_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qdn1I5A_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -365,6 +425,9 @@
     </sourceRole>
     <targetRole xmi:id="_Qdi8o5A_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="wakenUp" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWR3AJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-rwQZCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWSeEJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QdpDQ5A_EeSEiKM1Xq3Vkg" label="#"/>
       <cardinality xmi:id="_QdpDQpA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -382,6 +445,9 @@
     </sourceRole>
     <targetRole xmi:id="_QdjjsZA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="logger" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWTFIJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-sXUJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWTsMJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_QdqRYZA_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_QdqRYJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -401,6 +467,9 @@
     </sourceRole>
     <targetRole xmi:id="_Qdt7xpA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="sschannel" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWKiQJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-s-YJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWLJUJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qdt7x5A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qdt7yJA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -418,6 +487,9 @@
     </sourceRole>
     <targetRole xmi:id="_Qdvw9pA_EeSEiKM1Xq3Vkg" aggregationKind="NONE" name="address" navigable="true">
       <modelElement href="CommunicationLayer.uml#_QWLwYJA_EeSEiKM1Xq3Vkg"/>
+      <stereotypes xmi:id="_6-s-YZCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWMXcJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
       <visibility xmi:id="_Qdvw95A_EeSEiKM1Xq3Vkg" label="-"/>
       <cardinality xmi:id="_Qdvw-JA_EeSEiKM1Xq3Vkg" label="1" max="1" min="1"/>
     </targetRole>
@@ -558,16 +630,16 @@
     <visibility xmi:id="_QbsigpA_EeSEiKM1Xq3Vkg" label="+"/>
     <attributes xmi:id="_Qbsig5A_EeSEiKM1Xq3Vkg" defaultValue="new ConcurrentLinkedQueue&lt;Runnable>()" name="taskQueue">
       <modelElement href="CommunicationLayer.uml#_QVxgsJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QbsihJA_EeSEiKM1Xq3Vkg" name="Generics">
-        <modelElement href="CommunicationLayer.uml#_QVzV4JA_EeSEiKM1Xq3Vkg"/>
-      </stereotypes>
-      <stereotypes xmi:id="_QbsihZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
-        <modelElement href="CommunicationLayer.uml#_QVz88JA_EeSEiKM1Xq3Vkg"/>
-      </stereotypes>
       <stereotypes xmi:id="_QbsihpA_EeSEiKM1Xq3Vkg" name="Generics">
         <modelElement href="CommunicationLayer.uml#_QVzV4JA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <stereotypes xmi:id="_Qbsih5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QVz88JA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6_Q_EJCfEeSGr5JQJqgUjA" name="Generics">
+        <modelElement href="CommunicationLayer.uml#_QVzV4JA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6_RmIJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QVz88JA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QbsiiJA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -578,10 +650,10 @@
     </attributes>
     <attributes xmi:id="_Qbsii5A_EeSEiKM1Xq3Vkg" defaultValue="new AtomicBoolean()" name="wakenUp">
       <modelElement href="CommunicationLayer.uml#_QV0kAJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QbsijJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QbsijZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV1LEJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QbsijZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_XFsJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV1LEJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QbsijpA_EeSEiKM1Xq3Vkg" label="#"/>
@@ -592,10 +664,10 @@
     </attributes>
     <attributes xmi:id="_QbsikZA_EeSEiKM1Xq3Vkg" name="selector">
       <modelElement href="CommunicationLayer.uml#_QV1yIJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QbsikpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_Qbsik5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV2ZMJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_Qbsik5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_Y64JCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV2ZMJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QbsilJA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -606,10 +678,10 @@
     </attributes>
     <attributes xmi:id="_Qbsil5A_EeSEiKM1Xq3Vkg" name="objExecutorService">
       <modelElement href="CommunicationLayer.uml#_QV3AQJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QbsimJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QbsimZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV3nUJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QbsimZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_awEJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV3nUJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QbsimpA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -620,10 +692,10 @@
     </attributes>
     <attributes xmi:id="_QbsinZA_EeSEiKM1Xq3Vkg" name="signal">
       <modelElement href="CommunicationLayer.uml#_QV4OYJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QbsinpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_Qbsin5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV5cgJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_Qbsin5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_ir4JCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV5cgJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QbsioJA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -634,10 +706,10 @@
     </attributes>
     <attributes xmi:id="_Qbsio5A_EeSEiKM1Xq3Vkg" name="eventDistributionHandler">
       <modelElement href="CommunicationLayer.uml#_QV5cgZA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QbsipJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QbsipZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV6qoJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QbsipZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_khEJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV6qoJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QbsippA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -659,10 +731,10 @@
     </attributes>
     <attributes xmi:id="_QbsirpA_EeSEiKM1Xq3Vkg" name="shutdownSignal">
       <modelElement href="CommunicationLayer.uml#_QV8f0JA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_Qbsir5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QbsisJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV9t8JA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QbsisJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_sc4JCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV9t8JA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QbsisZA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -673,10 +745,10 @@
     </attributes>
     <attributes xmi:id="_QbsitJA_EeSEiKM1Xq3Vkg" defaultValue="Logger.getLogger(NIOWorker.class)" name="logger" staticAttribute="true">
       <modelElement href="CommunicationLayer.uml#_QV9t8ZA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QbsitZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QbsitpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV-8EJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QbsitpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_trAJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QV-8EJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_Qbsit5A_EeSEiKM1Xq3Vkg" label="-"/>
@@ -920,16 +992,16 @@
     <visibility xmi:id="_QcjeIpA_EeSEiKM1Xq3Vkg" label="+"/>
     <attributes xmi:id="_QcjeI5A_EeSEiKM1Xq3Vkg" name="workers">
       <modelElement href="CommunicationLayer.uml#_QVksYJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QcjeJJA_EeSEiKM1Xq3Vkg" name="Array">
-        <modelElement href="CommunicationLayer.uml#_QVl6gJA_EeSEiKM1Xq3Vkg"/>
-      </stereotypes>
-      <stereotypes xmi:id="_QcjeJZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
-        <modelElement href="CommunicationLayer.uml#_QVnIoJA_EeSEiKM1Xq3Vkg"/>
-      </stereotypes>
       <stereotypes xmi:id="_QcjeJpA_EeSEiKM1Xq3Vkg" name="Array">
         <modelElement href="CommunicationLayer.uml#_QVl6gJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <stereotypes xmi:id="_QcjeJ5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QVnIoJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6_zKkJCfEeSGr5JQJqgUjA" name="Array">
+        <modelElement href="CommunicationLayer.uml#_QVl6gJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6_zxoJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QVnIoJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QcjeKJA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -951,10 +1023,10 @@
     </attributes>
     <attributes xmi:id="_QcjeMJA_EeSEiKM1Xq3Vkg" name="signal">
       <modelElement href="CommunicationLayer.uml#_QVpk4JA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QcjeMZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_Qcfzw5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QVqzAJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_Qcfzw5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_vgMJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QVqzAJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QcjeMpA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -965,10 +1037,10 @@
     </attributes>
     <attributes xmi:id="_QckFMJA_EeSEiKM1Xq3Vkg" defaultValue="Logger.getLogger(NIOWorkerPool.class)" name="logger" staticAttribute="true">
       <modelElement href="CommunicationLayer.uml#_QVraEJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QckFMZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QchB4JA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QVsoMJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QchB4JA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_wuUJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QVsoMJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QckFMpA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1117,16 +1189,16 @@
     <visibility xmi:id="_QdwYApA_EeSEiKM1Xq3Vkg" label="+"/>
     <attributes xmi:id="_QdwYA5A_EeSEiKM1Xq3Vkg" defaultValue="new ConcurrentLinkedQueue&lt;SelectionKey>()" name="wpool" staticAttribute="true">
       <modelElement href="CommunicationLayer.uml#_QWG34JA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QdwYBJA_EeSEiKM1Xq3Vkg" name="Generics">
-        <modelElement href="CommunicationLayer.uml#_QWIGAJA_EeSEiKM1Xq3Vkg"/>
-      </stereotypes>
-      <stereotypes xmi:id="_QdwYBZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
-        <modelElement href="CommunicationLayer.uml#_QWItEJA_EeSEiKM1Xq3Vkg"/>
-      </stereotypes>
       <stereotypes xmi:id="_Qdkx1JA_EeSEiKM1Xq3Vkg" name="Generics">
         <modelElement href="CommunicationLayer.uml#_QWIGAJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <stereotypes xmi:id="_QdlY4JA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+        <modelElement href="CommunicationLayer.uml#_QWItEJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6_3cAJCfEeSGr5JQJqgUjA" name="Generics">
+        <modelElement href="CommunicationLayer.uml#_QWIGAJA_EeSEiKM1Xq3Vkg"/>
+      </stereotypes>
+      <stereotypes xmi:id="_6_4DEJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWItEJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QdwYBpA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1137,10 +1209,10 @@
     </attributes>
     <attributes xmi:id="_QdwYCZA_EeSEiKM1Xq3Vkg" name="selector">
       <modelElement href="CommunicationLayer.uml#_QWJUIJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QdwYCpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_Qdl_8ZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWJ7MJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_Qdl_8ZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_5RMJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWJ7MJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QdwYC5A_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1151,10 +1223,10 @@
     </attributes>
     <attributes xmi:id="_QdwYDpA_EeSEiKM1Xq3Vkg" name="sschannel">
       <modelElement href="CommunicationLayer.uml#_QWKiQJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QdwYD5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QdwYEJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWLJUJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QdwYEJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_7AAl8JCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWLJUJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QdwYEZA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1165,10 +1237,10 @@
     </attributes>
     <attributes xmi:id="_QdwYFJA_EeSEiKM1Xq3Vkg" name="address">
       <modelElement href="CommunicationLayer.uml#_QWLwYJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QdwYFZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QdwYFpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWMXcJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QdwYFpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_7AB0EJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWMXcJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QdwYF5A_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1179,10 +1251,10 @@
     </attributes>
     <attributes xmi:id="_QdwYGpA_EeSEiKM1Xq3Vkg" name="workerPool">
       <modelElement href="CommunicationLayer.uml#_QWM-gJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QdwYG5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QdhugZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWNlkJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QdhugZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_2N4JCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWNlkJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QdwYHJA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1193,10 +1265,10 @@
     </attributes>
     <attributes xmi:id="_QdwYH5A_EeSEiKM1Xq3Vkg" name="eventDistributionHandler">
       <modelElement href="CommunicationLayer.uml#_QWOMoJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_Qdw_EJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_Qdn1IJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWOzsJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_Qdn1IJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_6fUJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWOzsJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_Qdw_EZA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1218,10 +1290,10 @@
     </attributes>
     <attributes xmi:id="_Qdw_GZA_EeSEiKM1Xq3Vkg" name="shutdownSignal">
       <modelElement href="CommunicationLayer.uml#_QWQo4JA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_Qdw_GpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QdocMZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWRP8JA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QdocMZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_8UgJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWRP8JA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_Qdw_G5A_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1232,10 +1304,10 @@
     </attributes>
     <attributes xmi:id="_Qdw_HpA_EeSEiKM1Xq3Vkg" defaultValue="new AtomicBoolean()" name="wakenUp">
       <modelElement href="CommunicationLayer.uml#_QWR3AJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_Qdw_H5A_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QdpqUJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWSeEJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QdpqUJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_9ioJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWSeEJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_Qdw_IJA_EeSEiKM1Xq3Vkg" label="#"/>
@@ -1246,10 +1318,10 @@
     </attributes>
     <attributes xmi:id="_Qdw_I5A_EeSEiKM1Xq3Vkg" defaultValue="Logger.getLogger(DefaultServer.class)" name="logger" staticAttribute="true">
       <modelElement href="CommunicationLayer.uml#_QWTFIJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_Qdw_JJA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QdqRYpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWTsMJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QdqRYpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6__X0JCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWTsMJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_Qdw_JZA_EeSEiKM1Xq3Vkg" label="-"/>
@@ -1346,10 +1418,10 @@
     <visibility xmi:id="_QcSYa5A_EeSEiKM1Xq3Vkg" label="-"/>
     <attributes xmi:id="_QcSYbJA_EeSEiKM1Xq3Vkg" name="objWorkingChannel">
       <modelElement href="CommunicationLayer.uml#_QWAKMJA_EeSEiKM1Xq3Vkg"/>
-      <stereotypes xmi:id="_QcSYbZA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_QcSYbpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWAxQJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
-      <stereotypes xmi:id="_QcSYbpA_EeSEiKM1Xq3Vkg" name="LegacyStyledElement">
+      <stereotypes xmi:id="_6_uSEJCfEeSGr5JQJqgUjA" name="LegacyStyledElement">
         <modelElement href="CommunicationLayer.uml#_QWAxQJA_EeSEiKM1Xq3Vkg"/>
       </stereotypes>
       <visibility xmi:id="_QcSYb5A_EeSEiKM1Xq3Vkg" label="-"/>
