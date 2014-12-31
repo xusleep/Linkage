@@ -1,7 +1,7 @@
 package service.middleware.linkage.framework.io.protocol;
 
 
-public class CommunicationProtocol {
+public class IOProtocol {
 	/**
 	 * data transform buffer Setting, in the data level
 	 */
@@ -36,9 +36,9 @@ public class CommunicationProtocol {
 	 * @throws Exception 
 	 */
 	public static String extractMessage(StringBuffer bufferMessage) throws Exception{
-		int headStartIndex = bufferMessage.indexOf(CommunicationProtocol.MESSAGE_HEADER_START);
-		int headEndIndex = bufferMessage.indexOf(CommunicationProtocol.MESSAGE_HEADER_END);
-		if(CommunicationProtocol.MESSAGE_HEADER_START.length() > bufferMessage.length())
+		int headStartIndex = bufferMessage.indexOf(IOProtocol.MESSAGE_HEADER_START);
+		int headEndIndex = bufferMessage.indexOf(IOProtocol.MESSAGE_HEADER_END);
+		if(IOProtocol.MESSAGE_HEADER_START.length() > bufferMessage.length())
 			return "";
 		if(headStartIndex != 0)
 		{
@@ -47,19 +47,19 @@ public class CommunicationProtocol {
 		// message header is not completed, means it does not receive a complete message package
 		if(headEndIndex <= 0)
 			return "";
-		String head = bufferMessage.substring(headStartIndex, headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length());
-		String bodyLenthStr =  bufferMessage.substring(headStartIndex + CommunicationProtocol.MESSAGE_HEADER_START.length(), 
-				headStartIndex + CommunicationProtocol.MESSAGE_HEADER_START.length() + CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART);
+		String head = bufferMessage.substring(headStartIndex, headEndIndex + IOProtocol.MESSAGE_HEADER_END.length());
+		String bodyLenthStr =  bufferMessage.substring(headStartIndex + IOProtocol.MESSAGE_HEADER_START.length(), 
+				headStartIndex + IOProtocol.MESSAGE_HEADER_START.length() + IOProtocol.MESSAGE_HEADER_LENGTH_PART);
 		int bodyLenth = Integer.parseInt(bodyLenthStr);
 		// message body length is not reached as the expected length
-		if(bufferMessage.length() < CommunicationProtocol.MESSAGE_HEADER_START.length() + 
-				CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth)
+		if(bufferMessage.length() < IOProtocol.MESSAGE_HEADER_START.length() + 
+				IOProtocol.MESSAGE_HEADER_LENGTH_PART + IOProtocol.MESSAGE_HEADER_END.length() + bodyLenth)
 		{
 			return "";
 		}
-		String messageBody = bufferMessage.substring(headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length(), 
-				headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
-		bufferMessage.delete(headStartIndex, headEndIndex + CommunicationProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
+		String messageBody = bufferMessage.substring(headEndIndex + IOProtocol.MESSAGE_HEADER_END.length(), 
+				headEndIndex + IOProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
+		bufferMessage.delete(headStartIndex, headEndIndex + IOProtocol.MESSAGE_HEADER_END.length() + bodyLenth);
 		return messageBody;
 	}
 	
@@ -69,7 +69,7 @@ public class CommunicationProtocol {
 	 * @return
 	 */
 	public static String wrapMessage(String message){
-		return CommunicationProtocol.MESSAGE_HEADER_START + toLengthString(message.length()) + CommunicationProtocol.MESSAGE_HEADER_END + message; 
+		return IOProtocol.MESSAGE_HEADER_START + toLengthString(message.length()) + IOProtocol.MESSAGE_HEADER_END + message; 
 	}
 	
 	/**
@@ -83,7 +83,7 @@ public class CommunicationProtocol {
 	private static String toLengthString(int length){
 		String tmp = "" + length;
 		int tmpLength = tmp.length();
-		for(int i = 0; i < CommunicationProtocol.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
+		for(int i = 0; i < IOProtocol.MESSAGE_HEADER_LENGTH_PART - tmpLength; i++){
 			tmp = "0" + tmp;
 		}
 		return tmp;

@@ -14,7 +14,7 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.protocol.CommunicationProtocol;
+import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
  * hold the object when request a connect,
@@ -51,7 +51,7 @@ public class NIOWorkingChannel implements WorkingChannel {
 	public NIOWorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
 		this.worker = worker;
-		this.bufferMessage = new StringBuffer(CommunicationProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
+		this.bufferMessage = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
 	}
 	
 	/**

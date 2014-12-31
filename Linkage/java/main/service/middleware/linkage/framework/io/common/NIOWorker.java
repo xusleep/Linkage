@@ -28,7 +28,7 @@ import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
-import service.middleware.linkage.framework.io.protocol.CommunicationProtocol;
+import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
  * this is default worker, will be used when there is connection established 
@@ -168,8 +168,8 @@ public class NIOWorker implements Worker {
 				SocketChannel sc = (SocketChannel) channel.getChannel();
 				byte[] data = null;
 				try {
-					data = CommunicationProtocol.wrapMessage(evt.getMessage())
-							.getBytes(CommunicationProtocol.FRAMEWORK_IO_ENCODING);
+					data = IOProtocol.wrapMessage(evt.getMessage())
+							.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
 				} catch (UnsupportedEncodingException e2) {
 					e2.printStackTrace();
 				}
@@ -230,7 +230,7 @@ public class NIOWorker implements Worker {
 		int readBytes = 0;
 		int ret = 0;
 		boolean success = false;
-	    ByteBuffer bb = ByteBuffer.allocate(CommunicationProtocol.BUFFER_SIZE);
+	    ByteBuffer bb = ByteBuffer.allocate(IOProtocol.BUFFER_SIZE);
         try {
             while ((ret = ch.read(bb)) > 0) {
                 readBytes += ret;
@@ -259,7 +259,7 @@ public class NIOWorker implements Worker {
 		System.arraycopy(bb.array(), 0, message, 0, readBytes);
 		String receiveString = "";
 		try {
-			receiveString = new String(message, CommunicationProtocol.FRAMEWORK_IO_ENCODING);
+			receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
@@ -267,7 +267,7 @@ public class NIOWorker implements Worker {
 			objWorkingChannel.getBufferMessage().append(receiveString);
 			String unwrappedMessage = "";
 			try {
-				while((unwrappedMessage = CommunicationProtocol.extractMessage(objWorkingChannel.getBufferMessage())) != "")
+				while((unwrappedMessage = IOProtocol.extractMessage(objWorkingChannel.getBufferMessage())) != "")
 				{
 					final String sendMessage = unwrappedMessage;
 					objExecutorService.execute(new Runnable(){
