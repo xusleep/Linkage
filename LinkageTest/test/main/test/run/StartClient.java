@@ -15,23 +15,10 @@ import test.framework.concurrence.condition.job.AbstractJob;
 import test.framework.concurrence.condition.job.JobInterface;
 
 /**
- * <p>
- * Title:
- * </p>
- * <p>
- * Description:
- * </p>
- * <p>
- * Copyright: Copyright (c) 2004
- * </p>
- * <p>
- * Company:
- * </p>
  * 
- * @author not attributable
- * @version 1.0
+ * @author Smile
+ *
  */
-
 public class StartClient extends AbstractJob {
 	public static final AtomicInteger aint = new AtomicInteger(2320);
 	private final AtomicBoolean isFailed = new AtomicBoolean(false);
