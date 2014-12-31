@@ -12,12 +12,12 @@ import java.util.Properties;
 
 import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 
-public class ServiceSettingProtertyReader implements ServiceSettingReader {
+public class ServiceSettingPropertyReader implements ServiceSettingReader {
 	private final String serviceAddress;
 	private final int servicePort;
 	private final List<ServiceSettingEntity> serviceList = new LinkedList<ServiceSettingEntity>();
 
-	public ServiceSettingProtertyReader(String propertyFileName){
+	public ServiceSettingPropertyReader(String propertyFileName){
 		InputStream inputStream = ServiceSettingReader.class.getClassLoader().getResourceAsStream(propertyFileName);
 		//创建一个Properties容器 
         Properties properties = new Properties(); 

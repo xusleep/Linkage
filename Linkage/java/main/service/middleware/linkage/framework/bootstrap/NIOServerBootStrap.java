@@ -8,7 +8,7 @@ import service.middleware.linkage.framework.io.server.DefaultServer;
 import service.middleware.linkage.framework.io.server.Server;
 import service.middleware.linkage.framework.provider.DefaultServiceProvider;
 import service.middleware.linkage.framework.provider.ServiceProvider;
-import service.middleware.linkage.framework.setting.reader.ServiceSettingProtertyReader;
+import service.middleware.linkage.framework.setting.reader.ServiceSettingPropertyReader;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 
 /**
@@ -24,7 +24,7 @@ public class NIOServerBootStrap implements Runnable {
 	
 	public NIOServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
 		// read the configuration from the properties
-		this.servicePropertyEntity = new ServiceSettingProtertyReader(propertyPath);
+		this.servicePropertyEntity = new ServiceSettingPropertyReader(propertyPath);
 		// new a task handler, this handler will handle all of the task from the pool queue
 		// into the executor pool(thread pool) which will execute the task.
 		this.eventDistributionHandler = new EventDistributionMaster(serviceTaskThreadPootSize);

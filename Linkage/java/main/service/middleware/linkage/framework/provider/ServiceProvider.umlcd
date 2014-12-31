@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.yattasolutions.uml.diagrams.classifier:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.yattasolutions.diagrams="http://ns.yatta-solutions.com/umllab/diagrams/1.1.0" xmlns:com.yattasolutions.uml.diagrams.classifier="http://ns.yatta-solutions.com/umllab/diagrams/classifier/1.1.0" xmi:id="_uPSQYJDqEeSYk9UvSF06WQ">
+  <modelElement href="ServiceProvider.uml#_uj8RwJDqEeSYk9UvSF06WQ"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_uqrL4JDqEeSYk9UvSF06WQ" targetItem="_uqzuzZDqEeSYk9UvSF06WQ" sourceItem="_uqqk0JDqEeSYk9UvSF06WQ"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_uqtBEJDqEeSYk9UvSF06WQ" targetItem="_uqzu2pDqEeSYk9UvSF06WQ" sourceItem="_uqsaAJDqEeSYk9UvSF06WQ"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_uqxSgJDqEeSYk9UvSF06WQ" source="_uqzHuZDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_unBa8JDqEeSYk9UvSF06WQ"/>
+    <stereotypes xmi:id="_uqxSgZDqEeSYk9UvSF06WQ" name="Reference">
+      <modelElement href="ServiceProvider.uml#_unDQIJDqEeSYk9UvSF06WQ"/>
+    </stereotypes>
+    <nameVisual xmi:id="_uqxSgpDqEeSYk9UvSF06WQ" text=""/>
+    <sourceRole xmi:id="_uqxSg5DqEeSYk9UvSF06WQ" aggregationKind="NONE" name="">
+      <modelElement href="ServiceProvider.uml#_unBa8ZDqEeSYk9UvSF06WQ"/>
+      <visibility xmi:id="_uqxShJDqEeSYk9UvSF06WQ" label="+"/>
+      <cardinality xmi:id="_uqxShZDqEeSYk9UvSF06WQ" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_uqxShpDqEeSYk9UvSF06WQ" aggregationKind="NONE" name="servicePropertyEntity" navigable="true">
+      <modelElement href="ServiceProvider.uml#_umw8QJDqEeSYk9UvSF06WQ"/>
+      <visibility xmi:id="_uqxSh5DqEeSYk9UvSF06WQ" label="-"/>
+      <cardinality xmi:id="_uqxSiJDqEeSYk9UvSF06WQ" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_uqzHsJDqEeSYk9UvSF06WQ" source="_uqzHuZDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_unD3MJDqEeSYk9UvSF06WQ"/>
+    <stereotypes xmi:id="_uqzHsZDqEeSYk9UvSF06WQ" name="Reference">
+      <modelElement href="ServiceProvider.uml#_unFFUJDqEeSYk9UvSF06WQ"/>
+    </stereotypes>
+    <nameVisual xmi:id="_uqzHspDqEeSYk9UvSF06WQ" text=""/>
+    <sourceRole xmi:id="_uqzHs5DqEeSYk9UvSF06WQ" aggregationKind="NONE" name="">
+      <modelElement href="ServiceProvider.uml#_unD3MZDqEeSYk9UvSF06WQ"/>
+      <visibility xmi:id="_uqzHtJDqEeSYk9UvSF06WQ" label="+"/>
+      <cardinality xmi:id="_uqzHtZDqEeSYk9UvSF06WQ" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_uqzHtpDqEeSYk9UvSF06WQ" aggregationKind="NONE" name="logger" navigable="true">
+      <modelElement href="ServiceProvider.uml#_umyxcJDqEeSYk9UvSF06WQ"/>
+      <visibility xmi:id="_uqzHt5DqEeSYk9UvSF06WQ" label="-"/>
+      <cardinality xmi:id="_uqzHuJDqEeSYk9UvSF06WQ" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_uq84sZDqEeSYk9UvSF06WQ" targetItem="_uq_U8JDqEeSYk9UvSF06WQ" sourceItem="_uq84sJDqEeSYk9UvSF06WQ"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_uq9fwJDqEeSYk9UvSF06WQ" sourceAnchor="298.0,0.0" targetAnchor="213.0,76.0" dashed="true" superClass="_uq_U8JDqEeSYk9UvSF06WQ" subClass="_uqzHuZDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_umRNAJDqEeSYk9UvSF06WQ"/>
+  </edges>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_uqqk0JDqEeSYk9UvSF06WQ" sourceConnectionVisual="_uqrL4JDqEeSYk9UvSF06WQ" text="search the service from the service list&#xD;&#xA;&#x9; * @param serviceName&#xD;&#xA;&#x9; * @return" item="_uqzuzZDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_um9wkJDqEeSYk9UvSF06WQ"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_uqsaAJDqEeSYk9UvSF06WQ" sourceConnectionVisual="_uqtBEJDqEeSYk9UvSF06WQ" text="process the request from the client&#xD;&#xA;&#x9; * @param request&#xD;&#xA;&#x9; * @return" item="_uqzu2pDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_um-XoJDqEeSYk9UvSF06WQ"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_uq84sJDqEeSYk9UvSF06WQ" sourceConnectionVisual="_uq84sZDqEeSYk9UvSF06WQ" text="This class provide a service access point &#xD;&#xA;for all of the service&#xD;&#xA;@author zhonxu&#xD;&#xA; *" item="_uq_U8JDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_um--sJDqEeSYk9UvSF06WQ"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_uqzHuZDqEeSYk9UvSF06WQ" name="DefaultServiceProvider" associationsOut="_uqxSgJDqEeSYk9UvSF06WQ _uqzHsJDqEeSYk9UvSF06WQ" generalizations="_uq9fwJDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_ukRB4JDqEeSYk9UvSF06WQ"/>
+    <visualProperties xmi:id="_uqzHupDqEeSYk9UvSF06WQ" position="30.0,30.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_uqzuwJDqEeSYk9UvSF06WQ" label="+"/>
+    <attributes xmi:id="_uqzuwZDqEeSYk9UvSF06WQ" name="servicePropertyEntity">
+      <modelElement href="ServiceProvider.uml#_umw8QJDqEeSYk9UvSF06WQ"/>
+      <stereotypes xmi:id="_uqzuwpDqEeSYk9UvSF06WQ" name="LegacyStyledElement">
+        <modelElement href="ServiceProvider.uml#_umyKYJDqEeSYk9UvSF06WQ"/>
+      </stereotypes>
+      <stereotypes xmi:id="_uqzuw5DqEeSYk9UvSF06WQ" name="LegacyStyledElement">
+        <modelElement href="ServiceProvider.uml#_umyKYJDqEeSYk9UvSF06WQ"/>
+      </stereotypes>
+      <visibility xmi:id="_uqzuxJDqEeSYk9UvSF06WQ" label="-"/>
+      <cardinality xmi:id="_uqzuxZDqEeSYk9UvSF06WQ" label="1" max="1" min="1"/>
+      <type xmi:id="_uqzuxpDqEeSYk9UvSF06WQ" name="ServiceSettingReader">
+        <modelElement href="ServiceProvider.uml#_umOwwZDqEeSYk9UvSF06WQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_uqzux5DqEeSYk9UvSF06WQ" defaultValue="Logger.getLogger(ServiceProvider.class)" name="logger" staticAttribute="true">
+      <modelElement href="ServiceProvider.uml#_umyxcJDqEeSYk9UvSF06WQ"/>
+      <stereotypes xmi:id="_uqzuyJDqEeSYk9UvSF06WQ" name="LegacyStyledElement">
+        <modelElement href="ServiceProvider.uml#_um0moJDqEeSYk9UvSF06WQ"/>
+      </stereotypes>
+      <stereotypes xmi:id="_uqzuyZDqEeSYk9UvSF06WQ" name="LegacyStyledElement">
+        <modelElement href="ServiceProvider.uml#_um0moJDqEeSYk9UvSF06WQ"/>
+      </stereotypes>
+      <visibility xmi:id="_uqzuypDqEeSYk9UvSF06WQ" label="-"/>
+      <cardinality xmi:id="_uqzuy5DqEeSYk9UvSF06WQ" label="1" max="1" min="1"/>
+      <type xmi:id="_uqzuzJDqEeSYk9UvSF06WQ" name="Logger">
+        <modelElement href="ServiceProvider.uml#_umFm0JDqEeSYk9UvSF06WQ"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_uqzuzZDqEeSYk9UvSF06WQ" comments="_uqqk0JDqEeSYk9UvSF06WQ" targetConnectionVisual="_uqrL4JDqEeSYk9UvSF06WQ" name="searchService">
+      <modelElement href="ServiceProvider.uml#_ukXvkJDqEeSYk9UvSF06WQ"/>
+      <visibility xmi:id="_uqzuzpDqEeSYk9UvSF06WQ" label="-"/>
+      <outParameters xmi:id="_uqzuz5DqEeSYk9UvSF06WQ">
+        <modelElement href="ServiceProvider.uml#_ummkMJDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uqzu0JDqEeSYk9UvSF06WQ" name="ServiceSettingEntity">
+          <modelElement href="ServiceProvider.uml#_umM7kZDqEeSYk9UvSF06WQ"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_uqzu0ZDqEeSYk9UvSF06WQ" name="serviceName">
+        <modelElement href="ServiceProvider.uml#_ukYWoJDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uqzu0pDqEeSYk9UvSF06WQ" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_uqzu05DqEeSYk9UvSF06WQ" name="DefaultServiceProvider">
+      <modelElement href="ServiceProvider.uml#_umkH8JDqEeSYk9UvSF06WQ"/>
+      <keywords xmi:id="_uqzu1JDqEeSYk9UvSF06WQ" keyword="create"/>
+      <visibility xmi:id="_uqzu1ZDqEeSYk9UvSF06WQ" label="+"/>
+      <outParameters xmi:id="_uqzu1pDqEeSYk9UvSF06WQ">
+        <modelElement href="ServiceProvider.uml#_umlWEJDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uqzu15DqEeSYk9UvSF06WQ" name="DefaultServiceProvider">
+          <modelElement href="ServiceProvider.uml#_ukRB4JDqEeSYk9UvSF06WQ"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_uqzu2JDqEeSYk9UvSF06WQ" name="servicePropertyEntity">
+        <modelElement href="ServiceProvider.uml#_umkH8ZDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uqzu2ZDqEeSYk9UvSF06WQ" name="ServiceSettingReader">
+          <modelElement href="ServiceProvider.uml#_umOwwZDqEeSYk9UvSF06WQ"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_uqzu2pDqEeSYk9UvSF06WQ" comments="_uqsaAJDqEeSYk9UvSF06WQ" targetConnectionVisual="_uqtBEJDqEeSYk9UvSF06WQ" name="acceptServiceRequest">
+      <modelElement href="ServiceProvider.uml#_umnyUJDqEeSYk9UvSF06WQ"/>
+      <visibility xmi:id="_uqzu25DqEeSYk9UvSF06WQ" label="+"/>
+      <outParameters xmi:id="_uqzu3JDqEeSYk9UvSF06WQ">
+        <modelElement href="ServiceProvider.uml#_umpAcJDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uqzu3ZDqEeSYk9UvSF06WQ" name="ResponseEntity">
+          <modelElement href="ServiceProvider.uml#_umLGYZDqEeSYk9UvSF06WQ"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_uqzu3pDqEeSYk9UvSF06WQ" name="request">
+        <modelElement href="ServiceProvider.uml#_umoZYJDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uqzu35DqEeSYk9UvSF06WQ" name="RequestEntity">
+          <modelElement href="ServiceProvider.uml#_umJRMZDqEeSYk9UvSF06WQ"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:InterfaceVisual" xmi:id="_uq_U8JDqEeSYk9UvSF06WQ" comments="_uq84sJDqEeSYk9UvSF06WQ" targetConnectionVisual="_uq84sZDqEeSYk9UvSF06WQ" name="ServiceProvider" subclassedBy="_uq9fwJDqEeSYk9UvSF06WQ">
+    <modelElement href="ServiceProvider.uml#_ulXOEJDqEeSYk9UvSF06WQ"/>
+    <visualProperties xmi:id="_uq_U8ZDqEeSYk9UvSF06WQ" position="115.0,-101.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_uq_U8pDqEeSYk9UvSF06WQ" label="+"/>
+    <operations xmi:id="_uq_U85DqEeSYk9UvSF06WQ" name="acceptServiceRequest">
+      <modelElement href="ServiceProvider.uml#_umtR4JDqEeSYk9UvSF06WQ"/>
+      <visibility xmi:id="_uq_U9JDqEeSYk9UvSF06WQ" label="+"/>
+      <outParameters xmi:id="_uq_U9ZDqEeSYk9UvSF06WQ">
+        <modelElement href="ServiceProvider.uml#_umt48ZDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uq_U9pDqEeSYk9UvSF06WQ" name="ResponseEntity">
+          <modelElement href="ServiceProvider.uml#_umLGYZDqEeSYk9UvSF06WQ"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_uq_U95DqEeSYk9UvSF06WQ" name="request">
+        <modelElement href="ServiceProvider.uml#_umt48JDqEeSYk9UvSF06WQ"/>
+        <type xmi:id="_uq_U-JDqEeSYk9UvSF06WQ" name="RequestEntity">
+          <modelElement href="ServiceProvider.uml#_umJRMZDqEeSYk9UvSF06WQ"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+</com.yattasolutions.uml.diagrams.classifier:ClassDiagram>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UMLLabProfile="http:///schemas/UMLLabProfile/NS/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UMLLabProfile/NS/0 pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile">
+  <uml:Model xmi:id="_uOWcQJDqEeSYk9UvSF06WQ" name="ServiceProvider">
+    <eAnnotations xmi:id="_uZSg8JDqEeSYk9UvSF06WQ" source="http://ns.yatta.de/umllab">
+      <contents xmi:type="ecore:EAnnotation" xmi:id="_uZSg8ZDqEeSYk9UvSF06WQ" source="codegen">
+        <details xmi:id="_uZSg8pDqEeSYk9UvSF06WQ" key="codegenDirectory" value="/Linkage/java/main"/>
+        <details xmi:id="_uqdwgJDqEeSYk9UvSF06WQ" key="AssociatedSourceCode" value="/Linkage/java/main/service/middleware/linkage/framework/provider/DefaultServiceProvider.java;3288092692/1;/Linkage/java/main/service/middleware/linkage/framework/provider/ServiceProvider.java;2979281581/1;"/>
+      </contents>
+    </eAnnotations>
+    <elementImport xmi:id="_ukS3EJDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+    </elementImport>
+    <elementImport xmi:id="_ukTeIJDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
+    </elementImport>
+    <elementImport xmi:id="_ukTeIZDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#char"/>
+    </elementImport>
+    <elementImport xmi:id="_ukTeIpDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#double"/>
+    </elementImport>
+    <elementImport xmi:id="_ukTeI5DqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
+    </elementImport>
+    <elementImport xmi:id="_ukUFMJDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+    </elementImport>
+    <elementImport xmi:id="_ukUFMZDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+    </elementImport>
+    <elementImport xmi:id="_ukUFMpDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#short"/>
+    </elementImport>
+    <elementImport xmi:id="_ukUsQJDqEeSYk9UvSF06WQ">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </elementImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_ujxSoJDqEeSYk9UvSF06WQ" name="service">
+      <packagedElement xmi:type="uml:Package" xmi:id="_ujx5sJDqEeSYk9UvSF06WQ" name="middleware">
+        <packagedElement xmi:type="uml:Package" xmi:id="_ujx5sZDqEeSYk9UvSF06WQ" name="linkage">
+          <packagedElement xmi:type="uml:Package" xmi:id="_ujygwJDqEeSYk9UvSF06WQ" name="framework">
+            <packagedElement xmi:type="uml:Package" xmi:id="_uj09AJDqEeSYk9UvSF06WQ" name="common">
+              <packagedElement xmi:type="uml:Package" xmi:id="_uj1kEJDqEeSYk9UvSF06WQ" name="entity">
+                <packagedElement xmi:type="uml:Class" xmi:id="_umJRMZDqEeSYk9UvSF06WQ" name="RequestEntity"/>
+                <packagedElement xmi:type="uml:Class" xmi:id="_umLGYZDqEeSYk9UvSF06WQ" name="ResponseEntity"/>
+              </packagedElement>
+              <packagedElement xmi:type="uml:Class" xmi:id="_umHcAZDqEeSYk9UvSF06WQ" name="StringUtils"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Package" xmi:id="_uj2LIJDqEeSYk9UvSF06WQ" name="setting">
+              <packagedElement xmi:type="uml:Package" xmi:id="_uj2yMJDqEeSYk9UvSF06WQ" name="reader">
+                <packagedElement xmi:type="uml:Interface" xmi:id="_umOwwZDqEeSYk9UvSF06WQ" name="ServiceSettingReader"/>
+              </packagedElement>
+              <packagedElement xmi:type="uml:Class" xmi:id="_umM7kZDqEeSYk9UvSF06WQ" name="ServiceSettingEntity"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Package" xmi:id="_uj8RwJDqEeSYk9UvSF06WQ" name="provider">
+              <packagedElement xmi:type="uml:Class" xmi:id="_ukRB4JDqEeSYk9UvSF06WQ" clientDependency="_umRNAJDqEeSYk9UvSF06WQ" name="DefaultServiceProvider">
+                <ownedAttribute xmi:id="_umw8QJDqEeSYk9UvSF06WQ" name="servicePropertyEntity" visibility="private" isLeaf="true" type="_umOwwZDqEeSYk9UvSF06WQ" isReadOnly="true" association="_unBa8JDqEeSYk9UvSF06WQ"/>
+                <ownedAttribute xmi:id="_umyxcJDqEeSYk9UvSF06WQ" name="logger" visibility="private" isStatic="true" type="_umFm0JDqEeSYk9UvSF06WQ" association="_unD3MJDqEeSYk9UvSF06WQ">
+                  <defaultValue xmi:type="uml:LiteralString" xmi:id="_umzYgJDqEeSYk9UvSF06WQ" value="Logger.getLogger(ServiceProvider.class)"/>
+                </ownedAttribute>
+                <interfaceRealization xmi:id="_umRNAJDqEeSYk9UvSF06WQ" client="_ukRB4JDqEeSYk9UvSF06WQ" supplier="_ulXOEJDqEeSYk9UvSF06WQ" contract="_ulXOEJDqEeSYk9UvSF06WQ"/>
+                <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_um44EJDqEeSYk9UvSF06WQ" name="DefaultServiceProvider" specification="_umkH8JDqEeSYk9UvSF06WQ">
+                  <ownedParameter xmi:id="_um44EZDqEeSYk9UvSF06WQ" name="servicePropertyEntity" type="_umOwwZDqEeSYk9UvSF06WQ"/>
+                  <ownedParameter xmi:id="_um44EpDqEeSYk9UvSF06WQ" type="_ukRB4JDqEeSYk9UvSF06WQ" direction="return"/>
+                  <language>java</language>
+                  <body>this.servicePropertyEntity = servicePropertyEntity;&#xD;
+	</body>
+                </ownedBehavior>
+                <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_um5fIJDqEeSYk9UvSF06WQ" name="searchService" specification="_ukXvkJDqEeSYk9UvSF06WQ">
+                  <ownedParameter xmi:id="_um5fIZDqEeSYk9UvSF06WQ" name="serviceName">
+                    <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                  </ownedParameter>
+                  <ownedParameter xmi:id="_um5fIpDqEeSYk9UvSF06WQ" type="_umM7kZDqEeSYk9UvSF06WQ" direction="return"/>
+                  <language>java</language>
+                  <body>for(ServiceSettingEntity entity : servicePropertyEntity.getServiceList()){&#xD;
+			if(entity.getServiceName().equals(serviceName)){&#xD;
+				return entity;&#xD;
+			}&#xD;
+		}&#xD;
+		return null;&#xD;
+	</body>
+                </ownedBehavior>
+                <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_um6tQJDqEeSYk9UvSF06WQ" name="acceptServiceRequest" specification="_umnyUJDqEeSYk9UvSF06WQ">
+                  <ownedParameter xmi:id="_um6tQZDqEeSYk9UvSF06WQ" name="request" type="_umJRMZDqEeSYk9UvSF06WQ"/>
+                  <ownedParameter xmi:id="_um6tQpDqEeSYk9UvSF06WQ" type="_umLGYZDqEeSYk9UvSF06WQ" direction="return"/>
+                  <language>java</language>
+                  <body>ServiceSettingEntity entity = searchService(request.getServiceName());&#xD;
+		if(entity == null){&#xD;
+			ResponseEntity response = new ResponseEntity();&#xD;
+			response.setResult(&quot;Can not find the service name of &quot; + request.getServiceName());&#xD;
+			response.setRequestID(request.getRequestID());&#xD;
+			return response;&#xD;
+		}&#xD;
+		try {&#xD;
+			Class clazz = Class.forName(entity.getServiceInterface());&#xD;
+			Method[] methods = clazz.getMethods();&#xD;
+			Method findMethod = null;&#xD;
+			for(Method method : methods){&#xD;
+				if(method.getName().equals(request.getMethodName())){&#xD;
+					findMethod = method;&#xD;
+					break;&#xD;
+				}&#xD;
+			}&#xD;
+			if(findMethod != null)&#xD;
+			{&#xD;
+				Object result = findMethod.invoke(entity.getServiceTargetObject(), request.getArgs().toArray());&#xD;
+				ResponseEntity response = new ResponseEntity();&#xD;
+				response.setResult(result.toString());&#xD;
+				response.setRequestID(request.getRequestID());&#xD;
+				return response;&#xD;
+			}&#xD;
+		} catch (Exception e) {&#xD;
+			// TODO Auto-generated catch block&#xD;
+			logger.error(&quot;unexpected exception happened. exception detail:&quot; + StringUtils.ExceptionStackTraceToString(e));&#xD;
+			ResponseEntity response = new ResponseEntity();&#xD;
+			response.setResult(&quot;no service found in the server.&quot;);&#xD;
+			response.setRequestID(request.getRequestID());&#xD;
+			return response;&#xD;
+		} &#xD;
+		return new ResponseEntity();&#xD;
+	</body>
+                </ownedBehavior>
+                <ownedOperation xmi:id="_ukXvkJDqEeSYk9UvSF06WQ" name="searchService" visibility="private" method="_um5fIJDqEeSYk9UvSF06WQ">
+                  <ownedComment xmi:id="_um9wkJDqEeSYk9UvSF06WQ">
+                    <body>search the service from the service list&#xD;
+	 * @param serviceName&#xD;
+	 * @return</body>
+                  </ownedComment>
+                  <ownedParameter xmi:id="_ukYWoJDqEeSYk9UvSF06WQ" name="serviceName">
+                    <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                  </ownedParameter>
+                  <ownedParameter xmi:id="_ummkMJDqEeSYk9UvSF06WQ" type="_umM7kZDqEeSYk9UvSF06WQ" direction="return"/>
+                </ownedOperation>
+                <ownedOperation xmi:id="_umkH8JDqEeSYk9UvSF06WQ" name="DefaultServiceProvider" method="_um44EJDqEeSYk9UvSF06WQ">
+                  <eAnnotations xmi:id="_umkvAJDqEeSYk9UvSF06WQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+                    <details xmi:id="_umkvAZDqEeSYk9UvSF06WQ" key="create"/>
+                  </eAnnotations>
+                  <ownedParameter xmi:id="_umkH8ZDqEeSYk9UvSF06WQ" name="servicePropertyEntity" type="_umOwwZDqEeSYk9UvSF06WQ"/>
+                  <ownedParameter xmi:id="_umlWEJDqEeSYk9UvSF06WQ" type="_ukRB4JDqEeSYk9UvSF06WQ" direction="return"/>
+                </ownedOperation>
+                <ownedOperation xmi:id="_umnyUJDqEeSYk9UvSF06WQ" name="acceptServiceRequest" method="_um6tQJDqEeSYk9UvSF06WQ">
+                  <ownedComment xmi:id="_um-XoJDqEeSYk9UvSF06WQ">
+                    <body>process the request from the client&#xD;
+	 * @param request&#xD;
+	 * @return</body>
+                  </ownedComment>
+                  <ownedParameter xmi:id="_umoZYJDqEeSYk9UvSF06WQ" name="request" type="_umJRMZDqEeSYk9UvSF06WQ"/>
+                  <ownedParameter xmi:id="_umpAcJDqEeSYk9UvSF06WQ" type="_umLGYZDqEeSYk9UvSF06WQ" direction="return"/>
+                </ownedOperation>
+              </packagedElement>
+              <packagedElement xmi:type="uml:Interface" xmi:id="_ulXOEJDqEeSYk9UvSF06WQ" name="ServiceProvider">
+                <ownedComment xmi:id="_um--sJDqEeSYk9UvSF06WQ">
+                  <body>This class provide a service access point &#xD;
+for all of the service&#xD;
+@author zhonxu&#xD;
+ *</body>
+                </ownedComment>
+                <ownedOperation xmi:id="_umtR4JDqEeSYk9UvSF06WQ" name="acceptServiceRequest">
+                  <ownedParameter xmi:id="_umt48JDqEeSYk9UvSF06WQ" name="request" type="_umJRMZDqEeSYk9UvSF06WQ"/>
+                  <ownedParameter xmi:id="_umt48ZDqEeSYk9UvSF06WQ" type="_umLGYZDqEeSYk9UvSF06WQ" direction="return"/>
+                </ownedOperation>
+              </packagedElement>
+              <packagedElement xmi:type="uml:Association" xmi:id="_unBa8JDqEeSYk9UvSF06WQ" name="" memberEnd="_unBa8ZDqEeSYk9UvSF06WQ _umw8QJDqEeSYk9UvSF06WQ">
+                <ownedEnd xmi:id="_unBa8ZDqEeSYk9UvSF06WQ" name="" type="_ukRB4JDqEeSYk9UvSF06WQ" association="_unBa8JDqEeSYk9UvSF06WQ"/>
+              </packagedElement>
+              <packagedElement xmi:type="uml:Association" xmi:id="_unD3MJDqEeSYk9UvSF06WQ" name="" memberEnd="_unD3MZDqEeSYk9UvSF06WQ _umyxcJDqEeSYk9UvSF06WQ">
+                <ownedEnd xmi:id="_unD3MZDqEeSYk9UvSF06WQ" name="" type="_ukRB4JDqEeSYk9UvSF06WQ" association="_unD3MJDqEeSYk9UvSF06WQ"/>
+              </packagedElement>
+            </packagedElement>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_ujzH0JDqEeSYk9UvSF06WQ" name="java">
+      <packagedElement xmi:type="uml:Package" xmi:id="_ujzH0ZDqEeSYk9UvSF06WQ" name="lang">
+        <packagedElement xmi:type="uml:Package" xmi:id="_ujzu4JDqEeSYk9UvSF06WQ" name="reflect">
+          <packagedElement xmi:type="uml:Class" xmi:id="_umDxoJDqEeSYk9UvSF06WQ" name="Method"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_ujzu4ZDqEeSYk9UvSF06WQ" name="org">
+      <packagedElement xmi:type="uml:Package" xmi:id="_uj0V8JDqEeSYk9UvSF06WQ" name="apache">
+        <packagedElement xmi:type="uml:Package" xmi:id="_uj0V8ZDqEeSYk9UvSF06WQ" name="log4j">
+          <packagedElement xmi:type="uml:Class" xmi:id="_umFm0JDqEeSYk9UvSF06WQ" name="Logger"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <profileApplication xmi:id="_uZTvEJDqEeSYk9UvSF06WQ">
+      <eAnnotations xmi:id="_uZTvEZDqEeSYk9UvSF06WQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile"/>
+    </profileApplication>
+  </uml:Model>
+  <UMLLabProfile:TargetLanguage xmi:id="_uZUWIJDqEeSYk9UvSF06WQ" base_Package="_uOWcQJDqEeSYk9UvSF06WQ">
+    <languageName>java</languageName>
+  </UMLLabProfile:TargetLanguage>
+  <UMLLabProfile:Reference xmi:id="_umE_wJDqEeSYk9UvSF06WQ" base_Element="_umDxoJDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_umHcAJDqEeSYk9UvSF06WQ" base_Element="_umFm0JDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_umJRMJDqEeSYk9UvSF06WQ" base_Element="_umHcAZDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_umLGYJDqEeSYk9UvSF06WQ" base_Element="_umJRMZDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_umM7kJDqEeSYk9UvSF06WQ" base_Element="_umLGYZDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_umOwwJDqEeSYk9UvSF06WQ" base_Element="_umM7kZDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_umQl8JDqEeSYk9UvSF06WQ" base_Element="_umOwwZDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_umyKYJDqEeSYk9UvSF06WQ" base_Element="_umw8QJDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_um0moJDqEeSYk9UvSF06WQ" base_Element="_umyxcJDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_unDQIJDqEeSYk9UvSF06WQ" base_Element="_unBa8JDqEeSYk9UvSF06WQ"/>
+  <UMLLabProfile:Reference xmi:id="_unFFUJDqEeSYk9UvSF06WQ" base_Element="_unD3MJDqEeSYk9UvSF06WQ"/>
+</xmi:XMI>
