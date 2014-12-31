@@ -6,11 +6,10 @@ import service.middleware.linkage.framework.common.entity.ServiceInformationEnti
 
 
 /**
- * <p>Title: ∆Ù∂Ø¿‡</p>
- * @author starboy
- * @version 1.0
+ * 
+ * @author Smile
+ *
  */
-
 public class StartService {
 
     public static void main(String[] args) {
