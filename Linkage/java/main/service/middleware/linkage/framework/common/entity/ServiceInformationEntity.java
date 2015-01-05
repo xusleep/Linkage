@@ -70,5 +70,8 @@ public class ServiceInformationEntity {
 		return this.address + "_" +  this.port + "_UNIQUE_STRING";
 	}
 	
+	public String toDetailString(){
+		return this.toString() + "_" + this.serviceName + "_" + this.serviceMethod + "_" + this.serviceVersion;
+	}
 	
 }

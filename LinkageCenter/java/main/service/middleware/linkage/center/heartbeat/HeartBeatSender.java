@@ -75,7 +75,7 @@ public class HeartBeatSender implements Runnable {
 				}
 				else
 				{
-					logger.debug("sucessfull request information : " + result.getServiceInformationEntity().toString());
+					logger.debug("sucessfull request information : " + result.getServiceInformationEntity().toDetailString());
 				}
 			}
 			
