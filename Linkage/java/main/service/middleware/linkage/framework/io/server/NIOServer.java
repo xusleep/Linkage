@@ -29,7 +29,7 @@ import service.middleware.linkage.framework.io.common.WorkerPool;
  * @author zhonxu
  *
  */
-public class DefaultServer implements Server {
+public class NIOServer implements Server {
 	private static Queue<SelectionKey> wpool = new ConcurrentLinkedQueue<SelectionKey>(); 
 	private final Selector selector;
 	private final ServerSocketChannel sschannel;
@@ -39,9 +39,9 @@ public class DefaultServer implements Server {
 	private volatile boolean isShutdown = false;
 	private final CountDownLatch shutdownSignal;
 	protected final AtomicBoolean wakenUp = new AtomicBoolean();
-	private static Logger  logger = Logger.getLogger(DefaultServer.class);  
+	private static Logger  logger = Logger.getLogger(NIOServer.class);  
 	
-	public DefaultServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
+	public NIOServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
 		this.eventDistributionHandler = eventDistributionHandler;
 		eventDistributionHandler.submitServiceEvent(new ServiceStartingEvent());
 		selector = Selector.open();

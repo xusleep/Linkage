@@ -4,7 +4,7 @@ import service.middleware.linkage.framework.distribution.EventDistributionMaster
 import service.middleware.linkage.framework.handlers.ServiceReadWriteHandler;
 import service.middleware.linkage.framework.io.common.NIOWorkerPool;
 import service.middleware.linkage.framework.io.common.WorkerPool;
-import service.middleware.linkage.framework.io.server.DefaultServer;
+import service.middleware.linkage.framework.io.server.NIOServer;
 import service.middleware.linkage.framework.io.server.Server;
 import service.middleware.linkage.framework.provider.DefaultServiceProvider;
 import service.middleware.linkage.framework.provider.ServiceProvider;
@@ -39,7 +39,7 @@ public class NIOServerBootStrap implements Runnable {
 		eventDistributionHandler.registerHandler(new ServiceReadWriteHandler(providerBean));
 		
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
-		this.server = new DefaultServer(servicePropertyEntity.getServiceAddress(), servicePropertyEntity.getServicePort(),
+		this.server = new NIOServer(servicePropertyEntity.getServiceAddress(), servicePropertyEntity.getServicePort(),
 				eventDistributionHandler, workerPool);
 	}
 
