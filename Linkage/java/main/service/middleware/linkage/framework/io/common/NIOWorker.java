@@ -79,6 +79,8 @@ public class NIOWorker implements Worker {
 						it.remove();
 						// 处理IO事件
 						if (key.isReadable()) {
+							// 这里不能使用 同步方法，
+							// 当使用同步方法时，如果传输大文件的话，会阻塞其他通道的数据
 							if(!read(key)){
 								this.closeChannel(key);
 							}
