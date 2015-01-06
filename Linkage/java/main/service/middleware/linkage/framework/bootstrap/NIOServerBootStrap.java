@@ -1,7 +1,7 @@
 package service.middleware.linkage.framework.bootstrap;
 
 import service.middleware.linkage.framework.distribution.EventDistributionMaster;
-import service.middleware.linkage.framework.handlers.ServiceReadWriteHandler;
+import service.middleware.linkage.framework.handlers.MessageModeServiceReadWriteHandler;
 import service.middleware.linkage.framework.io.common.NIOWorkerPool;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.server.NIOServer;
@@ -31,7 +31,7 @@ public class NIOServerBootStrap extends AbstractBootStrap implements Runnable {
 		this.serviceProvider = new DefaultServiceProvider(servicePropertyEntity);
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
-		this.getEventDistributionHandler().registerHandler(new ServiceReadWriteHandler(serviceProvider));
+		this.getEventDistributionHandler().registerHandler(new MessageModeServiceReadWriteHandler(serviceProvider));
 		
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
 		this.server = new NIOServer(servicePropertyEntity.getServiceAddress(), servicePropertyEntity.getServicePort(),

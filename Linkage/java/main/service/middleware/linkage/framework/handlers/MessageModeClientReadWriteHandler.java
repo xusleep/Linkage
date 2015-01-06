@@ -21,11 +21,11 @@ import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
  * @author zhonxu
  *
  */
-public class ClientReadWriteHandler implements Handler {
-	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class);  
+public class MessageModeClientReadWriteHandler implements Handler {
+	private static Logger  logger = Logger.getLogger(MessageModeClientReadWriteHandler.class);  
 	private final ServiceAccess serviceAccess;
 	
-	public ClientReadWriteHandler(ServiceAccess serviceAccess){
+	public MessageModeClientReadWriteHandler(ServiceAccess serviceAccess){
 		this.serviceAccess = serviceAccess;
 	}
 	

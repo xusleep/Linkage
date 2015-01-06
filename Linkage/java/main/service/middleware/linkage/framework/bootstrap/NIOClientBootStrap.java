@@ -3,7 +3,7 @@ package service.middleware.linkage.framework.bootstrap;
 import java.io.IOException;
 
 import service.middleware.linkage.framework.distribution.EventDistributionMaster;
-import service.middleware.linkage.framework.handlers.ClientReadWriteHandler;
+import service.middleware.linkage.framework.handlers.MessageModeClientReadWriteHandler;
 import service.middleware.linkage.framework.io.client.Client;
 import service.middleware.linkage.framework.io.client.DefaultClient;
 import service.middleware.linkage.framework.io.common.NIOWorkerPool;
@@ -40,7 +40,7 @@ public class NIOClientBootStrap extends AbstractBootStrap implements Runnable {
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(this.getEventDistributionHandler(), this.getWorkerPool());
 		this.serviceAccess = new NIOServiceAccess(objServicePropertyEntity, this.getWorkerPool());
-		this.getEventDistributionHandler().registerHandler(new ClientReadWriteHandler(this.getServiceAccess()));
+		this.getEventDistributionHandler().registerHandler(new MessageModeClientReadWriteHandler(this.getServiceAccess()));
 	}
 	
 	/**

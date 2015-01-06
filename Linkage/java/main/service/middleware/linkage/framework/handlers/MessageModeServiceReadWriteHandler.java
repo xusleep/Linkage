@@ -24,11 +24,11 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
  * @author zhonxu
  *
  */
-public class ServiceReadWriteHandler implements Handler {
-	private static Logger  logger = Logger.getLogger(ClientReadWriteHandler.class); 
+public class MessageModeServiceReadWriteHandler implements Handler {
+	private static Logger  logger = Logger.getLogger(MessageModeClientReadWriteHandler.class); 
 	private final ServiceProvider  provider;
 	
-	public ServiceReadWriteHandler(ServiceProvider provider){
+	public MessageModeServiceReadWriteHandler(ServiceProvider provider){
 		this.provider = provider;
 	}
 	
