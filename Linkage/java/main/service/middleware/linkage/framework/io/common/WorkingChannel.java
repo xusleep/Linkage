@@ -12,7 +12,6 @@ import service.middleware.linkage.framework.exception.ServiceException;
  *
  */
 public interface WorkingChannel {
-	
 	/**
 	 * put the request result in the result list
 	 * @param requestResultEntity

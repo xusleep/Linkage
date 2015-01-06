@@ -40,19 +40,19 @@ public class NIOWorker implements Worker {
 	private final Queue<Runnable> taskQueue = new ConcurrentLinkedQueue<Runnable>();
 	protected final AtomicBoolean wakenUp = new AtomicBoolean();
 	private final Selector selector;
-	private final ExecutorService objExecutorService;
 	private final CountDownLatch signal;
-	private final EventDistributionMaster eventDistributionHandler;
 	private volatile boolean isShutdown = false;
 	private final CountDownLatch shutdownSignal;
-	private static Logger  logger = Logger.getLogger(NIOWorker.class);  
-	
+	private final NIOReadWriteContext readWriteContext;
+	private static Logger  logger = Logger.getLogger(NIOWorker.class); 
+	private final EventDistributionMaster eventDistributionHandler;
+
 	public NIOWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
 		selector = Selector.open();
-		this.objExecutorService = Executors.newFixedThreadPool(10);
 		this.signal = signal;
-		this.eventDistributionHandler = eventDistributionHandler;
 		shutdownSignal = new CountDownLatch(1);
+		this.eventDistributionHandler = eventDistributionHandler;
+		readWriteContext = new NIOReadWriteContext(eventDistributionHandler);
 	}
 
 	public void run() {
@@ -102,6 +102,14 @@ public class NIOWorker implements Worker {
 	}
 	
 	/**
+	 * get read write context
+	 * @return
+	 */
+	public NIOReadWriteContext getReadWriteContext() {
+		return readWriteContext;
+	}
+	
+	/**
 	 * shutdown 
 	 */
 	public void shutdown(){
@@ -145,7 +153,11 @@ public class NIOWorker implements Worker {
             task.run();
         }
     }
-	
+    
+	/**
+	 * write when the select event happens
+	 * @param key
+	 */
     private void writeFromSelectorLoop(final SelectionKey key) {
     	WorkingChannel channel = (WorkingChannel) key.attachment();
     	writeFromUser(channel);
@@ -157,45 +169,7 @@ public class NIOWorker implements Worker {
 	 * @return
 	 */
 	public boolean writeFromUser(WorkingChannel workingChannel) {
-		NIOWorkingChannel channel = (NIOWorkingChannel)workingChannel;
-		ServiceOnMessageWriteEvent evt;
-		final Queue<ServiceOnMessageWriteEvent> writeBuffer = channel.writeBufferQueue;
-		synchronized (channel.writeLock) {
-			for (;;) {
-				if ((evt = writeBuffer.poll()) == null) {
-					break;
-				}
-				SocketChannel sc = (SocketChannel) channel.getChannel();
-				byte[] data = null;
-				try {
-					data = IOProtocol.wrapMessage(evt.getMessage())
-							.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
-				} catch (UnsupportedEncodingException e2) {
-					e2.printStackTrace();
-				}
-				ByteBuffer buffer = ByteBuffer
-						.allocate(data.length);
-				buffer.put(data, 0, data.length);
-				buffer.flip();
-				if (buffer.hasRemaining()) {
-					try {
-						while(buffer.hasRemaining())
-							sc.write(buffer);
-					} catch (IOException e) {
-						this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(channel, evt.getRequestID(), new ServiceException(e, e.getMessage())));
-						logger.error("not expected interruptedException happened. exception detail : " 
-								+ StringUtils.ExceptionStackTraceToString(e));
-						try {
-							closeChannel(channel.getKey());
-						} catch (IOException e1) {
-							logger.error("not expected interruptedException happened. exception detail : " 
-									+ StringUtils.ExceptionStackTraceToString(e1));
-						}
-					}
-				}
-			}
-		}
-		return true;
+		return this.getReadWriteContext().write(workingChannel);
 	}
 
 	/**
@@ -225,69 +199,8 @@ public class NIOWorker implements Worker {
 	 * @return
 	 */
 	private boolean read(SelectionKey key) {
-		SocketChannel ch = (SocketChannel) key.channel();
-		final NIOWorkingChannel objWorkingChannel = (NIOWorkingChannel)key.attachment();
-		int readBytes = 0;
-		int ret = 0;
-		boolean success = false;
-	    ByteBuffer bb = ByteBuffer.allocate(IOProtocol.BUFFER_SIZE);
-        try {
-            while ((ret = ch.read(bb)) > 0) {
-                readBytes += ret;
-                if (!bb.hasRemaining()) {
-                    break;
-                }
-            }
-            if (ret < 0 ) {
-            	return success = false;
-            }
-            success = true;
-        } catch (ClosedChannelException e) {
-        	this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceOnChanelClosedException(e, e.getMessage())));
-            return false;
-        	
-        } 
-        // Can happen, and does not need a user attention.
-        catch (IOException e) {
-        	this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelIOExeptionEvent(objWorkingChannel, null, new ServiceOnChanelIOException(e, e.getMessage())));
-        	return false;
-        } 
-        if (readBytes > 0) {
-            bb.flip();
-        }
-		byte[] message = new byte[readBytes];
-		System.arraycopy(bb.array(), 0, message, 0, readBytes);
-		String receiveString = "";
-		try {
-			receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
-		synchronized(objWorkingChannel.readLock){
-			objWorkingChannel.getBufferMessage().append(receiveString);
-			String unwrappedMessage = "";
-			try {
-				while((unwrappedMessage = IOProtocol.extractMessage(objWorkingChannel.getBufferMessage())) != "")
-				{
-					final String sendMessage = unwrappedMessage;
-					objExecutorService.execute(new Runnable(){
-	
-						@Override
-						public void run() {
-							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(objWorkingChannel);
-							event.setMessage(sendMessage);
-							eventDistributionHandler.submitServiceEvent(event);
-						}
-						
-					});
-				}
-				
-			} catch (Exception e) {
-				logger.error("not expected interruptedException happened. exception detail : " 
-						+ StringUtils.ExceptionStackTraceToString(e));
-			}
-		}
-		return success;
+		final NIOWorkingChannel workingChannel = (NIOWorkingChannel)key.attachment();
+		return this.getReadWriteContext().read(workingChannel);
 	}
 
 	/**
@@ -317,7 +230,7 @@ public class NIOWorker implements Worker {
             }
         }
     }
-    
+
 	/**
 	 * this class is used to register the task to the worker
 	 * @author zhonxu

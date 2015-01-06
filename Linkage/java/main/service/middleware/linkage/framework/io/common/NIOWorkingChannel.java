@@ -39,9 +39,10 @@ public class NIOWorkingChannel implements WorkingChannel {
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteMessageQueue();
 	Channel channel;
 	private Worker worker;
-	private StringBuffer bufferMessage;
+	private StringBuffer readMessageBuffer;
 	private SelectionKey key;
 	private String workingChannelCacheID;
+	private volatile NIOWorkingMode workingMode = NIOWorkingMode.MessageMode;
 	
 	/**
 	 *  use the concurrent hash map to store the request result list {@link RequestResultEntity}
@@ -51,7 +52,7 @@ public class NIOWorkingChannel implements WorkingChannel {
 	public NIOWorkingChannel(Channel channel, Worker worker){
 		this.channel = channel;
 		this.worker = worker;
-		this.bufferMessage = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
+		this.readMessageBuffer = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
 	}
 	
 	/**
@@ -146,8 +147,8 @@ public class NIOWorkingChannel implements WorkingChannel {
 	 * get the meesage buffer
 	 * @return
 	 */
-	public StringBuffer getBufferMessage() {
-		return bufferMessage;
+	public StringBuffer getReadMessageBuffer() {
+		return readMessageBuffer;
 	}
 
 	public Worker getWorker() {
@@ -183,6 +184,14 @@ public class NIOWorkingChannel implements WorkingChannel {
 		this.writeBufferQueue.offer(serviceOnMessageWriteEvent);
 	}
 	
+	public NIOWorkingMode getWorkingMode() {
+		return workingMode;
+	}
+
+	public void setWorkingMode(NIOWorkingMode workingMode) {
+		this.workingMode = workingMode;
+	}
+
 	/**
 	 *  the writting queue for the request
 	 * @author zhonxu
