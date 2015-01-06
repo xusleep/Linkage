@@ -29,7 +29,7 @@ public class StartStorageClient {
 		clientBootStrap.run();
     	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/client_server.properties", 5);
     	serviceBootStrap.run();
-    	NIORouteServiceAccess cb = clientBootStrap.getConsume();
+    	NIORouteServiceAccess cb = clientBootStrap.getServiceAccess();
 		ServiceInformationEntity clientServiceInformationEntity = new ServiceInformationEntity();
 		clientServiceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
@@ -39,13 +39,13 @@ public class StartStorageClient {
 			List<String> args1 = new LinkedList<String>();
 			args1.add(i + ".txt");
 			args1.add(HexUtils.fileToHexString("E:\\Storage\\transeformfile.txt"));
-			RequestResultEntity result = clientBootStrap.getConsume().requestServicePerConnectSync("storage", args1);
+			RequestResultEntity result = clientBootStrap.getServiceAccess().requestServicePerConnectSync("storage", args1);
 			System.out.println("result is : " + result.getResponseEntity().getResult());
 		}
 		List<String> args1 = new LinkedList<String>();
 		args1.add("1.jar");
 		args1.add(HexUtils.fileToHexString("E:\\OSGI\\cxf-dosgi-ri-samples-ds-interface-1.2.jar"));
-		RequestResultEntity result = clientBootStrap.getConsume().requestServicePerConnectSync("storage", args1);
+		RequestResultEntity result = clientBootStrap.getServiceAccess().requestServicePerConnectSync("storage", args1);
 		System.out.println("result is : " + result.getResponseEntity().getResult());
 		clientBootStrap.shutdownImediate();
 		serviceBootStrap.shutdownImediate();

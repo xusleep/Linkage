@@ -19,7 +19,7 @@ public class StartLinkageCenter {
     		objServerBootStrap.run();
 			NIOClientBootStrap clientBootStrap = new NIOClientBootStrap("conf/linkage_center_client.properties", 5);
 			clientBootStrap.run();
-			HeartBeatSender objHeartBeatSender = new HeartBeatSender(clientBootStrap.getConsume());
+			HeartBeatSender objHeartBeatSender = new HeartBeatSender(clientBootStrap.getServiceAccess());
 			new Thread(objHeartBeatSender).start();
 			//Thread.sleep(1000);
 			//objServerBootStrap.shutdown();

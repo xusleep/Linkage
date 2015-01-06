@@ -87,7 +87,7 @@ public class StartClient1 extends AbstractJob {
 		clientBootStrap.run();
     	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/client_server.properties", 5);
     	serviceBootStrap.run();
-    	NIORouteServiceAccess cb = clientBootStrap.getConsume();
+    	NIORouteServiceAccess cb = clientBootStrap.getServiceAccess();
 		ServiceInformationEntity clientServiceInformationEntity = new ServiceInformationEntity();
 		clientServiceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());

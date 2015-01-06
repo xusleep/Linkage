@@ -22,7 +22,7 @@ public class StartService {
         			5, centerServiceInformationEntity);
     		serviceBootStrap.run();
     		clientBootStrap.run();
-    		ServiceCenterClientUtils.defaultRouteConsume = clientBootStrap.getConsume();
+    		ServiceCenterClientUtils.defaultRouteConsume = clientBootStrap.getServiceAccess();
     		try {
     			ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformationEntity, serviceBootStrap.getServicePropertyEntity());
     		}

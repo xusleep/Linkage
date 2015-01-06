@@ -23,7 +23,7 @@ public class NIOCenterClientBootStrap implements Runnable {
 	private final Client client;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final WorkerPool workPool;
-	private final NIORouteServiceAccess consume;
+	private final NIORouteServiceAccess serviceAccess;
 	
 	/**
 	 * 
@@ -46,8 +46,8 @@ public class NIOCenterClientBootStrap implements Runnable {
 		this.workPool = new NIOWorkerPool(eventDistributionHandler, 1);
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(eventDistributionHandler, this.workPool);
-		this.consume = new NIORouteServiceAccess(objServicePropertyEntity, this.workPool, centerServiceInformationEntity);
-		eventDistributionHandler.registerHandler(new ClientReadWriteHandler(this.getConsume()));
+		this.serviceAccess = new NIORouteServiceAccess(objServicePropertyEntity, this.workPool, centerServiceInformationEntity);
+		eventDistributionHandler.registerHandler(new ClientReadWriteHandler(this.getServiceAccess()));
 	}
 	
 	/**
@@ -55,8 +55,8 @@ public class NIOCenterClientBootStrap implements Runnable {
 	 * from the client
 	 * @return
 	 */
-	public NIORouteServiceAccess getConsume() {
-		return consume;
+	public NIORouteServiceAccess getServiceAccess() {
+		return serviceAccess;
 	}
 
 	public WorkerPool getWorkPool() {

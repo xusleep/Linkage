@@ -16,39 +16,30 @@ import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
  * @author zhonxu
  *
  */
-public class NIOServerBootStrap implements Runnable {
+public class NIOServerBootStrap extends AbstractBootStrap implements Runnable {
 	private final Server server;
-	private final ServiceProvider providerBean;
-	private final EventDistributionMaster eventDistributionHandler;
+	private final ServiceProvider serviceProvider;
 	private final ServiceSettingReader servicePropertyEntity;
 	
 	public NIOServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
+		super(serviceTaskThreadPootSize);
 		// read the configuration from the properties
 		this.servicePropertyEntity = new ServiceSettingPropertyReader(propertyPath);
-		// new a task handler, this handler will handle all of the task from the pool queue
-		// into the executor pool(thread pool) which will execute the task.
-		this.eventDistributionHandler = new EventDistributionMaster(serviceTaskThreadPootSize);
-		// this worker pool will handle the read write io operation for all of the connection
-		WorkerPool workerPool = new NIOWorkerPool(eventDistributionHandler);
 		// this is a provider which provides the service point access from the io layer
 		// in this provider, all of the service information will load into the bean
 		// when there is a request, the provider will find the service, init it & execute the service
-		this.providerBean = new DefaultServiceProvider(servicePropertyEntity);
+		this.serviceProvider = new DefaultServiceProvider(servicePropertyEntity);
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
-		eventDistributionHandler.registerHandler(new ServiceReadWriteHandler(providerBean));
+		this.getEventDistributionHandler().registerHandler(new ServiceReadWriteHandler(serviceProvider));
 		
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
 		this.server = new NIOServer(servicePropertyEntity.getServiceAddress(), servicePropertyEntity.getServicePort(),
-				eventDistributionHandler, workerPool);
+				this.getEventDistributionHandler(), this.getWorkerPool());
 	}
 
-	public ServiceProvider getProviderBean() {
-		return providerBean;
-	}
-
-	public EventDistributionMaster getEventDistributionHandler() {
-		return eventDistributionHandler;
+	public ServiceProvider getServiceProvider() {
+		return serviceProvider;
 	}
 
 	public ServiceSettingReader getServicePropertyEntity() {

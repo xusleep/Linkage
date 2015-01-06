@@ -41,7 +41,7 @@ public class StartClient extends AbstractJob {
     	centerServiceInformationEntity.setPort(5002);
 		NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
 		clientBootStrap.run();;
-		NIORouteServiceAccess cb = clientBootStrap.getConsume();
+		NIORouteServiceAccess cb = clientBootStrap.getServiceAccess();
 		for(long i = 0; i < 1000; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
