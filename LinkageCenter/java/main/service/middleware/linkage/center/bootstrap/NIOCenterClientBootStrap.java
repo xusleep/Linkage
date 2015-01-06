@@ -3,6 +3,7 @@ package service.middleware.linkage.center.bootstrap;
 import java.io.IOException;
 
 import service.middleware.linkage.center.comsume.NIORouteServiceAccess;
+import service.middleware.linkage.framework.bootstrap.AbstractBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.distribution.EventDistributionMaster;
 import service.middleware.linkage.framework.handlers.ClientReadWriteHandler;
@@ -19,10 +20,8 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  * @author zhonxu
  *
  */
-public class NIOCenterClientBootStrap implements Runnable {
+public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runnable {
 	private final Client client;
-	private final EventDistributionMaster eventDistributionHandler;
-	private final WorkerPool workPool;
 	private final NIORouteServiceAccess serviceAccess;
 	
 	/**
@@ -31,6 +30,7 @@ public class NIOCenterClientBootStrap implements Runnable {
 	 * @param clientTaskThreadPootSize the client 
 	 */
 	public NIOCenterClientBootStrap(String propertyPath, int clientTaskThreadPootSize, ServiceInformationEntity centerServiceInformationEntity){
+		super(clientTaskThreadPootSize);
 		// read the configuration from the properties
 		ClientSettingReader objServicePropertyEntity = null;
 		try {
@@ -38,16 +38,10 @@ public class NIOCenterClientBootStrap implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// new a task handler, this handler will handle all of the task from the pool queue
-		// into the executor pool(thread pool) which will execute the task.
-		eventDistributionHandler = new EventDistributionMaster(clientTaskThreadPootSize);
-		// this is a client worker pool, this pool will handle all of the io operation 
-		// with the server
-		this.workPool = new NIOWorkerPool(eventDistributionHandler, 1);
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
-		this.client = new DefaultClient(eventDistributionHandler, this.workPool);
-		this.serviceAccess = new NIORouteServiceAccess(objServicePropertyEntity, this.workPool, centerServiceInformationEntity);
-		eventDistributionHandler.registerHandler(new ClientReadWriteHandler(this.getServiceAccess()));
+		this.client = new DefaultClient(this.getEventDistributionHandler(), this.getWorkerPool());
+		this.serviceAccess = new NIORouteServiceAccess(objServicePropertyEntity, this.getWorkerPool(), centerServiceInformationEntity);
+		this.getEventDistributionHandler().registerHandler(new ClientReadWriteHandler(this.getServiceAccess()));
 	}
 	
 	/**
@@ -59,17 +53,10 @@ public class NIOCenterClientBootStrap implements Runnable {
 		return serviceAccess;
 	}
 
-	public WorkerPool getWorkPool() {
-		return workPool;
-	}
 
 	@Override
 	public void run() {
 		new Thread(client).start();
-	}
-
-	public EventDistributionMaster getEventDistributionHandler() {
-		return eventDistributionHandler;
 	}
 	
 	/**
