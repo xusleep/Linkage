@@ -12,7 +12,7 @@ import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.NIOWorkingChannel;
+import service.middleware.linkage.framework.io.common.NIOWorkingChannelMessageStrategy;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.serviceaccess.NIOServiceAccess;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
@@ -43,7 +43,7 @@ public class NIORouteServiceAccess extends NIOServiceAccess implements RouteServ
 			result.setServiceInformationEntity(serviceInformationEntity);
 			if(serviceInformationEntity == null)
 			{
-				NIOWorkingChannel.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
+				NIOWorkingChannelMessageStrategy.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
 				return result;
 			}
 		} 
@@ -53,7 +53,7 @@ public class NIORouteServiceAccess extends NIOServiceAccess implements RouteServ
 			//logger.log(Level.WARNING, ex.getMessage());
 			//System.out.println("ComsumerBean ... exception happend " + ex.getMessage());
 			//ex.printStackTrace();
-			NIOWorkingChannel.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
+			NIOWorkingChannelMessageStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
         	route.clean(result);
         	return result;
         }

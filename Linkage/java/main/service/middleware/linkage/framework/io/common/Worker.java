@@ -9,9 +9,7 @@ import java.nio.channels.SocketChannel;
  *
  */
 public interface Worker extends Runnable{
-	public WorkingChannel submitOpeRegister(SocketChannel sc);
-	public boolean writeFromUser(WorkingChannel channel);
-	public void closeWorkingChannel(WorkingChannel workingchannel) throws IOException;
+	public WorkingChannelContext submitOpeRegister(WorkingChannelContext sc);
 	/**
 	 * shutdown 
 	 */

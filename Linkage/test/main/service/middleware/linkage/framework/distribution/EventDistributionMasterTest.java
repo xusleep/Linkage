@@ -10,17 +10,14 @@ import java.util.concurrent.CountDownLatch;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import service.middleware.linkage.framework.distribution.EventDistributionMaster;
 import service.middleware.linkage.framework.event.ServiceEvent;
 import service.middleware.linkage.framework.handlers.Handler;
-import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
-import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
-import zhonglin.test.framework.concurrence.condition.job.JobInterface;
+import test.framework.concurrence.condition.MainConcurrentThread;
+import test.framework.concurrence.condition.job.AbstractJob;
+import test.framework.concurrence.condition.job.JobInterface;
 
 /**
  * this is used to test the EventDistribution{

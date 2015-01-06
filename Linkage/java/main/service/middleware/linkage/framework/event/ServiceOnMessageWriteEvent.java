@@ -1,6 +1,6 @@
 package service.middleware.linkage.framework.event;
 
-import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
 /**
  * this event will be triggered when there is a message need to be write in the channel
@@ -8,22 +8,22 @@ import service.middleware.linkage.framework.io.common.WorkingChannel;
  *
  */
 public class ServiceOnMessageWriteEvent implements ServiceEvent {
-	private WorkingChannel workingChannel;
+	private WorkingChannelContext workingChannel;
 	private String message;
 	private String requestID;
 	
-	public ServiceOnMessageWriteEvent(WorkingChannel workingChannel, String requestID)
+	public ServiceOnMessageWriteEvent(WorkingChannelContext workingChannel, String requestID)
 	{
 		this.workingChannel = workingChannel;
 	}
 
 	
-	public WorkingChannel getWrokingChannel() {
+	public WorkingChannelContext getWrokingChannel() {
 		return workingChannel;
 	}
 
 
-	public void setWorkingChannel(WorkingChannel socketChannel) {
+	public void setWorkingChannel(WorkingChannelContext socketChannel) {
 		this.workingChannel = socketChannel;
 	}
 

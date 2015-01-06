@@ -1,19 +1,33 @@
 package service.middleware.linkage.framework.io.common;
 
-import java.nio.channels.Channel;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import org.apache.log4j.Logger;
+
+import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
+import service.middleware.linkage.framework.distribution.EventDistributionMaster;
+import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionEvent;
+import service.middleware.linkage.framework.event.ServiceOnChannelIOExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
+import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
@@ -22,37 +36,32 @@ import service.middleware.linkage.framework.io.protocol.IOProtocol;
  * @author zhonxu
  *
  */
-public class NIOWorkingChannel implements WorkingChannel {
-
-    /**
-     * Monitor object for write.
-     */
-    final public Object writeLock = new Object();
-    /**
-     * Monitor object for read.
-     */
-    final public Object readLock = new Object();
+public class NIOWorkingChannelMessageStrategy implements WorkingChannelStrategy {
     
     /**
-     * Queue of write {@link ServiceOnMessageWriteEvent}s.
+     * Queue of write {@link ServiceOnMessageWriteEvent}s.s
      */
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteMessageQueue();
-	Channel channel;
-	private Worker worker;
 	private StringBuffer readMessageBuffer;
-	private SelectionKey key;
-	private String workingChannelCacheID;
-	private volatile NIOWorkingMode workingMode = NIOWorkingMode.MessageMode;
+	private final NIOWorkingChannelContext workingChannelContext;
+	private final EventDistributionMaster eventDistributionHandler;
+	private final ExecutorService objExecutorService;
+	private static Logger  logger = Logger.getLogger(NIOWorkingChannelMessageStrategy.class);
 	
 	/**
 	 *  use the concurrent hash map to store the request result list {@link RequestResultEntity}
 	 */
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
-	public NIOWorkingChannel(Channel channel, Worker worker){
-		this.channel = channel;
-		this.worker = worker;
+	public NIOWorkingChannelMessageStrategy(NIOWorkingChannelContext workingChannelContext, EventDistributionMaster eventDistributionHandler){
 		this.readMessageBuffer = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
+		this.workingChannelContext = workingChannelContext;
+		this.objExecutorService = Executors.newFixedThreadPool(10);
+		this.eventDistributionHandler = eventDistributionHandler;
+	}
+	
+	public void offerWriterQueue(ServiceOnMessageWriteEvent serviceOnMessageWriteEvent) {
+		this.writeBufferQueue.offer(serviceOnMessageWriteEvent);
 	}
 	
 	/**
@@ -150,46 +159,125 @@ public class NIOWorkingChannel implements WorkingChannel {
 	public StringBuffer getReadMessageBuffer() {
 		return readMessageBuffer;
 	}
-
-	public Worker getWorker() {
-		return worker;
-	}
-
-	public Channel getChannel() {
-		return channel;
-	}
-
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
-	
-    public SelectionKey getKey() {
-		return key;
-	}
-
-	public void setKey(SelectionKey key) {
-		this.key = key;
-	}
-	
-	public String getWoringChannelCacheID() {
-		return workingChannelCacheID;
-	}
-
-	public void setWorkingChannelCacheID(String workingChannelCacheID) {
-		this.workingChannelCacheID = workingChannelCacheID;
-	}
 	
 	@Override
-	public void offerWriterQueue(ServiceOnMessageWriteEvent serviceOnMessageWriteEvent) {
-		this.writeBufferQueue.offer(serviceOnMessageWriteEvent);
-	}
-	
-	public NIOWorkingMode getWorkingMode() {
-		return workingMode;
+	public WorkingChannelOperationResult read() {
+		SocketChannel ch = (SocketChannel) this.workingChannelContext.getChannel();
+		int readBytes = 0;
+		int ret = 0;
+		boolean success = false;
+	    ByteBuffer bb = ByteBuffer.allocate(IOProtocol.BUFFER_SIZE);
+        try {
+            while ((ret = ch.read(bb)) > 0) {
+                readBytes += ret;
+                if (!bb.hasRemaining()) {
+                    break;
+                }
+            }
+            if (ret < 0 ) {
+            	return new WorkingChannelOperationResult(false);
+            }
+            success = true;
+        } catch (ClosedChannelException e) {
+        	this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(this.workingChannelContext, null, new ServiceOnChanelClosedException(e, e.getMessage())));
+            return new WorkingChannelOperationResult(false);
+        	
+        } 
+        // Can happen, and does not need a user attention.
+        catch (IOException e) {
+        	this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelIOExeptionEvent(this.workingChannelContext, null, new ServiceOnChanelIOException(e, e.getMessage())));
+        	return new WorkingChannelOperationResult(false);
+        } 
+        if (readBytes > 0) {
+            bb.flip();
+        }
+		byte[] message = new byte[readBytes];
+		System.arraycopy(bb.array(), 0, message, 0, readBytes);
+		String receiveString = "";
+		try {
+			receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		synchronized(this.workingChannelContext.readLock){
+			this.getReadMessageBuffer().append(receiveString);
+			final WorkingChannelContext passWorkingChannelContext = this.workingChannelContext;
+			String unwrappedMessage = "";
+			try {
+				while((unwrappedMessage = IOProtocol.extractMessage(this.getReadMessageBuffer())) != "")
+				{
+					final String sendMessage = unwrappedMessage;
+					objExecutorService.execute(new Runnable(){
+						@Override
+						public void run() {
+							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(passWorkingChannelContext);
+							event.setMessage(sendMessage);
+							eventDistributionHandler.submitServiceEvent(event);
+						}
+						
+					});
+				}
+				
+			} catch (Exception e) {
+				logger.error("not expected interruptedException happened. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
+			}
+		}
+		return new WorkingChannelOperationResult(success);
 	}
 
-	public void setWorkingMode(NIOWorkingMode workingMode) {
-		this.workingMode = workingMode;
+	@Override
+	public WorkingChannelOperationResult write() {
+		ServiceOnMessageWriteEvent evt;
+		final Queue<ServiceOnMessageWriteEvent> writeBuffer = this.writeBufferQueue;
+		synchronized (this.workingChannelContext.writeLock) {
+			for (;;) {
+				if ((evt = writeBuffer.poll()) == null) {
+					break;
+				}
+				SocketChannel sc = (SocketChannel) this.workingChannelContext.getChannel();
+				byte[] data = null;
+				try {
+					data = IOProtocol.wrapMessage(evt.getMessage())
+							.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
+				} catch (UnsupportedEncodingException e2) {
+					e2.printStackTrace();
+				}
+				ByteBuffer buffer = ByteBuffer
+						.allocate(data.length);
+				buffer.put(data, 0, data.length);
+				buffer.flip();
+				if (buffer.hasRemaining()) {
+					try {
+						while(buffer.hasRemaining())
+							sc.write(buffer);
+					} catch (IOException e) {
+						this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(this.workingChannelContext, evt.getRequestID(), new ServiceException(e, e.getMessage())));
+						logger.error("not expected interruptedException happened. exception detail : " 
+								+ StringUtils.ExceptionStackTraceToString(e));
+						try {
+							closeChannel(this.workingChannelContext.getKey());
+						} catch (IOException e1) {
+							logger.error("not expected interruptedException happened. exception detail : " 
+									+ StringUtils.ExceptionStackTraceToString(e1));
+						}
+					}
+				}
+			}
+		}
+		return new WorkingChannelOperationResult(true);
+	}
+
+	/**
+	 * close the channel
+	 * 
+	 * @param sc
+	 * @throws IOException
+	 */
+	private void closeChannel(SelectionKey key) throws IOException {
+		key.cancel();
+		SocketChannel sc = (SocketChannel)key.channel();
+		sc.close();
 	}
 
 	/**

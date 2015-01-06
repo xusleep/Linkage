@@ -4,7 +4,7 @@ import java.util.List;
 
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
 public interface ServiceAccess {
 	
@@ -62,7 +62,7 @@ public interface ServiceAccess {
 	 * remove the channel from the cache 
 	 * @param requestID
 	 */
-	public void removeCachedChannel(WorkingChannel objWorkingChannel);
+	public void removeCachedChannel(WorkingChannelContext objWorkingChannel);
 	
 	public NIOServiceAccessEngine getConsumeEngine(); 
 }

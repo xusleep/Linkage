@@ -6,7 +6,7 @@ import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.io.common.WorkerPool;
-import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
 /**
@@ -61,7 +61,7 @@ public class NIOServiceAccess implements ServiceAccess {
 	}
 
 	@Override
-	public void removeCachedChannel(WorkingChannel objWorkingChannel) {
+	public void removeCachedChannel(WorkingChannelContext objWorkingChannel) {
 		// TODO Auto-generated method stub
 		consumeEngine.removeCachedChannel(objWorkingChannel);
 	}

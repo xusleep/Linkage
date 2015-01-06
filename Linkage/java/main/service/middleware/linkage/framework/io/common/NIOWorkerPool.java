@@ -19,6 +19,7 @@ public class NIOWorkerPool implements WorkerPool {
 	private int nextWorkCount = 0;
 	private final CountDownLatch signal;
 	private static Logger  logger = Logger.getLogger(NIOWorkerPool.class); 
+	private final EventDistributionMaster eventDistributionHandler;
 	
 	/**
 	 * 
@@ -27,10 +28,11 @@ public class NIOWorkerPool implements WorkerPool {
 	 */
 	public NIOWorkerPool(EventDistributionMaster eventDistributionHandler, int workerCounter){
 		signal = new CountDownLatch(workerCounter);
+		this.eventDistributionHandler = eventDistributionHandler;
 		workers = new Worker[workerCounter];
 		for(int i = 0; i < workers.length; i++){
 			try {
-				workers[i] = new NIOWorker(eventDistributionHandler, signal);
+				workers[i] = new NIOWorker(signal);
 			} catch (Exception e) {
 				logger.error("not expected interruptedException happened. exception detail : " 
 						+ StringUtils.ExceptionStackTraceToString(e));
@@ -39,12 +41,13 @@ public class NIOWorkerPool implements WorkerPool {
 	}
 	
 	public NIOWorkerPool(EventDistributionMaster eventDistributionHandler){
+		this.eventDistributionHandler = eventDistributionHandler;
 		int workerCounter = Runtime.getRuntime().availableProcessors();
 		signal = new CountDownLatch(workerCounter);
 		workers = new Worker[workerCounter];
 		for(int i = 0; i < workers.length; i++){
 			try {
-				workers[i] = new NIOWorker(eventDistributionHandler, signal);
+				workers[i] = new NIOWorker(signal);
 			} catch (Exception e) {
 				logger.error("not expected interruptedException happened. exception detail : " 
 						+ StringUtils.ExceptionStackTraceToString(e));
@@ -63,9 +66,9 @@ public class NIOWorkerPool implements WorkerPool {
 		return workers[Math.abs(nextWorkCount++)%workers.length];
 	}
 	
-	public WorkingChannel register(SocketChannel sc){
+	public WorkingChannelContext register(SocketChannel sc){
 		Worker worker = getNextWorker();
-		return worker.submitOpeRegister(sc);
+		return worker.submitOpeRegister(new NIOWorkingChannelContext(sc, worker, this.eventDistributionHandler));
 	}
 
 	@Override
@@ -81,7 +84,6 @@ public class NIOWorkerPool implements WorkerPool {
 	@Override
 	public void shutdown() {
 		logger.debug("shutdown all of the workers.");
-		// TODO Auto-generated method stub
 		for(int i = 0; i < workers.length; i++){
 			workers[i].shutdown();
 		}
@@ -90,7 +92,6 @@ public class NIOWorkerPool implements WorkerPool {
 	@Override
 	public void shutdownImediate() {
 		logger.debug("shutdown imediate all of the workers.");
-		// TODO Auto-generated method stub
 		for(int i = 0; i < workers.length; i++){
 			workers[i].shutdownImediate();
 		}

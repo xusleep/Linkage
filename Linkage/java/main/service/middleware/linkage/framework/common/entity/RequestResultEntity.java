@@ -3,7 +3,7 @@ package service.middleware.linkage.framework.common.entity;
 import java.util.concurrent.CountDownLatch;
 
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
 /**
  * this class stored the request result
@@ -16,7 +16,7 @@ public class RequestResultEntity {
 	private CountDownLatch signal = new CountDownLatch(1);
 	private boolean isException;
 	private ServiceException exception;
-	private WorkingChannel workingChannel;
+	private WorkingChannelContext workingChannel;
 	private ServiceInformationEntity serviceInformationEntity;
 	
 	public RequestResultEntity(){
@@ -67,11 +67,11 @@ public class RequestResultEntity {
 		this.exception = exception;
 	}
 
-	public WorkingChannel getWorkingChannel() {
+	public WorkingChannelContext getWorkingChannel() {
 		return workingChannel;
 	}
 
-	public void setWorkingChannel(WorkingChannel workingChannel) {
+	public void setWorkingChannel(WorkingChannelContext workingChannel) {
 		this.workingChannel = workingChannel;
 	}
 

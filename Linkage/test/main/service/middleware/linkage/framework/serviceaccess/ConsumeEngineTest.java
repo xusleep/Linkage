@@ -17,9 +17,9 @@ import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import zhonglin.test.framework.concurrence.condition.MainConcurrentThread;
-import zhonglin.test.framework.concurrence.condition.job.AbstractJob;
-import zhonglin.test.framework.concurrence.condition.job.JobInterface;
+import test.framework.concurrence.condition.MainConcurrentThread;
+import test.framework.concurrence.condition.job.AbstractJob;
+import test.framework.concurrence.condition.job.JobInterface;
 
 public class ConsumeEngineTest {
 	private static NIOServerBootStrap serviceBootStrap;

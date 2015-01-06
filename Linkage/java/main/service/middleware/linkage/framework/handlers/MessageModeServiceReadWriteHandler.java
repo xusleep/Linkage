@@ -14,7 +14,8 @@ import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
-import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.io.common.NIOWorkingChannelMessageStrategy;
+import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
@@ -37,14 +38,15 @@ public class MessageModeServiceReadWriteHandler implements Handler {
 		if (event instanceof ServiceOnMessageReceiveEvent) {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
-				WorkingChannel channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
+				WorkingChannelContext channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
+				NIOWorkingChannelMessageStrategy strategy = (NIOWorkingChannelMessageStrategy) channel.getWorkingChannelStrategy();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				RequestEntity objRequestEntity = SerializationUtils.deserializeRequest(receiveData);
 				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
 				objServiceOnMessageWriteEvent.setMessage(SerializationUtils.serializeResponse(objResponseEntity));
-				channel.offerWriterQueue(objServiceOnMessageWriteEvent);
-				channel.getWorker().writeFromUser(channel);
+				strategy.offerWriterQueue(objServiceOnMessageWriteEvent);
+				strategy.write();
 			} catch (Exception e) {
 				logger.error("ServiceReadWriteHandler exception happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
 			}

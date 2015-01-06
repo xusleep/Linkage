@@ -1,6 +1,6 @@
 package service.middleware.linkage.framework.event;
 
-import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
 /**
  * this event will be triggered when there is a message arrived
@@ -8,19 +8,19 @@ import service.middleware.linkage.framework.io.common.WorkingChannel;
  *
  */
 public class ServiceOnMessageReceiveEvent implements ServiceEvent {
-	private WorkingChannel workingChannel;
+	private WorkingChannelContext workingChannel;
 	private String message;
 	
-	public ServiceOnMessageReceiveEvent(WorkingChannel socketChannel)
+	public ServiceOnMessageReceiveEvent(WorkingChannelContext socketChannel)
 	{
 		this.workingChannel = socketChannel;
 	}
 
-	public WorkingChannel getWorkingChannel() {
+	public WorkingChannelContext getWorkingChannel() {
 		return workingChannel;
 	}
 
-	public void setWorkingChannel(WorkingChannel socketChannel) {
+	public void setWorkingChannel(WorkingChannelContext socketChannel) {
 		this.workingChannel = socketChannel;
 	}
 

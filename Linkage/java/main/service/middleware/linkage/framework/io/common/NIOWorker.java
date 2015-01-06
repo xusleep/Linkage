@@ -1,9 +1,6 @@
 package service.middleware.linkage.framework.io.common;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -12,8 +9,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -22,13 +17,7 @@ import org.apache.log4j.Logger;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.distribution.EventDistributionMaster;
 import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionEvent;
-import service.middleware.linkage.framework.event.ServiceOnChannelIOExeptionEvent;
-import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
-import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
-import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
-import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
  * this is default worker, will be used when there is connection established 
@@ -43,16 +32,12 @@ public class NIOWorker implements Worker {
 	private final CountDownLatch signal;
 	private volatile boolean isShutdown = false;
 	private final CountDownLatch shutdownSignal;
-	private final NIOReadWriteContext readWriteContext;
 	private static Logger  logger = Logger.getLogger(NIOWorker.class); 
-	private final EventDistributionMaster eventDistributionHandler;
 
-	public NIOWorker(EventDistributionMaster eventDistributionHandler, CountDownLatch signal) throws Exception {
+	public NIOWorker(CountDownLatch signal) throws Exception {
 		selector = Selector.open();
 		this.signal = signal;
 		shutdownSignal = new CountDownLatch(1);
-		this.eventDistributionHandler = eventDistributionHandler;
-		readWriteContext = new NIOReadWriteContext(eventDistributionHandler);
 	}
 
 	public void run() {
@@ -101,14 +86,6 @@ public class NIOWorker implements Worker {
 				continue;
 			}
 		}
-	}
-	
-	/**
-	 * get read write context
-	 * @return
-	 */
-	public NIOReadWriteContext getReadWriteContext() {
-		return readWriteContext;
 	}
 	
 	/**
@@ -161,19 +138,11 @@ public class NIOWorker implements Worker {
 	 * @param key
 	 */
     private void writeFromSelectorLoop(final SelectionKey key) {
-    	WorkingChannel channel = (WorkingChannel) key.attachment();
-    	writeFromUser(channel);
+    	WorkingChannelContext channel = (WorkingChannelContext) key.attachment();
+    	channel.getWorkingChannelStrategy().write();
     }
 	
-	/**
-	 * write data by user
-	 * @param key
-	 * @return
-	 */
-	public boolean writeFromUser(WorkingChannel workingChannel) {
-		return this.getReadWriteContext().write(workingChannel);
-	}
-
+	
 	/**
 	 * close the channel
 	 * 
@@ -191,8 +160,8 @@ public class NIOWorker implements Worker {
 	 * @param workingchannel
 	 * @throws IOException
 	 */
-	public void closeWorkingChannel(WorkingChannel workingchannel) throws IOException{
-		closeChannel(((NIOWorkingChannel)workingchannel).getKey());
+	public void closeWorkingChannel(WorkingChannelContext workingchannel) throws IOException{
+		closeChannel(((NIOWorkingChannelContext)workingchannel).getKey());
 	}
 	
 	/**
@@ -201,15 +170,14 @@ public class NIOWorker implements Worker {
 	 * @return
 	 */
 	private boolean read(SelectionKey key) {
-		final NIOWorkingChannel workingChannel = (NIOWorkingChannel)key.attachment();
-		return this.getReadWriteContext().read(workingChannel);
+		final NIOWorkingChannelContext workingChannel = (NIOWorkingChannelContext)key.attachment();
+		return workingChannel.getWorkingChannelStrategy().read().isSuccess();
 	}
 
 	/**
 	 * register a channel to the worker
 	 */
-	public WorkingChannel submitOpeRegister(SocketChannel schannel) {
-		WorkingChannel objWorkingChannel = new NIOWorkingChannel(schannel, this);
+	public WorkingChannelContext submitOpeRegister(WorkingChannelContext objWorkingChannel) {
 		registerTask(new RegisterTask(objWorkingChannel));
 		return objWorkingChannel;
 	}
@@ -240,10 +208,10 @@ public class NIOWorker implements Worker {
 	 */
 	private final class RegisterTask implements Runnable {
 		
-		private NIOWorkingChannel objWorkingChannel;
+		private NIOWorkingChannelContext objWorkingChannel;
 		
-		public RegisterTask(WorkingChannel workingChannel){
-			this.objWorkingChannel = (NIOWorkingChannel)workingChannel;
+		public RegisterTask(WorkingChannelContext workingChannel){
+			this.objWorkingChannel = (NIOWorkingChannelContext)workingChannel;
 		}
 
 		@Override
@@ -258,7 +226,6 @@ public class NIOWorker implements Worker {
 					schannel.finishConnect();
 					schannel.close();
 					schannel.socket().close();
-					eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(objWorkingChannel, null, new ServiceException(e, e.getMessage())));
 				} catch (Exception e1) {
 				}
 			}

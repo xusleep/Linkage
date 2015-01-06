@@ -1,7 +1,7 @@
 package service.middleware.linkage.framework.event;
 
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.WorkingChannel;
+import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
 /**
  * this event will be triggered when there is a channel close exception happen
@@ -10,11 +10,11 @@ import service.middleware.linkage.framework.io.common.WorkingChannel;
  */
 public class ServiceOnChannelCloseExeptionEvent implements ServiceEvent {
 	
-	private WorkingChannel workingChannel;
+	private WorkingChannelContext workingChannel;
 	private ServiceException exceptionHappen;
 	private String requestID;
 	
-	public ServiceOnChannelCloseExeptionEvent(WorkingChannel socketChannel, String requestID, ServiceException exceptionHappen)
+	public ServiceOnChannelCloseExeptionEvent(WorkingChannelContext socketChannel, String requestID, ServiceException exceptionHappen)
 	{
 		this.workingChannel = socketChannel;
 		this.requestID = requestID;
@@ -29,11 +29,11 @@ public class ServiceOnChannelCloseExeptionEvent implements ServiceEvent {
 		this.requestID = requestID;
 	}
 	
-	public WorkingChannel getWorkingChannel() {
+	public WorkingChannelContext getWorkingChannel() {
 		return workingChannel;
 	}
 
-	public void setWorkingChannel(WorkingChannel socketChannel) {
+	public void setWorkingChannel(WorkingChannelContext socketChannel) {
 		this.workingChannel = socketChannel;
 	}
 
