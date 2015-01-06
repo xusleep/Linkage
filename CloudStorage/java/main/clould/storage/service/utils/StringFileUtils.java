@@ -169,6 +169,28 @@ public class StringFileUtils {
 		}
 	}
 
-	
+	public static void main(String[] args) throws IOException{
+		//File file = new File("E:\\OSGI\\mysql-installer-community-5.6.19.0.msi");
+		//FileInputStream fis = new FileInputStream(file);
+		//byte[] buffer = new byte[20];
+		//int readCount = 0;
+		//int totalCount = 0;
+		//while ((readCount = fis.read(buffer)) > 0) {
+		//	totalCount = totalCount + readCount;
+		//}
+		//String content = file2String(file);
+		//System.out.println(totalCount);
+		//System.out.println(content.length());
+///*		File file1 = new File("E:\\OSGI\\1.msi");
+//		saveString2File(file1, content);*/
+		
+		String hexFileString = HexUtils.fileToHexString("E:\\OSGI\\mysql-installer-community-5.6.19.0.msi");
+		System.out.print("hexFileString.length() = " + hexFileString.length()); 
+		byte[] data = HexUtils.hexStringToByte(hexFileString);
+		File file2 = new File("E:\\OSGI\\1.msi");
+		FileOutputStream fos = new FileOutputStream(file2);
+		fos.write(data);
+		fos.close();
+	}
 }
 
