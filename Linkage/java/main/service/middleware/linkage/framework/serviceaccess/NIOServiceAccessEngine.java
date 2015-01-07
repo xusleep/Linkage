@@ -205,15 +205,11 @@ public class NIOServiceAccessEngine{
 	 * @param objRequestResultEntity
 	 */
 	public void closeChannelByRequestResult(RequestResultEntity objRequestResultEntity){
-		try {
-			removeCachedChannel(objRequestResultEntity.getWorkingChannel());
-			if(objRequestResultEntity.getWorkingChannel() != null && 
-					objRequestResultEntity.getWorkingChannel().getWorker() != null)
-			{
-				objRequestResultEntity.getWorkingChannel().getChannel().close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		removeCachedChannel(objRequestResultEntity.getWorkingChannel());
+		if(objRequestResultEntity.getWorkingChannel() != null && 
+				objRequestResultEntity.getWorkingChannel().getWorker() != null)
+		{
+			objRequestResultEntity.getWorkingChannel().closeWorkingChannel();
 		}
 	}
 }

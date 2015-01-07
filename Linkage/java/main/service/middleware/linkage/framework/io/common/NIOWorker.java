@@ -150,18 +150,10 @@ public class NIOWorker implements Worker {
 	 * @throws IOException
 	 */
 	private void closeChannel(SelectionKey key) throws IOException {
-		key.cancel();
-		SocketChannel sc = (SocketChannel)key.channel();
-		sc.close();
-	}
-	
-	/**
-	 * close the working channel
-	 * @param workingchannel
-	 * @throws IOException
-	 */
-	public void closeWorkingChannel(WorkingChannelContext workingchannel) throws IOException{
-		closeChannel(((NIOWorkingChannelContext)workingchannel).getKey());
+		WorkingChannelContext channel = (WorkingChannelContext) key.attachment();
+		if(channel != null){
+			channel.closeWorkingChannel();
+		}
 	}
 	
 	/**

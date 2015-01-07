@@ -1,10 +1,15 @@
 package service.middleware.linkage.framework.io.common;
 
+import java.io.IOException;
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.distribution.EventDistributionMaster;
 
 /**
@@ -29,6 +34,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	private String workingChannelCacheID;
 	private volatile NIOWorkingMode workingMode = NIOWorkingMode.MessageMode;
 	private List<WorkingChannelStrategy> workingChannelStrategyList = new LinkedList<WorkingChannelStrategy>();
+	private static Logger  logger = Logger.getLogger(NIOWorkingChannelContext.class);
 	
 	public NIOWorkingChannelContext(Channel channel, Worker worker, EventDistributionMaster eventDistributionHandler){
 		this.channel = channel;
@@ -50,6 +56,23 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * close the channel
+	 * 
+	 * @param sc
+	 * @throws IOException
+	 */
+	public void closeWorkingChannel() {
+		key.cancel();
+		SocketChannel sc = (SocketChannel)key.channel();
+		try {
+			sc.close();
+		} catch (IOException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+		}
 	}
 
 	public Worker getWorker() {

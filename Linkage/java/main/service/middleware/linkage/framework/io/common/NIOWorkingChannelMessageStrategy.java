@@ -255,29 +255,12 @@ public class NIOWorkingChannelMessageStrategy implements WorkingChannelStrategy 
 						this.eventDistributionHandler.submitServiceEvent(new ServiceOnChannelCloseExeptionEvent(this.workingChannelContext, evt.getRequestID(), new ServiceException(e, e.getMessage())));
 						logger.error("not expected interruptedException happened. exception detail : " 
 								+ StringUtils.ExceptionStackTraceToString(e));
-						try {
-							closeChannel(this.workingChannelContext.getKey());
-						} catch (IOException e1) {
-							logger.error("not expected interruptedException happened. exception detail : " 
-									+ StringUtils.ExceptionStackTraceToString(e1));
-						}
+						this.workingChannelContext.closeWorkingChannel();
 					}
 				}
 			}
 		}
 		return new WorkingChannelOperationResult(true);
-	}
-
-	/**
-	 * close the channel
-	 * 
-	 * @param sc
-	 * @throws IOException
-	 */
-	private void closeChannel(SelectionKey key) throws IOException {
-		key.cancel();
-		SocketChannel sc = (SocketChannel)key.channel();
-		sc.close();
 	}
 
 	/**

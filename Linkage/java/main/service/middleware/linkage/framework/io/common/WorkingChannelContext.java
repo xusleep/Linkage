@@ -18,4 +18,6 @@ public interface WorkingChannelContext {
 	public Worker getWorker();
 	
 	public WorkingChannelStrategy getWorkingChannelStrategy();
+	
+	public void closeWorkingChannel();
 }
