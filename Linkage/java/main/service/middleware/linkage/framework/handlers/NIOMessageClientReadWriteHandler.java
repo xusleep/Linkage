@@ -10,8 +10,6 @@ import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionE
 import service.middleware.linkage.framework.event.ServiceOnChannelIOExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnErrorEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
-import service.middleware.linkage.framework.event.ServiceStartedEvent;
-import service.middleware.linkage.framework.event.ServiceStartingEvent;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
@@ -23,12 +21,12 @@ import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
  * @author zhonxu
  *
  */
-public class MessageClientReadWriteHandler implements Handler {
-	private static Logger  logger = Logger.getLogger(MessageClientReadWriteHandler.class);  
+public class NIOMessageClientReadWriteHandler implements Handler {
+	private static Logger  logger = Logger.getLogger(NIOMessageClientReadWriteHandler.class);  
 	
 	private final ServiceAccess serviceAccess;
 	
-	public MessageClientReadWriteHandler(ServiceAccess serviceAccess){
+	public NIOMessageClientReadWriteHandler(ServiceAccess serviceAccess){
 		this.serviceAccess = serviceAccess;
 	}
 	
@@ -61,12 +59,5 @@ public class MessageClientReadWriteHandler implements Handler {
 		else if(event instanceof ServiceOnErrorEvent){
 			logger.error("there is a error comes out" + ((ServiceOnErrorEvent)event).getMsg());
 		}
-		else if(event instanceof ServiceStartingEvent){
-			logger.debug("Server Service starting ...");
-		}
-		else if(event instanceof ServiceStartedEvent){
-			logger.debug("Server Service starting ...");
-		}
-		
 	}
 }

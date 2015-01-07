@@ -6,7 +6,7 @@ import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.AbstractBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.handlers.MessageClientReadWriteHandler;
+import service.middleware.linkage.framework.handlers.NIOMessageClientReadWriteHandler;
 import service.middleware.linkage.framework.io.client.Client;
 import service.middleware.linkage.framework.io.client.DefaultClient;
 import service.middleware.linkage.framework.io.common.NIOWorkerPool;
@@ -41,7 +41,7 @@ public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runna
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(this.getEventDistributionHandler(), this.getWorkerPool());
 		this.serviceAccess = new NIORouteServiceAccess(objServicePropertyEntity, this.getWorkerPool(), centerServiceInformationEntity);
-		this.getEventDistributionHandler().registerHandler(new MessageClientReadWriteHandler(this.getServiceAccess()));
+		this.getEventDistributionHandler().registerHandler(new NIOMessageClientReadWriteHandler(this.getServiceAccess()));
 	}
 	
 	/**

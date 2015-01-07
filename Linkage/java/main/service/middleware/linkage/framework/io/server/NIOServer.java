@@ -43,7 +43,6 @@ public class NIOServer implements Server {
 	
 	public NIOServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
 		this.eventDistributionHandler = eventDistributionHandler;
-		eventDistributionHandler.submitServiceEvent(new ServiceStartingEvent());
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
 		// set it by no blocking
@@ -76,8 +75,6 @@ public class NIOServer implements Server {
 		eventDistributionHandler.start();
 		workerPool.start();
 		workerPool.waitReady();
-		eventDistributionHandler.submitServiceEvent(new ServiceStartedEvent());
-		// loop
 		while (true) {
 			try {
 				wakenUp.set(false);

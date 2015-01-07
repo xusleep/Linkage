@@ -12,11 +12,9 @@ import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionE
 import service.middleware.linkage.framework.event.ServiceOnErrorEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
-import service.middleware.linkage.framework.event.ServiceStartedEvent;
-import service.middleware.linkage.framework.event.ServiceStartingEvent;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
@@ -26,11 +24,11 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
  * @author zhonxu
  *
  */
-public class MessageServiceReadWriteHandler implements Handler {
-	private static Logger  logger = Logger.getLogger(MessageClientReadWriteHandler.class); 
+public class NIOMessageServiceReadWriteHandler implements Handler {
+	private static Logger  logger = Logger.getLogger(NIOMessageClientReadWriteHandler.class); 
 	private final ServiceProvider  provider;
 	
-	public MessageServiceReadWriteHandler(ServiceProvider provider){
+	public NIOMessageServiceReadWriteHandler(ServiceProvider provider){
 		this.provider = provider;
 	}
 	
@@ -59,12 +57,6 @@ public class MessageServiceReadWriteHandler implements Handler {
 		}
 		else if(event instanceof ServiceOnErrorEvent){
 			logger.error("ServiceReadWriteHandler ServiceOnExeptionEvent happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
-		}
-		else if(event instanceof ServiceStartingEvent){
-			logger.debug("Server Service starting ...");
-		}
-		else if(event instanceof ServiceStartedEvent){
-			logger.debug("Server Service starting ...");
 		}
 	}
 }
