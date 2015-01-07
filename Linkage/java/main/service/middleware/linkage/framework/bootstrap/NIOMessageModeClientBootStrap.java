@@ -3,6 +3,7 @@ package service.middleware.linkage.framework.bootstrap;
 import java.io.IOException;
 
 import service.middleware.linkage.framework.handlers.NIOMessageAccessClientHandler;
+import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
 import service.middleware.linkage.framework.io.client.Client;
 import service.middleware.linkage.framework.io.client.DefaultClient;
 import service.middleware.linkage.framework.serviceaccess.NIOServiceAccess;
@@ -16,7 +17,7 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  * @author zhonxu
  *
  */
-public class NIOClientBootStrap extends AbstractBootStrap implements Runnable {
+public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements Runnable {
 	private final Client client;
 	private final ServiceAccess serviceAccess;
 	
@@ -25,8 +26,8 @@ public class NIOClientBootStrap extends AbstractBootStrap implements Runnable {
 	 * @param propertyPath the property configured for the client
 	 * @param clientTaskThreadPootSize the client 
 	 */
-	public NIOClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
-		super(clientTaskThreadPootSize);
+	public NIOMessageModeClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
+		super(new NIOMessageEventDistributionMaster(clientTaskThreadPootSize));
 		// read the configuration from the properties
 		ClientSettingReader objServicePropertyEntity = null;
 		try {
@@ -35,9 +36,9 @@ public class NIOClientBootStrap extends AbstractBootStrap implements Runnable {
 			e.printStackTrace();
 		}
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
-		this.client = new DefaultClient(this.getEventDistributionHandler(), this.getWorkerPool());
+		this.client = new DefaultClient(this.getWorkerPool());
 		this.serviceAccess = new NIOServiceAccess(objServicePropertyEntity, this.getWorkerPool());
-		this.getEventDistributionHandler().addHandler(new NIOMessageAccessClientHandler(this.getServiceAccess()));
+		this.getWorkerPool().getEventDistributionHandler().addHandler(new NIOMessageAccessClientHandler(this.getServiceAccess()));
 	}
 	
 	/**

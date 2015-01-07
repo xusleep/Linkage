@@ -26,7 +26,7 @@ import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
-import service.middleware.linkage.framework.handlers.EventDistributionMaster;
+import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
 import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
@@ -42,7 +42,7 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteMessageQueue();
 	private StringBuffer readMessageBuffer;
 	private final NIOWorkingChannelContext workingChannelContext;
-	private final EventDistributionMaster eventDistributionHandler;
+	private final NIOMessageEventDistributionMaster eventDistributionHandler;
 	private final ExecutorService objExecutorService;
 	private static Logger  logger = Logger.getLogger(NIOMessageWorkingChannelStrategy.class);
 	
@@ -51,7 +51,7 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
 	 */
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
-	public NIOMessageWorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext, EventDistributionMaster eventDistributionHandler){
+	public NIOMessageWorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext, NIOMessageEventDistributionMaster eventDistributionHandler){
 		this.readMessageBuffer = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
 		this.workingChannelContext = workingChannelContext;
 		this.objExecutorService = Executors.newFixedThreadPool(10);

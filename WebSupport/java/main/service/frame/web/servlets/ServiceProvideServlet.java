@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
-import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
+import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 
 /**
@@ -32,7 +32,7 @@ public class ServiceProvideServlet extends HttpServlet {
     
     private void initServiceProvide(){
     	 try {
-         	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/service_server.properties", 5);
+         	NIOMessageModeServerBootStrap serviceBootStrap = new NIOMessageModeServerBootStrap("conf/service_server.properties", 5);
          	ServiceInformationEntity centerServiceInformationEntity = new ServiceInformationEntity();
          	centerServiceInformationEntity.setAddress("localhost");
          	centerServiceInformationEntity.setPort(5002);

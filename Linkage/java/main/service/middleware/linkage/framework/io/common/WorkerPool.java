@@ -2,6 +2,8 @@ package service.middleware.linkage.framework.io.common;
 
 import java.nio.channels.SocketChannel;
 
+import service.middleware.linkage.framework.handlers.EventDistributionMaster;
+
 /**
  * worker pool interface
  * @author zhonxu
@@ -21,4 +23,5 @@ public interface WorkerPool {
 	 * shutdown imediate
 	 */
 	public void shutdownImediate();
+	public EventDistributionMaster getEventDistributionHandler();
 }

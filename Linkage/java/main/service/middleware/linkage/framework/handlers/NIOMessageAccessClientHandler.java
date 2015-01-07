@@ -36,7 +36,7 @@ public class NIOMessageAccessClientHandler extends Handler {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				ResponseEntity objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
-				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnMessageReceiveEvent.getWorkingChannel().findWorkingChannelStrategy();
+				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnMessageReceiveEvent.getWorkingChannel().getWorkingChannelStrategy();
 				strategy.setRequestResult(objResponseEntity);
 				if(this.getNext() != null)
 				{
@@ -48,13 +48,13 @@ public class NIOMessageAccessClientHandler extends Handler {
 		}
 		else if(event instanceof ServiceOnChannelCloseExeptionEvent ){
 			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
-			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().findWorkingChannelStrategy();
+			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().getWorkingChannelStrategy();
 			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
 			strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 		}
 		else if(event instanceof ServiceOnChannelIOExeptionEvent){
 			ServiceOnChannelIOExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelIOExeptionEvent)event;
-			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().findWorkingChannelStrategy();
+			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().getWorkingChannelStrategy();
 			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
 			strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 		

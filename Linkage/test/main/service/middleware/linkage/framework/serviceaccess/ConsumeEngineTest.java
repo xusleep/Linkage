@@ -11,8 +11,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import service.middleware.linkage.framework.bootstrap.NIOClientBootStrap;
-import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
+import service.middleware.linkage.framework.bootstrap.NIOMessageModeClientBootStrap;
+import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
@@ -22,16 +22,16 @@ import test.framework.concurrence.condition.job.AbstractJob;
 import test.framework.concurrence.condition.job.JobInterface;
 
 public class ConsumeEngineTest {
-	private static NIOServerBootStrap serviceBootStrap;
-	private static NIOClientBootStrap clientBootStrap;
+	private static NIOMessageModeServerBootStrap serviceBootStrap;
+	private static NIOMessageModeClientBootStrap clientBootStrap;
 	private static Logger  logger = Logger.getLogger(ConsumeEngineTest.class); 
 	
 	@BeforeClass
 	public static  void setUp(){
 		try {
-			serviceBootStrap = new NIOServerBootStrap("service/middleware/linkage/framework/serviceaccess/conf/service_server.properties", 5);
+			serviceBootStrap = new NIOMessageModeServerBootStrap("service/middleware/linkage/framework/serviceaccess/conf/service_server.properties", 5);
 			serviceBootStrap.run();
-			clientBootStrap = new NIOClientBootStrap("service/middleware/linkage/framework/serviceaccess/conf/client_client.properties", 1);
+			clientBootStrap = new NIOMessageModeClientBootStrap("service/middleware/linkage/framework/serviceaccess/conf/client_client.properties", 1);
 			clientBootStrap.run();
 		} catch (Exception e) {
 			assertTrue("There is exception when setup the test, exception detail: " + StringUtils.ExceptionStackTraceToString(e), false);

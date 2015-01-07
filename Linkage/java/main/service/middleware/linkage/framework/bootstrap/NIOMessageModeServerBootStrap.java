@@ -1,6 +1,8 @@
 package service.middleware.linkage.framework.bootstrap;
 
 import service.middleware.linkage.framework.handlers.NIOMessageAccessServiceHandler;
+import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
+import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.io.server.NIOServer;
 import service.middleware.linkage.framework.io.server.Server;
 import service.middleware.linkage.framework.provider.DefaultServiceProvider;
@@ -13,13 +15,13 @@ import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
  * @author zhonxu
  *
  */
-public class NIOServerBootStrap extends AbstractBootStrap implements Runnable {
+public class NIOMessageModeServerBootStrap extends AbstractBootStrap implements Runnable {
 	private final Server server;
 	private final ServiceProvider serviceProvider;
 	private final ServiceSettingReader servicePropertyEntity;
 	
-	public NIOServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
-		super(serviceTaskThreadPootSize);
+	public NIOMessageModeServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
+		super(new NIOMessageEventDistributionMaster(serviceTaskThreadPootSize));
 		// read the configuration from the properties
 		this.servicePropertyEntity = new ServiceSettingPropertyReader(propertyPath);
 		// this is a provider which provides the service point access from the io layer
@@ -28,11 +30,11 @@ public class NIOServerBootStrap extends AbstractBootStrap implements Runnable {
 		this.serviceProvider = new DefaultServiceProvider(servicePropertyEntity);
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
-		this.getEventDistributionHandler().addHandler(new NIOMessageAccessServiceHandler(serviceProvider));
+		this.getWorkerPool().getEventDistributionHandler().addHandler(new NIOMessageAccessServiceHandler(serviceProvider));
 		
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
-		this.server = new NIOServer(servicePropertyEntity.getServiceAddress(), servicePropertyEntity.getServicePort(),
-				this.getEventDistributionHandler(), this.getWorkerPool());
+		this.server = new NIOServer(servicePropertyEntity.getServiceAddress(),  servicePropertyEntity.getServicePort(),
+				WorkingChannelMode.MessageMode, this.getWorkerPool());
 	}
 
 	public ServiceProvider getServiceProvider() {

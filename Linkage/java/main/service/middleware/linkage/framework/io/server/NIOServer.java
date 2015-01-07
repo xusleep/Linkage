@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
+import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 /**
@@ -34,14 +35,14 @@ public class NIOServer implements Server {
 	private final ServerSocketChannel sschannel;
 	private final InetSocketAddress address;
 	private final WorkerPool workerPool;
-	private final EventDistributionMaster eventDistributionHandler;
+	private final WorkingChannelMode workingChannelMode;
 	private volatile boolean isShutdown = false;
 	private final CountDownLatch shutdownSignal;
 	protected final AtomicBoolean wakenUp = new AtomicBoolean();
 	private static Logger  logger = Logger.getLogger(NIOServer.class);  
 	
-	public NIOServer(String strAddress, int port, EventDistributionMaster eventDistributionHandler, WorkerPool workerPool) throws Exception {
-		this.eventDistributionHandler = eventDistributionHandler;
+	public NIOServer(String strAddress, int port, WorkingChannelMode workingChannelMode, WorkerPool workerPool) throws Exception {
+		this.workingChannelMode = workingChannelMode;
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
 		// set it by no blocking
@@ -61,17 +62,9 @@ public class NIOServer implements Server {
 	public WorkerPool getWorkerPool() {
 		return workerPool;
 	}
-	
-	/**
-	 * get the event handler
-	 */
-	public EventDistributionMaster getMasterHandler() {
-		return eventDistributionHandler;
-	}
 
 	public void run() {
 		logger.debug("start the server.");
-		eventDistributionHandler.start();
 		workerPool.start();
 		workerPool.waitReady();
 		while (true) {
@@ -99,7 +92,7 @@ public class NIOServer implements Server {
 							SocketChannel sc = ssc.accept();
 							sc.configureBlocking(false);
 							// put the accepted channel into the worker pool
-							this.getWorkerPool().register(sc, WorkingChannelMode.MessageMode);
+							this.getWorkerPool().register(sc, this.workingChannelMode);
 						} 
 					}
 				} 
@@ -140,7 +133,6 @@ public class NIOServer implements Server {
                 selector.wakeup();
             }
         }
-		eventDistributionHandler.shutdown();
 		workerPool.shutdown();
 	}
 	
@@ -161,7 +153,6 @@ public class NIOServer implements Server {
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e));
 		}
-		eventDistributionHandler.shutdownImediate();
 		workerPool.shutdownImediate();
 	}
 

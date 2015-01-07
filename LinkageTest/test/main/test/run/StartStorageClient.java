@@ -10,7 +10,7 @@ import clould.storage.service.utils.HexUtils;
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
-import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
+import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 
@@ -27,7 +27,7 @@ public class StartStorageClient {
     	centerServiceInformationEntity.setPort(5002);
 		NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
 		clientBootStrap.run();
-    	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/client_server.properties", 5);
+    	NIOMessageModeServerBootStrap serviceBootStrap = new NIOMessageModeServerBootStrap("conf/client_server.properties", 5);
     	serviceBootStrap.run();
     	NIORouteServiceAccess cb = clientBootStrap.getServiceAccess();
 		ServiceInformationEntity clientServiceInformationEntity = new ServiceInformationEntity();

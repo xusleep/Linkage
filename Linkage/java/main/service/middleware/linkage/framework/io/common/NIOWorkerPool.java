@@ -56,6 +56,7 @@ public class NIOWorkerPool implements WorkerPool {
 	}
 	
 	public void start(){
+		this.eventDistributionHandler.start();
 		logger.debug("starting all of  the worker.");
 		for(int i = 0; i < workers.length; i++){
 			new Thread(workers[i]).start();
@@ -87,6 +88,7 @@ public class NIOWorkerPool implements WorkerPool {
 		for(int i = 0; i < workers.length; i++){
 			workers[i].shutdown();
 		}
+		this.eventDistributionHandler.shutdown();
 	}
 
 	@Override
@@ -95,5 +97,10 @@ public class NIOWorkerPool implements WorkerPool {
 		for(int i = 0; i < workers.length; i++){
 			workers[i].shutdownImediate();
 		}
+		this.eventDistributionHandler.shutdownImediate();
+	}
+
+	public EventDistributionMaster getEventDistributionHandler() {
+		return eventDistributionHandler;
 	}
 }

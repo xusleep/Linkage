@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
+import service.middleware.linkage.framework.handlers.NIOFileEventDistributionMaster;
+import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
 
 /**
  * hold the object when request a connect,
@@ -33,39 +35,39 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	private SelectionKey key;
 	private String workingChannelCacheID;
 	private final WorkingChannelMode workingMode;
-	private List<WorkingChannelStrategy> workingChannelStrategyList = new LinkedList<WorkingChannelStrategy>();
+	private final WorkingChannelStrategy workingChannelStrategy;
 	private static Logger  logger = Logger.getLogger(NIOWorkingChannelContext.class);
 	
 	public NIOWorkingChannelContext(Channel channel, WorkingChannelMode workingMode, Worker worker, EventDistributionMaster eventDistributionHandler){
 		this.channel = channel;
 		this.worker = worker;
 		this.workingMode = workingMode;
-		workingChannelStrategyList.add(new NIOMessageWorkingChannelStrategy(this, eventDistributionHandler));
-		workingChannelStrategyList.add(new NIOFileWorkingChannelStrategy());
+		if(workingMode == WorkingChannelMode.MessageMode )
+		{
+			this.workingChannelStrategy = new NIOMessageWorkingChannelStrategy(this, (NIOMessageEventDistributionMaster) eventDistributionHandler);
+		}
+		else if(workingMode == WorkingChannelMode.FileMode )
+		{
+			this.workingChannelStrategy = new NIOFileWorkingChannelStrategy(this,  (NIOFileEventDistributionMaster) eventDistributionHandler);
+		}
+		else
+		{
+			this.workingChannelStrategy = null;
+		}
 	}
 	
-	public WorkingChannelStrategy findWorkingChannelStrategy() {
-		for(WorkingChannelStrategy workingChannelStrategy : workingChannelStrategyList){
-			if(workingMode == WorkingChannelMode.MessageMode 
-					&& workingChannelStrategy instanceof NIOMessageWorkingChannelStrategy){
-				return workingChannelStrategy;
-			}
-			else if(workingMode == WorkingChannelMode.FileMode 
-					&& workingChannelStrategy instanceof NIOFileWorkingChannelStrategy){
-				return workingChannelStrategy;
-			}
-		}
-		return null;
+	public WorkingChannelStrategy getWorkingChannelStrategy() {
+		return this.workingChannelStrategy ;
 	}
 	
 	@Override
 	public WorkingChannelOperationResult readChannel() {
-		return findWorkingChannelStrategy().readChannel();
+		return getWorkingChannelStrategy().readChannel();
 	}
 
 	@Override
 	public WorkingChannelOperationResult writeChannel() {
-		return findWorkingChannelStrategy().writeChannel();
+		return getWorkingChannelStrategy().writeChannel();
 	}
 	
 	/**

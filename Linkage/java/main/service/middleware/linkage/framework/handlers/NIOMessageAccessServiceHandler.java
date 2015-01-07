@@ -37,7 +37,7 @@ public class NIOMessageAccessServiceHandler extends Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				WorkingChannelContext channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
-				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy) channel.findWorkingChannelStrategy();
+				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy) channel.getWorkingChannelStrategy();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				RequestEntity objRequestEntity = SerializationUtils.deserializeRequest(receiveData);
 				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);

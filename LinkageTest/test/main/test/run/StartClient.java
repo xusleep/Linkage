@@ -85,7 +85,7 @@ public class StartClient extends AbstractJob {
 
 	public static void main(String[] args) throws IOException {
 		StartClient job1 = new StartClient();
-		job1.setThreadCount(1000);
+		job1.setThreadCount(400);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

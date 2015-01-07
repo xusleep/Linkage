@@ -72,7 +72,7 @@ public class NIOServiceAccessEngine{
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
 			result.setWorkingChannel(newWorkingChannel);
-			strategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.findWorkingChannelStrategy();
+			strategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.getWorkingChannelStrategy();
 		}		
 		catch(Exception ex){
 			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
