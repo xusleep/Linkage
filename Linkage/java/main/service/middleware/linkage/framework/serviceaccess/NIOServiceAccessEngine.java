@@ -14,11 +14,11 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.common.WorkingChannelMode;
+import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
@@ -72,7 +72,7 @@ public class NIOServiceAccessEngine{
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
 			result.setWorkingChannel(newWorkingChannel);
-			strategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.findWorkingChannelStrategy(WorkingChannelMode.MessageMode);
+			strategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.findWorkingChannelStrategy();
 		}		
 		catch(Exception ex){
 			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
@@ -84,7 +84,7 @@ public class NIOServiceAccessEngine{
 		String sendData = SerializationUtils.serializeRequest(objRequestEntity);
 		objServiceOnMessageWriteEvent.setMessage(sendData);
 		strategy.offerWriterQueue(objServiceOnMessageWriteEvent);
-		strategy.write();
+		strategy.writeChannel();
 		return result;
 	}
 	
@@ -181,7 +181,7 @@ public class NIOServiceAccessEngine{
         } 
         // wait for the worker pool util it is ready
         this.workerPool.waitReady();
-        NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) this.workerPool.register(channel);
+        NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) this.workerPool.register(channel, WorkingChannelMode.MessageMode);
         return objWorkingChannel;
 	}
 	

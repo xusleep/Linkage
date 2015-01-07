@@ -14,7 +14,6 @@ import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
-import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
@@ -24,11 +23,11 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
  * @author zhonxu
  *
  */
-public class NIOMessageServiceReadWriteHandler implements Handler {
-	private static Logger  logger = Logger.getLogger(NIOMessageClientReadWriteHandler.class); 
+public class NIOMessageAccessServiceHandler extends Handler {
+	private static Logger  logger = Logger.getLogger(NIOMessageAccessClientHandler.class); 
 	private final ServiceProvider  provider;
 	
-	public NIOMessageServiceReadWriteHandler(ServiceProvider provider){
+	public NIOMessageAccessServiceHandler(ServiceProvider provider){
 		this.provider = provider;
 	}
 	
@@ -38,14 +37,18 @@ public class NIOMessageServiceReadWriteHandler implements Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				WorkingChannelContext channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
-				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy) channel.findWorkingChannelStrategy(WorkingChannelMode.MessageMode);
+				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy) channel.findWorkingChannelStrategy();
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				RequestEntity objRequestEntity = SerializationUtils.deserializeRequest(receiveData);
 				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
 				objServiceOnMessageWriteEvent.setMessage(SerializationUtils.serializeResponse(objResponseEntity));
 				strategy.offerWriterQueue(objServiceOnMessageWriteEvent);
-				strategy.write();
+				strategy.writeChannel();
+				if(this.getNext() != null)
+				{
+					this.getNext().handleRequest(event);
+				}
 			} catch (Exception e) {
 				logger.error("ServiceReadWriteHandler exception happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
 			}

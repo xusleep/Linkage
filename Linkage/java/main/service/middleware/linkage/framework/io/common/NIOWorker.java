@@ -136,7 +136,7 @@ public class NIOWorker implements Worker {
 	 */
     private void writeFromSelectorLoop(final SelectionKey key) {
     	WorkingChannelContext workingChannel = (WorkingChannelContext) key.attachment();
-    	workingChannel.write();
+    	workingChannel.writeChannel();
     }
 	
 	
@@ -160,7 +160,7 @@ public class NIOWorker implements Worker {
 	 */
 	private boolean read(SelectionKey key) {
 		final NIOWorkingChannelContext workingChannel = (NIOWorkingChannelContext)key.attachment();
-		return workingChannel.read().isSuccess();
+		return workingChannel.readChannel().isSuccess();
 	}
 
 	/**

@@ -20,21 +20,32 @@ import service.middleware.linkage.framework.event.ServiceEvent;
 public class EventDistributionMaster extends Thread {
 	public  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
 	public final ExecutorService objExecutorService;
-	private final List<Handler> eventHandlerList;
 	private volatile boolean isShutdown = false;
-	private static Logger  logger = Logger.getLogger(EventDistributionMaster.class);  
+	private static Logger  logger = Logger.getLogger(EventDistributionMaster.class);
+	private Handler firstHandler;
+	private Handler lastHandler;
 
 	public EventDistributionMaster(int taskThreadPootSize){
 		this.objExecutorService = Executors.newFixedThreadPool(taskThreadPootSize);
-		this.eventHandlerList = new LinkedList<Handler>();
 	}
 	
 	/**
 	 * register a handler to the master
+	 * the handler will call from the first to last if you are willing 
+	 * to transfer to next
 	 * @param handler
 	 */
-	public void registerHandler(Handler handler) {
-		this.eventHandlerList.add(handler);
+	public void addHandler(Handler handler) {
+		if(firstHandler == null)
+		{
+			lastHandler = firstHandler = handler;
+		}
+		else
+		{
+			lastHandler.setNext(handler);
+			handler.setPrevious(lastHandler);
+			lastHandler = handler;
+		}
 	}
 
 
@@ -125,22 +136,21 @@ public class EventDistributionMaster extends Thread {
 	
 	/**
 	 * this method used to handle the event to the working pool
+	 * 
 	 * @param event
 	 */
-	private void handleEvent(final ServiceEvent event){
-		this.objExecutorService.execute(new Runnable(){
+	private void handleEvent(final ServiceEvent event) {
+		final Handler handler = firstHandler;
+		this.objExecutorService.execute(new Runnable() {
 			@Override
 			public void run() {
-            	try {
-            		for(Handler handler : eventHandlerList)
-            		{
-            			handler.handleRequest(event);
-            		}
+				try {
+					handler.handleRequest(event);
 				} catch (Exception e) {
-					logger.error("not expected exception happened. exception detail : " 
+					logger.error("not expected exception happened. exception detail : "
 							+ StringUtils.ExceptionStackTraceToString(e));
 				}
 			}
-    	});
+		});
 	}
 }

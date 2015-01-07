@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.common.WorkerPool;
+import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 /**
  * 
  * this class is used the start a server
@@ -98,7 +99,7 @@ public class NIOServer implements Server {
 							SocketChannel sc = ssc.accept();
 							sc.configureBlocking(false);
 							// put the accepted channel into the worker pool
-							this.getWorkerPool().register(sc);
+							this.getWorkerPool().register(sc, WorkingChannelMode.MessageMode);
 						} 
 					}
 				} 

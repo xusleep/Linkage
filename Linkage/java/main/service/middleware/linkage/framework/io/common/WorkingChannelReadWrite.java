@@ -10,10 +10,10 @@ public interface WorkingChannelReadWrite {
 	 * read the data from the channel
 	 * @return
 	 */
-	public WorkingChannelOperationResult read();
+	public WorkingChannelOperationResult readChannel();
 	/**
 	 * write the data from the channel
 	 * @return
 	 */
-	public WorkingChannelOperationResult write();
+	public WorkingChannelOperationResult writeChannel();
 }

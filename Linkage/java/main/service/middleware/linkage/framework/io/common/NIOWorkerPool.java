@@ -66,9 +66,9 @@ public class NIOWorkerPool implements WorkerPool {
 		return workers[Math.abs(nextWorkCount++)%workers.length];
 	}
 	
-	public WorkingChannelContext register(SocketChannel sc){
+	public WorkingChannelContext register(SocketChannel sc, WorkingChannelMode workingChannelMode){
 		Worker worker = getNextWorker();
-		return worker.submitOpeRegister(new NIOWorkingChannelContext(sc, worker, this.eventDistributionHandler));
+		return worker.submitOpeRegister(new NIOWorkingChannelContext(sc, workingChannelMode, worker, this.eventDistributionHandler));
 	}
 
 	@Override

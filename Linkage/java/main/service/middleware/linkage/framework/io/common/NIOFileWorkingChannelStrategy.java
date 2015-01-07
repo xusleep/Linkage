@@ -8,13 +8,13 @@ package service.middleware.linkage.framework.io.common;
 public class NIOFileWorkingChannelStrategy implements WorkingChannelStrategy {
 
 	@Override
-	public WorkingChannelOperationResult read() {
+	public WorkingChannelOperationResult readChannel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public WorkingChannelOperationResult write() {
+	public WorkingChannelOperationResult writeChannel() {
 		// TODO Auto-generated method stub
 		return null;
 	}

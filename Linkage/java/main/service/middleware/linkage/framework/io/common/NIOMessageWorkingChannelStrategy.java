@@ -159,7 +159,7 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
 	}
 	
 	@Override
-	public WorkingChannelOperationResult read() {
+	public WorkingChannelOperationResult readChannel() {
 		SocketChannel ch = (SocketChannel) this.workingChannelContext.getChannel();
 		int readBytes = 0;
 		int ret = 0;
@@ -225,7 +225,7 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
 	}
 
 	@Override
-	public WorkingChannelOperationResult write() {
+	public WorkingChannelOperationResult writeChannel() {
 		ServiceOnMessageWriteEvent evt;
 		final Queue<ServiceOnMessageWriteEvent> writeBuffer = this.writeBufferQueue;
 		synchronized (this.workingChannelContext.writeLock) {

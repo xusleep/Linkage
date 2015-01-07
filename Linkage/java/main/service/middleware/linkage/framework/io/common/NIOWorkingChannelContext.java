@@ -32,20 +32,19 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	private Worker worker;
 	private SelectionKey key;
 	private String workingChannelCacheID;
-	private volatile WorkingChannelMode readWorkingMode = WorkingChannelMode.MessageMode;
-	private volatile WorkingChannelMode writeWorkingMode = WorkingChannelMode.MessageMode;
+	private final WorkingChannelMode workingMode;
 	private List<WorkingChannelStrategy> workingChannelStrategyList = new LinkedList<WorkingChannelStrategy>();
 	private static Logger  logger = Logger.getLogger(NIOWorkingChannelContext.class);
 	
-	public NIOWorkingChannelContext(Channel channel, Worker worker, EventDistributionMaster eventDistributionHandler){
+	public NIOWorkingChannelContext(Channel channel, WorkingChannelMode workingMode, Worker worker, EventDistributionMaster eventDistributionHandler){
 		this.channel = channel;
 		this.worker = worker;
+		this.workingMode = workingMode;
 		workingChannelStrategyList.add(new NIOMessageWorkingChannelStrategy(this, eventDistributionHandler));
 		workingChannelStrategyList.add(new NIOFileWorkingChannelStrategy());
 	}
 	
-	@Override
-	public WorkingChannelStrategy findWorkingChannelStrategy(WorkingChannelMode workingMode) {
+	public WorkingChannelStrategy findWorkingChannelStrategy() {
 		for(WorkingChannelStrategy workingChannelStrategy : workingChannelStrategyList){
 			if(workingMode == WorkingChannelMode.MessageMode 
 					&& workingChannelStrategy instanceof NIOMessageWorkingChannelStrategy){
@@ -60,13 +59,13 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	}
 	
 	@Override
-	public WorkingChannelOperationResult read() {
-		return findWorkingChannelStrategy(readWorkingMode).read();
+	public WorkingChannelOperationResult readChannel() {
+		return findWorkingChannelStrategy().readChannel();
 	}
 
 	@Override
-	public WorkingChannelOperationResult write() {
-		return findWorkingChannelStrategy(writeWorkingMode).write();
+	public WorkingChannelOperationResult writeChannel() {
+		return findWorkingChannelStrategy().writeChannel();
 	}
 	
 	/**
@@ -113,20 +112,10 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	public void setWorkingChannelCacheID(String workingChannelCacheID) {
 		this.workingChannelCacheID = workingChannelCacheID;
 	}
+
+	public WorkingChannelMode getWorkingMode() {
+		return workingMode;
+	}
 	
-	public WorkingChannelMode getReadWorkingMode() {
-		return readWorkingMode;
-	}
-
-	public void setReadWorkingMode(WorkingChannelMode workingMode) {
-		this.readWorkingMode = workingMode;
-	}
-
-	public WorkingChannelMode getWriteWorkingMode() {
-		return writeWorkingMode;
-	}
-
-	public void setWriteWorkingMode(WorkingChannelMode writeWorkingMode) {
-		this.writeWorkingMode = writeWorkingMode;
-	}
+	
 }

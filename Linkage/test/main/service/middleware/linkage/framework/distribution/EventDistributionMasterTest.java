@@ -38,7 +38,7 @@ public class EventDistributionMasterTest {
 	
 	@Test
 	public void testSubmitServiceEvent(){
-		eventDistributionMaster.registerHandler(new TestMultiHandler());
+		eventDistributionMaster.addHandler(new TestMultiHandler());
 		Random r = new Random();
 		int value1 = r.nextInt(1000);
 		int value2 = r.nextInt(1000);
@@ -52,7 +52,7 @@ public class EventDistributionMasterTest {
 	
 	@Test
 	public void testConcurrentSubmitServiceEvent(){
-		eventDistributionMaster.registerHandler(new TestMultiHandler());
+		eventDistributionMaster.addHandler(new TestMultiHandler());
 		ConcurrentSubmitEventJob job = new ConcurrentSubmitEventJob();
 		job.setThreadCount(1000);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
@@ -74,7 +74,7 @@ public class EventDistributionMasterTest {
 	 */
 	@Test
 	public void testHighPressSubmitServiceEvent(){
-		eventDistributionMaster.registerHandler(new TestMultiHandler());
+		eventDistributionMaster.addHandler(new TestMultiHandler());
 		logger.debug("testHighPressSubmitServiceEvent start.");
 		ConcurrentPressureSubmitEventJob job = new ConcurrentPressureSubmitEventJob();
 		job.setThreadCount(1000);
@@ -95,7 +95,7 @@ public class EventDistributionMasterTest {
 	public void testMaxSubmitServiceEvent(){
 		// Don't register a hand
 		//eventDistributionMaster.registerHandler(new TestMultiHandler());
-		eventDistributionMaster.registerHandler(new TestMultiHandlerLongTime());
+		eventDistributionMaster.addHandler(new TestMultiHandlerLongTime());
 		for(int i = 0; i < 10000000; i++){
 			Random r = new Random();
 			int value1 = r.nextInt(1000);
@@ -190,7 +190,7 @@ public class EventDistributionMasterTest {
 	 * @author Smile
 	 *
 	 */
-	private static class TestMultiHandler implements Handler{
+	private static class TestMultiHandler extends Handler{
 
 		@Override
 		public void handleRequest(ServiceEvent event) throws IOException,
@@ -206,7 +206,7 @@ public class EventDistributionMasterTest {
 	 * @author Smile
 	 *
 	 */
-	private static class TestMultiHandlerLongTime implements Handler{
+	private static class TestMultiHandlerLongTime extends Handler{
 
 		@Override
 		public void handleRequest(ServiceEvent event) throws IOException,
