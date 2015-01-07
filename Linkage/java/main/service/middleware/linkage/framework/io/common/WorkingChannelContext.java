@@ -9,13 +9,13 @@ import java.nio.channels.Channel;
  * @author zhonxu
  *
  */
-public interface WorkingChannelContext extends ReadWrite {
+public interface WorkingChannelContext extends WorkingChannelReadWrite {
 	public Channel getChannel();
 	/**
 	 * get the current worker for this channel
 	 * @return
 	 */
 	public Worker getWorker();
-	public WorkingChannelStrategy findWorkingChannelStrategy(NIOWorkingMode workingMode);
+	public WorkingChannelStrategy findWorkingChannelStrategy(WorkingChannelMode workingMode);
 	public void closeWorkingChannel();
 }

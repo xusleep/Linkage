@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import service.middleware.linkage.framework.event.ServiceEvent;
+import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.handlers.Handler;
 import test.framework.concurrence.condition.MainConcurrentThread;
 import test.framework.concurrence.condition.job.AbstractJob;

@@ -5,7 +5,7 @@ import java.io.IOException;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.AbstractBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import service.middleware.linkage.framework.distribution.EventDistributionMaster;
+import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.handlers.MessageClientReadWriteHandler;
 import service.middleware.linkage.framework.io.client.Client;
 import service.middleware.linkage.framework.io.client.DefaultClient;

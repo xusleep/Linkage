@@ -45,13 +45,13 @@ public class ConsumeEngineTest {
 			List<String> args = new LinkedList<String>();
 			args.add("121");
 			args.add("234");
-			RequestEntity objRequestEntity = clientBootStrap.getServiceAccess().getConsumeEngine().createRequestEntity("calculator", args);
+			RequestEntity objRequestEntity = clientBootStrap.getServiceAccess().getServiceAccessEngine().createRequestEntity("calculator", args);
 	        RequestResultEntity result = new RequestResultEntity();
 	        result.setRequestID(objRequestEntity.getRequestID());
 	        ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
 	        serviceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 	        serviceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
-	        result = clientBootStrap.getServiceAccess().getConsumeEngine().basicProcessRequest(objRequestEntity, result, serviceInformationEntity, false);
+	        result = clientBootStrap.getServiceAccess().getServiceAccessEngine().basicProcessRequest(objRequestEntity, result, serviceInformationEntity, false);
 	        assertTrue("Exception happen when request , exception: " + (result.isException() ? result.getException().getMessage() : ""), !result.isException());
 	        assertTrue("result not right, 121 + 234 = 355, the result is " + result.getResponseEntity().getResult(), 
 	        		result.getResponseEntity().getResult().equals("355"));
@@ -124,13 +124,13 @@ public class ConsumeEngineTest {
 			List<String> args = new LinkedList<String>();
 			args.add("" + value1);
 			args.add("" + value2);
-			RequestEntity objRequestEntity = clientBootStrap.getServiceAccess().getConsumeEngine().createRequestEntity("calculator", args);
+			RequestEntity objRequestEntity = clientBootStrap.getServiceAccess().getServiceAccessEngine().createRequestEntity("calculator", args);
 			RequestResultEntity result = new RequestResultEntity();
 			result.setRequestID(objRequestEntity.getRequestID());
 			ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
 			serviceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 			serviceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
-			result = clientBootStrap.getServiceAccess().getConsumeEngine().basicProcessRequest(objRequestEntity, result,serviceInformationEntity, isCachingChannel);
+			result = clientBootStrap.getServiceAccess().getServiceAccessEngine().basicProcessRequest(objRequestEntity, result,serviceInformationEntity, isCachingChannel);
 			assertTrue("Exception happen when request , exception: " + (result.isException() ? result.getException().getMessage() : ""), !result.isException());
 			assertTrue(String.format("result not right, %s + %s = %s, the result is %s", value1, value2, resultValue, result.getResponseEntity().getResult()), result.getResponseEntity().getResult().equals("" + resultValue));
 		}

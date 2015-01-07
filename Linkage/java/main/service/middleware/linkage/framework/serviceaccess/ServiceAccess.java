@@ -30,7 +30,7 @@ public interface ServiceAccess {
 	/**
 	 * send the request from the client to request a service
 	 * this request will not reuse the cache connect
-	 * use this method with closeChannelByRequestResult
+	 * use this method with closeChannelByRequestResult together
 	 * @param clientID the id set in property
 	 * @param args  the arguments for the service
 	 * @return
@@ -64,5 +64,5 @@ public interface ServiceAccess {
 	 */
 	public void removeCachedChannel(WorkingChannelContext objWorkingChannel);
 	
-	public NIOServiceAccessEngine getConsumeEngine(); 
+	public NIOServiceAccessEngine getServiceAccessEngine(); 
 }

@@ -1,4 +1,9 @@
 package service.middleware.linkage.framework.io.common;
 
-public interface WorkingChannelStrategy extends ReadWrite{
+/**
+ * the interface of the the working channel strategy
+ * @author zhonxu
+ *
+ */
+public interface WorkingChannelStrategy extends WorkingChannelReadWrite{
 }

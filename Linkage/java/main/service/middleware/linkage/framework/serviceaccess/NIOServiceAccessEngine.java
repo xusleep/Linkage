@@ -15,8 +15,8 @@ import service.middleware.linkage.framework.common.entity.ServiceInformationEnti
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
-import service.middleware.linkage.framework.io.common.NIOWorkingChannelMessageStrategy;
-import service.middleware.linkage.framework.io.common.NIOWorkingMode;
+import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
+import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
@@ -67,15 +67,15 @@ public class NIOServiceAccessEngine{
 	public RequestResultEntity basicProcessRequest(RequestEntity objRequestEntity, RequestResultEntity result, 
 			ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
 		NIOWorkingChannelContext newWorkingChannel = null;
-		NIOWorkingChannelMessageStrategy strategy = null;
+		NIOMessageWorkingChannelStrategy strategy = null;
 		try
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
 			result.setWorkingChannel(newWorkingChannel);
-			strategy = (NIOWorkingChannelMessageStrategy)newWorkingChannel.findWorkingChannelStrategy(NIOWorkingMode.MessageMode);
+			strategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.findWorkingChannelStrategy(WorkingChannelMode.MessageMode);
 		}		
 		catch(Exception ex){
-			strategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
 			return result;
 		}
 		// put the request result into the request result list
@@ -207,8 +207,7 @@ public class NIOServiceAccessEngine{
 	 */
 	public void closeChannelByRequestResult(RequestResultEntity objRequestResultEntity){
 		removeCachedChannel(objRequestResultEntity.getWorkingChannel());
-		if(objRequestResultEntity.getWorkingChannel() != null && 
-				objRequestResultEntity.getWorkingChannel().getWorker() != null)
+		if(objRequestResultEntity.getWorkingChannel() != null)
 		{
 			objRequestResultEntity.getWorkingChannel().closeWorkingChannel();
 		}

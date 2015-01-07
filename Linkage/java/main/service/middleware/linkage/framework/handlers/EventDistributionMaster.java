@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.distribution;
+package service.middleware.linkage.framework.handlers;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.event.ServiceEvent;
-import service.middleware.linkage.framework.handlers.Handler;
 
 /**
  * this master will handle all of the event to thread pool for running

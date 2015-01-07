@@ -12,8 +12,8 @@ import service.middleware.linkage.framework.event.ServiceOnErrorEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
-import service.middleware.linkage.framework.io.common.NIOWorkingChannelMessageStrategy;
-import service.middleware.linkage.framework.io.common.NIOWorkingMode;
+import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
+import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
 
@@ -39,7 +39,7 @@ public class MessageClientReadWriteHandler implements Handler {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				ResponseEntity objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
-				NIOWorkingChannelMessageStrategy strategy = (NIOWorkingChannelMessageStrategy)objServiceOnMessageReceiveEvent.getWorkingChannel().findWorkingChannelStrategy(NIOWorkingMode.MessageMode);
+				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnMessageReceiveEvent.getWorkingChannel().findWorkingChannelStrategy(WorkingChannelMode.MessageMode);
 				strategy.setRequestResult(objResponseEntity);
 			} catch (Exception e) {
 				logger.error("there is a error comes out: " + ((ServiceOnErrorEvent)event).getMsg());
@@ -47,13 +47,13 @@ public class MessageClientReadWriteHandler implements Handler {
 		}
 		else if(event instanceof ServiceOnChannelCloseExeptionEvent ){
 			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
-			NIOWorkingChannelMessageStrategy strategy = (NIOWorkingChannelMessageStrategy)objServiceOnExeptionEvent.getWorkingChannel().findWorkingChannelStrategy(NIOWorkingMode.MessageMode);
+			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().findWorkingChannelStrategy(WorkingChannelMode.MessageMode);
 			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
 			strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 		}
 		else if(event instanceof ServiceOnChannelIOExeptionEvent){
 			ServiceOnChannelIOExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelIOExeptionEvent)event;
-			NIOWorkingChannelMessageStrategy strategy = (NIOWorkingChannelMessageStrategy)objServiceOnExeptionEvent.getWorkingChannel().findWorkingChannelStrategy(NIOWorkingMode.MessageMode);
+			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().findWorkingChannelStrategy(WorkingChannelMode.MessageMode);
 			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
 			strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 		

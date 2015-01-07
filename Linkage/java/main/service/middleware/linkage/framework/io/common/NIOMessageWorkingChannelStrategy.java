@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.distribution.EventDistributionMaster;
 import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnChannelIOExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
@@ -27,15 +26,15 @@ import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
+import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
- * hold the object when request a connect,
- * the system will be wrapped by.
+ * this strategy is only used for the message mode only
  * @author zhonxu
  *
  */
-public class NIOWorkingChannelMessageStrategy implements WorkingChannelStrategy {
+public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy {
     
     /**
      * Queue of write {@link ServiceOnMessageWriteEvent}s.s
@@ -45,14 +44,14 @@ public class NIOWorkingChannelMessageStrategy implements WorkingChannelStrategy 
 	private final NIOWorkingChannelContext workingChannelContext;
 	private final EventDistributionMaster eventDistributionHandler;
 	private final ExecutorService objExecutorService;
-	private static Logger  logger = Logger.getLogger(NIOWorkingChannelMessageStrategy.class);
+	private static Logger  logger = Logger.getLogger(NIOMessageWorkingChannelStrategy.class);
 	
 	/**
 	 *  use the concurrent hash map to store the request result list {@link RequestResultEntity}
 	 */
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
-	public NIOWorkingChannelMessageStrategy(NIOWorkingChannelContext workingChannelContext, EventDistributionMaster eventDistributionHandler){
+	public NIOMessageWorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext, EventDistributionMaster eventDistributionHandler){
 		this.readMessageBuffer = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
 		this.workingChannelContext = workingChannelContext;
 		this.objExecutorService = Executors.newFixedThreadPool(10);

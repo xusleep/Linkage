@@ -67,7 +67,7 @@ public class NIOServiceAccess implements ServiceAccess {
 	}
 
 	@Override
-	public NIOServiceAccessEngine getConsumeEngine() {
+	public NIOServiceAccessEngine getServiceAccessEngine() {
 		// TODO Auto-generated method stub
 		return consumeEngine;
 	}

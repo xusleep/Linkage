@@ -14,8 +14,8 @@ import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
-import service.middleware.linkage.framework.io.common.NIOWorkingChannelMessageStrategy;
-import service.middleware.linkage.framework.io.common.NIOWorkingMode;
+import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
+import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
@@ -40,7 +40,7 @@ public class MessageServiceReadWriteHandler implements Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				WorkingChannelContext channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
-				NIOWorkingChannelMessageStrategy strategy = (NIOWorkingChannelMessageStrategy) channel.findWorkingChannelStrategy(NIOWorkingMode.MessageMode);
+				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy) channel.findWorkingChannelStrategy(WorkingChannelMode.MessageMode);
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				RequestEntity objRequestEntity = SerializationUtils.deserializeRequest(receiveData);
 				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
