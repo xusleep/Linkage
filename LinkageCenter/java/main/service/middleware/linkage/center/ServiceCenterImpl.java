@@ -18,7 +18,10 @@ public class ServiceCenterImpl implements ServiceCenter {
 	public String register(String serviceInfor) {
 		// TODO Auto-generated method stub
 		List<ServiceInformationEntity> objServiceInformation = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
-		ServiceCenter.serviceInformationList.addAll(objServiceInformation);
+		synchronized(ServiceCenter.serviceInformationList)
+		{
+			ServiceCenter.serviceInformationList.addAll(objServiceInformation);
+		}
 		for(ServiceInformationEntity clientServiceInformationEntity : ServiceCenter.serviceClientList)
 		{
 			try {
@@ -57,13 +60,16 @@ public class ServiceCenterImpl implements ServiceCenter {
 	 */
 	public String removeServiceList(String serviceName){
 		List<ServiceInformationEntity> resultList = new LinkedList<ServiceInformationEntity>();	
-		for(ServiceInformationEntity objServiceInformation : ServiceCenter.serviceInformationList){
-			if(objServiceInformation.getServiceName().equals(serviceName))
-			{
-				resultList.add(objServiceInformation);
+		synchronized(ServiceCenter.serviceInformationList)
+		{
+			for(ServiceInformationEntity objServiceInformation : ServiceCenter.serviceInformationList){
+				if(objServiceInformation.getServiceName().equals(serviceName))
+				{
+					resultList.add(objServiceInformation);
+				}
 			}
+			ServiceCenter.serviceInformationList.removeAll(resultList);
 		}
-		ServiceCenter.serviceInformationList.removeAll(resultList);
 		return "true";
 	}
 
