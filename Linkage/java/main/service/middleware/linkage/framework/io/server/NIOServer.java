@@ -17,8 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.event.ServiceStartedEvent;
-import service.middleware.linkage.framework.event.ServiceStartingEvent;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 /**
