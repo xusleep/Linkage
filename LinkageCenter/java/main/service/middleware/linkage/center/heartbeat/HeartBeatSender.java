@@ -10,14 +10,14 @@ import service.middleware.linkage.framework.common.ShareingData;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
 
 public class HeartBeatSender implements Runnable {
 	private static Logger  logger = Logger.getLogger(HeartBeatSender.class); 
-	private final ServiceAccess consume;
+	private final MessageModeServiceAccess consume;
 	private volatile boolean isShutdown = false;
 	
-	public HeartBeatSender(ServiceAccess consume){
+	public HeartBeatSender(MessageModeServiceAccess consume){
 		this.consume = consume;
 	}
 	

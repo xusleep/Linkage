@@ -12,7 +12,7 @@ import service.middleware.linkage.framework.event.ServiceOnErrorEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
-import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
 
 /**
  * the default handler for the client message received event
@@ -23,9 +23,9 @@ import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
 public class NIOMessageAccessClientHandler extends Handler {
 	private static Logger  logger = Logger.getLogger(NIOMessageAccessClientHandler.class);  
 	
-	private final ServiceAccess serviceAccess;
+	private final MessageModeServiceAccess serviceAccess;
 	
-	public NIOMessageAccessClientHandler(ServiceAccess serviceAccess){
+	public NIOMessageAccessClientHandler(MessageModeServiceAccess serviceAccess){
 		this.serviceAccess = serviceAccess;
 	}
 	

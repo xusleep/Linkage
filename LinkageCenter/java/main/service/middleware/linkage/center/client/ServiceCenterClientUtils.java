@@ -11,7 +11,7 @@ import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
 import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 
@@ -45,7 +45,7 @@ public final class ServiceCenterClientUtils {
 	 * @param serviceInformationList
 	 * @throws ServiceException 
 	 */
-	public static boolean notifyClientServiceAdd(ServiceAccess consume, ServiceInformationEntity clientServiceInformationEntity, List<ServiceInformationEntity> serviceInformationList ) throws ServiceException{
+	public static boolean notifyClientServiceAdd(MessageModeServiceAccess consume, ServiceInformationEntity clientServiceInformationEntity, List<ServiceInformationEntity> serviceInformationList ) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
 		List<String> args = new LinkedList<String>();
 		args.add(strServiceInformation);
@@ -66,7 +66,7 @@ public final class ServiceCenterClientUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean registerClientInformation(ServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, 
+	public static boolean registerClientInformation(MessageModeServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, 
 			ServiceInformationEntity clientServiceInformationEntity) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformation(clientServiceInformationEntity);
 		List<String> args = new LinkedList<String>();
@@ -86,7 +86,7 @@ public final class ServiceCenterClientUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static boolean registerServiceList(ServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, ServiceSettingReader workingServicePropertyEntity) throws ServiceException{
+	public static boolean registerServiceList(MessageModeServiceAccess consume, ServiceInformationEntity centerServiceInformationEntity, ServiceSettingReader workingServicePropertyEntity) throws ServiceException{
 		List<ServiceInformationEntity> serviceInformationList = new LinkedList<ServiceInformationEntity>();
 		
 		//获取所有服务，将服务注册到注册中心

@@ -1,5 +1,6 @@
 package service.middleware.linkage.framework.serviceaccess;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
@@ -14,11 +15,13 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.io.common.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkingChannelMode;
+import service.middleware.linkage.framework.io.common.WorkingChannelModeUtils;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
@@ -28,7 +31,7 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  * @author zhonxu
  *
  */
-public class NIOServiceAccessEngine{
+public class NIOMessageModeServiceAccessEngine{
 	/**
 	 * used to cached the {@link WorkingChannelContext} object
 	 */
@@ -37,7 +40,7 @@ public class NIOServiceAccessEngine{
 	private final WorkerPool workerPool;
 	private final ClientSettingReader workingClientPropertyEntity;
 	
-	public NIOServiceAccessEngine(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool){
+	public NIOMessageModeServiceAccessEngine(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool){
 		this.workingClientPropertyEntity = workingClientPropertyEntity;
 		this.workerPool = workerPool;
 	}
@@ -88,11 +91,38 @@ public class NIOServiceAccessEngine{
 		return result;
 	}
 	
+	public RequestResultEntity writeFile(File file, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
+		NIOWorkingChannelContext newWorkingChannel = null;
+		RequestResultEntity result = new RequestResultEntity();
+		NIOFileWorkingChannelStrategy strategy = null;
+		try
+		{
+			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
+			if(newWorkingChannel.getWorkingMode() == WorkingChannelMode.MESSAGEMODE){
+				NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.getWorkingChannelStrategy();
+				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, null);
+				objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(WorkingChannelMode.FILEMODE));
+				msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+				msgStrategy.writeChannel();
+				newWorkingChannel.switchWorkMode(WorkingChannelMode.FILEMODE);
+			}
+			result.setWorkingChannel(newWorkingChannel);
+			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
+			strategy.writeFileQueue.offer(file);
+			strategy.writeChannel();
+		}
+		catch(Exception ex){
+			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			return result;
+		}
+		return null;
+	}
+	
 	/**
 	 * get a working channel from cache,
 	 * if not existed, create a new one
-	 * @param serviceName
 	 * @param fromCached get it from the cache or not
+	 * @param serviceName
 	 * @return
 	 * @throws ExecutionException 
 	 * @throws InterruptedException 
@@ -106,7 +136,7 @@ public class NIOServiceAccessEngine{
 		NIOWorkingChannelContext objWorkingChannel;
 		// if not get it from the cache, create it directly
 		if(!fromCached){
-			objWorkingChannel  = createWorkingChannel(service);
+			objWorkingChannel  = createWorkingChannel(service, WorkingChannelMode.MESSAGEMODE);
 			objWorkingChannel.setWorkingChannelCacheID(cacheID);
 			return objWorkingChannel;
 		}
@@ -119,7 +149,7 @@ public class NIOServiceAccessEngine{
 				objWorkingChannel = (NIOWorkingChannelContext) workingChannelCacheList.get(service.toString());
 				if(objWorkingChannel == null)
 				{
-					objWorkingChannel = createWorkingChannel(service);
+					objWorkingChannel = createWorkingChannel(service, WorkingChannelMode.MESSAGEMODE);
 					objWorkingChannel.setWorkingChannelCacheID(cacheID);
 					workingChannelCacheList.put(cacheID, objWorkingChannel);
 				}
@@ -170,7 +200,7 @@ public class NIOServiceAccessEngine{
 	 * @return
 	 * @throws IOException
 	 */
-	private NIOWorkingChannelContext createWorkingChannel(ServiceInformationEntity service) throws IOException{
+	private NIOWorkingChannelContext createWorkingChannel(ServiceInformationEntity service, WorkingChannelMode workingChannelMode) throws IOException{
 		// get a Socket channel
         SocketChannel channel = SocketChannel.open();  
         // connect
@@ -181,7 +211,7 @@ public class NIOServiceAccessEngine{
         } 
         // wait for the worker pool util it is ready
         this.workerPool.waitReady();
-        NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) this.workerPool.register(channel, WorkingChannelMode.MessageMode);
+        NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) this.workerPool.register(channel, workingChannelMode);
         return objWorkingChannel;
 	}
 	

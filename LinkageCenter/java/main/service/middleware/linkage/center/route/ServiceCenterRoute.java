@@ -15,7 +15,7 @@ import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
 /**
  * This route is used for the service center
  * If will first access the service center, get the service list
@@ -26,9 +26,9 @@ import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
  */
 public class ServiceCenterRoute implements Route {
 	private final ServiceInformationEntity centerServiceInformationEntity;
-	private final ServiceAccess consume;
+	private final MessageModeServiceAccess consume;
 	
-	public ServiceCenterRoute(ServiceInformationEntity centerServiceInformationEntity, ServiceAccess consume){
+	public ServiceCenterRoute(ServiceInformationEntity centerServiceInformationEntity, MessageModeServiceAccess consume){
 		this.centerServiceInformationEntity = centerServiceInformationEntity;
 		this.consume = consume;
 	}

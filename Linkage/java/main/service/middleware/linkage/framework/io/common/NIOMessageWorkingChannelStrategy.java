@@ -26,7 +26,7 @@ import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
-import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
+import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
@@ -36,13 +36,21 @@ import service.middleware.linkage.framework.io.protocol.IOProtocol;
  */
 public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy {
     
+	   /**
+     * Monitor object for write.
+     */
+    final public Object writeLock = new Object();
+    /**
+     * Monitor object for read.
+     */
+    final public Object readLock = new Object();
     /**
      * Queue of write {@link ServiceOnMessageWriteEvent}s.s
      */
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteMessageQueue();
 	private StringBuffer readMessageBuffer;
 	private final NIOWorkingChannelContext workingChannelContext;
-	private final NIOMessageEventDistributionMaster eventDistributionHandler;
+	private final EventDistributionMaster eventDistributionHandler;
 	private final ExecutorService objExecutorService;
 	private static Logger  logger = Logger.getLogger(NIOMessageWorkingChannelStrategy.class);
 	
@@ -51,7 +59,7 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
 	 */
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
-	public NIOMessageWorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext, NIOMessageEventDistributionMaster eventDistributionHandler){
+	public NIOMessageWorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext, EventDistributionMaster eventDistributionHandler){
 		this.readMessageBuffer = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
 		this.workingChannelContext = workingChannelContext;
 		this.objExecutorService = Executors.newFixedThreadPool(10);
@@ -197,7 +205,7 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
-		synchronized(this.workingChannelContext.readLock){
+		synchronized(this.readLock){
 			this.getReadMessageBuffer().append(receiveString);
 			final WorkingChannelContext passWorkingChannelContext = this.workingChannelContext;
 			String unwrappedMessage = "";
@@ -205,15 +213,26 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
 				while((unwrappedMessage = IOProtocol.extractMessage(this.getReadMessageBuffer())) != "")
 				{
 					final String sendMessage = unwrappedMessage;
-					objExecutorService.execute(new Runnable(){
-						@Override
-						public void run() {
-							ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(passWorkingChannelContext);
-							event.setMessage(sendMessage);
-							eventDistributionHandler.submitServiceEvent(event);
+					if(WorkingChannelModeUtils.checkModeSwitch(unwrappedMessage))
+					{
+						WorkingChannelMode workingChannelMode = WorkingChannelModeUtils.getModeSwitch(unwrappedMessage);
+						if(workingChannelMode != WorkingChannelMode.MESSAGEMODE)
+						{
+							this.workingChannelContext.switchWorkMode(workingChannelMode);
 						}
-						
-					});
+					}
+					else
+					{
+						objExecutorService.execute(new Runnable(){
+							@Override
+							public void run() {
+								ServiceOnMessageReceiveEvent event = new ServiceOnMessageReceiveEvent(passWorkingChannelContext);
+								event.setMessage(sendMessage);
+								eventDistributionHandler.submitServiceEvent(event);
+							}
+							
+						});
+					}
 				}
 				
 			} catch (Exception e) {
@@ -228,7 +247,7 @@ public class NIOMessageWorkingChannelStrategy implements WorkingChannelStrategy 
 	public WorkingChannelOperationResult writeChannel() {
 		ServiceOnMessageWriteEvent evt;
 		final Queue<ServiceOnMessageWriteEvent> writeBuffer = this.writeBufferQueue;
-		synchronized (this.workingChannelContext.writeLock) {
+		synchronized (this.writeLock) {
 			for (;;) {
 				if ((evt = writeBuffer.poll()) == null) {
 					break;

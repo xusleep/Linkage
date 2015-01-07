@@ -4,15 +4,11 @@ import java.io.IOException;
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.handlers.NIOFileEventDistributionMaster;
-import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
 
 /**
  * hold the object when request a connect,
@@ -21,38 +17,31 @@ import service.middleware.linkage.framework.handlers.NIOMessageEventDistribution
  *
  */
 public class NIOWorkingChannelContext implements WorkingChannelContext {
-
-    /**
-     * Monitor object for write.
-     */
-    final public Object writeLock = new Object();
-    /**
-     * Monitor object for read.
-     */
-    final public Object readLock = new Object();
 	private Channel channel;
 	private Worker worker;
 	private SelectionKey key;
 	private String workingChannelCacheID;
-	private final WorkingChannelMode workingMode;
-	private final WorkingChannelStrategy workingChannelStrategy;
+	private WorkingChannelMode workingMode;
+	private WorkingChannelStrategy workingChannelStrategy;
 	private static Logger  logger = Logger.getLogger(NIOWorkingChannelContext.class);
+	private final EventDistributionMaster eventDistributionHandler;
 	
 	public NIOWorkingChannelContext(Channel channel, WorkingChannelMode workingMode, Worker worker, EventDistributionMaster eventDistributionHandler){
 		this.channel = channel;
 		this.worker = worker;
-		this.workingMode = workingMode;
-		if(workingMode == WorkingChannelMode.MessageMode )
+		this.eventDistributionHandler = eventDistributionHandler;
+		switchWorkMode(workingMode);
+	}
+	
+	public void switchWorkMode(WorkingChannelMode theWorkingMode){
+		this.workingMode = theWorkingMode;
+		if(this.workingMode == WorkingChannelMode.MESSAGEMODE )
 		{
-			this.workingChannelStrategy = new NIOMessageWorkingChannelStrategy(this, (NIOMessageEventDistributionMaster) eventDistributionHandler);
+			this.workingChannelStrategy = new NIOMessageWorkingChannelStrategy(this, eventDistributionHandler);
 		}
-		else if(workingMode == WorkingChannelMode.FileMode )
+		else if(this.workingMode == WorkingChannelMode.FILEMODE )
 		{
-			this.workingChannelStrategy = new NIOFileWorkingChannelStrategy(this,  (NIOFileEventDistributionMaster) eventDistributionHandler);
-		}
-		else
-		{
-			this.workingChannelStrategy = null;
+			this.workingChannelStrategy = new NIOFileWorkingChannelStrategy(this,  eventDistributionHandler);
 		}
 	}
 	

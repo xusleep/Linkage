@@ -1,17 +1,11 @@
 package test.run;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.File;
 
-import clould.storage.service.utils.HexUtils;
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 
 /**
@@ -34,19 +28,23 @@ public class StartStorageClient {
 		clientServiceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
 		ServiceCenterClientUtils.registerClientInformation(cb, clientServiceInformationEntity, centerServiceInformationEntity);
-		for(int i = 1; i < 10; i++)
-		{
-			List<String> args1 = new LinkedList<String>();
-			args1.add(i + ".txt");
-			args1.add(HexUtils.fileToHexString("E:\\Storage\\transeformfile.txt"));
-			RequestResultEntity result = clientBootStrap.getServiceAccess().requestServicePerConnectSync("storage", args1);
-			System.out.println("result is : " + result.getResponseEntity().getResult());
-		}
-		List<String> args1 = new LinkedList<String>();
-		args1.add("1.jar");
-		args1.add(HexUtils.fileToHexString("E:\\OSGI\\cxf-dosgi-ri-samples-ds-interface-1.2.jar"));
-		RequestResultEntity result = clientBootStrap.getServiceAccess().requestServicePerConnectSync("storage", args1);
-		System.out.println("result is : " + result.getResponseEntity().getResult());
+//		for(int i = 1; i < 10; i++)
+//		{
+//			List<String> args1 = new LinkedList<String>();
+//			args1.add(i + ".txt");
+//			args1.add(HexUtils.fileToHexString("E:\\Storage\\transeformfile.txt"));
+//			RequestResultEntity result = clientBootStrap.getServiceAccess().requestServicePerConnectSync("storage", args1);
+//			System.out.println("result is : " + result.getResponseEntity().getResult());
+//		}
+//		List<String> args1 = new LinkedList<String>();
+//		args1.add("1.jar");
+//		args1.add(HexUtils.fileToHexString("E:\\OSGI\\cxf-dosgi-ri-samples-ds-interface-1.2.jar"));
+//		RequestResultEntity result = clientBootStrap.getServiceAccess().requestServicePerConnectSync("storage", args1);
+//		System.out.println("result is : " + result.getResponseEntity().getResult());
+		ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
+		serviceInformationEntity.setAddress("localhost");
+		serviceInformationEntity.setPort(5003);
+		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("D:\\1.txt"), serviceInformationEntity, true);
 		clientBootStrap.shutdownImediate();
 		serviceBootStrap.shutdownImediate();
 	}

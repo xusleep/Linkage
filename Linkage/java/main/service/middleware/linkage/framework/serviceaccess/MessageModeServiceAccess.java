@@ -6,7 +6,7 @@ import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
-public interface ServiceAccess {
+public interface MessageModeServiceAccess {
 	
 	/**
 	 * request directly using the service information entity
@@ -64,5 +64,5 @@ public interface ServiceAccess {
 	 */
 	public void removeCachedChannel(WorkingChannelContext objWorkingChannel);
 	
-	public NIOServiceAccessEngine getServiceAccessEngine(); 
+	public NIOMessageModeServiceAccessEngine getServiceAccessEngine(); 
 }

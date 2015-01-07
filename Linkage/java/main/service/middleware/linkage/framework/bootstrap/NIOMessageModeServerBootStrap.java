@@ -2,7 +2,6 @@ package service.middleware.linkage.framework.bootstrap;
 
 import service.middleware.linkage.framework.handlers.NIOMessageAccessServiceHandler;
 import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
-import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.io.server.NIOServer;
 import service.middleware.linkage.framework.io.server.Server;
 import service.middleware.linkage.framework.provider.DefaultServiceProvider;
@@ -34,7 +33,7 @@ public class NIOMessageModeServerBootStrap extends AbstractBootStrap implements 
 		
 		// this is the server, it will accept all of the connection & register the channel into the worker pool
 		this.server = new NIOServer(servicePropertyEntity.getServiceAddress(),  servicePropertyEntity.getServicePort(),
-				WorkingChannelMode.MessageMode, this.getWorkerPool());
+				this.getWorkerPool());
 	}
 
 	public ServiceProvider getServiceProvider() {

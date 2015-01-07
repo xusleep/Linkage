@@ -6,6 +6,6 @@ package service.middleware.linkage.framework.io.common;
  *
  */
 public enum WorkingChannelMode {
-	MessageMode,
-	FileMode
+	MESSAGEMODE,
+	FILEMODE
 }

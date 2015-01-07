@@ -35,14 +35,12 @@ public class NIOServer implements Server {
 	private final ServerSocketChannel sschannel;
 	private final InetSocketAddress address;
 	private final WorkerPool workerPool;
-	private final WorkingChannelMode workingChannelMode;
 	private volatile boolean isShutdown = false;
 	private final CountDownLatch shutdownSignal;
 	protected final AtomicBoolean wakenUp = new AtomicBoolean();
 	private static Logger  logger = Logger.getLogger(NIOServer.class);  
 	
-	public NIOServer(String strAddress, int port, WorkingChannelMode workingChannelMode, WorkerPool workerPool) throws Exception {
-		this.workingChannelMode = workingChannelMode;
+	public NIOServer(String strAddress, int port, WorkerPool workerPool) throws Exception {
 		selector = Selector.open();
 		sschannel = ServerSocketChannel.open();
 		// set it by no blocking
@@ -92,7 +90,7 @@ public class NIOServer implements Server {
 							SocketChannel sc = ssc.accept();
 							sc.configureBlocking(false);
 							// put the accepted channel into the worker pool
-							this.getWorkerPool().register(sc, this.workingChannelMode);
+							this.getWorkerPool().register(sc, WorkingChannelMode.MESSAGEMODE);
 						} 
 					}
 				} 
