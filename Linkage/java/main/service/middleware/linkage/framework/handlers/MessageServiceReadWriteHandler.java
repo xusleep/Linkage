@@ -15,6 +15,7 @@ import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.event.ServiceStartedEvent;
 import service.middleware.linkage.framework.event.ServiceStartingEvent;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelMessageStrategy;
+import service.middleware.linkage.framework.io.common.NIOWorkingMode;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
@@ -25,11 +26,11 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
  * @author zhonxu
  *
  */
-public class MessageModeServiceReadWriteHandler implements Handler {
-	private static Logger  logger = Logger.getLogger(MessageModeClientReadWriteHandler.class); 
+public class MessageServiceReadWriteHandler implements Handler {
+	private static Logger  logger = Logger.getLogger(MessageClientReadWriteHandler.class); 
 	private final ServiceProvider  provider;
 	
-	public MessageModeServiceReadWriteHandler(ServiceProvider provider){
+	public MessageServiceReadWriteHandler(ServiceProvider provider){
 		this.provider = provider;
 	}
 	
@@ -39,7 +40,7 @@ public class MessageModeServiceReadWriteHandler implements Handler {
 			try {
 				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
 				WorkingChannelContext channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
-				NIOWorkingChannelMessageStrategy strategy = (NIOWorkingChannelMessageStrategy) channel.getWorkingChannelStrategy();
+				NIOWorkingChannelMessageStrategy strategy = (NIOWorkingChannelMessageStrategy) channel.findWorkingChannelStrategy(NIOWorkingMode.MessageMode);
 				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
 				RequestEntity objRequestEntity = SerializationUtils.deserializeRequest(receiveData);
 				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);

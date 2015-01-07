@@ -16,6 +16,7 @@ import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelMessageStrategy;
+import service.middleware.linkage.framework.io.common.NIOWorkingMode;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
@@ -71,7 +72,7 @@ public class NIOServiceAccessEngine{
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
 			result.setWorkingChannel(newWorkingChannel);
-			strategy = (NIOWorkingChannelMessageStrategy)newWorkingChannel.getWorkingChannelStrategy();
+			strategy = (NIOWorkingChannelMessageStrategy)newWorkingChannel.findWorkingChannelStrategy(NIOWorkingMode.MessageMode);
 		}		
 		catch(Exception ex){
 			strategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));

@@ -15,9 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.distribution.EventDistributionMaster;
-import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionEvent;
-import service.middleware.linkage.framework.exception.ServiceException;
 
 /**
  * this is default worker, will be used when there is connection established 
@@ -138,8 +135,8 @@ public class NIOWorker implements Worker {
 	 * @param key
 	 */
     private void writeFromSelectorLoop(final SelectionKey key) {
-    	WorkingChannelContext channel = (WorkingChannelContext) key.attachment();
-    	channel.getWorkingChannelStrategy().write();
+    	WorkingChannelContext workingChannel = (WorkingChannelContext) key.attachment();
+    	workingChannel.write();
     }
 	
 	
@@ -163,7 +160,7 @@ public class NIOWorker implements Worker {
 	 */
 	private boolean read(SelectionKey key) {
 		final NIOWorkingChannelContext workingChannel = (NIOWorkingChannelContext)key.attachment();
-		return workingChannel.getWorkingChannelStrategy().read().isSuccess();
+		return workingChannel.read().isSuccess();
 	}
 
 	/**

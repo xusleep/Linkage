@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.center.common.ServiceCenterUtils;
-import service.middleware.linkage.center.comsume.NIORouteServiceAccess;
+import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;

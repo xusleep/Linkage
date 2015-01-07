@@ -32,7 +32,8 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	private Worker worker;
 	private SelectionKey key;
 	private String workingChannelCacheID;
-	private volatile NIOWorkingMode workingMode = NIOWorkingMode.MessageMode;
+	private volatile NIOWorkingMode readWorkingMode = NIOWorkingMode.MessageMode;
+	private volatile NIOWorkingMode writeWorkingMode = NIOWorkingMode.MessageMode;
 	private List<WorkingChannelStrategy> workingChannelStrategyList = new LinkedList<WorkingChannelStrategy>();
 	private static Logger  logger = Logger.getLogger(NIOWorkingChannelContext.class);
 	
@@ -44,7 +45,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	}
 	
 	@Override
-	public WorkingChannelStrategy getWorkingChannelStrategy() {
+	public WorkingChannelStrategy findWorkingChannelStrategy(NIOWorkingMode workingMode) {
 		for(WorkingChannelStrategy workingChannelStrategy : workingChannelStrategyList){
 			if(workingMode == NIOWorkingMode.MessageMode 
 					&& workingChannelStrategy instanceof NIOWorkingChannelMessageStrategy){
@@ -56,6 +57,16 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public WorkingChannelOperationResult read() {
+		return findWorkingChannelStrategy(readWorkingMode).read();
+	}
+
+	@Override
+	public WorkingChannelOperationResult write() {
+		return findWorkingChannelStrategy(writeWorkingMode).write();
 	}
 	
 	/**
@@ -103,11 +114,19 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 		this.workingChannelCacheID = workingChannelCacheID;
 	}
 	
-	public NIOWorkingMode getWorkingMode() {
-		return workingMode;
+	public NIOWorkingMode getReadWorkingMode() {
+		return readWorkingMode;
 	}
 
-	public void setWorkingMode(NIOWorkingMode workingMode) {
-		this.workingMode = workingMode;
+	public void setReadWorkingMode(NIOWorkingMode workingMode) {
+		this.readWorkingMode = workingMode;
+	}
+
+	public NIOWorkingMode getWriteWorkingMode() {
+		return writeWorkingMode;
+	}
+
+	public void setWriteWorkingMode(NIOWorkingMode writeWorkingMode) {
+		this.writeWorkingMode = writeWorkingMode;
 	}
 }

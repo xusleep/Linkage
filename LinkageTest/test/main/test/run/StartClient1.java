@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
-import service.middleware.linkage.center.comsume.NIORouteServiceAccess;
+import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;

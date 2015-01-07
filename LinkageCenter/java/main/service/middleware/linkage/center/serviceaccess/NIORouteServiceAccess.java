@@ -1,4 +1,4 @@
-package service.middleware.linkage.center.comsume;
+package service.middleware.linkage.center.serviceaccess;
 
 import java.util.List;
 
