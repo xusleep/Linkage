@@ -1,8 +1,5 @@
 package service.middleware.linkage.framework.io.common;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -23,8 +20,9 @@ import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
+import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
  * this strategy is only used for the message mode only
@@ -194,26 +192,14 @@ public class NIOMessageWorkingChannelStrategy extends WorkingChannelStrategy {
 				if ((evt = writeBuffer.poll()) == null) {
 					break;
 				}
-				SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
-				byte[] data = null;
 				try {
-					data = IOProtocol.wrapMessage(evt.getMessage())
-							.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
-				} catch (UnsupportedEncodingException e2) {
-					e2.printStackTrace();
-				}
-				ByteBuffer buffer = ByteBuffer
-						.allocate(data.length);
-				buffer.put(data, 0, data.length);
-				buffer.flip();
-				if (buffer.hasRemaining()) {
-					try {
-						while(buffer.hasRemaining())
-							sc.write(buffer);
-					} catch (IOException e) {
-						this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), evt.getRequestID(), new ServiceException(e, e.getMessage())));
-						logger.error("not expected interruptedException happened. exception detail : " 
-								+ StringUtils.ExceptionStackTraceToString(e));
+					this.writeMessages(evt.getMessage());
+				} catch (ServiceException e) {
+					this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), evt.getRequestID(), e));
+					logger.error("not expected interruptedException happened. exception detail : " 
+							+ StringUtils.ExceptionStackTraceToString(e));
+					if(e instanceof ServiceOnChanelClosedException || e instanceof ServiceOnChanelIOException)
+					{
 						this.getWorkingChannelContext().closeWorkingChannel();
 					}
 				}

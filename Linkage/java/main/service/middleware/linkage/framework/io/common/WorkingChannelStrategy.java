@@ -28,6 +28,12 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 		this.workingChannelContext = workingChannelContext;
 	}
 	
+	/**
+	 * read messages from the channel
+	 * @param readLock
+	 * @return
+	 * @throws ServiceException
+	 */
 	public List<String> readMessages(Object readLock) throws ServiceException {
 		List<String> extractMessages = new LinkedList<String>();
 		SocketChannel ch = (SocketChannel) this.workingChannelContext.getChannel();
@@ -76,6 +82,28 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 			}
 		}
 		return extractMessages;
+	}
+	
+	public boolean writeMessages(String message) throws ServiceException {
+		SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
+		byte[] data = null;
+		try {
+			data = IOProtocol.wrapMessage(message).getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
+		} catch (UnsupportedEncodingException e2) {
+			throw new ServiceException(e2, e2.getMessage());
+		}
+		ByteBuffer buffer = ByteBuffer.allocate(data.length);
+		buffer.put(data, 0, data.length);
+		buffer.flip();
+		if (buffer.hasRemaining()) {
+			try {
+				while(buffer.hasRemaining())
+					sc.write(buffer);
+			} catch (IOException e) {
+				throw new ServiceException(e, e.getMessage());
+			}
+		}
+		return true;
 	}
 	
 	public StringBuffer getReadMessageBuffer() {

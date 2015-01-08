@@ -45,7 +45,7 @@ public class StartStorageClient {
 		serviceInformationEntity.setAddress("localhost");
 		serviceInformationEntity.setPort(5003);
 		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("D:\\1.txt"), serviceInformationEntity, true);
-		clientBootStrap.shutdownImediate();
-		serviceBootStrap.shutdownImediate();
+		//clientBootStrap.shutdownImediate();
+		//serviceBootStrap.shutdownImediate();
 	}
 }
