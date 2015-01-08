@@ -8,8 +8,7 @@ import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.event.ServiceEvent;
-import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionEvent;
-import service.middleware.linkage.framework.event.ServiceOnErrorEvent;
+import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
@@ -50,16 +49,20 @@ public class NIOMessageAccessServiceHandler extends Handler {
 					this.getNext().handleRequest(event);
 				}
 			} catch (Exception e) {
-				logger.error("ServiceReadWriteHandler exception happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
+				logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
 			}
 		}
-		else if(event instanceof ServiceOnChannelCloseExeptionEvent){
-			logger.error("ServiceReadWriteHandler ServiceOnExeptionEvent happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
-			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
-			objServiceOnExeptionEvent.getExceptionHappen().printStackTrace();
-		}
-		else if(event instanceof ServiceOnErrorEvent){
-			logger.error("ServiceReadWriteHandler ServiceOnExeptionEvent happned ..." + StringUtils.ExceptionStackTraceToString(((ServiceOnChannelCloseExeptionEvent) event).getExceptionHappen()));
+		else if(event instanceof ServiceExeptionEvent ){
+			ServiceExeptionEvent objServiceOnExeptionEvent = (ServiceExeptionEvent)event;
+			logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(objServiceOnExeptionEvent.getExceptionHappen()));
+			if(this.getNext() != null)
+			{
+				try {
+					this.getNext().handleRequest(event);
+				} catch (Exception e) {
+					logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
+				}
+			}
 		}
 	}
 }

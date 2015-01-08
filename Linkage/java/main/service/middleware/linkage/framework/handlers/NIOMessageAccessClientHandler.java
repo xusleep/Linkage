@@ -4,12 +4,13 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.event.ServiceEvent;
-import service.middleware.linkage.framework.event.ServiceOnChannelCloseExeptionEvent;
-import service.middleware.linkage.framework.event.ServiceOnChannelIOExeptionEvent;
-import service.middleware.linkage.framework.event.ServiceOnErrorEvent;
+import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
+import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
+import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
@@ -43,25 +44,27 @@ public class NIOMessageAccessClientHandler extends Handler {
 					this.getNext().handleRequest(event);
 				}
 			} catch (Exception e) {
-				logger.error("there is a error comes out: " + ((ServiceOnErrorEvent)event).getMsg());
+				logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
 			}
 		}
-		else if(event instanceof ServiceOnChannelCloseExeptionEvent ){
-			ServiceOnChannelCloseExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelCloseExeptionEvent)event;
-			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().getWorkingChannelStrategy();
-			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
-			strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
+		else if(event instanceof ServiceExeptionEvent ){
+			ServiceExeptionEvent objServiceOnExeptionEvent = (ServiceExeptionEvent)event;
+			logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(objServiceOnExeptionEvent.getExceptionHappen()));
+			if(objServiceOnExeptionEvent.getExceptionHappen() instanceof ServiceOnChanelClosedException 
+					|| objServiceOnExeptionEvent.getExceptionHappen() instanceof ServiceOnChanelIOException)
+			{
+				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().getWorkingChannelStrategy();
+				this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
+				strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
+			}
+			if(this.getNext() != null)
+			{
+				try {
+					this.getNext().handleRequest(event);
+				} catch (Exception e) {
+					logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
+				}
+			}
 		}
-		else if(event instanceof ServiceOnChannelIOExeptionEvent){
-			ServiceOnChannelIOExeptionEvent objServiceOnExeptionEvent = (ServiceOnChannelIOExeptionEvent)event;
-			NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().getWorkingChannelStrategy();
-			this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
-			strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
-		
-		}
-		else if(event instanceof ServiceOnErrorEvent){
-			logger.error("there is a error comes out" + ((ServiceOnErrorEvent)event).getMsg());
-		}
-
 	}
 }

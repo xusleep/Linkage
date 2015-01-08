@@ -7,8 +7,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -23,7 +21,7 @@ import service.middleware.linkage.framework.io.protocol.IOProtocol;
  * @author zhonxu
  *
  */
-public class NIOFileWorkingChannelStrategy implements WorkingChannelStrategy {
+public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 
 	enum FileTransferState{
 		Free,
@@ -33,14 +31,12 @@ public class NIOFileWorkingChannelStrategy implements WorkingChannelStrategy {
 		TransferOK
 	}
 	public final  Queue<File> writeFileQueue = new WriteFileQueue();
-	private final NIOWorkingChannelContext workingChannelContext;
-	private final List<File> fileWrittingQueue = new LinkedList<File>();
 	private FileTransferState fileTransferState = FileTransferState.Requesting;
 	private static Logger  logger = Logger.getLogger(NIOFileWorkingChannelStrategy.class);
 	
 	public NIOFileWorkingChannelStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
-		this.workingChannelContext = nioWorkingChannelContext;
+		super(nioWorkingChannelContext);
 	}
 
 	@Override
@@ -96,7 +92,7 @@ public class NIOFileWorkingChannelStrategy implements WorkingChannelStrategy {
 	}
 	
 	private void writeMessage(String msg){
-		SocketChannel sc = (SocketChannel) this.workingChannelContext.getChannel();
+		SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
 		byte[] data = null;
 		try {
 			data = IOProtocol.wrapMessage(msg)
@@ -115,9 +111,15 @@ public class NIOFileWorkingChannelStrategy implements WorkingChannelStrategy {
 			} catch (IOException e) {
 				logger.error("not expected interruptedException happened. exception detail : " 
 						+ StringUtils.ExceptionStackTraceToString(e));
-				this.workingChannelContext.closeWorkingChannel();
+				this.getWorkingChannelContext().closeWorkingChannel();
 			}
 		}
+	}
+	
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**
@@ -207,4 +209,6 @@ public class NIOFileWorkingChannelStrategy implements WorkingChannelStrategy {
             return e;
         }
 	}
+
+
 }

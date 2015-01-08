@@ -4,17 +4,17 @@ import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
 /**
- * this event will be triggered when there is a channel exception happen
+ * this event will be triggered when there is a channel close exception happen
  * @author zhonxu
  *
  */
-public class ServiceOnChannelIOExeptionEvent implements ServiceEvent {
+public class ServiceExeptionEvent implements ServiceEvent {
 	
 	private WorkingChannelContext workingChannel;
 	private ServiceException exceptionHappen;
 	private String requestID;
 	
-	public ServiceOnChannelIOExeptionEvent(WorkingChannelContext socketChannel, String requestID, ServiceException exceptionHappen)
+	public ServiceExeptionEvent(WorkingChannelContext socketChannel, String requestID, ServiceException exceptionHappen)
 	{
 		this.workingChannel = socketChannel;
 		this.requestID = requestID;
