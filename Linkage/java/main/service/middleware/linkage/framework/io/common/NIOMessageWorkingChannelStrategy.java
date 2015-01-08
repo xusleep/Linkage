@@ -165,7 +165,7 @@ public class NIOMessageWorkingChannelStrategy extends WorkingChannelStrategy {
 			extractMessages = this.readMessages(this.readLock);
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
-			this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			//this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
 			return new WorkingChannelOperationResult(false);
 		}
 		for(String message: extractMessages)

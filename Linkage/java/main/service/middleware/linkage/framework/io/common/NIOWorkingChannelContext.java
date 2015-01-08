@@ -37,11 +37,19 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 		this.workingMode = theWorkingMode;
 		if(this.workingMode == WorkingChannelMode.MESSAGEMODE )
 		{
+			if(this.workingChannelStrategy != null){
+				this.workingChannelStrategy.clear();
+			}
 			this.workingChannelStrategy = new NIOMessageWorkingChannelStrategy(this, eventDistributionHandler);
+			logger.debug("working channel mode is changed : " + theWorkingMode);
 		}
 		else if(this.workingMode == WorkingChannelMode.FILEMODE )
 		{
+			if(this.workingChannelStrategy != null){
+				this.workingChannelStrategy.clear();
+			}
 			this.workingChannelStrategy = new NIOFileWorkingChannelStrategy(this,  eventDistributionHandler);
+			logger.debug("working channel mode is changed : " + theWorkingMode);
 		}
 	}
 	
@@ -104,7 +112,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 		this.workingChannelCacheID = workingChannelCacheID;
 	}
 
-	public WorkingChannelMode getWorkingMode() {
+	public WorkingChannelMode getWorkingChannelMode() {
 		return workingMode;
 	}
 	

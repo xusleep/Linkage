@@ -98,18 +98,17 @@ public class NIOMessageModeServiceAccessEngine{
 		try
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
-			if(newWorkingChannel.getWorkingMode() == WorkingChannelMode.MESSAGEMODE){
+			if(newWorkingChannel.getWorkingChannelMode() == WorkingChannelMode.MESSAGEMODE){
 				NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.getWorkingChannelStrategy();
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, null);
 				objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(WorkingChannelMode.FILEMODE));
 				msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 				msgStrategy.writeChannel();
-				newWorkingChannel.switchWorkMode(WorkingChannelMode.FILEMODE);
 			}
-			result.setWorkingChannel(newWorkingChannel);
-			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
-			strategy.writeFileQueue.offer(file);
-			strategy.writeChannel();
+			//result.setWorkingChannel(newWorkingChannel);
+			//strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
+			//strategy.writeFileQueue.offer(file);
+			//strategy.writeChannel();
 		}
 		catch(Exception ex){
 			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));

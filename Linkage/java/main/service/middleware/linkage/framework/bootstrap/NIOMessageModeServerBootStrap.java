@@ -2,6 +2,7 @@ package service.middleware.linkage.framework.bootstrap;
 
 import service.middleware.linkage.framework.handlers.NIOMessageAccessServiceHandler;
 import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
+import service.middleware.linkage.framework.handlers.NIOSinkHandler;
 import service.middleware.linkage.framework.io.server.NIOServer;
 import service.middleware.linkage.framework.io.server.Server;
 import service.middleware.linkage.framework.provider.DefaultServiceProvider;
@@ -27,6 +28,7 @@ public class NIOMessageModeServerBootStrap extends AbstractBootStrap implements 
 		// in this provider, all of the service information will load into the bean
 		// when there is a request, the provider will find the service, init it & execute the service
 		this.serviceProvider = new DefaultServiceProvider(servicePropertyEntity);
+		this.getWorkerPool().getEventDistributionHandler().addHandler(new NIOSinkHandler());
 		// this is a handler for the service, which will read the requestion information & call the provider 
 		// to handle further
 		this.getWorkerPool().getEventDistributionHandler().addHandler(new NIOMessageAccessServiceHandler(serviceProvider));

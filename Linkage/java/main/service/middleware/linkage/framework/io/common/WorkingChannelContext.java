@@ -17,7 +17,7 @@ public interface WorkingChannelContext extends WorkingChannelReadWrite {
 	 */
 	public Worker getWorker();
 	public void closeWorkingChannel();
-	public WorkingChannelMode getWorkingMode();
+	public WorkingChannelMode getWorkingChannelMode();
 	public WorkingChannelStrategy getWorkingChannelStrategy();
 	public void switchWorkMode(WorkingChannelMode theWorkingMode);
 }

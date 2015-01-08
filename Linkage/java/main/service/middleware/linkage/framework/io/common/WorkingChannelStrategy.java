@@ -42,7 +42,7 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
                 }
             }
             if (ret < 0 ) {
-            	throw new ServiceOnChanelClosedException(new Exception("Channel is closed."), "Channel is closed.");
+            	throw new ServiceOnChanelClosedException(new Exception("Channel is closed normally."), "Channel is closed normally.");
             }
         } catch (ClosedChannelException e) {
         	throw new ServiceOnChanelClosedException(e, e.getMessage());
