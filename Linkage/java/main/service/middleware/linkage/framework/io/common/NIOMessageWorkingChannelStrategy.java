@@ -1,9 +1,9 @@
 package service.middleware.linkage.framework.io.common;
 
-import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,15 +13,11 @@ import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.common.entity.RequestResultEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
-import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 
 /**
@@ -43,7 +39,6 @@ public class NIOMessageWorkingChannelStrategy extends WorkingChannelStrategy {
      * Queue of write {@link ServiceOnMessageWriteEvent}s.s
      */
     public final  Queue<ServiceOnMessageWriteEvent> writeBufferQueue = new WriteMessageQueue();
-	private final EventDistributionMaster eventDistributionHandler;
 	private final ExecutorService objExecutorService;
 	private static Logger  logger = Logger.getLogger(NIOMessageWorkingChannelStrategy.class);
 	
@@ -53,9 +48,8 @@ public class NIOMessageWorkingChannelStrategy extends WorkingChannelStrategy {
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
 	public NIOMessageWorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext, EventDistributionMaster eventDistributionHandler){
-		super(workingChannelContext);
+		super(workingChannelContext, eventDistributionHandler);
 		this.objExecutorService = Executors.newFixedThreadPool(10);
-		this.eventDistributionHandler = eventDistributionHandler;
 	}
 	
 	@Override
@@ -158,18 +152,18 @@ public class NIOMessageWorkingChannelStrategy extends WorkingChannelStrategy {
 	
 	@Override
 	public WorkingChannelOperationResult readChannel() {
-		List<String> extractMessages = null;
-		try {
-			extractMessages = this.readMessages(this.readLock);
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			//this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
-			return new WorkingChannelOperationResult(false);
+		List<String> extractMessages = new LinkedList<String>();
+		WorkingChannelOperationResult readResult = new WorkingChannelOperationResult(false);
+		synchronized(this.readLock)
+		{
+			readResult = this.readMessages(extractMessages);
 		}
+
 		for(String message: extractMessages)
 		{
 			final String sendMessage = message;
 			final WorkingChannelContext passWorkingChannelContext = this.getWorkingChannelContext();
+			final EventDistributionMaster eventDistributionHandler = this.getEventDistributionHandler();
 			objExecutorService.execute(new Runnable(){
 				@Override
 				public void run() {
@@ -180,7 +174,7 @@ public class NIOMessageWorkingChannelStrategy extends WorkingChannelStrategy {
 				
 			});
 		}
-		return new WorkingChannelOperationResult(true);
+		return readResult;
 	}
 
 	@Override
@@ -192,17 +186,9 @@ public class NIOMessageWorkingChannelStrategy extends WorkingChannelStrategy {
 				if ((evt = writeBuffer.poll()) == null) {
 					break;
 				}
-				try {
-					this.writeMessages(evt.getMessage());
-				} catch (ServiceException e) {
-					this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), evt.getRequestID(), e));
-					logger.error("not expected interruptedException happened. exception detail : " 
-							+ StringUtils.ExceptionStackTraceToString(e));
-					if(e instanceof ServiceOnChanelClosedException || e instanceof ServiceOnChanelIOException)
-					{
-						this.getWorkingChannelContext().closeWorkingChannel();
-					}
-				}
+				WorkingChannelOperationResult writeResult = this.writeMessage(evt.getMessage());
+				if(!writeResult.isSuccess())
+					return writeResult;
 			}
 		}
 		return new WorkingChannelOperationResult(true);

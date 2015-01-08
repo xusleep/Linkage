@@ -3,8 +3,6 @@ package service.middleware.linkage.framework.serialization;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,9 +15,60 @@ import org.xml.sax.SAXException;
 
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.io.common.FileInformationEntity;
+import service.middleware.linkage.framework.io.common.RequestFileState;
 
 public class SerializationUtils {
+	
+	public static String serilizationFileInformationEntity(FileInformationEntity objFileInformation){
+		StringBuilder sb = new StringBuilder();
+		sb.append("<RequestFile>");
+		sb.append("<RequestState>");
+		sb.append(escapeForXML(objFileInformation.getRequestFileState().toString()));
+		sb.append("</RequestState>");
+		sb.append("<fileName>");
+		sb.append(escapeForXML(objFileInformation.getFileName()));
+		sb.append("</fileName>");
+		sb.append("<fileSize>");
+		sb.append(escapeForXML("" + objFileInformation.getFileSize()));
+		sb.append("</fileSize>");
+		sb.append("</RequestFile>");
+		return sb.toString();
+	}
+	
+	public static FileInformationEntity deserilizationFileInformationEntity(String receiveData){
+		try {
+			InputStream is = new StringBufferInputStream(receiveData);
+			FileInformationEntity objectFileInformationEntity = new FileInformationEntity();
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document document = db.parse(is);
+			NodeList childs = document.getChildNodes().item(0).getChildNodes(); 
+			for(int i = 0; i < childs.getLength(); i++){
+				Node node = childs.item(i);
+				if(node.getNodeName().equals("RequestState")){
+					objectFileInformationEntity.setRequestFileState(RequestFileState.valueOf(RequestFileState.class, node.getTextContent()));
+				}
+				else if(node.getNodeName().equals("fileName")){
+					objectFileInformationEntity.setFileName(node.getTextContent());
+				}
+				else if(node.getNodeName().equals("fileSize")){
+					objectFileInformationEntity.setFileSize(Long.parseLong(node.getTextContent()));
+				}
+			}
+			return objectFileInformationEntity;
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return null;
+	}
 	
 	/**
 	 * serialize request entity

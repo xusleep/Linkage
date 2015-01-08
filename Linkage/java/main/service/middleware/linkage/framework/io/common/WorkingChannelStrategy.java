@@ -5,12 +5,14 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
-import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import service.middleware.linkage.framework.common.StringUtils;
+import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
-import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
+import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
@@ -22,20 +24,22 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 	
 	private final StringBuffer readMessageBuffer;
 	private final NIOWorkingChannelContext workingChannelContext;
+	private final EventDistributionMaster eventDistributionHandler;
+	private static Logger  logger = Logger.getLogger(WorkingChannelStrategy.class);
 	
-	public WorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext){
+	public WorkingChannelStrategy(NIOWorkingChannelContext workingChannelContext, EventDistributionMaster eventDistributionHandler){
 		this.readMessageBuffer = new StringBuffer(IOProtocol.RECEIVE_BUFFER_MESSAGE_SIZE);
 		this.workingChannelContext = workingChannelContext;
+		this.eventDistributionHandler = eventDistributionHandler;
 	}
 	
 	/**
 	 * read messages from the channel
 	 * @param readLock
-	 * @return
+	 * @return WorkingChannelOperationResult
 	 * @throws ServiceException
 	 */
-	public List<String> readMessages(Object readLock) throws ServiceException {
-		List<String> extractMessages = new LinkedList<String>();
+	public WorkingChannelOperationResult readMessages(List<String> extractMessages) {
 		SocketChannel ch = (SocketChannel) this.workingChannelContext.getChannel();
 		int readBytes = 0;
 		int ret = 0;
@@ -48,14 +52,22 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
                 }
             }
             if (ret < 0 ) {
-            	throw new ServiceOnChanelClosedException(new Exception("Channel is closed normally."), "Channel is closed normally.");
+            	return new WorkingChannelOperationResult(false);
             }
         } catch (ClosedChannelException e) {
-        	throw new ServiceOnChanelClosedException(e, e.getMessage());
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			this.getWorkingChannelContext().closeWorkingChannel();
+			return new WorkingChannelOperationResult(false);
         } 
         // Can happen, and does not need a user attention.
         catch (IOException e) {
-        	throw new ServiceOnChanelIOException(e, e.getMessage());
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			this.getWorkingChannelContext().closeWorkingChannel();
+			return new WorkingChannelOperationResult(false);
         } 
         if (readBytes > 0) {
             bb.flip();
@@ -66,31 +78,47 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 		try {
 			receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
 		} catch (UnsupportedEncodingException e1) {
-			throw new ServiceException(e1, e1.getMessage());
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e1));
+			this.eventDistributionHandler.submitServiceEvent(
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e1, e1.getMessage())));
+			return new WorkingChannelOperationResult(true);
 		}
-		synchronized(readLock){
-			this.getReadMessageBuffer().append(receiveString);
-			String unwrappedMessage = "";
-			try {
-				while((unwrappedMessage = IOProtocol.extractMessage(this.getReadMessageBuffer())) != "")
-				{
-					extractMessages.add(unwrappedMessage);
-				}
-				
-			} catch (Exception e) {
-				throw new ServiceException(e, e.getMessage());
+		this.getReadMessageBuffer().append(receiveString);
+		String unwrappedMessage = "";
+		try {
+			while((unwrappedMessage = IOProtocol.extractMessage(this.getReadMessageBuffer())) != "")
+			{
+				extractMessages.add(unwrappedMessage);
 			}
+			
+		} catch (Exception e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.eventDistributionHandler.submitServiceEvent(
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			return new WorkingChannelOperationResult(true);
 		}
-		return extractMessages;
+		return new WorkingChannelOperationResult(true);
 	}
 	
-	public boolean writeMessages(String message) throws ServiceException {
+	/**
+	 * write the message into the channel
+	 * @param message
+	 * @return
+	 * @throws ServiceException
+	 */
+	public WorkingChannelOperationResult writeMessage(String message) {
 		SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
 		byte[] data = null;
 		try {
 			data = IOProtocol.wrapMessage(message).getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
 		} catch (UnsupportedEncodingException e2) {
-			throw new ServiceException(e2, e2.getMessage());
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e2));
+			this.eventDistributionHandler.submitServiceEvent(
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e2, e2.getMessage())));
+			return new WorkingChannelOperationResult(true);
 		}
 		ByteBuffer buffer = ByteBuffer.allocate(data.length);
 		buffer.put(data, 0, data.length);
@@ -100,12 +128,20 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 				while(buffer.hasRemaining())
 					sc.write(buffer);
 			} catch (IOException e) {
-				throw new ServiceException(e, e.getMessage());
+				logger.error("not expected interruptedException happened. exception detail : " 
+						+ StringUtils.ExceptionStackTraceToString(e));
+				this.eventDistributionHandler.submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+				this.getWorkingChannelContext().closeWorkingChannel();
+				return new WorkingChannelOperationResult(false);
 			}
 		}
-		return true;
+		return new WorkingChannelOperationResult(true);
 	}
 	
+	public EventDistributionMaster getEventDistributionHandler() {
+		return eventDistributionHandler;
+	}
+
 	public StringBuffer getReadMessageBuffer() {
 		return readMessageBuffer;
 	}

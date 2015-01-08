@@ -1,20 +1,17 @@
 package service.middleware.linkage.framework.io.common;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.io.protocol.IOProtocol;
+import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 /**
  * this strategy is only used for the file mode only
@@ -22,98 +19,122 @@ import service.middleware.linkage.framework.io.protocol.IOProtocol;
  *
  */
 public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
-
-	enum FileTransferState{
-		Free,
-		Requesting,
-		RequestOK,
-		Transfering,
-		TransferOK
-	}
 	public final  Queue<File> writeFileQueue = new WriteFileQueue();
-	private FileTransferState fileTransferState = FileTransferState.Requesting;
+	private Object readWriteLock = new Object();
+	private RequestFileState requestFileState = RequestFileState.Requesting;
 	private static Logger  logger = Logger.getLogger(NIOFileWorkingChannelStrategy.class);
+	private volatile File currentTransferFile;
 	
 	public NIOFileWorkingChannelStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
-		super(nioWorkingChannelContext);
+		super(nioWorkingChannelContext, eventDistributionHandler);
 	}
 
 	@Override
 	public WorkingChannelOperationResult readChannel() {
 		// client step 2
-		if(fileTransferState == FileTransferState.Requesting){
-			if(readMessage() == "RequestOK"){
-				fileTransferState = FileTransferState.RequestOK;
-				writeChannel();
+		if(requestFileState == RequestFileState.Requesting){
+			synchronized(readWriteLock){
+				List<String> messages = new LinkedList<String>();
+				WorkingChannelOperationResult readResult = this.readMessages(messages);
+				if(!readResult.isSuccess())
+				{
+					return readResult;
+				}
+				String receiveData = messages.get(0);
+				FileInformationEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+				if(objFileInformation.getRequestFileState() == RequestFileState.RequestOK){
+					WorkingChannelOperationResult writeResult = writeFile();
+					this.requestFileState = RequestFileState.Free;
+					return writeResult;
+				}
+				else if(objFileInformation.getRequestFileState() == RequestFileState.Wrong)
+				{
+					this.requestFileState = RequestFileState.Free;
+				}
+				
 			}
 		}
 		//Server step 1
-		if(fileTransferState == FileTransferState.Free){
-			if(readMessage() == "Requesting"){
-				writeMessage("RequestOK");
-				fileTransferState =  FileTransferState.Transfering;
+		if(requestFileState == RequestFileState.Free){
+			synchronized(readWriteLock){
+				List<String> messages = new LinkedList<String>();
+				WorkingChannelOperationResult readResult = this.readMessages(messages);
+				if(!readResult.isSuccess())
+				{
+					return readResult;
+				}
+				if(messages == null || messages.size() == 0){
+					return new WorkingChannelOperationResult(true);
+				}
+				String receiveData = messages.get(0);
+				String responseData;
+				FileInformationEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+				if(objFileInformation.getRequestFileState() == RequestFileState.Free){
+					this.requestFileState = RequestFileState.RequestOK;
+					objFileInformation.setRequestFileState(this.requestFileState);
+					responseData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
+					return this.writeMessage(responseData);
+				}
+				else
+				{
+					objFileInformation.setRequestFileState(RequestFileState.Wrong);
+					responseData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
+					this.requestFileState = RequestFileState.Free;
+					synchronized(readWriteLock){
+						return this.writeMessage(responseData);
+					}
+				}
 			}
 		}
 		// server step 2
-		if(fileTransferState == FileTransferState.Transfering){
-			readFile();
+		if(requestFileState == RequestFileState.RequestOK){
+			synchronized(readWriteLock){
+				WorkingChannelOperationResult writeResult = readFile();
+				this.requestFileState = RequestFileState.Free;
+				return writeResult;
+			}
 		}
-		return null;
+		return new WorkingChannelOperationResult(true);
 	}
 
 	@Override
 	public WorkingChannelOperationResult writeChannel() {
 		// client step 1
-		if(fileTransferState == FileTransferState.Free)
+		if(requestFileState == RequestFileState.Free)
 		{
-			fileTransferState = FileTransferState.Requesting;
-			writeMessage("Requesting");
-		}
-		// client step 3
-		if(fileTransferState == FileTransferState.RequestOK){
-			fileTransferState = FileTransferState.Transfering;
-			writeFile();
-			fileTransferState = FileTransferState.Free;
-		}
-		return null;
-	}
-	
-	private void readFile(){
-		
-	}
-	
-	private void writeFile(){
-		
-	}
-	
-	private String readMessage(){
-		return "";
-	}
-	
-	private void writeMessage(String msg){
-		SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
-		byte[] data = null;
-		try {
-			data = IOProtocol.wrapMessage(msg)
-					.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
-		} catch (UnsupportedEncodingException e2) {
-			e2.printStackTrace();
-		}
-		ByteBuffer buffer = ByteBuffer
-				.allocate(data.length);
-		buffer.put(data, 0, data.length);
-		buffer.flip();
-		if (buffer.hasRemaining()) {
-			try {
-				while(buffer.hasRemaining())
-					sc.write(buffer);
-			} catch (IOException e) {
-				logger.error("not expected interruptedException happened. exception detail : " 
-						+ StringUtils.ExceptionStackTraceToString(e));
-				this.getWorkingChannelContext().closeWorkingChannel();
+			currentTransferFile = writeFileQueue.poll();
+			FileInformationEntity objFileInformation = new FileInformationEntity();
+			objFileInformation.setFile(currentTransferFile);
+			objFileInformation.setFileName(currentTransferFile.getName());
+			objFileInformation.setFileSize(currentTransferFile.length());
+			objFileInformation.setRequestFileState(requestFileState);
+			String requestData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
+			requestFileState = RequestFileState.Requesting;
+			synchronized(readWriteLock){
+				return this.writeMessage(requestData);
 			}
 		}
+		// client step 3
+		if(requestFileState == RequestFileState.RequestOK){
+			synchronized(readWriteLock){
+				WorkingChannelOperationResult readResult = writeFile();
+				requestFileState = RequestFileState.Free;
+				return readResult;
+			}
+		}
+		return new WorkingChannelOperationResult(true);
+	}
+
+	private WorkingChannelOperationResult readFile(){
+		if(this.requestFileState == RequestFileState.RequestOK){
+			
+		}
+		return new WorkingChannelOperationResult(true);
+	}
+	
+	private WorkingChannelOperationResult writeFile(){
+		return new WorkingChannelOperationResult(true);
 	}
 	
 	@Override
