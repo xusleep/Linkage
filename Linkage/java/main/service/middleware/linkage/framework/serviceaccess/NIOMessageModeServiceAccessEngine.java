@@ -21,6 +21,7 @@ import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkingChannelMode;
+import service.middleware.linkage.framework.io.common.WorkingChannelModeSwitchState;
 import service.middleware.linkage.framework.io.common.WorkingChannelModeUtils;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
@@ -101,14 +102,18 @@ public class NIOMessageModeServiceAccessEngine{
 			if(newWorkingChannel.getWorkingChannelMode() == WorkingChannelMode.MESSAGEMODE){
 				NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.getWorkingChannelStrategy();
 				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, null);
-				objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(WorkingChannelMode.FILEMODE));
+				objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(WorkingChannelMode.FILEMODE, WorkingChannelModeSwitchState.REQUEST));
 				msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 				msgStrategy.writeChannel();
 			}
-			//result.setWorkingChannel(newWorkingChannel);
-			//strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
-			//strategy.writeFileQueue.offer(file);
-			//strategy.writeChannel();
+			// wait util the working mode is changed
+			while(newWorkingChannel.getWorkingChannelMode() != WorkingChannelMode.FILEMODE){
+				Thread.sleep(100);
+			}
+			result.setWorkingChannel(newWorkingChannel);
+			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
+			strategy.writeFileQueue.offer(file);
+			strategy.writeChannel();
 		}
 		catch(Exception ex){
 			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));

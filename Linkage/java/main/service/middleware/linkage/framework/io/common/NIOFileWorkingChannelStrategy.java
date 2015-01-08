@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.Logger;
-
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
@@ -21,19 +19,19 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
 public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 	public final  Queue<File> writeFileQueue = new WriteFileQueue();
 	private Object readWriteLock = new Object();
-	private RequestFileState requestFileState = RequestFileState.Requesting;
-	private static Logger  logger = Logger.getLogger(NIOFileWorkingChannelStrategy.class);
-	private volatile File currentTransferFile;
+	private FileInformationEntity currentFileInformationEntity;
 	
 	public NIOFileWorkingChannelStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
 		super(nioWorkingChannelContext, eventDistributionHandler);
+		currentFileInformationEntity = new FileInformationEntity();
+		this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 	}
 
 	@Override
 	public WorkingChannelOperationResult readChannel() {
 		// client step 2
-		if(requestFileState == RequestFileState.Requesting){
+		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Requesting){
 			synchronized(readWriteLock){
 				List<String> messages = new LinkedList<String>();
 				WorkingChannelOperationResult readResult = this.readMessages(messages);
@@ -44,19 +42,21 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 				String receiveData = messages.get(0);
 				FileInformationEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
 				if(objFileInformation.getRequestFileState() == RequestFileState.RequestOK){
-					WorkingChannelOperationResult writeResult = writeFile();
-					this.requestFileState = RequestFileState.Free;
+					WorkingChannelOperationResult writeResult = writeFile(currentFileInformationEntity);
+					this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 					return writeResult;
 				}
 				else if(objFileInformation.getRequestFileState() == RequestFileState.Wrong)
 				{
-					this.requestFileState = RequestFileState.Free;
+					this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
+					return readResult;
 				}
 				
 			}
 		}
+		
 		//Server step 1
-		if(requestFileState == RequestFileState.Free){
+		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free){
 			synchronized(readWriteLock){
 				List<String> messages = new LinkedList<String>();
 				WorkingChannelOperationResult readResult = this.readMessages(messages);
@@ -70,17 +70,18 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 				String receiveData = messages.get(0);
 				String responseData;
 				FileInformationEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
-				if(objFileInformation.getRequestFileState() == RequestFileState.Free){
-					this.requestFileState = RequestFileState.RequestOK;
-					objFileInformation.setRequestFileState(this.requestFileState);
-					responseData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
+				if(this.currentFileInformationEntity.getRequestFileState() == RequestFileState.Free){
+					this.currentFileInformationEntity.setRequestFileState(RequestFileState.RequestOK);
+					this.currentFileInformationEntity.setFileName(objFileInformation.getFileName());
+					this.currentFileInformationEntity.setFileSize(objFileInformation.getFileSize());
+					responseData = SerializationUtils.serilizationFileInformationEntity(this.currentFileInformationEntity);
 					return this.writeMessage(responseData);
 				}
 				else
 				{
 					objFileInformation.setRequestFileState(RequestFileState.Wrong);
 					responseData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
-					this.requestFileState = RequestFileState.Free;
+					this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 					synchronized(readWriteLock){
 						return this.writeMessage(responseData);
 					}
@@ -88,10 +89,11 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 			}
 		}
 		// server step 2
-		if(requestFileState == RequestFileState.RequestOK){
+		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.RequestOK){
 			synchronized(readWriteLock){
-				WorkingChannelOperationResult writeResult = readFile();
-				this.requestFileState = RequestFileState.Free;
+				currentFileInformationEntity.setReadFile(new File("D:\\" + currentFileInformationEntity.getFileName()));
+				WorkingChannelOperationResult writeResult = readFile(currentFileInformationEntity);
+				this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 				return writeResult;
 			}
 		}
@@ -101,46 +103,34 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 	@Override
 	public WorkingChannelOperationResult writeChannel() {
 		// client step 1
-		if(requestFileState == RequestFileState.Free)
+		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free)
 		{
-			currentTransferFile = writeFileQueue.poll();
-			FileInformationEntity objFileInformation = new FileInformationEntity();
-			objFileInformation.setFile(currentTransferFile);
-			objFileInformation.setFileName(currentTransferFile.getName());
-			objFileInformation.setFileSize(currentTransferFile.length());
-			objFileInformation.setRequestFileState(requestFileState);
-			String requestData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
-			requestFileState = RequestFileState.Requesting;
+			currentFileInformationEntity = new FileInformationEntity();
+			currentFileInformationEntity.setWriteFile(writeFileQueue.poll());
+			currentFileInformationEntity.setFileName(currentFileInformationEntity.getWriteFile().getName());
+			currentFileInformationEntity.setFileSize(currentFileInformationEntity.getWriteFile().length());
+			currentFileInformationEntity.setRequestFileState(RequestFileState.Requesting);
+			String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
 			synchronized(readWriteLock){
 				return this.writeMessage(requestData);
 			}
 		}
 		// client step 3
-		if(requestFileState == RequestFileState.RequestOK){
+		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.RequestOK){
 			synchronized(readWriteLock){
-				WorkingChannelOperationResult readResult = writeFile();
-				requestFileState = RequestFileState.Free;
+				WorkingChannelOperationResult readResult = writeFile(currentFileInformationEntity);
+				currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 				return readResult;
 			}
 		}
 		return new WorkingChannelOperationResult(true);
 	}
-
-	private WorkingChannelOperationResult readFile(){
-		if(this.requestFileState == RequestFileState.RequestOK){
-			
-		}
-		return new WorkingChannelOperationResult(true);
-	}
 	
-	private WorkingChannelOperationResult writeFile(){
-		return new WorkingChannelOperationResult(true);
-	}
 	
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		currentFileInformationEntity = new FileInformationEntity();
+		currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 	}
 	
 	/**

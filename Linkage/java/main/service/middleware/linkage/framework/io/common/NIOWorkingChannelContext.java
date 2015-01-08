@@ -21,7 +21,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	private Worker worker;
 	private SelectionKey key;
 	private String workingChannelCacheID;
-	private WorkingChannelMode workingMode;
+	private volatile WorkingChannelMode workingMode;
 	private WorkingChannelStrategy workingChannelStrategy;
 	private static Logger  logger = Logger.getLogger(NIOWorkingChannelContext.class);
 	private final EventDistributionMaster eventDistributionHandler;

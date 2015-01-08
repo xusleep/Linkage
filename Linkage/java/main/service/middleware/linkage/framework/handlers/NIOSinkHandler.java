@@ -9,9 +9,11 @@ import service.middleware.linkage.framework.event.ServiceEvent;
 import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
+import service.middleware.linkage.framework.io.common.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkingChannelMode;
+import service.middleware.linkage.framework.io.common.WorkingChannelModeSwitchState;
 import service.middleware.linkage.framework.io.common.WorkingChannelModeUtils;
 
 /**
@@ -37,16 +39,39 @@ public class NIOSinkHandler extends Handler {
 				// so the client's working mode will change as well
 				if(WorkingChannelModeUtils.checkModeSwitch(receiveData))
 				{
-					WorkingChannelMode targetWorkingChannelMode = WorkingChannelModeUtils.getModeSwitch(receiveData);
 					WorkingChannelContext workingChannel = objServiceOnMessageReceiveEvent.getWorkingChannel();
-					if(targetWorkingChannelMode != workingChannel.getWorkingChannelMode())
+					synchronized(workingChannel)
 					{
-						NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)workingChannel.getWorkingChannelStrategy();
-						ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(workingChannel, null);
-						objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(targetWorkingChannelMode));
-						msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-						msgStrategy.writeChannel();
-						objServiceOnMessageReceiveEvent.getWorkingChannel().switchWorkMode(targetWorkingChannelMode);
+						// Check if switch the mode again
+						if(WorkingChannelModeUtils.checkModeSwitch(receiveData))
+						{
+							WorkingChannelModeSwitchState workingChannelModeSwitchState = WorkingChannelModeUtils.getModeSwitchState(receiveData);
+							WorkingChannelMode targetWorkingChannelMode = WorkingChannelModeUtils.getModeSwitch(receiveData);
+							if(targetWorkingChannelMode != workingChannel.getWorkingChannelMode() && workingChannel.getWorkingChannelMode() == WorkingChannelMode.MESSAGEMODE)
+							{
+								NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)workingChannel.getWorkingChannelStrategy();
+								// if just request, we will send back the request by ok
+								if(workingChannelModeSwitchState == WorkingChannelModeSwitchState.REQUEST)
+								{
+									ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(workingChannel, null);
+									// tell the client the switch is ok
+									objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(targetWorkingChannelMode, WorkingChannelModeSwitchState.REQUESTOK));
+									msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+									msgStrategy.writeChannel();
+								}
+								objServiceOnMessageReceiveEvent.getWorkingChannel().switchWorkMode(targetWorkingChannelMode);
+							}
+//							else if(targetWorkingChannelMode != workingChannel.getWorkingChannelMode() && workingChannel.getWorkingChannelMode() == WorkingChannelMode.FILEMODE)
+//							{
+//								// if just request, we will send back the request by ok
+//								if(workingChannelModeSwitchState == WorkingChannelModeSwitchState.REQUEST)
+//								{
+//									NIOFileWorkingChannelStrategy msgStrategy = (NIOFileWorkingChannelStrategy)workingChannel.getWorkingChannelStrategy();
+//									msgStrategy.writeMessage(WorkingChannelModeUtils.getModeSwitchString(targetWorkingChannelMode, WorkingChannelModeSwitchState.REQUESTOK));
+//								}
+//								objServiceOnMessageReceiveEvent.getWorkingChannel().switchWorkMode(targetWorkingChannelMode);
+//							}
+						}
 					}
 				}
 				else if(this.getNext() != null)

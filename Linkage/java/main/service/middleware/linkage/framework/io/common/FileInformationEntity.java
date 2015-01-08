@@ -5,7 +5,8 @@ import java.io.File;
 public class FileInformationEntity {
 	private String fileName;
 	private long fileSize;
-	private File file;
+	private File writeFile;
+	private File readFile;
 	private  RequestFileState RequestFileState;
 	
 	public FileInformationEntity(){
@@ -35,13 +36,19 @@ public class FileInformationEntity {
 		RequestFileState = requestFileState;
 	}
 
-	public File getFile() {
-		return file;
+	public File getWriteFile() {
+		return writeFile;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
+	public File getReadFile() {
+		return readFile;
 	}
 
-	
+	public void setReadFile(File readFile) {
+		this.readFile = readFile;
+	}
+
+	public void setWriteFile(File writeFile) {
+		this.writeFile = writeFile;
+	}
 }
