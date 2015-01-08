@@ -112,7 +112,7 @@ public class NIOMessageModeServiceAccessEngine{
 			}
 			result.setWorkingChannel(newWorkingChannel);
 			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
-			strategy.writeFileQueue.offer(file);
+			strategy.offerQueue(file);
 			strategy.writeChannel();
 		}
 		catch(Exception ex){

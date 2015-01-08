@@ -19,8 +19,8 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
  *
  */
 public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
-	public final  Queue<File> writeFileQueue = new WriteFileQueue();
-	private Object readWriteLock = new Object();
+	private final  Queue<File> writeFileQueue = new WriteFileQueue();
+	//private Object readWriteLock = new Object();
 	private FileInformationEntity currentFileInformationEntity;
 	
 	public NIOFileWorkingChannelStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
@@ -30,11 +30,17 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 		this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 	}
 
+	public synchronized boolean offerQueue(File file) {
+		return this.writeFileQueue.offer(file);
+	}
+
+
+
 	@Override
-	public WorkingChannelOperationResult readChannel() {
+	public synchronized WorkingChannelOperationResult readChannel() {
 		// client step 2
 		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Requesting){
-			synchronized(readWriteLock){
+			//synchronized(readWriteLock){
 				List<String> messages = new LinkedList<String>();
 				WorkingChannelOperationResult readResult = this.readMessages(messages);
 				if(!readResult.isSuccess())
@@ -54,12 +60,12 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 					return readResult;
 				}
 				
-			}
+			//}
 		}
 		
 		//Server step 1
 		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free){
-			synchronized(readWriteLock){
+			//synchronized(readWriteLock){
 				List<String> messages = new LinkedList<String>();
 				WorkingChannelOperationResult readResult = this.readMessages(messages);
 				if(!readResult.isSuccess())
@@ -84,34 +90,33 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 					objFileInformation.setRequestFileState(RequestFileState.Wrong);
 					responseData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
 					this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
-					synchronized(readWriteLock){
+					//synchronized(readWriteLock){
 						return this.writeMessage(responseData);
-					}
+					//}
 				}
-			}
+			//}
 		}
 		// server step 2
 		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.RequestOK){
-			synchronized(readWriteLock){
+			//synchronized(readWriteLock){
 				currentFileInformationEntity.setReadFile(new File("D:\\" + currentFileInformationEntity.getFileName()));
 				WorkingChannelOperationResult writeResult = readFile(currentFileInformationEntity);
 				this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
 				return writeResult;
-			}
+			//}
 		}
 		return new WorkingChannelOperationResult(true);
 	}
 
 	@Override
-	public WorkingChannelOperationResult writeChannel() {
-		for (;;) {
-			synchronized(readWriteLock){
+	public synchronized WorkingChannelOperationResult writeChannel() {
+			//synchronized(readWriteLock){
 				// client step 1
 				if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free)
 				{
 					File workingFile = null;
 					if ((workingFile = writeFileQueue.poll()) == null) {
-						break;
+						return new WorkingChannelOperationResult(true);
 					}
 					currentFileInformationEntity = new FileInformationEntity();
 					currentFileInformationEntity.setWriteFile(workingFile);
@@ -121,22 +126,13 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 					String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
 					return this.writeMessage(requestData);
 				}
-			}
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		// client step 3
-		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.RequestOK){
-			synchronized(readWriteLock){
-				WorkingChannelOperationResult readResult = writeFile(currentFileInformationEntity);
-				currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
-				return readResult;
-			}
-		}
+			//}
+			//try {
+			//	Thread.sleep(100);
+			//} catch (InterruptedException e) {
+			//	e.printStackTrace();
+			//}
+		//}
 		return new WorkingChannelOperationResult(true);
 	}
 	
