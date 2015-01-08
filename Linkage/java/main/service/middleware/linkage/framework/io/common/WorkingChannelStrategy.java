@@ -168,7 +168,12 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 	    		totalCount = totalCount + readCount;
 	    		logger.debug("received " + totalCount + " bytes");
 	    		if(objFileInformationEntity.getFileSize() == totalCount)
+	    		{
 	    			break;
+	    		}
+	    		else if(objFileInformationEntity.getFileSize() > totalCount){
+	    			break;
+	    		}
 	    	}
 		} catch (IOException e) {
 			logger.error("not expected interruptedException happened. exception detail : " 

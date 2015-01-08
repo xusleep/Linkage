@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Logger;
+
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
@@ -102,17 +104,29 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 
 	@Override
 	public WorkingChannelOperationResult writeChannel() {
-		// client step 1
-		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free)
-		{
-			currentFileInformationEntity = new FileInformationEntity();
-			currentFileInformationEntity.setWriteFile(writeFileQueue.poll());
-			currentFileInformationEntity.setFileName(currentFileInformationEntity.getWriteFile().getName());
-			currentFileInformationEntity.setFileSize(currentFileInformationEntity.getWriteFile().length());
-			currentFileInformationEntity.setRequestFileState(RequestFileState.Requesting);
-			String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
+		for (;;) {
 			synchronized(readWriteLock){
-				return this.writeMessage(requestData);
+				// client step 1
+				if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free)
+				{
+					File workingFile = null;
+					if ((workingFile = writeFileQueue.poll()) == null) {
+						break;
+					}
+					currentFileInformationEntity = new FileInformationEntity();
+					currentFileInformationEntity.setWriteFile(workingFile);
+					currentFileInformationEntity.setFileName(currentFileInformationEntity.getWriteFile().getName());
+					currentFileInformationEntity.setFileSize(currentFileInformationEntity.getWriteFile().length());
+					currentFileInformationEntity.setRequestFileState(RequestFileState.Requesting);
+					String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
+					return this.writeMessage(requestData);
+				}
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		// client step 3

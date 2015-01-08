@@ -19,7 +19,7 @@ public class StartStorageClient {
     	ServiceInformationEntity centerServiceInformationEntity = new ServiceInformationEntity();
     	centerServiceInformationEntity.setAddress("localhost");
     	centerServiceInformationEntity.setPort(5002);
-		NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
+		final NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformationEntity);
 		clientBootStrap.run();
     	NIOMessageModeServerBootStrap serviceBootStrap = new NIOMessageModeServerBootStrap("conf/client_server.properties", 5);
     	serviceBootStrap.run();
@@ -41,11 +41,28 @@ public class StartStorageClient {
 //		args1.add(HexUtils.fileToHexString("E:\\OSGI\\cxf-dosgi-ri-samples-ds-interface-1.2.jar"));
 //		RequestResultEntity result = clientBootStrap.getServiceAccess().requestServicePerConnectSync("storage", args1);
 //		System.out.println("result is : " + result.getResponseEntity().getResult());
-		ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
+		final ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
 		serviceInformationEntity.setAddress("localhost");
 		serviceInformationEntity.setPort(5003);
 		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\1.txt"), serviceInformationEntity, true);
-		//clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+		for(int i = 0; i < 10; i++)
+		{
+			new Thread(new Runnable(){
+	
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\1.txt"), serviceInformationEntity, true);
+					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+				}
+				
+			}).start();
+		}
+
 		//clientBootStrap.shutdownImediate();
 		//serviceBootStrap.shutdownImediate();
 	}

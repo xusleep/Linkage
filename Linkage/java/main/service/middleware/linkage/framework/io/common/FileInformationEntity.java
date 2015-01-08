@@ -7,7 +7,7 @@ public class FileInformationEntity {
 	private long fileSize;
 	private File writeFile;
 	private File readFile;
-	private  RequestFileState RequestFileState;
+	private volatile RequestFileState RequestFileState;
 	
 	public FileInformationEntity(){
 	}
