@@ -10,7 +10,6 @@ public class ClientDownloadTranserState implements State {
 	
 	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
 	private final FileRequestEntity currentFileInformationEntity;
-	
 	public ClientDownloadTranserState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileRequestEntity currentFileInformationEntity)
 	{
 		this.fileWorkingChannelStrategy = fileWorkingChannelStrategy;
@@ -20,7 +19,7 @@ public class ClientDownloadTranserState implements State {
 	@Override
 	public WorkingChannelOperationResult execute() {
 		WorkingChannelOperationResult readResult = this.fileWorkingChannelStrategy.readFile(currentFileInformationEntity);
-		this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState());
+		this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));
 		return readResult;
 	}
 

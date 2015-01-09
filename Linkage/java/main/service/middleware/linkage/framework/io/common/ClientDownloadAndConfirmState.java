@@ -23,7 +23,7 @@ public class ClientDownloadAndConfirmState implements State {
 		WorkingChannelOperationResult readResult = this.fileWorkingChannelStrategy.readMessages(messages);
 		if(!readResult.isSuccess())
 		{
-			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState());
+			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));
 			return readResult;
 		}
 		String receiveData = messages.get(0);
@@ -38,7 +38,7 @@ public class ClientDownloadAndConfirmState implements State {
 		}
 		else if(objFileInformation.getRequestFileState() == FileRequestState.WRONG)
 		{
-			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState());
+			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));
 			return readResult;
 		}
 		return new WorkingChannelOperationResult(true);

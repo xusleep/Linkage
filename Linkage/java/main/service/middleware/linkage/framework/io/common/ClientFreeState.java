@@ -1,15 +1,16 @@
 package service.middleware.linkage.framework.io.common;
 
 public class ClientFreeState implements State {
+	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
 	
-	public ClientFreeState()
+	public ClientFreeState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy)
 	{
+		this.fileWorkingChannelStrategy = fileWorkingChannelStrategy;
 	}
 	
 	@Override
 	public WorkingChannelOperationResult execute() {
-		// TODO Auto-generated method stub
-		return new WorkingChannelOperationResult(true);
+		return this.fileWorkingChannelStrategy.readAndDrop();
 	}
 
 }

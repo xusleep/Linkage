@@ -65,7 +65,7 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 		this.workingState = new ClientDownloadRequestState(this, fileTransferEntity.getFileGetPath(), fileTransferEntity.getFileSavePath());
 		WorkingChannelOperationResult writeResult = this.workingState.execute();
 		if(!writeResult.isSuccess()){
-			this.setWorkingState(new ClientFreeState());
+			this.setWorkingState(new ClientFreeState(this));
 		}
 		return writeResult;
 	}
@@ -85,7 +85,7 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 			this.getEventDistributionHandler().submitServiceEvent(
 					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
 			// read the data, but drop it
-			return readAndDrop();
+			return new WorkingChannelOperationResult(false);
 		}
     	FileChannel fileChannel = fos.getChannel();
     	SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();

@@ -22,19 +22,19 @@ public class ClientUploadAndConfirmFileState implements State {
 		WorkingChannelOperationResult readResult = this.fileWorkingChannelStrategy.readMessages(messages);
 		if(!readResult.isSuccess())
 		{
-			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState());
+			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));
 			return readResult;
 		}
 		String receiveData = messages.get(0);
 		FileRequestEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.UPLOADOK){
 			WorkingChannelOperationResult writeResult = this.fileWorkingChannelStrategy.writeFile(currentFileInformationEntity);
-			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState());
+			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));
 			return writeResult;
 		}
 		else if(objFileInformation.getRequestFileState() == FileRequestState.WRONG)
 		{
-			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState());
+			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));
 			return readResult;
 		}
 		return new WorkingChannelOperationResult(true);
