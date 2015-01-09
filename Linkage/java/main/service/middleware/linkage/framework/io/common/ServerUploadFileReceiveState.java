@@ -4,9 +4,9 @@ import java.io.File;
 
 public class ServerUploadFileReceiveState implements State{
 	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
-	private final FileRequestEntity currentFileInformationEntity;
+	private final FileTransferEntity currentFileInformationEntity;
 	
-	public ServerUploadFileReceiveState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileRequestEntity currentFileInformationEntity)
+	public ServerUploadFileReceiveState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileTransferEntity currentFileInformationEntity)
 	{
 		this.fileWorkingChannelStrategy = fileWorkingChannelStrategy;
 		this.currentFileInformationEntity = currentFileInformationEntity;

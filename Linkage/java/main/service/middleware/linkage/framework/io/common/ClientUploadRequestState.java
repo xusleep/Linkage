@@ -20,9 +20,7 @@ public class ClientUploadRequestState implements State {
 	@Override
 	public WorkingChannelOperationResult execute() {
 		File uploadFile = new File(this.fileUploadPath);
-		FileRequestEntity currentFileInformationEntity = new FileRequestEntity(this.fileUploadPath, this.fileSavePath);
-		currentFileInformationEntity.setFileName(uploadFile.getName());
-		currentFileInformationEntity.setFileSize(uploadFile.length());
+		FileTransferEntity currentFileInformationEntity = new FileTransferEntity(this.fileUploadPath, this.fileSavePath);
 		currentFileInformationEntity.setRequestFileState(FileRequestState.UPLOAD);
 		String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
 		this.fileWorkingChannelStrategy.setWorkingState(new ClientUploadAndConfirmFileState(fileWorkingChannelStrategy, currentFileInformationEntity));

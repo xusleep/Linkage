@@ -44,7 +44,7 @@ public class StartStorageClient {
 		final ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
 		serviceInformationEntity.setAddress("localhost");
 		serviceInformationEntity.setPort(5003);
-		clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "D:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+		clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\tcwtd.rmvb", "D:\\testworkingfolder\\downloadClient\\tcwtd.rmvb", serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		for(int i = 0; i < 10; i++)
@@ -53,8 +53,8 @@ public class StartStorageClient {
 	
 				@Override
 				public void run() {
-					while(true)
-					{
+					//while(true)
+					//{
 //					// TODO Auto-generated method stub
 						try {
 							Thread.sleep(3000);
@@ -62,8 +62,9 @@ public class StartStorageClient {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
-					}
+						//clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\tcwtd.rmvb", "E:\\testworkingfolder\\downloadClient\\tcwtd.rmvb", serviceInformationEntity, true);
+						//clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+					//}
 //					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\1.txt"), serviceInformationEntity, true);
 //					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);

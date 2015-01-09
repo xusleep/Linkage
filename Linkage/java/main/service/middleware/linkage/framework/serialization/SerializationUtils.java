@@ -15,23 +15,17 @@ import org.xml.sax.SAXException;
 
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.io.common.FileRequestEntity;
+import service.middleware.linkage.framework.io.common.FileTransferEntity;
 import service.middleware.linkage.framework.io.common.FileRequestState;
 
 public class SerializationUtils {
 	
-	public static String serilizationFileInformationEntity(FileRequestEntity objFileInformation){
+	public static String serilizationFileInformationEntity(FileTransferEntity objFileInformation){
 		StringBuilder sb = new StringBuilder();
 		sb.append("<RequestFile>");
 		sb.append("<RequestState>");
 		sb.append(escapeForXML(objFileInformation.getRequestFileState().toString()));
 		sb.append("</RequestState>");
-		sb.append("<fileName>");
-		sb.append(escapeForXML(objFileInformation.getFileName()));
-		sb.append("</fileName>");
-		sb.append("<fileSize>");
-		sb.append(escapeForXML("" + objFileInformation.getFileSize()));
-		sb.append("</fileSize>");
 		sb.append("<fileGetPath>");
 		sb.append(escapeForXML("" + objFileInformation.getFileGetPath()));
 		sb.append("</fileGetPath>");
@@ -42,10 +36,10 @@ public class SerializationUtils {
 		return sb.toString();
 	}
 	
-	public static FileRequestEntity deserilizationFileInformationEntity(String receiveData){
+	public static FileTransferEntity deserilizationFileInformationEntity(String receiveData){
 		try {
 			InputStream is = new StringBufferInputStream(receiveData);
-			FileRequestEntity objectFileInformationEntity = new FileRequestEntity();
+			FileTransferEntity objectFileInformationEntity = new FileTransferEntity();
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document document = db.parse(is);
@@ -54,12 +48,6 @@ public class SerializationUtils {
 				Node node = childs.item(i);
 				if(node.getNodeName().equals("RequestState")){
 					objectFileInformationEntity.setRequestFileState(FileRequestState.valueOf(FileRequestState.class, node.getTextContent()));
-				}
-				else if(node.getNodeName().equals("fileName")){
-					objectFileInformationEntity.setFileName(node.getTextContent());
-				}
-				else if(node.getNodeName().equals("fileSize")){
-					objectFileInformationEntity.setFileSize(Long.parseLong(node.getTextContent()));
 				}
 				else if(node.getNodeName().equals("fileGetPath")){
 					objectFileInformationEntity.setFileGetPath(node.getTextContent());

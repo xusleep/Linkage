@@ -15,9 +15,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 
+import service.middleware.linkage.framework.common.ConvertUtils;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.event.ServiceExeptionEvent;
-import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.exception.ServiceFileTransferErrorException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 
@@ -31,7 +32,9 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 	//private Object readWriteLock = new Object();
 	private State workingState;
 	private static Logger logger = Logger.getLogger(NIOFileWorkingChannelStrategy.class);
-	private final long FILE_TRANSFER_BUFFER_SIZE = 1024 * 1024 * 10;
+	private static final long FILE_TRANSFER_BUFFER_SIZE = 1024 * 1024 * 10;
+	private static final int FILE_STATE_OK = 0;
+	private static final int FILE_STATE_WRONG = 1;
 	
 	public NIOFileWorkingChannelStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
@@ -75,62 +78,74 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 	public void clear() {
 	}
 	
-	protected WorkingChannelOperationResult readFile(FileRequestEntity objFileInformationEntity){
-		FileOutputStream fos;
-		try {
-			fos = new FileOutputStream(new File(objFileInformationEntity.getFileSavePath()));
-		} catch (FileNotFoundException e) {
-			logger.error("not expected interruptedException happened. exception detail : " 
-					+ StringUtils.ExceptionStackTraceToString(e));
-			this.getEventDistributionHandler().submitServiceEvent(
-					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
-			// read the data, but drop it
-			return new WorkingChannelOperationResult(false);
-		}
-    	FileChannel fileChannel = fos.getChannel();
+	/**
+	 * read the file from the channel
+	 * @param objFileInformationEntity
+	 * @return
+	 */
+	protected WorkingChannelOperationResult readFile(FileTransferEntity objFileInformationEntity){
+		int fileState = 0;
+		long fileSize = 0;
     	SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
-
 		try {
-			logger.debug("start receiving file. file size : " + objFileInformationEntity.getFileSize() + " bytes");
+			ByteBuffer bb = ByteBuffer.allocate(1);
+			while (sc.read(bb) > 0) {
+                if (!bb.hasRemaining()) {
+                    break;
+                }
+            }
+			fileState = ConvertUtils.byteToInt(bb.get(0));
+			bb.clear();
+			if(fileState != FILE_STATE_OK){
+				this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, 
+						new ServiceFileTransferErrorException(new Exception("receive file error, wrong state"), "receive file error, wrong state")));
+				return this.readAndDrop();
+			}
+			bb = ByteBuffer.allocate(8);
+            while (sc.read(bb) > 0) {
+                if (!bb.hasRemaining()) {
+                    break;
+                }
+            }
+            fileSize = ConvertUtils.bytesToLong(bb.array());
+            bb.clear();
+			logger.debug("start receiving file. file size : " + fileSize + " bytes . file state : " + fileState);
+
+			FileOutputStream fos = new FileOutputStream(new File(objFileInformationEntity.getFileSavePath()));
+			FileChannel fileChannel = fos.getChannel();
 	    	long readCount = fileChannel.transferFrom(sc, 0, FILE_TRANSFER_BUFFER_SIZE);
 	    	long totalCount = readCount;
-	    	// if the loop did not read the file for a very long time, then quit
-	    	int loopWaitCount = 100000;
-	    	while(objFileInformationEntity.getFileSize() > totalCount && loopWaitCount > 0){
+	    	while(fileSize > totalCount){
 	    		readCount = fileChannel.transferFrom(sc, totalCount, FILE_TRANSFER_BUFFER_SIZE);
 	    		totalCount = totalCount + readCount;
 	    		logger.debug("received " + totalCount + " bytes");
-	    		if(readCount == 0){
-	    			loopWaitCount--;
-	    			try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	    		}
 	    	}
-	    	logger.debug("received file. file size : " + objFileInformationEntity.getFileSize() + " bytes");
-		} catch (IOException e) {
+	    	fileChannel.close();
+	        fos.close();
+	    	logger.debug("received file. file size : " + fileSize + " bytes");
+		}
+		catch(FileNotFoundException e){
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceFileTransferErrorException(e, e.getMessage())));
+			// read the data, but drop them all
+			return this.readAndDrop();
+		}
+		catch (IOException e) {
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e));
 			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceOnChanelIOException(e, e.getMessage())));
 			this.getWorkingChannelContext().closeWorkingChannel();
 			return new WorkingChannelOperationResult(false);
 		}
-		try {
-	    	fileChannel.close();
-	        fos.close();
-		} catch (IOException e) {
-			logger.error("not expected interruptedException happened. exception detail : " 
-					+ StringUtils.ExceptionStackTraceToString(e));
-			this.getEventDistributionHandler().submitServiceEvent(
-					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
-			return new WorkingChannelOperationResult(true);
-		}
 		return new WorkingChannelOperationResult(true);
 	}
-	
+
+	/**
+	 * read the data from the check, in case it will cause the 
+	 * dead loop if we dont read the data
+	 * @return
+	 */
 	protected WorkingChannelOperationResult readAndDrop(){
 		try {
 			SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
@@ -151,27 +166,48 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 		return new WorkingChannelOperationResult(true);
 	}
 	
-	protected WorkingChannelOperationResult writeFile(FileRequestEntity objFileInformationEntity){
+	/**
+	 * write the file into the channel
+	 * @param objFileInformationEntity
+	 * @return
+	 */
+	protected WorkingChannelOperationResult writeFile(FileTransferEntity objFileInformationEntity){
+		int fileState = FILE_STATE_OK;
+		long fileSize = 0;
 		SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
-		FileInputStream fis;
+		FileInputStream fis = null;
+		FileChannel fileChannel = null;
 		try {
-			fis = new FileInputStream(new File(objFileInformationEntity.getFileGetPath()));
+			File file = new File(objFileInformationEntity.getFileGetPath());
+			fileSize = file.length();
+			fis = new FileInputStream(file);
+			fileChannel = fis.getChannel();
 		} catch (FileNotFoundException e) {
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e));
 			this.getEventDistributionHandler().submitServiceEvent(
-					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
-			return new WorkingChannelOperationResult(true);
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceFileTransferErrorException(e, e.getMessage())));
+			fileState = FILE_STATE_WRONG;
 		}
-		long offset = 0;
-		long totalBytes = objFileInformationEntity.getFileSize();
-		logger.debug("start file transfering ... filesize: " + totalBytes);
-		FileChannel fileChannel = fis.getChannel();
+		
+		logger.debug("start writting file. file size : " + fileSize + " bytes . file state : " + fileState);
 		try {
-			while (offset < totalBytes) {
+			ByteBuffer bb = ByteBuffer.allocate(1);
+			bb.put(ConvertUtils.intToByte(fileState));
+			bb.flip();
+			while(bb.hasRemaining())
+				sc.write(bb);
+			bb = ByteBuffer.allocate(8);
+			byte[] dst = ConvertUtils.longToBytes(fileSize);
+			bb.put(dst, 0, 8);
+			bb.flip();
+			while(bb.hasRemaining())
+				sc.write(bb);
+			long offset = 0;
+			while (offset < fileSize) {
 				long buffSize = FILE_TRANSFER_BUFFER_SIZE; 
-				if (totalBytes - offset < buffSize) {
-					buffSize = totalBytes - offset;
+				if (fileSize - offset < buffSize) {
+					buffSize = fileSize - offset;
 				}
 				long transferred = fileChannel.transferTo(offset, buffSize, sc);
 				if (transferred > 0) {
@@ -185,15 +221,17 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceOnChanelIOException(e, e.getMessage())));
 			this.getWorkingChannelContext().closeWorkingChannel();
 			return new WorkingChannelOperationResult(false);
-		}
+		}         
 		try {
-			fileChannel.close();
-			fis.close();
+			if(fileChannel != null)
+				fileChannel.close();
+			if(fis != null)
+				fis.close();
 		} catch (IOException e) {
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e));
 			this.getEventDistributionHandler().submitServiceEvent(
-					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceFileTransferErrorException(e, e.getMessage())));
 			return new WorkingChannelOperationResult(true);
 		}
 		return new WorkingChannelOperationResult(true);

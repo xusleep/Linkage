@@ -8,9 +8,9 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 public class ServerDownloadConfirmAndTransferState implements State{
 	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
-	private final FileRequestEntity currentFileInformationEntity;
+	private final FileTransferEntity currentFileInformationEntity;
 	
-	public ServerDownloadConfirmAndTransferState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileRequestEntity currentFileInformationEntity)
+	public ServerDownloadConfirmAndTransferState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileTransferEntity currentFileInformationEntity)
 	{
 		this.fileWorkingChannelStrategy = fileWorkingChannelStrategy;
 		this.currentFileInformationEntity = currentFileInformationEntity;
@@ -25,7 +25,7 @@ public class ServerDownloadConfirmAndTransferState implements State{
 			return readResult;
 		}
 		String receiveData = messages.get(0);
-		FileRequestEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.DOWNLOADTRANSEROK){
 			WorkingChannelOperationResult writeResult = this.fileWorkingChannelStrategy.writeFile(currentFileInformationEntity);
 			this.fileWorkingChannelStrategy.setWorkingState(new ServerAcceptRequestState(this.fileWorkingChannelStrategy));

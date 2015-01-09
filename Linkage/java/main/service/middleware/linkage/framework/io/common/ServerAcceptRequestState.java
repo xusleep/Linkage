@@ -30,7 +30,7 @@ public class ServerAcceptRequestState implements State{
 		}
 		String receiveData = messages.get(0);
 		String responseData;
-		FileRequestEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.UPLOAD){
 			objFileInformation.setRequestFileState(FileRequestState.UPLOADOK);
 			this.fileWorkingChannelStrategy.setWorkingState(new ServerUploadFileReceiveState(fileWorkingChannelStrategy, objFileInformation));
@@ -38,10 +38,6 @@ public class ServerAcceptRequestState implements State{
 			return this.fileWorkingChannelStrategy.writeMessage(responseData);
 		}
 		else if(objFileInformation.getRequestFileState() == FileRequestState.DOWNLOAD){
-			// set the file here
-			File sentFile = new File(objFileInformation.getFileGetPath());
-			objFileInformation.setFileName(sentFile.getName());
-			objFileInformation.setFileSize(sentFile.length());
 			objFileInformation.setRequestFileState(FileRequestState.DOWNLOADTRANSER);
 			this.fileWorkingChannelStrategy.setWorkingState(new ServerDownloadConfirmAndTransferState(fileWorkingChannelStrategy, objFileInformation));
 			responseData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);

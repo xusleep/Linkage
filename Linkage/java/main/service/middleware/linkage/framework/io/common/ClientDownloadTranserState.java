@@ -9,8 +9,8 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
 public class ClientDownloadTranserState implements State {
 	
 	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
-	private final FileRequestEntity currentFileInformationEntity;
-	public ClientDownloadTranserState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileRequestEntity currentFileInformationEntity)
+	private final FileTransferEntity currentFileInformationEntity;
+	public ClientDownloadTranserState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileTransferEntity currentFileInformationEntity)
 	{
 		this.fileWorkingChannelStrategy = fileWorkingChannelStrategy;
 		this.currentFileInformationEntity = currentFileInformationEntity;

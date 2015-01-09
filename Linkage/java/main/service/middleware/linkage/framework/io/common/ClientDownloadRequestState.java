@@ -18,7 +18,7 @@ public class ClientDownloadRequestState implements State {
 
 	@Override
 	public WorkingChannelOperationResult execute() {
-		FileRequestEntity currentFileInformationEntity = new FileRequestEntity(this.fileDownloadPath, this.fileSavePath);
+		FileTransferEntity currentFileInformationEntity = new FileTransferEntity(this.fileDownloadPath, this.fileSavePath);
 		currentFileInformationEntity.setRequestFileState(FileRequestState.DOWNLOAD);
 		String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
 		WorkingChannelOperationResult writeResult = this.fileWorkingChannelStrategy.writeMessage(requestData);
