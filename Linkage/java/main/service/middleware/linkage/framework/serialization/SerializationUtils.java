@@ -15,12 +15,12 @@ import org.xml.sax.SAXException;
 
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.io.common.FileInformationEntity;
-import service.middleware.linkage.framework.io.common.RequestFileState;
+import service.middleware.linkage.framework.io.common.FileRequestEntity;
+import service.middleware.linkage.framework.io.common.FileRequestState;
 
 public class SerializationUtils {
 	
-	public static String serilizationFileInformationEntity(FileInformationEntity objFileInformation){
+	public static String serilizationFileInformationEntity(FileRequestEntity objFileInformation){
 		StringBuilder sb = new StringBuilder();
 		sb.append("<RequestFile>");
 		sb.append("<RequestState>");
@@ -32,14 +32,20 @@ public class SerializationUtils {
 		sb.append("<fileSize>");
 		sb.append(escapeForXML("" + objFileInformation.getFileSize()));
 		sb.append("</fileSize>");
+		sb.append("<fileGetPath>");
+		sb.append(escapeForXML("" + objFileInformation.getFileGetPath()));
+		sb.append("</fileGetPath>");
+		sb.append("<fileSavePath>");
+		sb.append(escapeForXML("" + objFileInformation.getFileSavePath()));
+		sb.append("</fileSavePath>");
 		sb.append("</RequestFile>");
 		return sb.toString();
 	}
 	
-	public static FileInformationEntity deserilizationFileInformationEntity(String receiveData){
+	public static FileRequestEntity deserilizationFileInformationEntity(String receiveData){
 		try {
 			InputStream is = new StringBufferInputStream(receiveData);
-			FileInformationEntity objectFileInformationEntity = new FileInformationEntity();
+			FileRequestEntity objectFileInformationEntity = new FileRequestEntity();
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document document = db.parse(is);
@@ -47,13 +53,19 @@ public class SerializationUtils {
 			for(int i = 0; i < childs.getLength(); i++){
 				Node node = childs.item(i);
 				if(node.getNodeName().equals("RequestState")){
-					objectFileInformationEntity.setRequestFileState(RequestFileState.valueOf(RequestFileState.class, node.getTextContent()));
+					objectFileInformationEntity.setRequestFileState(FileRequestState.valueOf(FileRequestState.class, node.getTextContent()));
 				}
 				else if(node.getNodeName().equals("fileName")){
 					objectFileInformationEntity.setFileName(node.getTextContent());
 				}
 				else if(node.getNodeName().equals("fileSize")){
 					objectFileInformationEntity.setFileSize(Long.parseLong(node.getTextContent()));
+				}
+				else if(node.getNodeName().equals("fileGetPath")){
+					objectFileInformationEntity.setFileGetPath(node.getTextContent());
+				}
+				else if(node.getNodeName().equals("fileSavePath")){
+					objectFileInformationEntity.setFileSavePath(node.getTextContent());
 				}
 			}
 			return objectFileInformationEntity;

@@ -1,17 +1,25 @@
 package service.middleware.linkage.framework.io.common;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 
+import service.middleware.linkage.framework.common.StringUtils;
+import service.middleware.linkage.framework.event.ServiceExeptionEvent;
+import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 /**
  * this strategy is only used for the file mode only
@@ -19,128 +27,176 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
  *
  */
 public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
-	private final  Queue<File> writeFileQueue = new WriteFileQueue();
+	private final Queue<FileTransferEntity> downloadFileQueue = new TransferFileQueue();
 	//private Object readWriteLock = new Object();
-	private FileInformationEntity currentFileInformationEntity;
+	private State workingState;
+	private static Logger logger = Logger.getLogger(NIOFileWorkingChannelStrategy.class);
+	private final long FILE_TRANSFER_BUFFER_SIZE = 1024 * 1024 * 10;
 	
 	public NIOFileWorkingChannelStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
 		super(nioWorkingChannelContext, eventDistributionHandler);
-		currentFileInformationEntity = new FileInformationEntity();
-		this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
+		this.workingState = new ServerAcceptRequestState(this);
 	}
 
-	public synchronized boolean offerQueue(File file) {
-		return this.writeFileQueue.offer(file);
+	public State getWorkingState() {
+		return workingState;
 	}
 
+	public void setWorkingState(State workingState) {
+		this.workingState = workingState;
+	}
 
+	public synchronized boolean offerDownloadFileQueue(FileTransferEntity fileTransferEntity) {
+		return this.downloadFileQueue.offer(fileTransferEntity);
+	}
 
 	@Override
 	public synchronized WorkingChannelOperationResult readChannel() {
-		// client step 2
-		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Requesting){
-			//synchronized(readWriteLock){
-				List<String> messages = new LinkedList<String>();
-				WorkingChannelOperationResult readResult = this.readMessages(messages);
-				if(!readResult.isSuccess())
-				{
-					return readResult;
-				}
-				String receiveData = messages.get(0);
-				FileInformationEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
-				if(objFileInformation.getRequestFileState() == RequestFileState.RequestOK){
-					WorkingChannelOperationResult writeResult = writeFile(currentFileInformationEntity);
-					this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
-					return writeResult;
-				}
-				else if(objFileInformation.getRequestFileState() == RequestFileState.Wrong)
-				{
-					this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
-					return readResult;
-				}
-				
-			//}
-		}
-		
-		//Server step 1
-		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free){
-			//synchronized(readWriteLock){
-				List<String> messages = new LinkedList<String>();
-				WorkingChannelOperationResult readResult = this.readMessages(messages);
-				if(!readResult.isSuccess())
-				{
-					return readResult;
-				}
-				if(messages == null || messages.size() == 0){
-					return new WorkingChannelOperationResult(true);
-				}
-				String receiveData = messages.get(0);
-				String responseData;
-				FileInformationEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
-				if(this.currentFileInformationEntity.getRequestFileState() == RequestFileState.Free){
-					this.currentFileInformationEntity.setRequestFileState(RequestFileState.RequestOK);
-					this.currentFileInformationEntity.setFileName(objFileInformation.getFileName());
-					this.currentFileInformationEntity.setFileSize(objFileInformation.getFileSize());
-					responseData = SerializationUtils.serilizationFileInformationEntity(this.currentFileInformationEntity);
-					return this.writeMessage(responseData);
-				}
-				else
-				{
-					objFileInformation.setRequestFileState(RequestFileState.Wrong);
-					responseData = SerializationUtils.serilizationFileInformationEntity(objFileInformation);
-					this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
-					//synchronized(readWriteLock){
-						return this.writeMessage(responseData);
-					//}
-				}
-			//}
-		}
-		// server step 2
-		if(currentFileInformationEntity.getRequestFileState() == RequestFileState.RequestOK){
-			//synchronized(readWriteLock){
-				currentFileInformationEntity.setReadFile(new File("D:\\" + currentFileInformationEntity.getFileName()));
-				WorkingChannelOperationResult writeResult = readFile(currentFileInformationEntity);
-				this.currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
-				return writeResult;
-			//}
-		}
-		return new WorkingChannelOperationResult(true);
+		WorkingChannelOperationResult readResult =  this.workingState.execute();
+		return readResult;
 	}
 
 	@Override
 	public synchronized WorkingChannelOperationResult writeChannel() {
-			//synchronized(readWriteLock){
-				// client step 1
-				if(currentFileInformationEntity.getRequestFileState() == RequestFileState.Free)
-				{
-					File workingFile = null;
-					if ((workingFile = writeFileQueue.poll()) == null) {
-						return new WorkingChannelOperationResult(true);
-					}
-					currentFileInformationEntity = new FileInformationEntity();
-					currentFileInformationEntity.setWriteFile(workingFile);
-					currentFileInformationEntity.setFileName(currentFileInformationEntity.getWriteFile().getName());
-					currentFileInformationEntity.setFileSize(currentFileInformationEntity.getWriteFile().length());
-					currentFileInformationEntity.setRequestFileState(RequestFileState.Requesting);
-					String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
-					return this.writeMessage(requestData);
-				}
-			//}
-			//try {
-			//	Thread.sleep(100);
-			//} catch (InterruptedException e) {
-			//	e.printStackTrace();
-			//}
-		//}
-		return new WorkingChannelOperationResult(true);
+		FileTransferEntity fileTransferEntity = downloadFileQueue.poll();
+		if(fileTransferEntity == null)
+			return new WorkingChannelOperationResult(true);
+		this.workingState = new ClientDownloadRequestState(this, fileTransferEntity.getFileGetPath(), fileTransferEntity.getFileSavePath());
+		WorkingChannelOperationResult writeResult = this.workingState.execute();
+		if(!writeResult.isSuccess()){
+			this.setWorkingState(new ClientFreeState());
+		}
+		return writeResult;
 	}
 	
 	
 	@Override
 	public void clear() {
-		currentFileInformationEntity = new FileInformationEntity();
-		currentFileInformationEntity.setRequestFileState(RequestFileState.Free);
+	}
+	
+	protected WorkingChannelOperationResult readFile(FileRequestEntity objFileInformationEntity){
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(new File(objFileInformationEntity.getFileSavePath()));
+		} catch (FileNotFoundException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			// read the data, but drop it
+			return readAndDrop();
+		}
+    	FileChannel fileChannel = fos.getChannel();
+    	SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
+
+		try {
+			logger.debug("start receiving file. file size : " + objFileInformationEntity.getFileSize() + " bytes");
+	    	long readCount = fileChannel.transferFrom(sc, 0, FILE_TRANSFER_BUFFER_SIZE);
+	    	long totalCount = readCount;
+	    	// if the loop did not read the file for a very long time, then quit
+	    	int loopWaitCount = 100000;
+	    	while(objFileInformationEntity.getFileSize() > totalCount && loopWaitCount > 0){
+	    		readCount = fileChannel.transferFrom(sc, totalCount, FILE_TRANSFER_BUFFER_SIZE);
+	    		totalCount = totalCount + readCount;
+	    		logger.debug("received " + totalCount + " bytes");
+	    		if(readCount == 0){
+	    			loopWaitCount--;
+	    			try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    		}
+	    	}
+	    	logger.debug("received file. file size : " + objFileInformationEntity.getFileSize() + " bytes");
+		} catch (IOException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceOnChanelIOException(e, e.getMessage())));
+			this.getWorkingChannelContext().closeWorkingChannel();
+			return new WorkingChannelOperationResult(false);
+		}
+		try {
+	    	fileChannel.close();
+	        fos.close();
+		} catch (IOException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			return new WorkingChannelOperationResult(true);
+		}
+		return new WorkingChannelOperationResult(true);
+	}
+	
+	protected WorkingChannelOperationResult readAndDrop(){
+		try {
+			SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
+			ByteBuffer bb = ByteBuffer.allocate(2014);
+			long readCount = sc.read(bb);
+			while(readCount > 0){
+				bb.clear();
+				readCount = sc.read(bb);
+			}
+		}
+		catch (IOException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceOnChanelIOException(e, e.getMessage())));
+			this.getWorkingChannelContext().closeWorkingChannel();
+			return new WorkingChannelOperationResult(false);
+		}
+		return new WorkingChannelOperationResult(true);
+	}
+	
+	protected WorkingChannelOperationResult writeFile(FileRequestEntity objFileInformationEntity){
+		SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File(objFileInformationEntity.getFileGetPath()));
+		} catch (FileNotFoundException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			return new WorkingChannelOperationResult(true);
+		}
+		long offset = 0;
+		long totalBytes = objFileInformationEntity.getFileSize();
+		logger.debug("start file transfering ... filesize: " + totalBytes);
+		FileChannel fileChannel = fis.getChannel();
+		try {
+			while (offset < totalBytes) {
+				long buffSize = FILE_TRANSFER_BUFFER_SIZE; 
+				if (totalBytes - offset < buffSize) {
+					buffSize = totalBytes - offset;
+				}
+				long transferred = fileChannel.transferTo(offset, buffSize, sc);
+				if (transferred > 0) {
+					offset += transferred;
+					logger.debug("transfered " + offset + " bytes");
+				}
+			}
+		} catch (IOException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceOnChanelIOException(e, e.getMessage())));
+			this.getWorkingChannelContext().closeWorkingChannel();
+			return new WorkingChannelOperationResult(false);
+		}
+		try {
+			fileChannel.close();
+			fis.close();
+		} catch (IOException e) {
+			logger.error("not expected interruptedException happened. exception detail : " 
+					+ StringUtils.ExceptionStackTraceToString(e));
+			this.getEventDistributionHandler().submitServiceEvent(
+					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e, e.getMessage())));
+			return new WorkingChannelOperationResult(true);
+		}
+		return new WorkingChannelOperationResult(true);
 	}
 	
 	/**
@@ -148,23 +204,23 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 	 * @author zhonxu
 	 *
 	 */
-	private final class WriteFileQueue implements Queue<File> {
+	private final class TransferFileQueue implements Queue<FileTransferEntity> {
 
-        private final Queue<File> queue;
+        private final Queue<FileTransferEntity> queue;
 
-        public WriteFileQueue() {
-            queue = new ConcurrentLinkedQueue<File>();
+        public TransferFileQueue() {
+            queue = new ConcurrentLinkedQueue<FileTransferEntity>();
         }
 
-        public File remove() {
+        public FileTransferEntity remove() {
             return queue.remove();
         }
 
-        public File element() {
+        public FileTransferEntity element() {
             return queue.element();
         }
 
-        public File peek() {
+        public FileTransferEntity peek() {
             return queue.peek();
         }
 
@@ -176,7 +232,7 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
             return queue.isEmpty();
         }
 
-        public Iterator<File> iterator() {
+        public Iterator<FileTransferEntity> iterator() {
             return queue.iterator();
         }
 
@@ -192,7 +248,7 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
             return queue.containsAll(c);
         }
 
-        public boolean addAll(Collection<? extends File> c) {
+        public boolean addAll(Collection<? extends FileTransferEntity> c) {
             return queue.addAll(c);
         }
 
@@ -208,7 +264,7 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
             queue.clear();
         }
 
-        public boolean add(File e) {
+        public boolean add(FileTransferEntity e) {
             return queue.add(e);
         }
 
@@ -220,13 +276,13 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
             return queue.contains(o);
         }
 
-        public boolean offer(File e) {
+        public boolean offer(FileTransferEntity e) {
             boolean success = queue.offer(e);
             return success;
         }
 
-        public File poll() {
-        	File e = queue.poll();
+        public FileTransferEntity poll() {
+        	FileTransferEntity e = queue.poll();
             return e;
         }
 	}

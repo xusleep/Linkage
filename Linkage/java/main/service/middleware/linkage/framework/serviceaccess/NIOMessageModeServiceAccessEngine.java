@@ -1,6 +1,5 @@
 package service.middleware.linkage.framework.serviceaccess;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
@@ -15,6 +14,7 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.io.common.FileTransferEntity;
 import service.middleware.linkage.framework.io.common.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
@@ -92,7 +92,7 @@ public class NIOMessageModeServiceAccessEngine{
 		return result;
 	}
 	
-	public RequestResultEntity writeFile(File file, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
+	public RequestResultEntity downloadFile(String downloadFilePath, String saveFilePath, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
 		NIOWorkingChannelContext newWorkingChannel = null;
 		RequestResultEntity result = new RequestResultEntity();
 		NIOFileWorkingChannelStrategy strategy = null;
@@ -112,7 +112,7 @@ public class NIOMessageModeServiceAccessEngine{
 			}
 			result.setWorkingChannel(newWorkingChannel);
 			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
-			strategy.offerQueue(file);
+			strategy.offerDownloadFileQueue(new FileTransferEntity(downloadFilePath, saveFilePath));
 			strategy.writeChannel();
 		}
 		catch(Exception ex){

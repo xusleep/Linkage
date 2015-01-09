@@ -44,23 +44,32 @@ public class StartStorageClient {
 		final ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
 		serviceInformationEntity.setAddress("localhost");
 		serviceInformationEntity.setPort(5003);
-		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\1.txt"), serviceInformationEntity, true);
-		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+		clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "D:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+//		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		for(int i = 0; i < 10; i++)
 //		{
-//			new Thread(new Runnable(){
-//	
-//				@Override
-//				public void run() {
+			new Thread(new Runnable(){
+	
+				@Override
+				public void run() {
+					while(true)
+					{
 //					// TODO Auto-generated method stub
-//					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+					}
 //					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\1.txt"), serviceInformationEntity, true);
 //					clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
-//				}
-//				
-//			}).start();
+				}
+				
+			}).start();
 //		}
 
 		//clientBootStrap.shutdownImediate();
