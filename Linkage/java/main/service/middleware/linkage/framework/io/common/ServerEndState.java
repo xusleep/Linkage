@@ -7,17 +7,16 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
-
-public class ServerAcceptRequestState implements State{
+public class ServerEndState implements State{
 	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
-	private static Logger logger = Logger.getLogger(ServerAcceptRequestState.class);
+	private final FileTransferEntity currentFileInformationEntity;
+	private static Logger logger = Logger.getLogger(ServerEndState.class);
 	
-	public ServerAcceptRequestState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy)
+	public ServerEndState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileTransferEntity currentFileInformationEntity)
 	{
-		logger.debug("server ready for accept new request.");
 		this.fileWorkingChannelStrategy = fileWorkingChannelStrategy;
+		this.currentFileInformationEntity = currentFileInformationEntity;
 	}
-
 	@Override
 	public WorkingChannelOperationResult execute() {
 		List<String> messages = new LinkedList<String>();
@@ -34,17 +33,10 @@ public class ServerAcceptRequestState implements State{
 		String receiveData = messages.get(0);
 		String responseData;
 		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
-		if(objFileInformation.getRequestFileState() == FileRequestState.UPLOAD){
-			logger.debug("server accept upload request and send upload ok confirm to client.");
-			objFileInformation.setRequestFileState(FileRequestState.UPLOADOK);
-			this.fileWorkingChannelStrategy.setWorkingState(new ServerUploadFileReceiveState(fileWorkingChannelStrategy, objFileInformation));
-			responseData = SerializationUtils.serilizationFileTransferEntity(objFileInformation);
-			return this.fileWorkingChannelStrategy.writeMessage(responseData);
-		}
-		else if(objFileInformation.getRequestFileState() == FileRequestState.DOWNLOAD){
-			logger.debug("server accept download request and send transfer request to client.");
-			objFileInformation.setRequestFileState(FileRequestState.DOWNLOADTRANSER);
-			this.fileWorkingChannelStrategy.setWorkingState(new ServerDownloadConfirmAndTransferState(fileWorkingChannelStrategy, objFileInformation));
+		if(objFileInformation.getRequestFileState() == FileRequestState.END){
+			logger.debug("server receive end request and send end ok confirm to client.");
+			objFileInformation.setRequestFileState(FileRequestState.ENDOK);
+			this.fileWorkingChannelStrategy.setWorkingState(new ServerAcceptRequestState(fileWorkingChannelStrategy));
 			responseData = SerializationUtils.serilizationFileTransferEntity(objFileInformation);
 			return this.fileWorkingChannelStrategy.writeMessage(responseData);
 		}

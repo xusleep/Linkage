@@ -6,5 +6,7 @@ public enum FileRequestState {
 	DOWNLOAD,
 	DOWNLOADTRANSER,
 	DOWNLOADTRANSEROK,
+	END,
+	ENDOK,
 	WRONG
 }

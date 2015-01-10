@@ -76,6 +76,7 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
         }
 		byte[] message = new byte[readBytes];
 		System.arraycopy(bb.array(), 0, message, 0, readBytes);
+		logger.debug("readMessage total read bytes count : " + readBytes);
 		String receiveString = "";
 		try {
 			receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
@@ -113,6 +114,7 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 	 */
 	protected WorkingChannelOperationResult writeMessage(String message) {
 		SocketChannel sc = (SocketChannel) this.getWorkingChannelContext().getChannel();
+		logger.debug("writeMessage : " + message);
 		byte[] data = null;
 		try {
 			data = IOProtocol.wrapMessage(message).getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
@@ -123,6 +125,7 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 					new ServiceExeptionEvent(this.getWorkingChannelContext(), null, new ServiceException(e2, e2.getMessage())));
 			return new WorkingChannelOperationResult(true);
 		}
+		logger.debug("writeMessage total write bytes count : " + data.length);
 		ByteBuffer buffer = ByteBuffer.allocate(data.length);
 		buffer.put(data, 0, data.length);
 		buffer.flip();

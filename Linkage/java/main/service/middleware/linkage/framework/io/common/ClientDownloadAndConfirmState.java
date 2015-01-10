@@ -3,12 +3,15 @@ package service.middleware.linkage.framework.io.common;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 public class ClientDownloadAndConfirmState implements State {
 	
 	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
 	private final FileTransferEntity currentFileInformationEntity;
+	private static Logger logger = Logger.getLogger(ClientDownloadAndConfirmState.class);
 	
 	public ClientDownloadAndConfirmState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileTransferEntity currentFileInformationEntity)
 	{
@@ -28,8 +31,9 @@ public class ClientDownloadAndConfirmState implements State {
 		String receiveData = messages.get(0);
 		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.DOWNLOADTRANSER){
+			logger.debug("client download receive the transfer request from the server");
 			this.currentFileInformationEntity.setRequestFileState(FileRequestState.DOWNLOADTRANSEROK);
-			String requestData = SerializationUtils.serilizationFileInformationEntity(currentFileInformationEntity);
+			String requestData = SerializationUtils.serilizationFileTransferEntity(currentFileInformationEntity);
 			this.fileWorkingChannelStrategy.setWorkingState(new ClientDownloadTranserState(fileWorkingChannelStrategy, currentFileInformationEntity));
 			WorkingChannelOperationResult writeResult = this.fileWorkingChannelStrategy.writeMessage(requestData);
 			return writeResult;

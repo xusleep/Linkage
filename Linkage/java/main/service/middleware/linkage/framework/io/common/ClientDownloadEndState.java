@@ -7,13 +7,13 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
-public class ClientUploadAndConfirmFileState implements State {
+public class ClientDownloadEndState implements State {
 	
 	private final NIOFileWorkingChannelStrategy fileWorkingChannelStrategy;
 	private final FileTransferEntity currentFileInformationEntity;
-	private static Logger logger = Logger.getLogger(ClientUploadAndConfirmFileState.class);
+	private static Logger logger = Logger.getLogger(ClientDownloadEndState.class);
 	
-	public ClientUploadAndConfirmFileState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileTransferEntity currentFileInformationEntity)
+	public ClientDownloadEndState(NIOFileWorkingChannelStrategy fileWorkingChannelStrategy, FileTransferEntity currentFileInformationEntity)
 	{
 		this.fileWorkingChannelStrategy = fileWorkingChannelStrategy;
 		this.currentFileInformationEntity = currentFileInformationEntity;
@@ -30,11 +30,10 @@ public class ClientUploadAndConfirmFileState implements State {
 		}
 		String receiveData = messages.get(0);
 		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
-		if(objFileInformation.getRequestFileState() == FileRequestState.UPLOADOK){
-			logger.debug("client upload receive upload request confirm ok and send file.");
-			WorkingChannelOperationResult writeResult = this.fileWorkingChannelStrategy.writeFile(currentFileInformationEntity);
+		if(objFileInformation.getRequestFileState() == FileRequestState.ENDOK){
+			logger.debug("client download receive end ok confirm from the server, the state will change back to client free state");
 			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));
-			return writeResult;
+			return new WorkingChannelOperationResult(true);
 		}
 		else if(objFileInformation.getRequestFileState() == FileRequestState.WRONG)
 		{

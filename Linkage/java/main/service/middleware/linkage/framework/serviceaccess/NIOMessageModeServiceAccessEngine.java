@@ -14,7 +14,6 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.FileTransferEntity;
 import service.middleware.linkage.framework.io.common.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
@@ -112,8 +111,36 @@ public class NIOMessageModeServiceAccessEngine{
 			}
 			result.setWorkingChannel(newWorkingChannel);
 			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
-			strategy.offerDownloadFileQueue(new FileTransferEntity(downloadFilePath, saveFilePath));
-			strategy.writeChannel();
+			strategy.downloadFile(downloadFilePath, saveFilePath);
+		}
+		catch(Exception ex){
+			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			return result;
+		}
+		return null;
+	}
+	
+	public RequestResultEntity uploadFile(String uploadFilePath, String saveFilePath, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
+		NIOWorkingChannelContext newWorkingChannel = null;
+		RequestResultEntity result = new RequestResultEntity();
+		NIOFileWorkingChannelStrategy strategy = null;
+		try
+		{
+			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
+			if(newWorkingChannel.getWorkingChannelMode() == WorkingChannelMode.MESSAGEMODE){
+				NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.getWorkingChannelStrategy();
+				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, null);
+				objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(WorkingChannelMode.FILEMODE, WorkingChannelModeSwitchState.REQUEST));
+				msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
+				msgStrategy.writeChannel();
+			}
+			// wait util the working mode is changed
+			while(newWorkingChannel.getWorkingChannelMode() != WorkingChannelMode.FILEMODE){
+				Thread.sleep(100);
+			}
+			result.setWorkingChannel(newWorkingChannel);
+			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
+			strategy.uploadFile(uploadFilePath, saveFilePath);
 		}
 		catch(Exception ex){
 			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));

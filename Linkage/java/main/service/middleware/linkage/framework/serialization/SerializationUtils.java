@@ -20,7 +20,7 @@ import service.middleware.linkage.framework.io.common.FileRequestState;
 
 public class SerializationUtils {
 	
-	public static String serilizationFileInformationEntity(FileTransferEntity objFileInformation){
+	public static String serilizationFileTransferEntity(FileTransferEntity objFileInformation){
 		StringBuilder sb = new StringBuilder();
 		sb.append("<RequestFile>");
 		sb.append("<RequestState>");
