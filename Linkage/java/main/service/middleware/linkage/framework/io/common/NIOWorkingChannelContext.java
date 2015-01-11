@@ -48,7 +48,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 			if(this.workingChannelStrategy != null){
 				this.workingChannelStrategy.clear();
 			}
-			this.workingChannelStrategy = new NIOFileWorkingChannelStrategy(this,  eventDistributionHandler);
+			this.workingChannelStrategy = new NIOFileMessageMixStrategy(this,  eventDistributionHandler);
 			logger.debug("working channel mode is changed : " + theWorkingMode);
 		}
 	}

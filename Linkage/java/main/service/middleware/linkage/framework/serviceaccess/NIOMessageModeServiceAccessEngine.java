@@ -14,6 +14,7 @@ import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.io.common.NIOFileMessageMixStrategy;
 import service.middleware.linkage.framework.io.common.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
@@ -22,6 +23,7 @@ import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.io.common.WorkingChannelModeSwitchState;
 import service.middleware.linkage.framework.io.common.WorkingChannelModeUtils;
+import service.middleware.linkage.framework.io.protocol.IOProtocol;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
@@ -123,7 +125,7 @@ public class NIOMessageModeServiceAccessEngine{
 	public RequestResultEntity uploadFile(String uploadFilePath, String saveFilePath, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
 		NIOWorkingChannelContext newWorkingChannel = null;
 		RequestResultEntity result = new RequestResultEntity();
-		NIOFileWorkingChannelStrategy strategy = null;
+		NIOFileMessageMixStrategy strategy = null;
 		try
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
@@ -139,8 +141,11 @@ public class NIOMessageModeServiceAccessEngine{
 				Thread.sleep(100);
 			}
 			result.setWorkingChannel(newWorkingChannel);
-			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
-			strategy.uploadFile(uploadFilePath, saveFilePath);
+			strategy = (NIOFileMessageMixStrategy) newWorkingChannel.getWorkingChannelStrategy();
+			//String message = "<=============================================================Message===================================================>";
+			//byte[] data = message.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
+			//strategy.writeMessageData(data);
+			strategy.writeFileData(1000);
 		}
 		catch(Exception ex){
 			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));

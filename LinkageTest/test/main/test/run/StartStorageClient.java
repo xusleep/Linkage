@@ -7,6 +7,8 @@ import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.io.common.NIOFileMessageMixStrategy;
+import service.middleware.linkage.framework.io.nio.FileInformationEntity;
 
 /**
  * 
@@ -44,19 +46,33 @@ public class StartStorageClient {
 		final ServiceInformationEntity serviceInformationEntity = new ServiceInformationEntity();
 		serviceInformationEntity.setAddress("localhost");
 		serviceInformationEntity.setPort(5003);
-		clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+		FileInformationEntity fileInformationEntity = new FileInformationEntity();
+		fileInformationEntity.setFileID(1000);
+		fileInformationEntity.setFilePath("G:\\Films\\407.Dark.Flight.3D.2012.720p.BluRay.x264-HDChina [PublicHD]\\dark.mkv");
+		NIOFileMessageMixStrategy.addFileInformationEntity(fileInformationEntity);
+		clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
-		for(int i = 0; i < 200; i++)
+		for(int i = 0; i < 0; i++)
 		{
 			new Thread(new Runnable(){
 	
 				@Override
 				public void run() {
-					//while(true)
+					while(true)
+					{
+						try {
+							Thread.sleep(1);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+					}
+						//while(true)
 					//{
 //					// TODO Auto-generated method stub
-						clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+					//	clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 						//clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\tcwtd.rmvb", "E:\\testworkingfolder\\downloadClient\\tcwtd.rmvb", serviceInformationEntity, true);
 						//clientBootStrap.getServiceAccess().getServiceAccessEngine().downloadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 					//}

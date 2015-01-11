@@ -5,16 +5,18 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.StringUtils;
+import service.middleware.linkage.framework.event.ServerOnFileDataReceivedEvent;
 import service.middleware.linkage.framework.event.ServiceEvent;
 import service.middleware.linkage.framework.event.ServiceExeptionEvent;
+import service.middleware.linkage.framework.event.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
-import service.middleware.linkage.framework.io.common.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkingChannelMode;
 import service.middleware.linkage.framework.io.common.WorkingChannelModeSwitchState;
 import service.middleware.linkage.framework.io.common.WorkingChannelModeUtils;
+import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
  * the default handler for the client message received event
@@ -81,6 +83,15 @@ public class NIOSinkHandler extends Handler {
 			} catch (Exception e) {
 				logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
 			}
+		}
+		else if(event instanceof ServiceOnMessageDataReceivedEvent){
+			ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent)event;
+			String receiveString = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), IOProtocol.FRAMEWORK_IO_ENCODING);
+			logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveString);
+		}
+		else if(event instanceof ServerOnFileDataReceivedEvent){
+			ServerOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServerOnFileDataReceivedEvent)event;
+			logger.debug("ServerOnFileDataReceivedEvent receive message : " + objServerOnFileDataReceivedEvent.getFileID());
 		}
 		else if(event instanceof ServiceExeptionEvent ){
 			ServiceExeptionEvent objServiceOnExeptionEvent = (ServiceExeptionEvent)event;
