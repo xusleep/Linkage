@@ -32,6 +32,14 @@ import service.middleware.linkage.framework.io.nio.writer.WriterInterface;
  */
 public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
 	
+	/**
+	 * Monitor object for write.
+	 */
+	final public Object writeLock = new Object();
+	/**
+	 * Monitor object for read.
+	 */
+	final public Object readLock = new Object();
 	private WriterInterface writer;
 	private ReaderInterface reader;
 	private static List<FileInformationEntity> fileList = new ArrayList<FileInformationEntity>();
@@ -50,7 +58,7 @@ public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
 		reader = new PacketReader(dataReader);
 	}
 	
-	public static synchronized void removeFileInformationEntity(long fileID){
+	public static void removeFileInformationEntity(long fileID){
 		int index = -1;
 		for(index = 0; index < fileList.size(); index++){
 			if(fileList.get(index).getFileID() == fileID){
@@ -75,10 +83,14 @@ public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
 
 	@Override
 	public synchronized WorkingChannelOperationResult readChannel() {
+		
 		PacketEntity packetEntity = new PacketEntity();
 		boolean result = false;
 		try {
-			result = reader.read((SocketChannel) this.getWorkingChannelContext().getChannel(), packetEntity);
+			synchronized(this.readLock)
+			{
+				result = reader.read((SocketChannel) this.getWorkingChannelContext().getChannel(), packetEntity);
+			}
 			if(packetEntity.getPacketDataType() == PacketDataType.MESSAGE)
 			{
 				MessageEntity contentEntity = (MessageEntity) packetEntity.getContentEntity();
@@ -107,7 +119,10 @@ public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
 		packetEntity.setLength(contentEntity.getLength() + 1 + 8);
 		boolean result = false;
 		try {
-			result = writer.write((SocketChannel) this.getWorkingChannelContext().getChannel(), packetEntity);
+			synchronized(this.writeLock)
+			{
+				result = writer.write((SocketChannel) this.getWorkingChannelContext().getChannel(), packetEntity);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,8 +143,11 @@ public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
 			packetEntity.setContentEntity(contentEntity);
 			packetEntity.setPacketDataType(PacketDataType.FILE);
 			packetEntity.setLength(file.length() + 1 + 8 + 8);
-			result = this.writer.write((SocketChannel) this.getWorkingChannelContext().getChannel(), 
-					packetEntity);
+			synchronized(this.writeLock)
+			{
+				result = this.writer.write((SocketChannel) this.getWorkingChannelContext().getChannel(), 
+						packetEntity);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

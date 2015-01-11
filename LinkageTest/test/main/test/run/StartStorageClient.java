@@ -53,7 +53,7 @@ public class StartStorageClient {
 		clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
-		for(int i = 0; i < 0; i++)
+		for(int i = 0; i < 1000; i++)
 		{
 			new Thread(new Runnable(){
 	
@@ -61,12 +61,12 @@ public class StartStorageClient {
 				public void run() {
 					while(true)
 					{
-						try {
-							Thread.sleep(1);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+//						try {
+//							Thread.sleep(1);
+//						} catch (InterruptedException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 						clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 					}
 						//while(true)

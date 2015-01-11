@@ -142,10 +142,10 @@ public class NIOMessageModeServiceAccessEngine{
 			}
 			result.setWorkingChannel(newWorkingChannel);
 			strategy = (NIOFileMessageMixStrategy) newWorkingChannel.getWorkingChannelStrategy();
-			//String message = "<=============================================================Message===================================================>";
-			//byte[] data = message.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
-			//strategy.writeMessageData(data);
-			strategy.writeFileData(1000);
+			String message = "<=============================================================Message===================================================>";
+			byte[] data = message.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
+			strategy.writeMessageData(data);
+			//strategy.writeFileData(1000);
 		}
 		catch(Exception ex){
 			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
