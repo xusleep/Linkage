@@ -14,12 +14,12 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  * @author zhonxu
  *
  */
-public class NIOMessageModeServiceAccess implements MessageModeServiceAccess {
+public class ServiceAccessImpl implements ServiceAccess {
 	
-	protected NIOMessageModeServiceAccessEngine consumeEngine;
+	protected ServiceAccessEngine consumeEngine;
 
-	public NIOMessageModeServiceAccess(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool) {
-		consumeEngine = new NIOMessageModeServiceAccessEngine(workingClientPropertyEntity, workerPool);
+	public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool) {
+		consumeEngine = new ServiceAccessEngine(workingClientPropertyEntity, workerPool);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class NIOMessageModeServiceAccess implements MessageModeServiceAccess {
 	}
 
 	@Override
-	public NIOMessageModeServiceAccessEngine getServiceAccessEngine() {
+	public ServiceAccessEngine getServiceAccessEngine() {
 		// TODO Auto-generated method stub
 		return consumeEngine;
 	}

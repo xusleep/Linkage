@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import service.middleware.linkage.framework.event.ServiceEvent;
-import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
+import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
 import service.middleware.linkage.framework.handlers.Handler;
 import test.framework.concurrence.condition.MainConcurrentThread;
 import test.framework.concurrence.condition.job.AbstractJob;
@@ -27,12 +27,12 @@ import test.framework.concurrence.condition.job.JobInterface;
  */
 public class EventDistributionMasterTest {
 	
-	private static NIOMessageEventDistributionMaster eventDistributionMaster;
+	private static DefaultEventDistributionMaster eventDistributionMaster;
 	private static Logger  logger = Logger.getLogger(EventDistributionMasterTest.class); 
 	
 	@Before
 	public void setUp(){
-		eventDistributionMaster = new NIOMessageEventDistributionMaster(100);
+		eventDistributionMaster = new DefaultEventDistributionMaster(100);
 		eventDistributionMaster.start();
 	}
 	

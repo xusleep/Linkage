@@ -29,7 +29,7 @@ public class StartStorageClient {
 		ServiceInformationEntity clientServiceInformationEntity = new ServiceInformationEntity();
 		clientServiceInformationEntity.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
-		ServiceCenterClientUtils.registerClientInformation(cb, clientServiceInformationEntity, centerServiceInformationEntity);
+//		ServiceCenterClientUtils.registerClientInformation(cb, clientServiceInformationEntity, centerServiceInformationEntity);
 //		for(int i = 1; i < 10; i++)
 //		{
 //			List<String> args1 = new LinkedList<String>();

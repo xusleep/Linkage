@@ -14,10 +14,10 @@ import service.middleware.linkage.framework.common.entity.ServiceInformationEnti
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.serviceaccess.NIOMessageModeServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.ServiceAccessImpl;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
-public class NIORouteServiceAccess extends NIOMessageModeServiceAccess implements RouteServiceAccess {
+public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteServiceAccess {
 	private final Route route;
 	private Log logger = LogFactory.getFactory().getInstance(NIORouteServiceAccess.class);
 	public NIORouteServiceAccess(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool, ServiceInformationEntity centerServiceInformationEntity) {

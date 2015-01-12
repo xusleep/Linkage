@@ -1,7 +1,7 @@
 package service.middleware.linkage.framework.bootstrap;
 
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
+import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
 import service.middleware.linkage.framework.io.common.NIOWorkerPool;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 

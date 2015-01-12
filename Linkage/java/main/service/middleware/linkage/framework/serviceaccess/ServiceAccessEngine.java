@@ -33,7 +33,7 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  * @author zhonxu
  *
  */
-public class NIOMessageModeServiceAccessEngine{
+public class ServiceAccessEngine{
 	/**
 	 * used to cached the {@link WorkingChannelContext} object
 	 */
@@ -42,7 +42,7 @@ public class NIOMessageModeServiceAccessEngine{
 	private final WorkerPool workerPool;
 	private final ClientSettingReader workingClientPropertyEntity;
 	
-	public NIOMessageModeServiceAccessEngine(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool){
+	public ServiceAccessEngine(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool){
 		this.workingClientPropertyEntity = workingClientPropertyEntity;
 		this.workerPool = workerPool;
 	}
@@ -129,17 +129,6 @@ public class NIOMessageModeServiceAccessEngine{
 		try
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
-			if(newWorkingChannel.getWorkingChannelMode() == WorkingChannelMode.MESSAGEMODE){
-				NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.getWorkingChannelStrategy();
-				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, null);
-				objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(WorkingChannelMode.FILEMODE, WorkingChannelModeSwitchState.REQUEST));
-				msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-				msgStrategy.writeChannel();
-			}
-			// wait util the working mode is changed
-			while(newWorkingChannel.getWorkingChannelMode() != WorkingChannelMode.FILEMODE){
-				Thread.sleep(100);
-			}
 			result.setWorkingChannel(newWorkingChannel);
 			strategy = (NIOMixedStrategy) newWorkingChannel.getWorkingChannelStrategy();
 			String message = "<=============================================================Message===================================================>";

@@ -13,7 +13,7 @@ import service.middleware.linkage.framework.exception.ServiceOnChanelClosedExcep
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
-import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
 
 /**
  * the default handler for the client message received event
@@ -22,12 +22,12 @@ import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAcce
  * @author zhonxu
  *
  */
-public class NIOMessageAccessClientHandler extends Handler {
-	private static Logger  logger = Logger.getLogger(NIOMessageAccessClientHandler.class);  
+public class AccessClientHandler extends Handler {
+	private static Logger  logger = Logger.getLogger(AccessClientHandler.class);  
 	
-	private final MessageModeServiceAccess serviceAccess;
+	private final ServiceAccess serviceAccess;
 	
-	public NIOMessageAccessClientHandler(MessageModeServiceAccess serviceAccess){
+	public AccessClientHandler(ServiceAccess serviceAccess){
 		this.serviceAccess = serviceAccess;
 	}
 	

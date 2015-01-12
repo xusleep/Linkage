@@ -15,15 +15,15 @@ import service.middleware.linkage.framework.event.ServiceEvent;
  * @author zhonxu
  *
  */
-public class NIOMessageEventDistributionMaster extends EventDistributionMaster{
+public class DefaultEventDistributionMaster extends EventDistributionMaster{
 	public  BlockingQueue<ServiceEvent> pool = new LinkedBlockingQueue<ServiceEvent>();
 	public final ExecutorService objExecutorService;
 	private volatile boolean isShutdown = false;
-	private static Logger  logger = Logger.getLogger(NIOMessageEventDistributionMaster.class);
+	private static Logger  logger = Logger.getLogger(DefaultEventDistributionMaster.class);
 	private Handler firstHandler;
 	private Handler lastHandler;
 
-	public NIOMessageEventDistributionMaster(int taskThreadPootSize){
+	public DefaultEventDistributionMaster(int taskThreadPootSize){
 		this.objExecutorService = Executors.newFixedThreadPool(taskThreadPootSize);
 	}
 	

@@ -2,13 +2,12 @@ package service.middleware.linkage.framework.bootstrap;
 
 import java.io.IOException;
 
-import service.middleware.linkage.framework.handlers.NIOMessageAccessClientHandler;
-import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
-import service.middleware.linkage.framework.handlers.NIOSinkHandler;
+import service.middleware.linkage.framework.handlers.AccessClientHandler;
+import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
 import service.middleware.linkage.framework.io.client.Client;
 import service.middleware.linkage.framework.io.client.DefaultClient;
-import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
-import service.middleware.linkage.framework.serviceaccess.NIOMessageModeServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.ServiceAccessImpl;
 import service.middleware.linkage.framework.setting.reader.ClientSettingPropertyReader;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
@@ -20,7 +19,7 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  */
 public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements Runnable {
 	private final Client client;
-	private final MessageModeServiceAccess serviceAccess;
+	private final ServiceAccess serviceAccess;
 	
 	/**
 	 * 
@@ -28,7 +27,7 @@ public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements 
 	 * @param clientTaskThreadPootSize the client 
 	 */
 	public NIOMessageModeClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
-		super(new NIOMessageEventDistributionMaster(clientTaskThreadPootSize));
+		super(new DefaultEventDistributionMaster(clientTaskThreadPootSize));
 		// read the configuration from the properties
 		ClientSettingReader objServicePropertyEntity = null;
 		try {
@@ -38,9 +37,8 @@ public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements 
 		}
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new DefaultClient(this.getWorkerPool());
-		this.serviceAccess = new NIOMessageModeServiceAccess(objServicePropertyEntity, this.getWorkerPool());
-		this.getWorkerPool().getEventDistributionHandler().addHandler(new NIOSinkHandler());
-		this.getWorkerPool().getEventDistributionHandler().addHandler(new NIOMessageAccessClientHandler(this.getServiceAccess()));
+		this.serviceAccess = new ServiceAccessImpl(objServicePropertyEntity, this.getWorkerPool());
+		this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler(this.getServiceAccess()));
 	}
 	
 	/**
@@ -48,7 +46,7 @@ public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements 
 	 * from the client
 	 * @return
 	 */
-	public MessageModeServiceAccess getServiceAccess() {
+	public ServiceAccess getServiceAccess() {
 		return serviceAccess;
 	}
 

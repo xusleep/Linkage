@@ -1,6 +1,6 @@
 package service.middleware.linkage.framework.bootstrap;
 
-import service.middleware.linkage.framework.handlers.NIOMessageEventDistributionMaster;
+import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
 import service.middleware.linkage.framework.io.server.NIOServer;
 import service.middleware.linkage.framework.io.server.Server;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingPropertyReader;
@@ -17,7 +17,7 @@ public class NIOFileModeServerBootStrap extends AbstractBootStrap implements Run
 	private final ServiceSettingReader servicePropertyEntity;
 	
 	public NIOFileModeServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
-		super(new NIOMessageEventDistributionMaster(serviceTaskThreadPootSize));
+		super(new DefaultEventDistributionMaster(serviceTaskThreadPootSize));
 		// read the configuration from the properties
 		this.servicePropertyEntity = new ServiceSettingPropertyReader(propertyPath);
 		

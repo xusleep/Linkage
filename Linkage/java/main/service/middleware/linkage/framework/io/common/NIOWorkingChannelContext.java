@@ -41,7 +41,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	 * set the working strategy for the channel
 	 * the strategy is the way how the channel read or write the data into the channel
 	 */
-	public void setWorkingStrategy(WorkingChannelMode theWorkingMode){
+	private void setWorkingStrategy(WorkingChannelMode theWorkingMode){
 		this.workingMode = theWorkingMode;
 		if(this.workingMode == WorkingChannelMode.MESSAGEMODE )
 		{
