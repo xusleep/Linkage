@@ -1,5 +1,6 @@
-package service.middleware.linkage.framework.event;
+package service.middleware.linkage.framework.io.nio.strategy.mixed.events;
 
+import service.middleware.linkage.framework.handlers.ServiceEvent;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 
 public class ServiceOnMessageDataReceivedEvent implements ServiceEvent {

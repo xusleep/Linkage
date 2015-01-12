@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.common.entity;
+package service.middleware.linkage.framework.serviceaccess.entity;
 
 /**
  * this class stores the information which response from the server

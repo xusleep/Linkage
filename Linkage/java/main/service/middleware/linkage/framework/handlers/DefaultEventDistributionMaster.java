@@ -7,8 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.event.ServiceEvent;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * this master will handle all of the event to thread pool for running

@@ -30,7 +30,7 @@ public class ClientDownloadEndState implements State {
 			return readResult;
 		}
 		String receiveData = messages.get(0);
-		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileTransferEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.ENDOK){
 			logger.debug("client download receive end ok confirm from the server, the state will change back to client free state");
 			this.fileWorkingChannelStrategy.setWorkingState(new ClientFreeState(fileWorkingChannelStrategy));

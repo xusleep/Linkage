@@ -5,9 +5,9 @@ import java.util.concurrent.CountDownLatch;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * Worker pool, put the channel into the worker pool

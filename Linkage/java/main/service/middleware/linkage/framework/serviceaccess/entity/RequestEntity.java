@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.common.entity;
+package service.middleware.linkage.framework.serviceaccess.entity;
 
 import java.util.LinkedList;
 import java.util.List;

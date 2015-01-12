@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.AbstractBootStrap;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.handlers.AccessClientHandler;
 import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
 import service.middleware.linkage.framework.io.client.Client;
 import service.middleware.linkage.framework.io.client.DefaultClient;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingPropertyReader;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 

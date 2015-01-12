@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.common;
+package service.middleware.linkage.framework.utils;
 
 import java.nio.ByteBuffer;
 

@@ -33,7 +33,7 @@ public class ServerEndState implements State{
 		}
 		String receiveData = messages.get(0);
 		String responseData;
-		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileTransferEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.END){
 			logger.debug("server receive end request and send end ok confirm to client.");
 			objFileInformation.setRequestFileState(FileRequestState.ENDOK);

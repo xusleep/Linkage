@@ -11,11 +11,11 @@ import java.util.Random;
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.center.common.ServiceCenterUtils;
 import service.middleware.linkage.center.route.filters.RouteFilter;
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 /**
  * This route is used for the service center
  * If will first access the service center, get the service list

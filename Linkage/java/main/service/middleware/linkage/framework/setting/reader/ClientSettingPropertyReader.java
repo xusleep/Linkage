@@ -1,6 +1,6 @@
 package service.middleware.linkage.framework.setting.reader;
 
-import static service.middleware.linkage.framework.common.ShareingData.CLIENT_START_STRING;
+import static service.middleware.linkage.framework.utils.ShareingData.CLIENT_START_STRING;
 
 import java.io.IOException;
 import java.io.InputStream;

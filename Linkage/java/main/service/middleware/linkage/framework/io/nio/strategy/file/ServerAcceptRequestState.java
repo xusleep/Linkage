@@ -34,7 +34,7 @@ public class ServerAcceptRequestState implements State{
 		}
 		String receiveData = messages.get(0);
 		String responseData;
-		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileTransferEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.UPLOAD){
 			logger.debug("server accept upload request and send upload ok confirm to client.");
 			objFileInformation.setRequestFileState(FileRequestState.UPLOADOK);

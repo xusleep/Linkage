@@ -1,8 +1,8 @@
 package service.middleware.linkage.framework.setting.reader;
 
-import static service.middleware.linkage.framework.common.ShareingData.SERVICE_ADDRESS;
-import static service.middleware.linkage.framework.common.ShareingData.SERVICE_PORT;
-import static service.middleware.linkage.framework.common.ShareingData.SERVICE_START_STRING;
+import static service.middleware.linkage.framework.utils.ShareingData.SERVICE_ADDRESS;
+import static service.middleware.linkage.framework.utils.ShareingData.SERVICE_PORT;
+import static service.middleware.linkage.framework.utils.ShareingData.SERVICE_START_STRING;
 
 import java.io.IOException;
 import java.io.InputStream;

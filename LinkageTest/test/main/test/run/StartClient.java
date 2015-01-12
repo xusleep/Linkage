@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 import test.framework.concurrence.condition.MainConcurrentThread;
 import test.framework.concurrence.condition.job.AbstractJob;
 import test.framework.concurrence.condition.job.JobInterface;

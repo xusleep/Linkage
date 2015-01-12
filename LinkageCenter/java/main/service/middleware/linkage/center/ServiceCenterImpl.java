@@ -5,8 +5,8 @@ import java.util.List;
 
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.center.common.ServiceCenterUtils;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 
 /**
  * 提供给其他Service服务器，注册使用

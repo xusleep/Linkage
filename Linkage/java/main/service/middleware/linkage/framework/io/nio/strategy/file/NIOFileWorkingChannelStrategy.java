@@ -16,9 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.ConvertUtils;
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.exception.ServiceFileTransferErrorException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
@@ -27,7 +24,11 @@ import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.common.WorkingChannelStrategy;
-import service.middleware.linkage.framework.io.protocol.IOProtocol;
+import service.middleware.linkage.framework.io.nio.strategy.message.protocol.IOProtocol;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceExeptionEvent;
+import service.middleware.linkage.framework.utils.ConvertUtils;
+import service.middleware.linkage.framework.utils.EncodingUtils;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * this strategy is only used for the file mode only
@@ -132,7 +133,7 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 		logger.debug("readMessage total read bytes count : " + readBytes);
 		String receiveString = "";
 		try {
-			receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
+			receiveString = new String(message, EncodingUtils.FRAMEWORK_IO_ENCODING);
 			logger.debug("receiveString : " + receiveString);
 		} catch (UnsupportedEncodingException e1) {
 			logger.error("not expected interruptedException happened. exception detail : " 
@@ -170,7 +171,7 @@ public class NIOFileWorkingChannelStrategy extends WorkingChannelStrategy {
 		logger.debug("writeMessage : " + message);
 		byte[] data = null;
 		try {
-			data = IOProtocol.wrapMessage(message).getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
+			data = IOProtocol.wrapMessage(message).getBytes(EncodingUtils.FRAMEWORK_IO_ENCODING);
 		} catch (UnsupportedEncodingException e2) {
 			logger.error("not expected interruptedException happened. exception detail : " 
 					+ StringUtils.ExceptionStackTraceToString(e2));

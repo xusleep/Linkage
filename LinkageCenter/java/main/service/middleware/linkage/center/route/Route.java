@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import service.middleware.linkage.center.clean.Cleaner;
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 /**
  *  this is interface for the route,
  *  the client will call a route to get the service list and choose the service

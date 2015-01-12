@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 
 public class SerializeUtilsTest {
 	

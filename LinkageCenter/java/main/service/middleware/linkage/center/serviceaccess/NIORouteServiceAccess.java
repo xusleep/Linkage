@@ -7,15 +7,15 @@ import org.apache.commons.logging.LogFactory;
 
 import service.middleware.linkage.center.route.Route;
 import service.middleware.linkage.center.route.ServiceCenterRoute;
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.common.WorkerPool;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccessImpl;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteServiceAccess {
 	private final Route route;

@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.protocol;
+package service.middleware.linkage.framework.io.nio.strategy.message.protocol;
 
 
 public class IOProtocol {
@@ -6,10 +6,6 @@ public class IOProtocol {
 	 * data transform buffer Setting, in the data level
 	 */
 	public static final int BUFFER_SIZE = 1024;
-	/**
-	 * data transform coding Setting
-	 */
-	public static final String FRAMEWORK_IO_ENCODING = "UTF-8";
 	/**
 	 * data transform buffer seting, in the message level
 	 */

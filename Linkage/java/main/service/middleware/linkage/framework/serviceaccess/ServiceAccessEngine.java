@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
-import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkerPool;
@@ -22,11 +17,16 @@ import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeSw
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeUtils;
 import service.middleware.linkage.framework.io.nio.strategy.file.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
-import service.middleware.linkage.framework.io.protocol.IOProtocol;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
+import service.middleware.linkage.framework.utils.EncodingUtils;
 
 /**
  * this an engine class of consume
@@ -132,7 +132,7 @@ public class ServiceAccessEngine{
 			result.setWorkingChannel(newWorkingChannel);
 			strategy = (NIOMixedStrategy) newWorkingChannel.getWorkingChannelStrategy();
 			String message = "<=============================================================Message===================================================>";
-			byte[] data = message.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
+			byte[] data = message.getBytes(EncodingUtils.FRAMEWORK_IO_ENCODING);
 			strategy.writeMessageData(data);
 			//strategy.writeFileData(1000);
 		}

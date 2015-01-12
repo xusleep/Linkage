@@ -1,7 +1,7 @@
 package service.middleware.linkage.framework.provider;
 
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.ResponseEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 
 /**
  * This class provide a service access point 

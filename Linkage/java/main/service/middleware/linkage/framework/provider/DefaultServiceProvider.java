@@ -4,11 +4,11 @@ import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.ResponseEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 public class DefaultServiceProvider implements ServiceProvider{
 	private final ServiceSettingReader servicePropertyEntity;

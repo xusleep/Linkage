@@ -2,8 +2,6 @@ package service.middleware.linkage.framework.handlers;
 
 import java.io.IOException;
 
-import service.middleware.linkage.framework.event.ServiceEvent;
-
 /**
  * the abtract handler for the handlers
  * it's a double link list

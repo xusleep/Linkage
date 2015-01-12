@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.common.entity;
+package service.middleware.linkage.framework.serviceaccess.entity;
 
 /**
  * this class use to hold the information of a service

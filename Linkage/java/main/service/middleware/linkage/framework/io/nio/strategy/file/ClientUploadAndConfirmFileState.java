@@ -30,7 +30,7 @@ public class ClientUploadAndConfirmFileState implements State {
 			return readResult;
 		}
 		String receiveData = messages.get(0);
-		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileTransferEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.UPLOADOK){
 			logger.debug("client upload receive upload request confirm ok and send file.");
 			WorkingChannelOperationResult writeResult = this.fileWorkingChannelStrategy.writeFile(currentFileInformationEntity);

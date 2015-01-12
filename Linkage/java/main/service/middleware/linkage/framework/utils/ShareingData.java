@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.common;
+package service.middleware.linkage.framework.utils;
 
 public class ShareingData {
 	public static final String SERVICE_ADDRESS = "serviceAddress";

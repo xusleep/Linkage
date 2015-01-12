@@ -13,10 +13,10 @@ import org.junit.Test;
 
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeClientBootStrap;
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.utils.StringUtils;
 import test.framework.concurrence.condition.MainConcurrentThread;
 import test.framework.concurrence.condition.job.AbstractJob;
 import test.framework.concurrence.condition.job.JobInterface;

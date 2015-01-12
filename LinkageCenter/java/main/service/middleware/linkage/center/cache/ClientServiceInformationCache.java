@@ -3,8 +3,8 @@ package service.middleware.linkage.center.cache;
 import java.util.LinkedList;
 import java.util.List;
 
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * 

@@ -28,7 +28,7 @@ public class ServerDownloadConfirmAndTransferState implements State{
 			return readResult;
 		}
 		String receiveData = messages.get(0);
-		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileTransferEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.DOWNLOADTRANSEROK){
 			logger.debug("server download receive the transfer request confirm and send the file to client");
 			WorkingChannelOperationResult writeResult = this.fileWorkingChannelStrategy.writeFile(currentFileInformationEntity);

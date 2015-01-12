@@ -6,9 +6,9 @@ import java.nio.channels.SocketChannel;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.ConvertUtils;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
+import service.middleware.linkage.framework.utils.ConvertUtils;
 
 public class PacketWriter extends WriterDecorator {
 	private static Logger logger = Logger.getLogger(PacketWriter.class);

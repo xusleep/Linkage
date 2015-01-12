@@ -8,10 +8,10 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.center.common.ServiceCenterUtils;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 

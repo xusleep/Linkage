@@ -2,7 +2,7 @@ package service.middleware.linkage.center.heartbeat;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.ShareingData;
+import service.middleware.linkage.framework.utils.ShareingData;
 
 public class DefaultHeartBeatReceiver implements HeartBeatReceiver {
 	private static Logger  logger = Logger.getLogger(HeartBeatSender.class); 

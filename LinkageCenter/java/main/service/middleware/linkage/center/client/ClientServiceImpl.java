@@ -6,7 +6,7 @@ import static service.middleware.linkage.center.cache.ClientServiceInformationCa
 import java.util.List;
 
 import service.middleware.linkage.center.common.ServiceCenterUtils;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 /**
  * this interface is used in the client.
  * the configure management center will notify the client

@@ -1,6 +1,6 @@
 package service.middleware.linkage.center.clean;
 
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
 
 /**
  * this interface will deal with the clean job 

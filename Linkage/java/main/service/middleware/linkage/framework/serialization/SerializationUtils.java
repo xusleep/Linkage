@@ -13,13 +13,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.ResponseEntity;
 import service.middleware.linkage.framework.io.nio.strategy.file.FileRequestState;
 import service.middleware.linkage.framework.io.nio.strategy.file.FileTransferEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 
 public class SerializationUtils {
 	
+	/**
+	 * serialization FileTransferEntity
+	 * @param objFileInformation
+	 * @return
+	 */
 	public static String serilizationFileTransferEntity(FileTransferEntity objFileInformation){
 		StringBuilder sb = new StringBuilder();
 		sb.append("<RequestFile>");
@@ -36,7 +41,12 @@ public class SerializationUtils {
 		return sb.toString();
 	}
 	
-	public static FileTransferEntity deserilizationFileInformationEntity(String receiveData){
+	/**
+	 * deserialization FileTransferEntity
+	 * @param objFileInformation
+	 * @return
+	 */
+	public static FileTransferEntity deserilizationFileTransferEntity(String receiveData){
 		try {
 			InputStream is = new StringBufferInputStream(receiveData);
 			FileTransferEntity objectFileInformationEntity = new FileTransferEntity();

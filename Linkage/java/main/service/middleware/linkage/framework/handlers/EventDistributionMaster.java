@@ -1,6 +1,5 @@
 package service.middleware.linkage.framework.handlers;
 
-import service.middleware.linkage.framework.event.ServiceEvent;
 
 public abstract class EventDistributionMaster extends Thread{
 	/**

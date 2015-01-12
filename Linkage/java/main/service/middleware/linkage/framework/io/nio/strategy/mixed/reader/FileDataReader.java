@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.ConvertUtils;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
+import service.middleware.linkage.framework.utils.ConvertUtils;
 
 public class FileDataReader extends ReaderDecorator {
 

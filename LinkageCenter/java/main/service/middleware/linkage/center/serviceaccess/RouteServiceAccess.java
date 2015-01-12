@@ -2,7 +2,7 @@ package service.middleware.linkage.center.serviceaccess;
 
 import java.util.List;
 
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
 
 public interface RouteServiceAccess {
 	/**

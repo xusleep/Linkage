@@ -30,7 +30,7 @@ public class ClientDownloadAndConfirmState implements State {
 			return readResult;
 		}
 		String receiveData = messages.get(0);
-		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileInformationEntity(receiveData);
+		FileTransferEntity objFileInformation = SerializationUtils.deserilizationFileTransferEntity(receiveData);
 		if(objFileInformation.getRequestFileState() == FileRequestState.DOWNLOADTRANSER){
 			logger.debug("client download receive the transfer request from the server");
 			this.currentFileInformationEntity.setRequestFileState(FileRequestState.DOWNLOADTRANSEROK);

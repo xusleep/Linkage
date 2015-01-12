@@ -6,11 +6,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.center.ServiceCenter;
-import service.middleware.linkage.framework.common.ShareingData;
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.common.entity.RequestResultEntity;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.utils.ShareingData;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 public class HeartBeatSender implements Runnable {
 	private static Logger  logger = Logger.getLogger(HeartBeatSender.class); 

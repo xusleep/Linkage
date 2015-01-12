@@ -7,12 +7,12 @@ import java.nio.channels.SocketChannel;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 import service.middleware.linkage.framework.io.nio.strategy.file.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * hold the object when request a connect,

@@ -3,7 +3,7 @@ package service.middleware.linkage.center;
 import java.util.LinkedList;
 import java.util.List;
 
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 
 public interface ServiceCenter {
 	public static final List<ServiceInformationEntity> serviceInformationList = new LinkedList<ServiceInformationEntity>();

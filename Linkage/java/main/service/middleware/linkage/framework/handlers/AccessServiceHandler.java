@@ -4,20 +4,19 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
-import service.middleware.linkage.framework.common.entity.RequestEntity;
-import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.event.ServerOnFileDataReceivedEvent;
-import service.middleware.linkage.framework.event.ServiceEvent;
-import service.middleware.linkage.framework.event.ServiceExeptionEvent;
-import service.middleware.linkage.framework.event.ServiceOnMessageDataReceivedEvent;
-import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
-import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.protocol.IOProtocol;
+import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageReceiveEvent;
+import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageWriteEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServerOnFileDataReceivedEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceExeptionEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
+import service.middleware.linkage.framework.utils.EncodingUtils;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * Service handler from the server side
@@ -57,7 +56,7 @@ public class AccessServiceHandler extends Handler {
 		}
 		else if(event instanceof ServiceOnMessageDataReceivedEvent){
 			ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent)event;
-			String receiveString = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), IOProtocol.FRAMEWORK_IO_ENCODING);
+			String receiveString = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), EncodingUtils.FRAMEWORK_IO_ENCODING);
 			logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveString);
 		}
 		else if(event instanceof ServerOnFileDataReceivedEvent){

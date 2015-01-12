@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
-import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 
 /**
  * This servlet is used to start the service from the web

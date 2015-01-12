@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.common.StringUtils;
+import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * this is default worker, will be used when there is connection established 
