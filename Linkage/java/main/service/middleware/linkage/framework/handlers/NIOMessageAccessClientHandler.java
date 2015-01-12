@@ -18,6 +18,7 @@ import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAcce
 /**
  * the default handler for the client message received event
  * 
+ * 
  * @author zhonxu
  *
  */
