@@ -10,6 +10,19 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.Content
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
 import service.middleware.linkage.framework.utils.ConvertUtils;
 
+/**
+ * when reading a packet data from the channel
+ * we are gona to use the decorator pattern to read.
+ * the packet reader is a decorator which will wapper 
+ * the data type reader, the data type reader will
+ * wapper the file reader and message reader
+ * we read from the packet reader, read the size of the packet
+ * then goto the data type reader, read the datatype of the packet
+ * if the data type is message , we goto the message reader
+ * else we goto the file reader.
+ * @author zhonxu
+ *
+ */
 public class PacketReader extends ReaderDecorator {
 	private static Logger logger = Logger.getLogger(PacketReader.class);
 	

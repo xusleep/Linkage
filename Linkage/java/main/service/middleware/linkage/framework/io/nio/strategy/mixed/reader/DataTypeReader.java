@@ -13,6 +13,13 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketD
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
 import service.middleware.linkage.framework.utils.ConvertUtils;
 
+/**
+ * read the data type, if is message packet
+ * goto the message reader
+ * else goto the file reader
+ * @author zhonxu
+ *
+ */
 public class DataTypeReader extends ReaderDecorator {
 	private ReaderInterface wrappedFileReader;
 	private ReaderInterface wrappedMessageReader;

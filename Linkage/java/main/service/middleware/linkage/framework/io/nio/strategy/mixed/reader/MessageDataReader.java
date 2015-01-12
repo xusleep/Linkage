@@ -9,6 +9,11 @@ import org.apache.log4j.Logger;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
 
+/**
+ * read the message data
+ * @author zhonxu
+ *
+ */
 public class MessageDataReader extends ReaderDecorator {
 	private static Logger logger = Logger.getLogger(MessageDataReader.class);
 	

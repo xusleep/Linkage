@@ -13,6 +13,13 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketD
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
 import service.middleware.linkage.framework.utils.ConvertUtils;
 
+/**
+ * write the data type, if is message packet
+ * goto the message writer
+ * else goto the file writer
+ * @author zhonxu
+ *
+ */
 public class DataTypeWriter extends WriterDecorator {
 	private static Logger logger = Logger.getLogger(DataTypeWriter.class);
 	private WriterInterface wrappedFileWriter;

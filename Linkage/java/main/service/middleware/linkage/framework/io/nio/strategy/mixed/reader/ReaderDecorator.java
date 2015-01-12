@@ -1,6 +1,10 @@
 package service.middleware.linkage.framework.io.nio.strategy.mixed.reader;
 
-
+/**
+ * abstract decorator for the reader
+ * @author zhonxu
+ *
+ */
 public abstract class ReaderDecorator implements ReaderInterface {
 	private ReaderInterface wrappedReader;
 	

@@ -13,6 +13,11 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.Content
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
 import service.middleware.linkage.framework.utils.StringUtils;
 
+/**
+ * write the message data
+ * @author zhonxu
+ *
+ */
 public class MessageDataWriter extends WriterDecorator {
 	private static Logger logger = Logger.getLogger(MessageDataWriter.class);
 	public MessageDataWriter(WriterInterface wrappedWriter) {

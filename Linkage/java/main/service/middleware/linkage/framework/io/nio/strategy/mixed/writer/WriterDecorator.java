@@ -1,5 +1,10 @@
 package service.middleware.linkage.framework.io.nio.strategy.mixed.writer;
 
+/**
+ * abstract decorator for the writer
+ * @author zhonxu
+ *
+ */
 public abstract class WriterDecorator implements WriterInterface {
 	private WriterInterface wrappedWriter;
 

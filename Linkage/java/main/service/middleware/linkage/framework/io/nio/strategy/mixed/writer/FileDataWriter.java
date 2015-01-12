@@ -15,6 +15,13 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEnt
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
 import service.middleware.linkage.framework.utils.ConvertUtils;
 
+/**
+ * write the file data,
+ * find the file information by the file id
+ * then write the channel and write file
+ * @author zhonxu
+ *
+ */
 public class FileDataWriter extends WriterDecorator {
 	private static final long FILE_TRANSFER_BUFFER_SIZE = 1024 * 1024 * 10;
 	private static Logger logger = Logger.getLogger(FileDataWriter.class);

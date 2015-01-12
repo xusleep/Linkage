@@ -10,6 +10,19 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.Content
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
 import service.middleware.linkage.framework.utils.ConvertUtils;
 
+/**
+ * when writting a packet data from the channel
+ * we are gona to use the decorator pattern to write.
+ * the packet writer is a decorator which will wapper 
+ * the data type writer, the data type writer will
+ * wapper the file writer and message writer
+ * we write from the packet writer, write the size of the packet
+ * then goto the data type writer, write the datatype of the packet
+ * if the data type is message , we goto the message writer
+ * else we goto the file writer.
+ * @author zhonxu
+ *
+ */
 public class PacketWriter extends WriterDecorator {
 	private static Logger logger = Logger.getLogger(PacketWriter.class);
 	public PacketWriter(WriterInterface wrappedWriter) {

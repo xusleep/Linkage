@@ -19,6 +19,14 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEnt
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
 import service.middleware.linkage.framework.utils.ConvertUtils;
 
+/**
+ * read the file data,
+ * first we reader the file id,
+ * and find the file information by the file id
+ * then read the channel and write file
+ * @author zhonxu
+ *
+ */
 public class FileDataReader extends ReaderDecorator {
 
 	private static Logger logger = Logger.getLogger(FileDataReader.class);
