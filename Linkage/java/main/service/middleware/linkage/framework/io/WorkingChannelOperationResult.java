@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.common;
+package service.middleware.linkage.framework.io;
 
 public class WorkingChannelOperationResult {
 	private boolean isSuccess;

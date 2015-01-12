@@ -1,7 +1,7 @@
 package service.middleware.linkage.framework.io.nio.strategy.message.events;
 
 import service.middleware.linkage.framework.handlers.ServiceEvent;
-import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
 
 /**
  * this event will be triggered when there is a message arrived

@@ -1,6 +1,6 @@
 package service.middleware.linkage.framework.bootstrap;
 
-import service.middleware.linkage.framework.io.common.WorkerPool;
+import service.middleware.linkage.framework.io.WorkerPool;
 
 /**
  * this interface is used for the boot strap of the server or client 

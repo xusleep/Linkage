@@ -1,8 +1,9 @@
-package service.middleware.linkage.framework.io.client;
+package service.middleware.linkage.framework.io.nio;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.io.common.WorkerPool;
+import service.middleware.linkage.framework.io.Client;
+import service.middleware.linkage.framework.io.WorkerPool;
 
 /**
  * this class will be used in the client
@@ -10,11 +11,11 @@ import service.middleware.linkage.framework.io.common.WorkerPool;
  * @author zhonxu
  *
  */
-public class DefaultClient implements Client {
+public class NIOClient implements Client {
 	private final WorkerPool workerPool;
-	private static Logger  logger = Logger.getLogger(DefaultClient.class); 
+	private static Logger  logger = Logger.getLogger(NIOClient.class); 
 
-	public DefaultClient(WorkerPool workerPool){
+	public NIOClient(WorkerPool workerPool){
 		this.workerPool = workerPool;
 	}
 	

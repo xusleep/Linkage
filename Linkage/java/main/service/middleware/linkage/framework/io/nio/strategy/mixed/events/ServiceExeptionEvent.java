@@ -2,7 +2,7 @@ package service.middleware.linkage.framework.io.nio.strategy.mixed.events;
 
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.handlers.ServiceEvent;
-import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
 
 /**
  * this event will be triggered when there is a channel close exception happen

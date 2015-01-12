@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.server;
+package service.middleware.linkage.framework.io.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,7 +18,8 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
-import service.middleware.linkage.framework.io.common.WorkerPool;
+import service.middleware.linkage.framework.io.Server;
+import service.middleware.linkage.framework.io.WorkerPool;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 import service.middleware.linkage.framework.utils.StringUtils;
 /**

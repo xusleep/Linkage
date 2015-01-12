@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.common;
+package service.middleware.linkage.framework.io.nio;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 
+import service.middleware.linkage.framework.io.Worker;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.utils.StringUtils;
 
 /**

@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import service.middleware.linkage.framework.handlers.AccessClientHandler;
 import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
-import service.middleware.linkage.framework.io.client.Client;
-import service.middleware.linkage.framework.io.client.DefaultClient;
+import service.middleware.linkage.framework.io.Client;
+import service.middleware.linkage.framework.io.nio.NIOClient;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccessImpl;
 import service.middleware.linkage.framework.setting.reader.ClientSettingPropertyReader;
@@ -36,7 +36,7 @@ public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements 
 			e.printStackTrace();
 		}
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
-		this.client = new DefaultClient(this.getWorkerPool());
+		this.client = new NIOClient(this.getWorkerPool());
 		this.serviceAccess = new ServiceAccessImpl(objServicePropertyEntity, this.getWorkerPool());
 		this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler(this.getServiceAccess()));
 	}

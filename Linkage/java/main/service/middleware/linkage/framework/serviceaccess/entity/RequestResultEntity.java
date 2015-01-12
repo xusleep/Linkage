@@ -3,7 +3,7 @@ package service.middleware.linkage.framework.serviceaccess.entity;
 import java.util.concurrent.CountDownLatch;
 
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
 
 /**
  * this class stored the request result

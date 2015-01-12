@@ -1,8 +1,8 @@
 package service.middleware.linkage.framework.bootstrap;
 
 import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
-import service.middleware.linkage.framework.io.server.NIOServer;
-import service.middleware.linkage.framework.io.server.Server;
+import service.middleware.linkage.framework.io.Server;
+import service.middleware.linkage.framework.io.nio.NIOServer;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingPropertyReader;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 

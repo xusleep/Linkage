@@ -1,7 +1,6 @@
-package service.middleware.linkage.framework.io.client;
+package service.middleware.linkage.framework.io;
 
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.io.common.WorkerPool;
 
 /**
  * client interface

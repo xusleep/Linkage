@@ -1,7 +1,7 @@
 package service.middleware.linkage.framework.io.nio.strategy.mixed.events;
 
 import service.middleware.linkage.framework.handlers.ServiceEvent;
-import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
 
 public class ServerOnFileDataReceivedEvent implements ServiceEvent {
 	private WorkingChannelContext workingChannel;

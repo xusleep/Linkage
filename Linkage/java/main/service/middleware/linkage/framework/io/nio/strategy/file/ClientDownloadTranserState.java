@@ -2,7 +2,7 @@ package service.middleware.linkage.framework.io.nio.strategy.file;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.io.common.WorkingChannelOperationResult;
+import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 public class ClientDownloadTranserState implements State {

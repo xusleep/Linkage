@@ -9,9 +9,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
-import service.middleware.linkage.framework.io.common.WorkerPool;
-import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.WorkerPool;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
+import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeSwitchState;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeUtils;

@@ -7,7 +7,7 @@ import java.nio.channels.SocketChannel;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
-import service.middleware.linkage.framework.io.common.WorkingChannelOperationResult;
+import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceExeptionEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;

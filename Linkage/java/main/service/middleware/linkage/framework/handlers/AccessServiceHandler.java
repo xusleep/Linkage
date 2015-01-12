@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageWriteEvent;

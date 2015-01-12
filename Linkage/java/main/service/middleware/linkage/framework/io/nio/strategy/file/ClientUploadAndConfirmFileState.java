@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.io.common.WorkingChannelOperationResult;
+import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 
 public class ClientUploadAndConfirmFileState implements State {

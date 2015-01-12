@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.common;
+package service.middleware.linkage.framework.io.nio;
 
 import java.io.IOException;
 import java.nio.channels.Channel;
@@ -8,6 +8,10 @@ import java.nio.channels.SocketChannel;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
+import service.middleware.linkage.framework.io.Worker;
+import service.middleware.linkage.framework.io.WorkingChannelContext;
+import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
+import service.middleware.linkage.framework.io.WorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 import service.middleware.linkage.framework.io.nio.strategy.file.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;

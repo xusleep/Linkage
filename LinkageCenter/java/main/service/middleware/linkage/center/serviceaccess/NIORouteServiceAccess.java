@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import service.middleware.linkage.center.route.Route;
 import service.middleware.linkage.center.route.ServiceCenterRoute;
 import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.common.WorkerPool;
+import service.middleware.linkage.framework.io.WorkerPool;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccessImpl;
 import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;

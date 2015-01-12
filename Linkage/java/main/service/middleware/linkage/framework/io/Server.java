@@ -1,6 +1,5 @@
-package service.middleware.linkage.framework.io.server;
+package service.middleware.linkage.framework.io;
 
-import service.middleware.linkage.framework.io.common.WorkerPool;
 
 /**
  * Server interface

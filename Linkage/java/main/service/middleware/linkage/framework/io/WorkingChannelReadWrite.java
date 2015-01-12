@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.common;
+package service.middleware.linkage.framework.io;
 
 /**
  * this is the interface of read&wirte from the channel

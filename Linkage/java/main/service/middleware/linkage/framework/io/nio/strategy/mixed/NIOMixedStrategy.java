@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
-import service.middleware.linkage.framework.io.common.WorkingChannelOperationResult;
-import service.middleware.linkage.framework.io.common.WorkingChannelStrategy;
+import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
+import service.middleware.linkage.framework.io.WorkingChannelStrategy;
+import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServerOnFileDataReceivedEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;

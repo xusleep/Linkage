@@ -2,8 +2,8 @@ package service.middleware.linkage.framework.bootstrap;
 
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
-import service.middleware.linkage.framework.io.common.NIOWorkerPool;
-import service.middleware.linkage.framework.io.common.WorkerPool;
+import service.middleware.linkage.framework.io.WorkerPool;
+import service.middleware.linkage.framework.io.nio.NIOWorkerPool;
 
 public abstract class AbstractBootStrap implements BootStrap {
 	// this is a client worker pool, this pool will handle all of the io operation 

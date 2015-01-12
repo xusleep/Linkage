@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.common;
+package service.middleware.linkage.framework.io;
 
 import java.nio.channels.SocketChannel;
 

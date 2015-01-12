@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.common;
+package service.middleware.linkage.framework.io;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
