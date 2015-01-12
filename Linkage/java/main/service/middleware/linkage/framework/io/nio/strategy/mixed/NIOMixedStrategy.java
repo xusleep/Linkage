@@ -3,15 +3,23 @@ package service.middleware.linkage.framework.io.nio.strategy.mixed;
 import java.io.File;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 
+import service.middleware.linkage.framework.exception.ServiceException;
+import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
+import service.middleware.linkage.framework.handlers.ServiceExeptionEvent;
 import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.WorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServerOnFileDataReceivedEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnFileDataReceivedEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnFileDataWriteEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
@@ -27,6 +35,8 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.FileDat
 import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.MessageDataWriter;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.PacketWriter;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.WriterInterface;
+import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 
 /**
  * this strategy is only used for the mixed mode only
@@ -36,18 +46,24 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.WriterI
  */
 public class NIOMixedStrategy extends WorkingChannelStrategy {
 	
-	/**
-	 * Monitor object for write.
-	 */
+	// Monitor object for write.
 	final public Object writeLock = new Object();
-	/**
-	 * Monitor object for read.
-	 */
+	// Monitor object for read.
 	final public Object readLock = new Object();
+	// writer for writting the channel
 	private WriterInterface writer;
+	// reader for reading the channel
 	private ReaderInterface reader;
+	// event distribution master 
 	private final EventDistributionMaster eventDistributionHandler;
-	private static List<FileInformationEntity> fileList = new ArrayList<FileInformationEntity>();
+	// transfered file list, wait for transfering or receiveing
+	private static List<FileInformationEntity> transferFileList = new LinkedList<FileInformationEntity>();
+	// write file event queue
+	private Queue<ServiceOnFileDataWriteEvent> writeFileQueue = new LinkedList<ServiceOnFileDataWriteEvent>();
+	// write message event queue
+	private Queue<ServiceOnMessageDataWriteEvent> writeMessageQueue = new LinkedList<ServiceOnMessageDataWriteEvent>();
+	 // use the concurrent hash map to store the request result list {@link RequestResultEntity}
+	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
 	public NIOMixedStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
@@ -64,35 +80,148 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 		reader = new PacketReader(dataReader);
 	}
 	
-	public EventDistributionMaster getEventDistributionHandler() {
-		return eventDistributionHandler;
+	/**
+	 * offer writer message event to the write queue
+	 * @param serviceOnMessageDataWriteEvent
+	 */
+	public void offerMessageWriteQueue(ServiceOnMessageDataWriteEvent serviceOnMessageDataWriteEvent) {
+		this.writeMessageQueue.offer(serviceOnMessageDataWriteEvent);
 	}
 	
-	public static void removeFileInformationEntity(long fileID){
+	/**
+	 * offer write file event to the write queue
+	 * @param ServiceOnFileDataWriteEvent
+	 */
+	public void offerFileWriteQueue(ServiceOnFileDataWriteEvent serviceOnFileDataWriteEvent) {
+		this.writeFileQueue.offer(serviceOnFileDataWriteEvent);
+	}
+	
+	/**
+	 * 
+	 * @param fileID
+	 */
+	public static synchronized void removeFileInformationEntity(long fileID){
 		int index = -1;
-		for(index = 0; index < fileList.size(); index++){
-			if(fileList.get(index).getFileID() == fileID){
+		for(index = 0; index < transferFileList.size(); index++){
+			if(transferFileList.get(index).getFileID() == fileID){
 				break;
 			}
 		}
-		fileList.remove(index);
+		transferFileList.remove(index);
 	}
 	
+	/**
+	 * 
+	 * @param fileInformationEntity
+	 */
 	public static synchronized void addFileInformationEntity(FileInformationEntity fileInformationEntity){
-		fileList.add(fileInformationEntity);
+		transferFileList.add(fileInformationEntity);
 	}
 	
+	/**
+	 * 
+	 * @param fileID
+	 * @return
+	 */
 	public static synchronized FileInformationEntity findFileInformationEntity(long fileID){
-		for(FileInformationEntity fileInformationEntity : fileList){
+		for(FileInformationEntity fileInformationEntity : transferFileList){
 			if(fileInformationEntity.getFileID() == fileID){
 				return fileInformationEntity;
 			}
 		}
 		return null;
 	}
+	
+	/**
+	 * put the request result in the result list
+	 * @param requestResultEntity
+	 */
+	public void offerRequestResult(RequestResultEntity requestResultEntity){
+		resultList.put(requestResultEntity.getRequestID(), requestResultEntity);
+	}
+	
+	/**
+	 * clear the result
+	 */
+	public void clearAllResult(ServiceException exception){
+		Enumeration<String> keyEnumeration = resultList.keys();
+		while(keyEnumeration.hasMoreElements())
+		{
+			String requestID = keyEnumeration.nextElement();
+			RequestResultEntity requestResultEntity = resultList.get(requestID);
+			setExceptionToRuquestResult(requestResultEntity, exception);
+		}
+		resultList.clear();
+	}
+	
+	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public static void setExceptionToRuquestResult(RequestResultEntity result, ServiceException serviceException){
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(result.getRequestID());
+		    objResponseEntity.setResult(serviceException.getMessage());
+		    result.setException(true);
+		    result.setException(serviceException);
+			result.setResponseEntity(objResponseEntity);
+		}
+	}
+	
+	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public void setRuquestResult(String requestID, String strResult){
+		RequestResultEntity result = this.resultList.remove(requestID);
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(requestID);
+		    objResponseEntity.setResult(strResult);
+		    result.setException(false);
+			result.setResponseEntity(objResponseEntity);
+		}
+	}
+	
+	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public void setExceptionRuquestResult(String requestID, ServiceException serviceException){
+		RequestResultEntity result = this.resultList.remove(requestID);
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(requestID);
+		    objResponseEntity.setResult(serviceException.getMessage());
+		    result.setException(true);
+		    result.setException(serviceException);
+			result.setResponseEntity(objResponseEntity);
+		}
+	}
+	
+	/**
+	 * when the response comes, use this method to set it. 
+	 * @param objResponseEntity
+	 */
+	public RequestResultEntity setRequestResult(ResponseEntity objResponseEntity){
+		RequestResultEntity result = this.resultList.remove(objResponseEntity.getRequestID());
+		if(result != null)
+		{
+			result.setException(false);
+			result.setResponseEntity(objResponseEntity);
+		}
+		return result;
+	}
 
 	@Override
-	public synchronized WorkingChannelOperationResult readChannel() {
+	public  WorkingChannelOperationResult readChannel() {
 		
 		PacketEntity packetEntity = new PacketEntity();
 		boolean result = false;
@@ -109,17 +238,50 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 			else if(packetEntity.getPacketDataType() == PacketDataType.FILE)
 			{
 				FileEntity fileEntity = (FileEntity) packetEntity.getContentEntity();
-				this.getEventDistributionHandler().submitServiceEvent(new ServerOnFileDataReceivedEvent(this.getWorkingChannelContext(), fileEntity.getFileID()));
+				this.getEventDistributionHandler().submitServiceEvent(new ServiceOnFileDataReceivedEvent(this.getWorkingChannelContext(), fileEntity.getFileID()));
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), 
+					null, new ServiceOnChanelIOException(e, e.getMessage())));
 			result = false;
 		}
 		return new WorkingChannelOperationResult(result);
 	}
 	
-	public synchronized WorkingChannelOperationResult writeMessageData(byte[] data){
+	@Override
+	public WorkingChannelOperationResult writeChannel() {
+		ServiceOnMessageDataWriteEvent messageEvent;
+		synchronized (this.writeLock) {
+			for (;;) {
+				if ((messageEvent = writeMessageQueue.poll()) == null) {
+					break;
+				}
+				WorkingChannelOperationResult writeResult = this.writeMessageData(messageEvent.getMessageData());
+				if(!writeResult.isSuccess())
+					return writeResult;
+			}
+		}
+		ServiceOnFileDataWriteEvent fileEvent;
+		synchronized (this.writeLock) {
+			for (;;) {
+				if ((fileEvent = writeFileQueue.poll()) == null) {
+					break;
+				}
+				WorkingChannelOperationResult writeResult = this.writeFileData(fileEvent.getFileID());
+				if(!writeResult.isSuccess())
+					return writeResult;
+			}
+		}
+		return new WorkingChannelOperationResult(true);
+	}
+
+	
+	/**
+	 * write message data to the channel 
+	 * @param data
+	 * @return
+	 */
+	private WorkingChannelOperationResult writeMessageData(byte[] data){
 		MessageEntity contentEntity = new MessageEntity();
 		contentEntity.setData(data);
 		contentEntity.setLength(data.length);
@@ -134,14 +296,18 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 				result = writer.write((SocketChannel) this.getWorkingChannelContext().getChannel(), packetEntity);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = false;
 		}
 		return new WorkingChannelOperationResult(result);
 	}
 	
-	public synchronized WorkingChannelOperationResult writeFileData(long fileID){
+	/**
+	 * write the file data into the channel
+	 * @param fileID
+	 * @return
+	 */
+	private WorkingChannelOperationResult writeFileData(long fileID){
 		boolean result = false;
 		try {
 			FileInformationEntity fileInformationEntity = NIOMixedStrategy.findFileInformationEntity(fileID);
@@ -159,7 +325,6 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 						packetEntity);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = false;
 		}
@@ -167,11 +332,15 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 	}
 
 	@Override
-	public WorkingChannelOperationResult writeChannel() {
-		return null;
-	}
-
-	@Override
 	public void clear() {
+		this.clearAllResult(new ServiceException(null, "clear operations."));
+	}
+	
+	/**
+	 * get event distribution handler
+	 * @return
+	 */
+	public EventDistributionMaster getEventDistributionHandler() {
+		return eventDistributionHandler;
 	}
 }

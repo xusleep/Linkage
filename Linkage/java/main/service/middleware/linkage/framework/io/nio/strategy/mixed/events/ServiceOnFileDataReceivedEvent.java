@@ -3,11 +3,11 @@ package service.middleware.linkage.framework.io.nio.strategy.mixed.events;
 import service.middleware.linkage.framework.handlers.ServiceEvent;
 import service.middleware.linkage.framework.io.WorkingChannelContext;
 
-public class ServerOnFileDataReceivedEvent implements ServiceEvent {
+public class ServiceOnFileDataReceivedEvent implements ServiceEvent {
 	private WorkingChannelContext workingChannel;
 	private long fileID;
 	
-	public ServerOnFileDataReceivedEvent(WorkingChannelContext workingChannel, long fileID){
+	public ServiceOnFileDataReceivedEvent(WorkingChannelContext workingChannel, long fileID){
 		this.workingChannel = workingChannel;
 		this.fileID = fileID;
 	} 

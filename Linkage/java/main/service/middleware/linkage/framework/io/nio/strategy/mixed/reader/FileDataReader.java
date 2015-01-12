@@ -39,7 +39,7 @@ public class FileDataReader extends ReaderDecorator {
         while (totalCount > readCount) {
         	ret = sc.read(bb);
             if (ret < 0 ) {
-            	throw new IOException("channel is closed.");
+            	return false;
             }
         	readCount = readCount + ret;
         	logger.debug("FileReader read bytes count : " + readCount);
@@ -63,6 +63,9 @@ public class FileDataReader extends ReaderDecorator {
 				buffSize = totalCount - readCount;
 			}
     		ret = fileChannel.transferFrom(sc, readCount, buffSize);
+            if (ret < 0 ) {
+            	return false;
+            }
     		readCount = readCount + ret;
     		logger.debug("FileReader file received " + readCount + " bytes");
     	}

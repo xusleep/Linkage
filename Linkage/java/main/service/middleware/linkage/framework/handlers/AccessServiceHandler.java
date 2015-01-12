@@ -8,9 +8,10 @@ import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageWriteEvent;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServerOnFileDataReceivedEvent;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceExeptionEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnFileDataReceivedEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
@@ -34,17 +35,17 @@ public class AccessServiceHandler extends Handler {
 	
 	@Override
 	public void handleRequest(ServiceEvent event) throws IOException {
-		if (event instanceof ServiceOnMessageReceiveEvent) {
+		if(event instanceof ServiceOnMessageDataReceivedEvent){
 			try {
-				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
-				WorkingChannelContext channel = objServiceOnMessageReceiveEvent.getWorkingChannel();
-				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy) channel.getWorkingChannelStrategy();
-				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
+				ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent)event;
+				WorkingChannelContext channel = objServiceOnMessageDataReceivedEvent.getWorkingChannel();
+				NIOMixedStrategy strategy = (NIOMixedStrategy) channel.getWorkingChannelStrategy();
+				String receiveData = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), EncodingUtils.FRAMEWORK_IO_ENCODING);
 				RequestEntity objRequestEntity = SerializationUtils.deserializeRequest(receiveData);
+				logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveData);
 				ResponseEntity objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
-				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(channel, objRequestEntity.getRequestID());
-				objServiceOnMessageWriteEvent.setMessage(SerializationUtils.serializeResponse(objResponseEntity));
-				strategy.offerWriterQueue(objServiceOnMessageWriteEvent);
+				ServiceOnMessageDataWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageDataWriteEvent(channel, SerializationUtils.serializeResponse(objResponseEntity).getBytes(EncodingUtils.FRAMEWORK_IO_ENCODING));
+				strategy.offerMessageWriteQueue(objServiceOnMessageWriteEvent);
 				strategy.writeChannel();
 				if(this.getNext() != null)
 				{
@@ -54,13 +55,8 @@ public class AccessServiceHandler extends Handler {
 				logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
 			}
 		}
-		else if(event instanceof ServiceOnMessageDataReceivedEvent){
-			ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent)event;
-			String receiveString = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), EncodingUtils.FRAMEWORK_IO_ENCODING);
-			logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveString);
-		}
-		else if(event instanceof ServerOnFileDataReceivedEvent){
-			ServerOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServerOnFileDataReceivedEvent)event;
+		else if(event instanceof ServiceOnFileDataReceivedEvent){
+			ServiceOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServiceOnFileDataReceivedEvent)event;
 			logger.debug("ServerOnFileDataReceivedEvent receive message : " + objServerOnFileDataReceivedEvent.getFileID());
 		}
 		else if(event instanceof ServiceExeptionEvent ){

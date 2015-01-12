@@ -50,7 +50,7 @@ public class StartStorageClient {
 		fileInformationEntity.setFileID(1000);
 		fileInformationEntity.setFilePath("G:\\Films\\407.Dark.Flight.3D.2012.720p.BluRay.x264-HDChina [PublicHD]\\dark.mkv");
 		NIOMixedStrategy.addFileInformationEntity(fileInformationEntity);
-		clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+		//clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 		for(int i = 0; i < 1000; i++)
@@ -67,7 +67,7 @@ public class StartStorageClient {
 //							// TODO Auto-generated catch block
 //							e.printStackTrace();
 //						}
-						clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
+						//clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 					}
 						//while(true)
 					//{

@@ -7,11 +7,13 @@ import org.apache.log4j.Logger;
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageReceiveEvent;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceExeptionEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnFileDataReceivedEvent;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
 import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
+import service.middleware.linkage.framework.utils.EncodingUtils;
 import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
@@ -32,12 +34,13 @@ public class AccessClientHandler extends Handler {
 	
 	@Override
 	public void handleRequest(ServiceEvent event) throws IOException {
-		if (event instanceof ServiceOnMessageReceiveEvent) {
+		if(event instanceof ServiceOnMessageDataReceivedEvent){
 			try {
-				ServiceOnMessageReceiveEvent objServiceOnMessageReceiveEvent = (ServiceOnMessageReceiveEvent) event;
-				String receiveData = objServiceOnMessageReceiveEvent.getMessage();
+				ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent)event;
+				String receiveData = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), EncodingUtils.FRAMEWORK_IO_ENCODING);
+				logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveData);
 				ResponseEntity objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
-				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnMessageReceiveEvent.getWorkingChannel().getWorkingChannelStrategy();
+				NIOMixedStrategy strategy = (NIOMixedStrategy)objServiceOnMessageDataReceivedEvent.getWorkingChannel().getWorkingChannelStrategy();
 				strategy.setRequestResult(objResponseEntity);
 				if(this.getNext() != null)
 				{
@@ -46,6 +49,10 @@ public class AccessClientHandler extends Handler {
 			} catch (Exception e) {
 				logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
 			}
+		}
+		else if(event instanceof ServiceOnFileDataReceivedEvent){
+			ServiceOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServiceOnFileDataReceivedEvent)event;
+			logger.debug("ServerOnFileDataReceivedEvent receive message : " + objServerOnFileDataReceivedEvent.getFileID());
 		}
 		else if(event instanceof ServiceExeptionEvent ){
 			ServiceExeptionEvent objServiceOnExeptionEvent = (ServiceExeptionEvent)event;

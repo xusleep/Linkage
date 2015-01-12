@@ -36,7 +36,7 @@ public class DataTypeReader extends ReaderDecorator {
         while (totalCount > readCount) {
         	ret = sc.read(bb);
             if (ret < 0 ) {
-            	throw new IOException("channel is closed.");
+            	return false;
             }
         	readCount = readCount + ret;
         	logger.debug("DataTypeReader read bytes count : " + readCount);
