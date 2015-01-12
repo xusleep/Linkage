@@ -263,7 +263,8 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 				result = writer.write((SocketChannel) this.getWorkingChannelContext().getChannel(), packetEntity);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), 
+					null, new ServiceOnChanelIOException(e, e.getMessage())));
 			result = false;
 		}
 		return new WorkingChannelOperationResult(result);
@@ -292,7 +293,8 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 						packetEntity);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.getEventDistributionHandler().submitServiceEvent(new ServiceExeptionEvent(this.getWorkingChannelContext(), 
+					null, new ServiceOnChanelIOException(e, e.getMessage())));
 			result = false;
 		}
 		return new WorkingChannelOperationResult(result);
