@@ -99,7 +99,7 @@ public class ServiceAccessEngine{
 	}
 	
 	
-	public RequestResultEntity uploadFile(String )
+	//public RequestResultEntity uploadFile(String )
 	
 	/**
 	 * get a working channel from cache,

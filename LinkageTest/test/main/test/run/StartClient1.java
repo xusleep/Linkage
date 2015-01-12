@@ -93,7 +93,7 @@ public class StartClient1 extends AbstractJob {
 		clientServiceInformationEntity.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
 		ServiceCenterClientUtils.registerClientInformation(cb, clientServiceInformationEntity, centerServiceInformationEntity);
 		StartClient1 job1 = new StartClient1(cb);
-		job1.setThreadCount(1000);
+		job1.setThreadCount(2000);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

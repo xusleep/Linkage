@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.Enumeration;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.FileInformationStorageList;
 import service.middleware.linkage.framework.exception.ServiceException;
@@ -57,11 +59,12 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 	// event distribution master 
 	private final EventDistributionMaster eventDistributionHandler;
 	// write file event queue
-	private Queue<ServiceOnFileDataWriteEvent> writeFileQueue = new LinkedList<ServiceOnFileDataWriteEvent>();
+	private Queue<ServiceOnFileDataWriteEvent> writeFileQueue = new ConcurrentLinkedQueue<ServiceOnFileDataWriteEvent>();
 	// write message event queue
-	private Queue<ServiceOnMessageDataWriteEvent> writeMessageQueue = new LinkedList<ServiceOnMessageDataWriteEvent>();
+	private Queue<ServiceOnMessageDataWriteEvent> writeMessageQueue = new ConcurrentLinkedQueue<ServiceOnMessageDataWriteEvent>();
 	 // use the concurrent hash map to store the request result list {@link RequestResultEntity}
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
+	private static Logger logger = Logger.getLogger(NIOMixedStrategy.class);
 	
 	public NIOMixedStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
@@ -91,7 +94,9 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 	 * @param ServiceOnFileDataWriteEvent
 	 */
 	public void offerFileWriteQueue(ServiceOnFileDataWriteEvent serviceOnFileDataWriteEvent) {
-		this.writeFileQueue.offer(serviceOnFileDataWriteEvent);
+		synchronized(this.writeLock){
+			this.writeFileQueue.offer(serviceOnFileDataWriteEvent);
+		}
 	}
 	
 	/**
