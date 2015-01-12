@@ -1,26 +1,21 @@
 package clould.storage.service;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.concurrent.atomic.AtomicLong;
 
-import clould.storage.service.utils.HexUtils;
+import service.middleware.linkage.framework.FileInformationStorageList;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
+
 
 public class FileStorageServiceImpl implements FileStorageService{
-
+	private static AtomicLong fileIDGenerator = new AtomicLong(0);
 	@Override
-	public String updateFile(String fileName, String hexStringData) {
-		byte[] fileByteData = HexUtils.hexStringToByte(hexStringData);
-		try {
-			FileOutputStream fps = new FileOutputStream("E:\\Storage\\" + fileName);
-			fps.write(fileByteData);
-			fps.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return "True";
+	public String getUploadFileID(String fileSavePath) {
+		long fileID = fileIDGenerator.incrementAndGet();
+		FileInformationEntity fileInformationEntity = new FileInformationEntity();
+		fileInformationEntity.setFileID(fileID);
+		fileInformationEntity.setFilePath(fileSavePath);
+		FileInformationStorageList.addFileInformationEntity(fileInformationEntity);
+		return "" + fileID;
 	}
 
 }

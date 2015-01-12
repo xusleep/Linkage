@@ -1,5 +1,6 @@
 package service.middleware.linkage.framework.bootstrap;
 
+import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.WorkerPool;
 
 /**
@@ -14,4 +15,6 @@ public interface BootStrap {
 	public void shutdown();
 	// shutdown the boot strap imediately
 	public void shutdownImediate();
+	// get the event distribution master
+	public EventDistributionMaster getEventDistributionMaster();
 }

@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.Enumeration;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
+import service.middleware.linkage.framework.FileInformationStorageList;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
@@ -56,8 +56,6 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 	private ReaderInterface reader;
 	// event distribution master 
 	private final EventDistributionMaster eventDistributionHandler;
-	// transfered file list, wait for transfering or receiveing
-	private static List<FileInformationEntity> transferFileList = new LinkedList<FileInformationEntity>();
 	// write file event queue
 	private Queue<ServiceOnFileDataWriteEvent> writeFileQueue = new LinkedList<ServiceOnFileDataWriteEvent>();
 	// write message event queue
@@ -94,42 +92,6 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 	 */
 	public void offerFileWriteQueue(ServiceOnFileDataWriteEvent serviceOnFileDataWriteEvent) {
 		this.writeFileQueue.offer(serviceOnFileDataWriteEvent);
-	}
-	
-	/**
-	 * 
-	 * @param fileID
-	 */
-	public static synchronized void removeFileInformationEntity(long fileID){
-		int index = -1;
-		for(index = 0; index < transferFileList.size(); index++){
-			if(transferFileList.get(index).getFileID() == fileID){
-				break;
-			}
-		}
-		transferFileList.remove(index);
-	}
-	
-	/**
-	 * 
-	 * @param fileInformationEntity
-	 */
-	public static synchronized void addFileInformationEntity(FileInformationEntity fileInformationEntity){
-		transferFileList.add(fileInformationEntity);
-	}
-	
-	/**
-	 * 
-	 * @param fileID
-	 * @return
-	 */
-	public static synchronized FileInformationEntity findFileInformationEntity(long fileID){
-		for(FileInformationEntity fileInformationEntity : transferFileList){
-			if(fileInformationEntity.getFileID() == fileID){
-				return fileInformationEntity;
-			}
-		}
-		return null;
 	}
 	
 	/**
@@ -310,7 +272,7 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 	private WorkingChannelOperationResult writeFileData(long fileID){
 		boolean result = false;
 		try {
-			FileInformationEntity fileInformationEntity = NIOMixedStrategy.findFileInformationEntity(fileID);
+			FileInformationEntity fileInformationEntity = FileInformationStorageList.findFileInformationEntity(fileID);
 			File file = new File(fileInformationEntity.getFilePath());
 			FileEntity contentEntity = new FileEntity();
 			contentEntity.setFileID(fileID);

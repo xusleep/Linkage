@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.FileInformationStorageList;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
@@ -59,7 +59,7 @@ public class FileDataReader extends ReaderDecorator {
         bb.clear();
         fileEntity.setFileID(fileID);
         long fileSize = contentEntity.getLength() - 8;
-        FileInformationEntity fileInformationEntity = NIOMixedStrategy.findFileInformationEntity(fileID);
+        FileInformationEntity fileInformationEntity = FileInformationStorageList.findFileInformationEntity(fileID);
         logger.debug("FileReader fileID:" + fileID + " filesize:" + fileSize + " save path:" + fileInformationEntity.getFilePath());
         FileOutputStream fos = new FileOutputStream(new File(fileInformationEntity.getFilePath()));
 		FileChannel fileChannel = fos.getChannel();

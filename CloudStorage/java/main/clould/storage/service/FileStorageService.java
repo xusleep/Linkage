@@ -1,5 +1,5 @@
 package clould.storage.service;
 
 public interface FileStorageService {
-	public String updateFile(String fileName, String fileData);
+	public String getUploadFileID(String filePath);
 }

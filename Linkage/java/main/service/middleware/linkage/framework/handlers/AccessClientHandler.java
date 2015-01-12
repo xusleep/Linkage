@@ -35,20 +35,12 @@ public class AccessClientHandler extends Handler {
 	@Override
 	public void handleRequest(ServiceEvent event) throws IOException {
 		if(event instanceof ServiceOnMessageDataReceivedEvent){
-			try {
-				ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent)event;
-				String receiveData = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), EncodingUtils.FRAMEWORK_IO_ENCODING);
-				logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveData);
-				ResponseEntity objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
-				NIOMixedStrategy strategy = (NIOMixedStrategy)objServiceOnMessageDataReceivedEvent.getWorkingChannel().getWorkingChannelStrategy();
-				strategy.setRequestResult(objResponseEntity);
-				if(this.getNext() != null)
-				{
-					this.getNext().handleRequest(event);
-				}
-			} catch (Exception e) {
-				logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
-			}
+			ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent)event;
+			String receiveData = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), EncodingUtils.FRAMEWORK_IO_ENCODING);
+			logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveData);
+			ResponseEntity objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
+			NIOMixedStrategy strategy = (NIOMixedStrategy)objServiceOnMessageDataReceivedEvent.getWorkingChannel().getWorkingChannelStrategy();
+			strategy.setRequestResult(objResponseEntity);
 		}
 		else if(event instanceof ServiceOnFileDataReceivedEvent){
 			ServiceOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServiceOnFileDataReceivedEvent)event;
@@ -64,13 +56,14 @@ public class AccessClientHandler extends Handler {
 				this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
 				strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 			}
-			if(this.getNext() != null)
+		}
+		if(this.getNext() != null)
+		{
+			try
 			{
-				try {
-					this.getNext().handleRequest(event);
-				} catch (Exception e) {
-					logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
-				}
+				this.getNext().handleRequest(event);
+			} catch (Exception e) {
+				logger.error("there is an exception comes out: " + StringUtils.ExceptionStackTraceToString(e));
 			}
 		}
 	}

@@ -9,7 +9,7 @@ import java.nio.channels.SocketChannel;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.FileInformationStorageList;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
@@ -35,7 +35,7 @@ public class FileDataWriter extends WriterDecorator {
 	public boolean write(SocketChannel sc, ContentEntity contentEntity)
 			throws IOException {
 		FileEntity fileEntity = (FileEntity)contentEntity;
-		FileInformationEntity fileInformationEntity = NIOMixedStrategy.findFileInformationEntity(fileEntity.getFileID());
+		FileInformationEntity fileInformationEntity = FileInformationStorageList.findFileInformationEntity(fileEntity.getFileID());
 		FileInputStream fis = new FileInputStream(new File(fileInformationEntity.getFilePath()));
 		FileChannel fileChannel = fis.getChannel();
 		long writtenCount = 0;

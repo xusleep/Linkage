@@ -9,12 +9,18 @@ public abstract class AbstractBootStrap implements BootStrap {
 	// this is a client worker pool, this pool will handle all of the io operation 
 	// with the server
 	private final WorkerPool workPool;
+	private final EventDistributionMaster eventDistributionMaster;
 	
 	public AbstractBootStrap(EventDistributionMaster eventDistributionMaster){
+		this.eventDistributionMaster = eventDistributionMaster;
 		this.workPool = new NIOWorkerPool(eventDistributionMaster);
 	}
 	
 	public WorkerPool getWorkerPool() {
 		return workPool;
+	}
+
+	public EventDistributionMaster getEventDistributionMaster() {
+		return eventDistributionMaster;
 	}
 }

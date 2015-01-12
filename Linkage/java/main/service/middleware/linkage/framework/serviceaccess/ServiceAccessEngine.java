@@ -97,56 +97,9 @@ public class ServiceAccessEngine{
 		}
 		return result;
 	}
-//	
-//	public RequestResultEntity downloadFile(String downloadFilePath, String saveFilePath, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
-//		NIOWorkingChannelContext newWorkingChannel = null;
-//		RequestResultEntity result = new RequestResultEntity();
-//		NIOFileWorkingChannelStrategy strategy = null;
-//		try
-//		{
-//			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
-//			if(newWorkingChannel.getWorkingChannelMode() == WorkingChannelMode.MESSAGEMODE){
-//				NIOMessageWorkingChannelStrategy msgStrategy = (NIOMessageWorkingChannelStrategy)newWorkingChannel.getWorkingChannelStrategy();
-//				ServiceOnMessageWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageWriteEvent(newWorkingChannel, null);
-//				objServiceOnMessageWriteEvent.setMessage(WorkingChannelModeUtils.getModeSwitchString(WorkingChannelMode.FILEMODE, WorkingChannelModeSwitchState.REQUEST));
-//				msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
-//				msgStrategy.writeChannel();
-//			}
-//			// wait util the working mode is changed
-//			while(newWorkingChannel.getWorkingChannelMode() != WorkingChannelMode.FILEMODE){
-//				Thread.sleep(100);
-//			}
-//			result.setWorkingChannel(newWorkingChannel);
-//			strategy = (NIOFileWorkingChannelStrategy) newWorkingChannel.getWorkingChannelStrategy();
-//			strategy.downloadFile(downloadFilePath, saveFilePath);
-//		}
-//		catch(Exception ex){
-//			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
-//			return result;
-//		}
-//		return null;
-//	}
-//	
-//	public RequestResultEntity uploadFile(String uploadFilePath, String saveFilePath, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
-//		NIOWorkingChannelContext newWorkingChannel = null;
-//		RequestResultEntity result = new RequestResultEntity();
-//		NIOMixedStrategy strategy = null;
-//		try
-//		{
-//			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
-//			result.setWorkingChannel(newWorkingChannel);
-//			strategy = (NIOMixedStrategy) newWorkingChannel.getWorkingChannelStrategy();
-//			String message = "<=============================================================Message===================================================>";
-//			byte[] data = message.getBytes(EncodingUtils.FRAMEWORK_IO_ENCODING);
-//			strategy.writeMessageData(data);
-//			//strategy.writeFileData(1000);
-//		}
-//		catch(Exception ex){
-//			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
-//			return result;
-//		}
-//		return null;
-//	}
+	
+	
+	public RequestResultEntity uploadFile(String )
 	
 	/**
 	 * get a working channel from cache,
