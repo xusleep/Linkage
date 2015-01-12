@@ -11,7 +11,7 @@ import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
-import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.MessageModeServiceAccess;
 

@@ -15,8 +15,8 @@ import org.xml.sax.SAXException;
 
 import service.middleware.linkage.framework.common.entity.RequestEntity;
 import service.middleware.linkage.framework.common.entity.ResponseEntity;
-import service.middleware.linkage.framework.io.common.FileTransferEntity;
-import service.middleware.linkage.framework.io.common.FileRequestState;
+import service.middleware.linkage.framework.io.nio.strategy.file.FileRequestState;
+import service.middleware.linkage.framework.io.nio.strategy.file.FileTransferEntity;
 
 public class SerializationUtils {
 	

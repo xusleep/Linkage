@@ -3,6 +3,7 @@ package service.middleware.linkage.framework.io.common;
 import java.nio.channels.SocketChannel;
 
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 
 /**
  * worker pool interface

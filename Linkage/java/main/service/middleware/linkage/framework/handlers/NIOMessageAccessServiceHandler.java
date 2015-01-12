@@ -11,8 +11,8 @@ import service.middleware.linkage.framework.event.ServiceEvent;
 import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
-import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
+import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.provider.ServiceProvider;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 

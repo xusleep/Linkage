@@ -7,8 +7,8 @@ import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import service.middleware.linkage.framework.io.common.NIOFileMessageMixStrategy;
 import service.middleware.linkage.framework.io.nio.FileInformationEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOFileMessageMixStrategy;
 
 /**
  * 
