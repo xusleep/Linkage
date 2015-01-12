@@ -1,5 +1,10 @@
 package service.middleware.linkage.framework.io.nio;
 
+/**
+ * This entity retain the file content
+ * @author zhonxu
+ *
+ */
 public class FileEntity extends ContentEntity{
 	private long fileID;
 	public long getFileID() {
