@@ -22,7 +22,7 @@ import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeSw
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeUtils;
 import service.middleware.linkage.framework.io.nio.strategy.file.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOFileMessageMixStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
 import service.middleware.linkage.framework.io.protocol.IOProtocol;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
@@ -125,7 +125,7 @@ public class NIOMessageModeServiceAccessEngine{
 	public RequestResultEntity uploadFile(String uploadFilePath, String saveFilePath, ServiceInformationEntity serviceInformationEntity, boolean channelFromCached){
 		NIOWorkingChannelContext newWorkingChannel = null;
 		RequestResultEntity result = new RequestResultEntity();
-		NIOFileMessageMixStrategy strategy = null;
+		NIOMixedStrategy strategy = null;
 		try
 		{
 			newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformationEntity);
@@ -141,7 +141,7 @@ public class NIOMessageModeServiceAccessEngine{
 				Thread.sleep(100);
 			}
 			result.setWorkingChannel(newWorkingChannel);
-			strategy = (NIOFileMessageMixStrategy) newWorkingChannel.getWorkingChannelStrategy();
+			strategy = (NIOMixedStrategy) newWorkingChannel.getWorkingChannelStrategy();
 			String message = "<=============================================================Message===================================================>";
 			byte[] data = message.getBytes(IOProtocol.FRAMEWORK_IO_ENCODING);
 			strategy.writeMessageData(data);
@@ -172,7 +172,7 @@ public class NIOMessageModeServiceAccessEngine{
 		NIOWorkingChannelContext objWorkingChannel;
 		// if not get it from the cache, create it directly
 		if(!fromCached){
-			objWorkingChannel  = createWorkingChannel(service, WorkingChannelMode.MESSAGEMODE);
+			objWorkingChannel  = createWorkingChannel(service, WorkingChannelMode.MIXED);
 			objWorkingChannel.setWorkingChannelCacheID(cacheID);
 			return objWorkingChannel;
 		}
@@ -185,7 +185,7 @@ public class NIOMessageModeServiceAccessEngine{
 				objWorkingChannel = (NIOWorkingChannelContext) workingChannelCacheList.get(service.toString());
 				if(objWorkingChannel == null)
 				{
-					objWorkingChannel = createWorkingChannel(service, WorkingChannelMode.MESSAGEMODE);
+					objWorkingChannel = createWorkingChannel(service, WorkingChannelMode.MIXED);
 					objWorkingChannel.setWorkingChannelCacheID(cacheID);
 					workingChannelCacheList.put(cacheID, objWorkingChannel);
 				}

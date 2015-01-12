@@ -10,10 +10,10 @@ import java.nio.channels.SocketChannel;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.ConvertUtils;
-import service.middleware.linkage.framework.io.nio.ContentEntity;
-import service.middleware.linkage.framework.io.nio.FileEntity;
-import service.middleware.linkage.framework.io.nio.FileInformationEntity;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOFileMessageMixStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
 
 public class FileDataWriter extends WriterDecorator {
 	private static final long FILE_TRANSFER_BUFFER_SIZE = 1024 * 1024 * 10;
@@ -28,7 +28,7 @@ public class FileDataWriter extends WriterDecorator {
 	public boolean write(SocketChannel sc, ContentEntity contentEntity)
 			throws IOException {
 		FileEntity fileEntity = (FileEntity)contentEntity;
-		FileInformationEntity fileInformationEntity = NIOFileMessageMixStrategy.findFileInformationEntity(fileEntity.getFileID());
+		FileInformationEntity fileInformationEntity = NIOMixedStrategy.findFileInformationEntity(fileEntity.getFileID());
 		FileInputStream fis = new FileInputStream(new File(fileInformationEntity.getFilePath()));
 		FileChannel fileChannel = fis.getChannel();
 		long writtenCount = 0;

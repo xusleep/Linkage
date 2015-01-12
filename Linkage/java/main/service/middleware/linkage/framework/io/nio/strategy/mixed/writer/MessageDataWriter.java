@@ -10,8 +10,8 @@ import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
 import service.middleware.linkage.framework.io.common.WorkingChannelOperationResult;
-import service.middleware.linkage.framework.io.nio.ContentEntity;
-import service.middleware.linkage.framework.io.nio.MessageEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
 
 public class MessageDataWriter extends WriterDecorator {
 	private static Logger logger = Logger.getLogger(MessageDataWriter.class);

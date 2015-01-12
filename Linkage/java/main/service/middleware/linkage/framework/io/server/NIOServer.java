@@ -90,7 +90,7 @@ public class NIOServer implements Server {
 							SocketChannel sc = ssc.accept();
 							sc.configureBlocking(false);
 							// put the accepted channel into the worker pool
-							this.getWorkerPool().register(sc, WorkingChannelMode.MESSAGEMODE);
+							this.getWorkerPool().register(sc, WorkingChannelMode.MIXED);
 						} 
 					}
 				} 

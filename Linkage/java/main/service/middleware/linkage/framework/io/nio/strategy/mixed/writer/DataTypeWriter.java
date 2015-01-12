@@ -7,11 +7,11 @@ import java.nio.channels.SocketChannel;
 import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.common.ConvertUtils;
-import service.middleware.linkage.framework.io.nio.ContentEntity;
-import service.middleware.linkage.framework.io.nio.FileEntity;
-import service.middleware.linkage.framework.io.nio.MessageEntity;
-import service.middleware.linkage.framework.io.nio.PacketDataType;
-import service.middleware.linkage.framework.io.nio.PacketEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketDataType;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
 
 public class DataTypeWriter extends WriterDecorator {
 	private static Logger logger = Logger.getLogger(DataTypeWriter.class);

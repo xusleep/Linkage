@@ -10,8 +10,9 @@ import org.apache.log4j.Logger;
 import service.middleware.linkage.framework.common.StringUtils;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
+import service.middleware.linkage.framework.io.nio.strategy.file.NIOFileWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOFileMessageMixStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
 
 /**
  * hold the object when request a connect,
@@ -55,8 +56,16 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 			if(this.workingChannelStrategy != null){
 				this.workingChannelStrategy.clear();
 			}
-			this.workingChannelStrategy = new NIOFileMessageMixStrategy(this,  eventDistributionHandler);
-			logger.debug("working channel mode is changed : " + theWorkingMode);
+			this.workingChannelStrategy = new NIOFileWorkingChannelStrategy(this,  eventDistributionHandler);
+			logger.debug("working channel strategy is changed : " + theWorkingMode);
+		}
+		else if(this.workingMode == WorkingChannelMode.MIXED )
+		{
+			if(this.workingChannelStrategy != null){
+				this.workingChannelStrategy.clear();
+			}
+			this.workingChannelStrategy = new NIOMixedStrategy(this,  eventDistributionHandler);
+			logger.debug("working channel strategy is changed : " + theWorkingMode);
 		}
 	}
 	

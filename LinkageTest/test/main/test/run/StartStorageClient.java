@@ -7,8 +7,8 @@ import service.middleware.linkage.center.client.ServiceCenterClientUtils;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import service.middleware.linkage.framework.io.nio.FileInformationEntity;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOFileMessageMixStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
 
 /**
  * 
@@ -49,7 +49,7 @@ public class StartStorageClient {
 		FileInformationEntity fileInformationEntity = new FileInformationEntity();
 		fileInformationEntity.setFileID(1000);
 		fileInformationEntity.setFilePath("G:\\Films\\407.Dark.Flight.3D.2012.720p.BluRay.x264-HDChina [PublicHD]\\dark.mkv");
-		NIOFileMessageMixStrategy.addFileInformationEntity(fileInformationEntity);
+		NIOMixedStrategy.addFileInformationEntity(fileInformationEntity);
 		clientBootStrap.getServiceAccess().getServiceAccessEngine().uploadFile("E:\\testworkingfolder\\downloadServer\\1.txt", "E:\\testworkingfolder\\downloadClient\\1.txt", serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);
 //		clientBootStrap.getServiceAccess().getServiceAccessEngine().writeFile(new File("E:\\testfolder\\2.txt"), serviceInformationEntity, true);

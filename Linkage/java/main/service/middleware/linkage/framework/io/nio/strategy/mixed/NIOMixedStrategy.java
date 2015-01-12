@@ -12,11 +12,11 @@ import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.common.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.common.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.common.WorkingChannelStrategy;
-import service.middleware.linkage.framework.io.nio.FileEntity;
-import service.middleware.linkage.framework.io.nio.FileInformationEntity;
-import service.middleware.linkage.framework.io.nio.MessageEntity;
-import service.middleware.linkage.framework.io.nio.PacketDataType;
-import service.middleware.linkage.framework.io.nio.PacketEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketDataType;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.reader.DataTypeReader;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.reader.FileDataReader;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.reader.MessageDataReader;
@@ -34,7 +34,7 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.WriterI
  * @author zhonxu
  *
  */
-public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
+public class NIOMixedStrategy extends WorkingChannelStrategy {
 	
 	/**
 	 * Monitor object for write.
@@ -49,7 +49,7 @@ public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
 	private final EventDistributionMaster eventDistributionHandler;
 	private static List<FileInformationEntity> fileList = new ArrayList<FileInformationEntity>();
 	
-	public NIOFileMessageMixStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
+	public NIOMixedStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
 			EventDistributionMaster eventDistributionHandler) {
 		super(nioWorkingChannelContext);
 		this.eventDistributionHandler = eventDistributionHandler;
@@ -144,7 +144,7 @@ public class NIOFileMessageMixStrategy extends WorkingChannelStrategy {
 	public synchronized WorkingChannelOperationResult writeFileData(long fileID){
 		boolean result = false;
 		try {
-			FileInformationEntity fileInformationEntity = NIOFileMessageMixStrategy.findFileInformationEntity(fileID);
+			FileInformationEntity fileInformationEntity = NIOMixedStrategy.findFileInformationEntity(fileID);
 			File file = new File(fileInformationEntity.getFilePath());
 			FileEntity contentEntity = new FileEntity();
 			contentEntity.setFileID(fileID);

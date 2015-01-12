@@ -6,8 +6,8 @@ import java.nio.channels.SocketChannel;
 
 import org.apache.log4j.Logger;
 
-import service.middleware.linkage.framework.io.nio.ContentEntity;
-import service.middleware.linkage.framework.io.nio.MessageEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.ContentEntity;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
 
 public class MessageDataReader extends ReaderDecorator {
 	private static Logger logger = Logger.getLogger(MessageDataReader.class);

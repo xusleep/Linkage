@@ -2,8 +2,8 @@ package test.run;
 import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootStrap;
 import service.middleware.linkage.framework.common.entity.ServiceInformationEntity;
-import service.middleware.linkage.framework.io.nio.FileInformationEntity;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOFileMessageMixStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
 
 
 /**
@@ -26,7 +26,7 @@ public class StartService {
     		FileInformationEntity fileInformationEntity = new FileInformationEntity();
     		fileInformationEntity.setFileID(1000);
     		fileInformationEntity.setFilePath("E:\\testworkingfolder\\downloadClient\\1.mkv");
-    		NIOFileMessageMixStrategy.addFileInformationEntity(fileInformationEntity);
+    		NIOMixedStrategy.addFileInformationEntity(fileInformationEntity);
 //    		ServiceCenterClientUtils.defaultRouteConsume = clientBootStrap.getServiceAccess();
 //    		try {
 //    			ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformationEntity, serviceBootStrap.getServicePropertyEntity());

@@ -8,5 +8,5 @@ package service.middleware.linkage.framework.io.nio.strategy;
 public enum WorkingChannelMode {
 	MESSAGEMODE,
 	FILEMODE,
-	MESSGEFILEMIXEDMODE
+	MIXED
 }

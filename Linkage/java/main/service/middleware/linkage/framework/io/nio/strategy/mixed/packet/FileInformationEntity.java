@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.io.nio;
+package service.middleware.linkage.framework.io.nio.strategy.mixed.packet;
 
 public class FileInformationEntity {
 	private long fileID;
