@@ -11,11 +11,11 @@ import service.middleware.linkage.framework.event.ServiceExeptionEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageReceiveEvent;
 import service.middleware.linkage.framework.event.ServiceOnMessageWriteEvent;
-import service.middleware.linkage.framework.io.common.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.common.WorkingChannelContext;
-import service.middleware.linkage.framework.io.common.WorkingChannelMode;
-import service.middleware.linkage.framework.io.common.WorkingChannelModeSwitchState;
-import service.middleware.linkage.framework.io.common.WorkingChannelModeUtils;
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeSwitchState;
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelModeUtils;
+import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.protocol.IOProtocol;
 
 /**
@@ -61,7 +61,7 @@ public class NIOSinkHandler extends Handler {
 									msgStrategy.writeBufferQueue.offer(objServiceOnMessageWriteEvent);
 									msgStrategy.writeChannel();
 								}
-								objServiceOnMessageReceiveEvent.getWorkingChannel().switchWorkMode(targetWorkingChannelMode);
+								objServiceOnMessageReceiveEvent.getWorkingChannel().setWorkingStrategy(targetWorkingChannelMode);
 							}
 //							else if(targetWorkingChannelMode != workingChannel.getWorkingChannelMode() && workingChannel.getWorkingChannelMode() == WorkingChannelMode.FILEMODE)
 //							{

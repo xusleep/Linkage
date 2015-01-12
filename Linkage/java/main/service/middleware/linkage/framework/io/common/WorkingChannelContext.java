@@ -2,6 +2,8 @@ package service.middleware.linkage.framework.io.common;
 
 import java.nio.channels.Channel;
 
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
+
 
 /**
  * hold the object when request a connect,
@@ -19,5 +21,5 @@ public interface WorkingChannelContext extends WorkingChannelReadWrite {
 	public void closeWorkingChannel();
 	public WorkingChannelMode getWorkingChannelMode();
 	public WorkingChannelStrategy getWorkingChannelStrategy();
-	public void switchWorkMode(WorkingChannelMode theWorkingMode);
+	public void setWorkingStrategy(WorkingChannelMode theWorkingMode);
 }
