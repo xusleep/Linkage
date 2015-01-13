@@ -62,5 +62,5 @@ public interface ServiceAccess {
 	 * get the engine
 	 * @return
 	 */
-	public ServiceEngineInterface getServiceAccessEngine(); 
+	public ServiceAccessEngine getServiceAccessEngine(); 
 }

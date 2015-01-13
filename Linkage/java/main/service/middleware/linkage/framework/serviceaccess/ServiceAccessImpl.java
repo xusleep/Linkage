@@ -18,12 +18,12 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  */
 public class ServiceAccessImpl implements ServiceAccess{
 	
-	protected ServiceEngineInterface serviceEngine;
+	protected ServiceAccessEngine serviceEngine;
 	 // use the concurrent hash map to store the request result list {@link RequestResultEntity}
 	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 
 	public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool) {
-		serviceEngine = new ServiceAccessEngine(workingClientPropertyEntity, workerPool);
+		serviceEngine = new ServiceAccessEngineImpl(workingClientPropertyEntity, workerPool);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class ServiceAccessImpl implements ServiceAccess{
 	}
 
 	@Override
-	public ServiceEngineInterface getServiceAccessEngine() {
+	public ServiceAccessEngine getServiceAccessEngine() {
 		// TODO Auto-generated method stub
 		return serviceEngine;
 	}

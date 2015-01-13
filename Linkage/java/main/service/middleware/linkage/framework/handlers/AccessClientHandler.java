@@ -10,7 +10,7 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.events.Service
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
-import service.middleware.linkage.framework.serviceaccess.ServiceEngineInterface;
+import service.middleware.linkage.framework.serviceaccess.ServiceAccessEngine;
 import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 import service.middleware.linkage.framework.utils.EncodingUtils;
 import service.middleware.linkage.framework.utils.StringUtils;
@@ -25,9 +25,9 @@ import service.middleware.linkage.framework.utils.StringUtils;
 public class AccessClientHandler extends Handler {
 	private static Logger  logger = Logger.getLogger(AccessClientHandler.class);  
 	
-	private final ServiceEngineInterface serviceAccessEngine;
+	private final ServiceAccessEngine serviceAccessEngine;
 	
-	public AccessClientHandler(ServiceEngineInterface serviceAccessEngine){
+	public AccessClientHandler(ServiceAccessEngine serviceAccessEngine){
 		this.serviceAccessEngine = serviceAccessEngine;
 	}
 	
