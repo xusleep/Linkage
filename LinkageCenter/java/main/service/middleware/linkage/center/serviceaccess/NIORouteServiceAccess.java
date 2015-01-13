@@ -9,7 +9,7 @@ import service.middleware.linkage.center.route.Route;
 import service.middleware.linkage.center.route.ServiceCenterRoute;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.WorkerPool;
-import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
+import service.middleware.linkage.framework.serviceaccess.ServiceAccessEngine;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccessImpl;
 import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
 import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
@@ -33,7 +33,7 @@ public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteSer
 	@Override
 	public RequestResultEntity requestService(String clientID,
 			List<String> args, boolean channelFromCached) {
-		final RequestEntity objRequestEntity = consumeEngine.createRequestEntity(clientID, args);
+		final RequestEntity objRequestEntity = serviceEngine.createRequestEntity(clientID, args);
         RequestResultEntity result = new RequestResultEntity();
         result.setRequestID(objRequestEntity.getRequestID());
     	// Find the service information from the route, set the information into the result entity as well
@@ -43,7 +43,7 @@ public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteSer
 			result.setServiceInformationEntity(serviceInformationEntity);
 			if(serviceInformationEntity == null)
 			{
-				NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
+				ServiceAccessEngine.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
 				return result;
 			}
 		} 
@@ -53,11 +53,11 @@ public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteSer
 			//logger.log(Level.WARNING, ex.getMessage());
 			//System.out.println("ComsumerBean ... exception happend " + ex.getMessage());
 			//ex.printStackTrace();
-			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
+			ServiceAccessEngine.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
         	route.clean(result);
         	return result;
         }
-		return consumeEngine.basicProcessRequest(objRequestEntity, result, serviceInformationEntity, channelFromCached);
+		return serviceEngine.basicProcessRequest(objRequestEntity, result, serviceInformationEntity, channelFromCached);
 	}
 
 	@Override

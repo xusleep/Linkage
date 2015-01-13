@@ -62,8 +62,6 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 	private Queue<ServiceOnFileDataWriteEvent> writeFileQueue = new ConcurrentLinkedQueue<ServiceOnFileDataWriteEvent>();
 	// write message event queue
 	private Queue<ServiceOnMessageDataWriteEvent> writeMessageQueue = new ConcurrentLinkedQueue<ServiceOnMessageDataWriteEvent>();
-	 // use the concurrent hash map to store the request result list {@link RequestResultEntity}
-	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	private static Logger logger = Logger.getLogger(NIOMixedStrategy.class);
 	
 	public NIOMixedStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
@@ -99,93 +97,7 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 		}
 	}
 	
-	/**
-	 * put the request result in the result list
-	 * @param requestResultEntity
-	 */
-	public void offerRequestResult(RequestResultEntity requestResultEntity){
-		resultList.put(requestResultEntity.getRequestID(), requestResultEntity);
-	}
 	
-	/**
-	 * clear the result
-	 */
-	public void clearAllResult(ServiceException exception){
-		Enumeration<String> keyEnumeration = resultList.keys();
-		while(keyEnumeration.hasMoreElements())
-		{
-			String requestID = keyEnumeration.nextElement();
-			RequestResultEntity requestResultEntity = resultList.get(requestID);
-			setExceptionToRuquestResult(requestResultEntity, exception);
-		}
-		resultList.clear();
-	}
-	
-	/**
-	 * set the request result
-	 * @param requestID
-	 * @param strResult
-	 */
-	public static void setExceptionToRuquestResult(RequestResultEntity result, ServiceException serviceException){
-		if(result != null)
-		{
-		    ResponseEntity objResponseEntity = new ResponseEntity();
-		    objResponseEntity.setRequestID(result.getRequestID());
-		    objResponseEntity.setResult(serviceException.getMessage());
-		    result.setException(true);
-		    result.setException(serviceException);
-			result.setResponseEntity(objResponseEntity);
-		}
-	}
-	
-	/**
-	 * set the request result
-	 * @param requestID
-	 * @param strResult
-	 */
-	public void setRuquestResult(String requestID, String strResult){
-		RequestResultEntity result = this.resultList.remove(requestID);
-		if(result != null)
-		{
-		    ResponseEntity objResponseEntity = new ResponseEntity();
-		    objResponseEntity.setRequestID(requestID);
-		    objResponseEntity.setResult(strResult);
-		    result.setException(false);
-			result.setResponseEntity(objResponseEntity);
-		}
-	}
-	
-	/**
-	 * set the request result
-	 * @param requestID
-	 * @param strResult
-	 */
-	public void setExceptionRuquestResult(String requestID, ServiceException serviceException){
-		RequestResultEntity result = this.resultList.remove(requestID);
-		if(result != null)
-		{
-		    ResponseEntity objResponseEntity = new ResponseEntity();
-		    objResponseEntity.setRequestID(requestID);
-		    objResponseEntity.setResult(serviceException.getMessage());
-		    result.setException(true);
-		    result.setException(serviceException);
-			result.setResponseEntity(objResponseEntity);
-		}
-	}
-	
-	/**
-	 * when the response comes, use this method to set it. 
-	 * @param objResponseEntity
-	 */
-	public RequestResultEntity setRequestResult(ResponseEntity objResponseEntity){
-		RequestResultEntity result = this.resultList.remove(objResponseEntity.getRequestID());
-		if(result != null)
-		{
-			result.setException(false);
-			result.setResponseEntity(objResponseEntity);
-		}
-		return result;
-	}
 
 	@Override
 	public  WorkingChannelOperationResult readChannel() {
@@ -298,11 +210,6 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
 			result = false;
 		}
 		return new WorkingChannelOperationResult(result);
-	}
-
-	@Override
-	public void clear() {
-		this.clearAllResult(new ServiceException(null, "clear operations."));
 	}
 	
 	/**

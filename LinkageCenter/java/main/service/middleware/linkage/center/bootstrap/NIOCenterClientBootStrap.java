@@ -39,7 +39,7 @@ public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runna
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new NIOClient(this.getWorkerPool());
 		this.serviceAccess = new NIORouteServiceAccess(objServicePropertyEntity, this.getWorkerPool(), centerServiceInformationEntity);
-		this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler(this.getServiceAccess()));
+		this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler(this.getServiceAccess().getServiceAccessEngine()));
 	}
 	
 	/**

@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -14,8 +16,6 @@ import service.middleware.linkage.framework.io.WorkerPool;
 import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
-import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.nio.strategy.message.events.ServiceOnMessageWriteEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
@@ -32,7 +32,7 @@ import service.middleware.linkage.framework.utils.EncodingUtils;
  * @author zhonxu
  *
  */
-public class ServiceAccessEngine{
+public class ServiceAccessEngine implements ServiceEngineInterface{
 	/**
 	 * used to cached the {@link WorkingChannelContext} object
 	 */
@@ -40,10 +40,83 @@ public class ServiceAccessEngine{
 	private AtomicLong idGenerator = new AtomicLong(0);
 	private final WorkerPool workerPool;
 	private final ClientSettingReader workingClientPropertyEntity;
+	 // use the concurrent hash map to store the request result list {@link RequestResultEntity}
+	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 	
 	public ServiceAccessEngine(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool){
 		this.workingClientPropertyEntity = workingClientPropertyEntity;
 		this.workerPool = workerPool;
+	}
+	
+	/**
+	 * put the request result in the result list
+	 * @param requestResultEntity
+	 */
+	public void offerRequestResult(RequestResultEntity requestResultEntity){
+		resultList.put(requestResultEntity.getRequestID(), requestResultEntity);
+	}
+	
+	/**
+	 * clear the result
+	 */
+	public void clearAllResult(ServiceException exception){
+		Enumeration<String> keyEnumeration = resultList.keys();
+		while(keyEnumeration.hasMoreElements())
+		{
+			String requestID = keyEnumeration.nextElement();
+			RequestResultEntity requestResultEntity = resultList.get(requestID);
+			setExceptionToRuquestResult(requestResultEntity, exception);
+		}
+		resultList.clear();
+	}
+	
+	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public void setRuquestResult(String requestID, String strResult){
+		RequestResultEntity result = this.resultList.remove(requestID);
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(requestID);
+		    objResponseEntity.setResult(strResult);
+		    result.setException(false);
+			result.setResponseEntity(objResponseEntity);
+		}
+	}
+	
+	/**
+	 * set the request result
+	 * @param requestID
+	 * @param strResult
+	 */
+	public void setExceptionRuquestResult(String requestID, ServiceException serviceException){
+		RequestResultEntity result = this.resultList.remove(requestID);
+		if(result != null)
+		{
+		    ResponseEntity objResponseEntity = new ResponseEntity();
+		    objResponseEntity.setRequestID(requestID);
+		    objResponseEntity.setResult(serviceException.getMessage());
+		    result.setException(true);
+		    result.setException(serviceException);
+			result.setResponseEntity(objResponseEntity);
+		}
+	}
+	
+	/**
+	 * when the response comes, use this method to set it. 
+	 * @param objResponseEntity
+	 */
+	public RequestResultEntity setRequestResult(ResponseEntity objResponseEntity){
+		RequestResultEntity result = this.resultList.remove(objResponseEntity.getRequestID());
+		if(result != null)
+		{
+			result.setException(false);
+			result.setResponseEntity(objResponseEntity);
+		}
+		return result;
 	}
 	
 	/**
@@ -79,11 +152,11 @@ public class ServiceAccessEngine{
 			strategy = (NIOMixedStrategy)newWorkingChannel.getWorkingChannelStrategy();
 		}		
 		catch(Exception ex){
-			NIOMessageWorkingChannelStrategy.setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
+			setExceptionToRuquestResult(result, new ServiceException(ex, ex.getMessage()));
 			return result;
 		}
 		// put the request result into the request result list
-		strategy.offerRequestResult(result);
+		this.offerRequestResult(result);
 		
 		String sendData = SerializationUtils.serializeRequest(objRequestEntity);
 		ServiceOnMessageDataWriteEvent objServiceOnMessageWriteEvent;
@@ -92,7 +165,6 @@ public class ServiceAccessEngine{
 			strategy.offerMessageWriteQueue(objServiceOnMessageWriteEvent);
 			strategy.writeChannel();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;

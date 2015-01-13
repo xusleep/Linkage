@@ -6,12 +6,11 @@ import org.apache.log4j.Logger;
 
 import service.middleware.linkage.framework.exception.ServiceOnChanelClosedException;
 import service.middleware.linkage.framework.exception.ServiceOnChanelIOException;
-import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnFileDataReceivedEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.serviceaccess.ServiceAccess;
+import service.middleware.linkage.framework.serviceaccess.ServiceEngineInterface;
 import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 import service.middleware.linkage.framework.utils.EncodingUtils;
 import service.middleware.linkage.framework.utils.StringUtils;
@@ -26,10 +25,10 @@ import service.middleware.linkage.framework.utils.StringUtils;
 public class AccessClientHandler extends Handler {
 	private static Logger  logger = Logger.getLogger(AccessClientHandler.class);  
 	
-	private final ServiceAccess serviceAccess;
+	private final ServiceEngineInterface serviceAccessEngine;
 	
-	public AccessClientHandler(ServiceAccess serviceAccess){
-		this.serviceAccess = serviceAccess;
+	public AccessClientHandler(ServiceEngineInterface serviceAccessEngine){
+		this.serviceAccessEngine = serviceAccessEngine;
 	}
 	
 	@Override
@@ -39,8 +38,7 @@ public class AccessClientHandler extends Handler {
 			String receiveData = new String(objServiceOnMessageDataReceivedEvent.getMessageData(), EncodingUtils.FRAMEWORK_IO_ENCODING);
 			logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveData);
 			ResponseEntity objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
-			NIOMixedStrategy strategy = (NIOMixedStrategy)objServiceOnMessageDataReceivedEvent.getWorkingChannel().getWorkingChannelStrategy();
-			strategy.setRequestResult(objResponseEntity);
+			serviceAccessEngine.setRequestResult(objResponseEntity);
 		}
 		else if(event instanceof ServiceOnFileDataReceivedEvent){
 			ServiceOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServiceOnFileDataReceivedEvent)event;
@@ -52,9 +50,8 @@ public class AccessClientHandler extends Handler {
 			if(objServiceOnExeptionEvent.getExceptionHappen() instanceof ServiceOnChanelClosedException 
 					|| objServiceOnExeptionEvent.getExceptionHappen() instanceof ServiceOnChanelIOException)
 			{
-				NIOMessageWorkingChannelStrategy strategy = (NIOMessageWorkingChannelStrategy)objServiceOnExeptionEvent.getWorkingChannel().getWorkingChannelStrategy();
-				this.serviceAccess.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
-				strategy.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
+				this.serviceAccessEngine.removeCachedChannel(objServiceOnExeptionEvent.getWorkingChannel());
+				this.serviceAccessEngine.clearAllResult(objServiceOnExeptionEvent.getExceptionHappen());
 			}
 		}
 		if(this.getNext() != null)

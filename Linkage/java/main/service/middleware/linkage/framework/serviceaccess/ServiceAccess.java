@@ -59,10 +59,8 @@ public interface ServiceAccess {
 	public void closeChannelByRequestResult(RequestResultEntity objRequestResultEntity);
 	
 	/**
-	 * remove the channel from the cache 
-	 * @param requestID
+	 * get the engine
+	 * @return
 	 */
-	public void removeCachedChannel(WorkingChannelContext objWorkingChannel);
-	
-	public ServiceAccessEngine getServiceAccessEngine(); 
+	public ServiceEngineInterface getServiceAccessEngine(); 
 }

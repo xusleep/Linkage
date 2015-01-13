@@ -13,8 +13,6 @@ import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.WorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
-import service.middleware.linkage.framework.io.nio.strategy.file.NIOFileWorkingChannelStrategy;
-import service.middleware.linkage.framework.io.nio.strategy.message.NIOMessageWorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
 import service.middleware.linkage.framework.utils.StringUtils;
 
@@ -47,30 +45,8 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 	 */
 	private void setWorkingStrategy(WorkingChannelMode theWorkingMode){
 		this.workingMode = theWorkingMode;
-		if(this.workingMode == WorkingChannelMode.MESSAGEMODE )
-		{
-			if(this.workingChannelStrategy != null){
-				this.workingChannelStrategy.clear();
-			}
-			this.workingChannelStrategy = new NIOMessageWorkingChannelStrategy(this, eventDistributionHandler);
-			logger.debug("working channel strategy is changed : " + theWorkingMode);
-		}
-		else if(this.workingMode == WorkingChannelMode.FILEMODE )
-		{
-			if(this.workingChannelStrategy != null){
-				this.workingChannelStrategy.clear();
-			}
-			this.workingChannelStrategy = new NIOFileWorkingChannelStrategy(this,  eventDistributionHandler);
-			logger.debug("working channel strategy is changed : " + theWorkingMode);
-		}
-		else if(this.workingMode == WorkingChannelMode.MIXED )
-		{
-			if(this.workingChannelStrategy != null){
-				this.workingChannelStrategy.clear();
-			}
-			this.workingChannelStrategy = new NIOMixedStrategy(this,  eventDistributionHandler);
-			logger.debug("working channel strategy is changed : " + theWorkingMode);
-		}
+		this.workingChannelStrategy = new NIOMixedStrategy(this,  eventDistributionHandler);
+		logger.debug("working channel strategy is: " + theWorkingMode);
 	}
 	
 	public WorkingChannelStrategy getWorkingChannelStrategy() {

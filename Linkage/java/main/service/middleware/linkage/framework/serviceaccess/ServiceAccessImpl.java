@@ -1,11 +1,13 @@
 package service.middleware.linkage.framework.serviceaccess;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
+import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.WorkerPool;
-import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
 import service.middleware.linkage.framework.serviceaccess.entity.RequestResultEntity;
+import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 import service.middleware.linkage.framework.serviceaccess.entity.ServiceInformationEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
@@ -14,12 +16,14 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  * @author zhonxu
  *
  */
-public class ServiceAccessImpl implements ServiceAccess {
+public class ServiceAccessImpl implements ServiceAccess{
 	
-	protected ServiceAccessEngine consumeEngine;
+	protected ServiceEngineInterface serviceEngine;
+	 // use the concurrent hash map to store the request result list {@link RequestResultEntity}
+	private final ConcurrentHashMap<String, RequestResultEntity> resultList = new ConcurrentHashMap<String, RequestResultEntity>(2048);
 
 	public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool) {
-		consumeEngine = new ServiceAccessEngine(workingClientPropertyEntity, workerPool);
+		serviceEngine = new ServiceAccessEngine(workingClientPropertyEntity, workerPool);
 	}
 
 	@Override
@@ -47,28 +51,37 @@ public class ServiceAccessImpl implements ServiceAccess {
 	@Override
 	public RequestResultEntity requestService(String clientID, List<String> args, 
 			ServiceInformationEntity serviceInformationEntity, boolean channelFromCached) {
-		RequestEntity objRequestEntity = consumeEngine.createRequestEntity(clientID, args);
+		RequestEntity objRequestEntity = serviceEngine.createRequestEntity(clientID, args);
         RequestResultEntity result = new RequestResultEntity();
         result.setRequestID(objRequestEntity.getRequestID());
-		return this.consumeEngine.basicProcessRequest(objRequestEntity, result, serviceInformationEntity, channelFromCached);
+		return this.serviceEngine.basicProcessRequest(objRequestEntity, result, serviceInformationEntity, channelFromCached);
 	}
 
 	@Override
 	public void closeChannelByRequestResult(
 			RequestResultEntity objRequestResultEntity) {
 		// TODO Auto-generated method stub
-		consumeEngine.closeChannelByRequestResult(objRequestResultEntity);
+		serviceEngine.closeChannelByRequestResult(objRequestResultEntity);
 	}
 
 	@Override
-	public void removeCachedChannel(WorkingChannelContext objWorkingChannel) {
+	public ServiceEngineInterface getServiceAccessEngine() {
 		// TODO Auto-generated method stub
-		consumeEngine.removeCachedChannel(objWorkingChannel);
+		return serviceEngine;
 	}
 
-	@Override
-	public ServiceAccessEngine getServiceAccessEngine() {
-		// TODO Auto-generated method stub
-		return consumeEngine;
+	/**
+	 * when the response comes, use this method to set it. 
+	 * @param objResponseEntity
+	 */
+	public RequestResultEntity setRequestResult(ResponseEntity objResponseEntity){
+		return serviceEngine.setRequestResult(objResponseEntity);
+	}
+	
+	/**
+	 * clear the result
+	 */
+	public void clearAllResult(ServiceException exception){
+		serviceEngine.clearAllResult(exception);
 	}
 }

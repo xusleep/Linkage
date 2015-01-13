@@ -13,72 +13,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import service.middleware.linkage.framework.io.nio.strategy.file.FileRequestState;
-import service.middleware.linkage.framework.io.nio.strategy.file.FileTransferEntity;
 import service.middleware.linkage.framework.serviceaccess.entity.RequestEntity;
 import service.middleware.linkage.framework.serviceaccess.entity.ResponseEntity;
 
 public class SerializationUtils {
-	
-	/**
-	 * serialization FileTransferEntity
-	 * @param objFileInformation
-	 * @return
-	 */
-	public static String serilizationFileTransferEntity(FileTransferEntity objFileInformation){
-		StringBuilder sb = new StringBuilder();
-		sb.append("<RequestFile>");
-		sb.append("<RequestState>");
-		sb.append(escapeForXML(objFileInformation.getRequestFileState().toString()));
-		sb.append("</RequestState>");
-		sb.append("<fileGetPath>");
-		sb.append(escapeForXML("" + objFileInformation.getFileGetPath()));
-		sb.append("</fileGetPath>");
-		sb.append("<fileSavePath>");
-		sb.append(escapeForXML("" + objFileInformation.getFileSavePath()));
-		sb.append("</fileSavePath>");
-		sb.append("</RequestFile>");
-		return sb.toString();
-	}
-	
-	/**
-	 * deserialization FileTransferEntity
-	 * @param objFileInformation
-	 * @return
-	 */
-	public static FileTransferEntity deserilizationFileTransferEntity(String receiveData){
-		try {
-			InputStream is = new StringBufferInputStream(receiveData);
-			FileTransferEntity objectFileInformationEntity = new FileTransferEntity();
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document document = db.parse(is);
-			NodeList childs = document.getChildNodes().item(0).getChildNodes(); 
-			for(int i = 0; i < childs.getLength(); i++){
-				Node node = childs.item(i);
-				if(node.getNodeName().equals("RequestState")){
-					objectFileInformationEntity.setRequestFileState(FileRequestState.valueOf(FileRequestState.class, node.getTextContent()));
-				}
-				else if(node.getNodeName().equals("fileGetPath")){
-					objectFileInformationEntity.setFileGetPath(node.getTextContent());
-				}
-				else if(node.getNodeName().equals("fileSavePath")){
-					objectFileInformationEntity.setFileSavePath(node.getTextContent());
-				}
-			}
-			return objectFileInformationEntity;
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		return null;
-	}
 	
 	/**
 	 * serialize request entity
