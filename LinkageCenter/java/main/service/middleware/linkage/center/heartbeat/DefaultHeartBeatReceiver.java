@@ -13,7 +13,6 @@ public class DefaultHeartBeatReceiver implements HeartBeatReceiver {
 		{
 			return ShareingData.HEART_BEAT_REPLY;
 		}
-		// TODO Auto-generated method stub
 		return ShareingData.HEART_BEAT_ERROR;
 	}
 

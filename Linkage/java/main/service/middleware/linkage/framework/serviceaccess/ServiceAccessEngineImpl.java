@@ -2,7 +2,6 @@ package service.middleware.linkage.framework.serviceaccess;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -11,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import service.middleware.linkage.framework.connection.pool.NIOConnectionPoolManager;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.WorkerPool;
 import service.middleware.linkage.framework.io.WorkingChannelContext;
@@ -254,16 +254,10 @@ public class ServiceAccessEngineImpl implements ServiceAccessEngine{
 	 * @param port
 	 * @return
 	 * @throws IOException
+	 * @throws ServiceException 
 	 */
-	private NIOWorkingChannelContext createWorkingChannel(ServiceInformationEntity service, WorkingChannelMode workingChannelMode) throws IOException{
-		// get a Socket channel
-        SocketChannel channel = SocketChannel.open();  
-        // connect
-        channel.connect(new InetSocketAddress(service.getAddress(), service.getPort()));
-        // finish the connect
-        if(channel.isConnectionPending()){  
-            channel.finishConnect();  
-        } 
+	private NIOWorkingChannelContext createWorkingChannel(ServiceInformationEntity service, WorkingChannelMode workingChannelMode) throws IOException, ServiceException{
+		SocketChannel channel = NIOConnectionPoolManager.getIOConnection(service.getAddress() + ":" + service.getPort());
         // wait for the worker pool util it is ready
         this.workerPool.waitReady();
         NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) this.workerPool.register(channel, workingChannelMode);
