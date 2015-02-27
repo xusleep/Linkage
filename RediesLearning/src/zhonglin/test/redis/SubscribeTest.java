@@ -13,7 +13,7 @@ public class SubscribeTest {
 		JedisPoolConfig cfg = new JedisPoolConfig();
 		cfg.setMaxActive(10);
 		cfg.setMaxIdle(5);
-		Pool<Jedis> jedisPool = new JedisPool(cfg, "10.0.50.162", new Integer(6379));	
+		Pool<Jedis> jedisPool = new JedisPool(cfg, "127.0.0.1", new Integer(6379));	
 		 jedis = jedisPool.getResource();
 	}
 	
